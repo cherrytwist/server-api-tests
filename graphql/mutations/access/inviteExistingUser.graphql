@@ -10,8 +10,7 @@ mutation InviteContributors(
       welcomeMessage: $message
     }
   ) {
-    id
-    ...LifecycleDataInvitation
+    ...InvitationData
     __typename
   }
 }

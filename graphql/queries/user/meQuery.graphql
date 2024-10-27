@@ -2,8 +2,7 @@ query MeQuery {
   me {
     communityApplications {
       application {
-        id
-        ...LifecycleDataApplication
+        ...ApplicationData
       }
        spacePendingMembershipInfo {
         id
@@ -11,8 +10,7 @@ query MeQuery {
     }
     communityInvitations {
       invitation {
-        id
-        ...LifecycleDataInvitation
+        ...InvitationData
       }
       spacePendingMembershipInfo {
         id

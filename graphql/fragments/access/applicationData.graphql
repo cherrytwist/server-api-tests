@@ -1,6 +1,8 @@
 fragment ApplicationData on Application {
   id
-  ...LifecycleDataApplication
+  state
+  nextEvents
+  isFinalized
   lifecycle {
     id
   }

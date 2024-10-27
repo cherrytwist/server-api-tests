@@ -3,6 +3,11 @@ mutation eventOnOrganizationVerification(
 ) {
   eventOnOrganizationVerification(eventData: $eventData) {
     id
-    ...LifecycleDataOrganizationVerification
+    state
+    nextEvents
+    isFinalized
+    lifecycle {
+      id
+    }
   }
 }

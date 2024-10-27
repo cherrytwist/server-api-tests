@@ -1,6 +1,11 @@
 fragment InvitationData on Invitation {
   id
-  ...LifecycleDataInvitation
+  state
+  nextEvents
+  isFinalized
+  lifecycle {
+    id
+  }
   createdBy {
     ...UserDataLight
   }

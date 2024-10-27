@@ -1,10 +1,5 @@
 mutation InvitationStateEvent($input: InvitationEventInput!) {
   eventOnInvitation(eventData: $input) {
-    id
-    authorization {
-      myPrivileges
-    }
-    id
-    ...LifecycleDataInvitation
+    ...InvitationData
   }
 }

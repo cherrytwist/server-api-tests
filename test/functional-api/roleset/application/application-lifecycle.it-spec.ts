@@ -66,22 +66,26 @@ describe('Lifecycle', () => {
       'should update application, when set event: "$setEvent" to state: "$state", nextEvents: "$nextEvents"',
       async ({ setEvent, state, nextEvents }) => {
         // Act
-        const updateState = await eventOnRoleSetApplication(
+        const eventResponseData = await eventOnRoleSetApplication(
           applicationId,
           setEvent
         );
 
-        const data = updateState?.data?.eventOnApplication;
-        const getApp = await getRoleSetInvitationsApplications(
+        const application = eventResponseData?.data?.eventOnApplication;
+        const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
           entitiesId.space.roleSetId
         );
-        const applicationDataResponse =
-          getApp?.data?.lookup?.roleSet?.applications[0];
-
-        // Assert
-        expect(data?.state).toEqual(state);
-        expect(data?.nextEvents).toEqual(nextEvents);
-        expect(data).toEqual(applicationDataResponse);
+        console.log(`roleSetPendingMemberships: ${JSON.stringify(roleSetPendingMemberships)}`);
+        const roleSetFirstApplication =
+          roleSetPendingMemberships?.data?.lookup?.roleSet?.applications[0];
+        if (!roleSetFirstApplication) {
+          throw new Error('Role set application not found');
+        }
+        console.log(`roleSetFirstApplication: ${JSON.stringify(roleSetFirstApplication)}`);
+          // Assert
+        expect(application?.state).toEqual(state);
+        expect(application?.nextEvents).toEqual(nextEvents);
+        expect(application).toEqual(roleSetFirstApplication);
       }
     );
   });
