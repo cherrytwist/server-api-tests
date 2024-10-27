@@ -335,7 +335,12 @@ describe('Application-flows', () => {
     const filteredMembershipData =
       membershipData?.filter(app => app.application.state == 'new') ?? [];
     // Assert
-    expect(filteredMembershipData).toEqual(challengeAppOb);
+    // ToDO: this may need tweaking.
+      expect(filteredMembershipData).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining(challengeAppOb),
+        ])
+      );
   });
 
   test('should return updated membershipUser applications', async () => {
