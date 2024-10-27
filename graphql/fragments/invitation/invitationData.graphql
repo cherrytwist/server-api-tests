@@ -2,10 +2,10 @@ fragment InvitationData on Invitation {
   id
   ...LifecycleDataInvitation
   createdBy {
-    ...UserData
+    ...UserDataLight
   }
   contributor {
-    ...UserData
+    ...UserDataLight
   }
   authorization {
     myPrivileges

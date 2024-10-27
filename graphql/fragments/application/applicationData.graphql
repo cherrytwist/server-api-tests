@@ -1,11 +1,14 @@
 fragment ApplicationData on Application {
   id
   ...LifecycleDataApplication
+  lifecycle {
+    id
+  }
   questions {
     id
   }
   contributor {
-    ...UserData
+    ...UserDataLight
   }
   authorization {
     myPrivileges

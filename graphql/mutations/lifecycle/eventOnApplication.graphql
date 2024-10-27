@@ -1,6 +1,9 @@
 mutation eventOnApplication($input: ApplicationEventInput!) {
   eventOnApplication(eventData: $input) {
     id
+    lifecycle {
+      id
+    }
     ...LifecycleDataApplication
   }
 }
