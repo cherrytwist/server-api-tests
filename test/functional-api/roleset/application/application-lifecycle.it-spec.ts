@@ -81,7 +81,6 @@ describe('Lifecycle', () => {
         if (!roleSetFirstApplication) {
           throw new Error('Role set application not found');
         }
-        console.log(`roleSetFirstApplication: ${JSON.stringify(roleSetFirstApplication)}`);
           // Assert
         expect(application?.state).toEqual(state);
         expect(application?.nextEvents).toEqual(nextEvents);
