@@ -75,7 +75,7 @@ describe('Lifecycle', () => {
         const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
           entitiesId.space.roleSetId
         );
-        console.log(`roleSetPendingMemberships: ${JSON.stringify(roleSetPendingMemberships)}`);
+
         const roleSetFirstApplication =
           roleSetPendingMemberships?.data?.lookup?.roleSet?.applications[0];
         if (!roleSetFirstApplication) {
