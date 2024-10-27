@@ -74,6 +74,7 @@ describe('Application', () => {
 
     if (applicationId && applicationId.length === 36) {
       await deleteApplication(applicationId);
+      applicationId = '';
     }
   });
 
@@ -468,6 +469,7 @@ describe('Application-flows', () => {
     );
 
     // Unset the challengeApplicationId so that afterEach does not try to delete it again
+    applicationId = '';
     challengeApplicationId = '';
   });
 });

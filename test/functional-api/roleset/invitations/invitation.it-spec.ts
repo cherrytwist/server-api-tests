@@ -73,7 +73,10 @@ describe('Invitations', () => {
       entitiesId.space.roleSetId,
       CommunityRoleType.Member
     );
-    await deleteInvitation(invitationId);
+    if (invitationId && invitationId.length === 36) {
+      await deleteInvitation(invitationId);
+      invitationId = '';
+    }
   });
   test('should create invitation', async () => {
     // Act
