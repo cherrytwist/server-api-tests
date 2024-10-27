@@ -207,6 +207,9 @@ export const updateSpaceSettings = async (
 
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
+  if (!spaceID) {
+    throw new Error('Space ID is required');
+  }
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.UpdateSpaceSettings(

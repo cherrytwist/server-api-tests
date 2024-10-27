@@ -13,5 +13,5 @@ const main = async () => {
 };
 
 main().catch(error => {
-  console.error(error);
+  console.error(`Unable to register: ${error}`);
 });

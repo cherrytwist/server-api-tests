@@ -75,7 +75,7 @@ export const users: Users = {
   betaTester: usersSetEmail[12],
 };
 
-export const getUserDataCodegensIds = async () => {
+export const getUserIDs = async () => {
   for (const user of usersSetEmail) {
     const userData = await getUserData(user.email);
     user.displayName = userData?.data?.user.profile.displayName || '';
@@ -91,7 +91,7 @@ export const getUserDataCodegensIds = async () => {
 };
 
 beforeAll(async () => {
-  await getUserDataCodegensIds();
+  await getUserIDs();
   await assignUserAsGlobalSupport(
     users.globalSpacesAdmin.id,
     TestUser.GLOBAL_ADMIN
