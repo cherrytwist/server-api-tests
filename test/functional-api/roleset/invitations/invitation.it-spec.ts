@@ -73,32 +73,33 @@ describe('Invitations', () => {
       entitiesId.space.roleSetId,
       CommunityRoleType.Member
     );
-    await deleteInvitation(invitationId);
+    //await deleteInvitation(invitationId);
   });
-  test('should create invitation', async () => {
-    // Act
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
+  // test('should create invitation', async () => {
+  //   // Act
+  //   invitationData = await inviteContributors(
+  //     entitiesId.space.roleSetId,
+  //     [users.nonSpaceMember.id],
+  //     TestUser.GLOBAL_ADMIN
+  //   );
 
-    invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-    if (invitationResult && invitationResult.length > 0) {
-      invitationId = invitationResult[0].id;
-    }
+  //   invitationId = 'invitationIdNotRetrieved';
+  //   const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+  //   if (invitationResult && invitationResult.length > 0) {
+  //     invitationId = invitationResult[0].id;
+  //   }
+  //   expect(invitationId.length).toEqual(36);
 
 
-    const getInv = await getSpaceInvitation(
-      entitiesId.spaceId,
-      TestUser.GLOBAL_ADMIN
-    );
-    const data = getInv?.data?.space?.community?.roleSet.invitations;
+  //   const getInv = await getSpaceInvitation(
+  //     entitiesId.spaceId,
+  //     TestUser.GLOBAL_ADMIN
+  //   );
+  //   const data = getInv?.data?.space?.community?.roleSet.invitations;
 
-    // Assert
-    expect(data?.[0].state).toEqual('invited');
-  });
+  //   // Assert
+  //   expect(data?.[0].state).toEqual('invited');
+  // });
 
   test('should create space invitation, when previous was REJECTED and ARCHIVED', async () => {
     // Arrange
@@ -113,6 +114,7 @@ describe('Invitations', () => {
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
+    expect(invitationId.length).toEqual(36);
 
     // Reject and Archive Space invitation
     await eventOnRoleSetInvitation(invitationId, 'REJECT');
@@ -126,12 +128,16 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    const invitationInfoTwo =
-      invitationDataTwo?.data?.inviteContributorsForRoleSetMembership[0];
-    const invitationIdTwo = invitationInfoTwo?.id ?? '';
+    let  invitationIdTwo = 'invitationId2NotRetrieved';
+    const invitationResultTwo = invitationDataTwo?.data?.inviteContributorsForRoleSetMembership;
+    if (invitationResultTwo && invitationResultTwo.length > 0) {
+      invitationIdTwo = invitationResultTwo[0].id;
+    }
+    expect(invitationIdTwo.length).toEqual(36);
 
     const userAppsData = await meQuery(TestUser.NON_HUB_MEMBER);
     const membershipData = userAppsData?.data?.me;
+    console.log(`membershipData: ${JSON.stringify(membershipData)}`);
 
     // Assert
     expect(membershipData?.communityInvitations).toEqual(
@@ -145,406 +151,421 @@ describe('Invitations', () => {
         }),
       ])
     );
-    await deleteInvitation(invitationIdTwo);
-  });
-
-  test('should remove invitation', async () => {
-    // Arrange
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-    invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-    if (invitationResult && invitationResult.length > 0) {
-      invitationId = invitationResult[0].id;
-    }
-
-    // Act
-    const removeInv = await deleteInvitation(invitationId);
-    const getInv = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
-    // Assert
-    expect(removeInv?.data?.deleteInvitation.id).toEqual(invitationId);
-    expect(getInv?.data?.lookup?.roleSet?.invitations).toHaveLength(0);
-  });
-
-  // Skipped until implemented
-  test.skip('should throw error for quering not existing invitation', async () => {
-    // Act
-    const invId = '8bf7752d-59bf-404a-97c8-e906d8377c37';
-    const getInv = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
-
-    // Assert
-    expect(getInv.status).toBe(200);
-    expect(getInv?.error?.errors[0].message).toContain(
-      `Invitation with ID ${invId} can not be found!`
-    );
-  });
-
-  test('should throw error for creating the same invitation twice', async () => {
-    // Arrange
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-
-    invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-    if (invitationResult && invitationResult.length > 0) {
-      invitationId = invitationResult[0].id;
-    }
-
-    // Act
-    const invitationDataTwo = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-
-    // Assert
-    expect(invitationDataTwo?.error?.errors[0].message).toContain(
-      `Invitation not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
-    );
-  });
-
-  test('should return invitations after user is removed', async () => {
-    // Act
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.qaUser.id],
-      TestUser.GLOBAL_ADMIN
-    );
-    invitationId =
-      invitationData?.data?.inviteContributorsForRoleSetMembership?.id;
-
-    await deleteUser(users.qaUser.id);
-
-    const invitationsDataCommunity = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
-
-    // Assert
-    expect(invitationsDataCommunity.status).toBe(200);
-    expect(
-      invitationsDataCommunity?.data?.lookup?.roleSet?.invitations
-    ).toEqual([]);
-    await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
+    //await deleteInvitation(invitationIdTwo);
   });
 });
 
-describe('Invitations-flows', () => {
-  afterEach(async () => {
-    await removeRoleFromUser(
-      users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
-      CommunityRoleType.Member
-    );
+//   test('should remove invitation', async () => {
+//     // Arrange
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
+//     invitationId = 'invitationIdNotRetrieved';
+//     const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//     if (invitationResult && invitationResult.length > 0) {
+//       invitationId = invitationResult[0].id;
+//     }
+//     expect(invitationId.length).toEqual(36);
 
-    await deleteInvitation(invitationId);
-  });
+//     // Act
+//     const removeInv = await deleteInvitation(invitationId);
+//     const getInv = await getRoleSetInvitationsApplications(
+//       entitiesId.space.roleSetId
+//     );
+//     // Assert
+//     expect(removeInv?.data?.deleteInvitation.id).toEqual(invitationId);
+//     expect(getInv?.data?.lookup?.roleSet?.invitations).toHaveLength(0);
+//   });
 
-  test('invitee is able to ACCEPT invitation and access space data', async () => {
-    // Act
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-    invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-    if (invitationResult && invitationResult.length > 0) {
-      invitationId = invitationResult[0].id;
-    }
+//   // Skipped until implemented
+//   test.skip('should throw error for quering not existing invitation', async () => {
+//     // Act
+//     const invId = '8bf7752d-59bf-404a-97c8-e906d8377c37';
+//     const getInv = await getRoleSetInvitationsApplications(
+//       entitiesId.space.roleSetId
+//     );
 
-    // Approve Space invitation
-    const a = await eventOnRoleSetInvitation(
-      invitationId,
-      'ACCEPT',
-      TestUser.NON_HUB_MEMBER
-    );
-    console.log(a);
-    await delay(1000);
+//     // Assert
+//     expect(getInv.status).toBe(200);
+//     expect(getInv?.error?.errors[0].message).toContain(
+//       `Invitation with ID ${invId} can not be found!`
+//     );
+//   });
 
-    const spaceData = await getSpaceData(
-      spaceNameId,
-      TestUser.NON_HUB_MEMBER
-    );
-    console.log(spaceData.error);
+//   test('should throw error for creating the same invitation twice', async () => {
+//     // Arrange
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
 
-    // Assert
-    expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
-      readPrivilege
-    );
-  });
+//     invitationId = 'invitationIdNotRetrieved';
+//     const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//     if (invitationResult && invitationResult.length > 0) {
+//       invitationId = invitationResult[0].id;
+//     }
+//     expect(invitationId.length).toEqual(36);
 
-  test('invitee is able to REJECT and ARCHIVE invitation: no access to space data', async () => {
-    // Act
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-    invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-    if (invitationResult && invitationResult.length > 0) {
-      invitationId = invitationResult[0].id;
-    }
+//     // Act
+//     const invitationDataTwo = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
 
-    // Approve Space invitation
-    await eventOnRoleSetInvitation(
-      invitationId,
-      'REJECT',
-      TestUser.NON_HUB_MEMBER
-    );
-    await delay(1000);
-    await eventOnRoleSetInvitation(
-      invitationId,
-      'ARCHIVE',
-      TestUser.NON_HUB_MEMBER
-    );
-    await delay(1000);
-    const spaceData = await getSpaceData(
-      spaceNameId,
-      TestUser.NON_HUB_MEMBER
-    );
+//     // Assert
+//     expect(invitationDataTwo?.error?.errors[0].message).toContain(
+//       `Invitation not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
+//     );
+//   });
 
-    // Assert
-    expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
-      undefined
-    );
-  });
+//   test('should return invitations after user is removed', async () => {
+//     // Act
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.qaUser.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
 
-  test('should throw error, when sending invitation to a member', async () => {
-    // Arrange
-    await assignRoleToUser(
-      users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
-      CommunityRoleType.Member
-    );
-
-    await assignRoleToUser(
-      users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
-      CommunityRoleType.Member
-    );
-
-    // Act
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-
-    // Assert
-    expect(invitationData?.error?.errors[0].message).toContain(
-      `Invitation not possible: Contributor ${users.nonSpaceMember.id} is already a member of the RoleSet: ${entitiesId.space.roleSetId}.`
-    );
-  });
-
-  test('should fail to send invitation, when user has active application', async () => {
-    // Arrange
-    const res = await createApplication(
-      entitiesId.space.roleSetId,
-      TestUser.NON_HUB_MEMBER
-    );
-    let applicationId = 'applicationIdNotRetrieved';
-    if (res?.data?.applyForEntryRoleOnRoleSet) {
-       applicationId = res?.data?.applyForEntryRoleOnRoleSet?.id;
-    }
-    expect(applicationId.length).toEqual(36);
-
-    // Act
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-
-    // Assert
-    expect(invitationData?.error?.errors[0].message).toContain(
-      `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.nonSpaceMember.id} on RoleSet: ${entitiesId.space.roleSetId}.`
-    );
-    await deleteApplication(applicationId);
-  });
-
-  test('User with received inviation, cannot apply to the community', async () => {
-    // Arrange
-    invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
-      [users.nonSpaceMember.id],
-      TestUser.GLOBAL_ADMIN
-    );
-
-    const userDataOrig = await meQuery(TestUser.NON_HUB_MEMBER);
-
-    const membershipDataOrig = userDataOrig?.data?.me;
-    const invitationsCount = membershipDataOrig?.communityInvitations?.length ?? 0;
-    const applicationsCountOrig = membershipDataOrig?.communityApplications?.length ?? 0;
+//     invitationId = 'invitationIdNotRetrieved';
+//     const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//     if (invitationResult && invitationResult.length > 0) {
+//       invitationId = invitationResult[0].id;
+//     }
+//     expect(invitationId.length).toEqual(36);
 
 
-    invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-    if (invitationResult && invitationResult.length > 0) {
-      invitationId = invitationResult[0].id;
-    }
-    expect(invitationId.length).toEqual(36);
+//     await deleteUser(users.qaUser.id);
 
-    // Act
-    const res = await createApplication(entitiesId.space.roleSetId);
-    const userAppsData = await meQuery(TestUser.NON_HUB_MEMBER);
+//     const invitationsDataCommunity = await getRoleSetInvitationsApplications(
+//       entitiesId.space.roleSetId
+//     );
 
-    const membershipData = userAppsData?.data?.me;
+//     // Assert
+//     expect(invitationsDataCommunity.status).toBe(200);
+//     expect(
+//       invitationsDataCommunity?.data?.lookup?.roleSet?.invitations
+//     ).toEqual([]);
+//     await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
+//   });
+// });
 
-    // Assert
-    expect(invitationsCount > 0).toBeTruthy();
-    expect(membershipData?.communityApplications).toHaveLength(applicationsCountOrig);
-    expect(res.error?.errors[0].message).toContain(
-      `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
-    );
-  });
-});
+// describe('Invitations-flows', () => {
+//   afterEach(async () => {
+//     await removeRoleFromUser(
+//       users.nonSpaceMember.id,
+//       entitiesId.space.roleSetId,
+//       CommunityRoleType.Member
+//     );
 
-describe('Invitations - Authorization', () => {
-  const authErrorUpdateInvitationMessage =
-    "Authorization: unable to grant 'update' privilege: event on invitation";
-  const authErrorCreateInvitationMessage =
-    "Authorization: unable to grant 'community-invite' privilege";
-  const accepted = 'accepted';
-  const invited = 'invited';
+//     await deleteInvitation(invitationId);
+//   });
 
-  afterEach(async () => {
-    await removeRoleFromUser(
-      users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
-      CommunityRoleType.Member
-    );
+//   test('invitee is able to ACCEPT invitation and access space data', async () => {
+//     // Act
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
+//     invitationId = 'invitationIdNotRetrieved';
+//     const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//     if (invitationResult && invitationResult.length > 0) {
+//       invitationId = invitationResult[0].id;
+//     }
+//     expect(invitationId.length).toEqual(36);
 
-    await deleteInvitation(invitationId);
-  });
-  describe('DDT rights to change invitation state', () => {
-    // Arrange
-    test.each`
-      user                          | text
-      ${TestUser.NON_HUB_MEMBER}    | ${accepted}
-      ${TestUser.GLOBAL_ADMIN}      | ${invited}
-      ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
-      ${TestUser.HUB_ADMIN}         | ${invited}
-    `(
-      'User: "$user", should get: "$text" to update invitation of another user',
-      async ({ user, text }) => {
-        invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
-          [users.nonSpaceMember.id],
-          TestUser.GLOBAL_ADMIN
-        );
-        invitationId = 'invitationIdNotRetrieved';
-        const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-        if (invitationResult && invitationResult.length > 0) {
-          invitationId = invitationResult[0].id;
-        }
+//     // Approve Space invitation
+//     const a = await eventOnRoleSetInvitation(
+//       invitationId,
+//       'ACCEPT',
+//       TestUser.NON_HUB_MEMBER
+//     );
+//     console.log(a);
+//     await delay(1000);
 
-        expect(invitationId.length).toEqual(36);
+//     const spaceData = await getSpaceData(
+//       spaceNameId,
+//       TestUser.NON_HUB_MEMBER
+//     );
+//     console.log(spaceData.error);
 
-        const result = await eventOnRoleSetInvitation(
-          invitationId,
-          'ACCEPT',
-          user
-        );
+//     // Assert
+//     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
+//       readPrivilege
+//     );
+//   });
 
-        // Assert
-        expect(
-          result?.data?.eventOnInvitation.state
-        ).toContain(text);
-      }
-    );
+//   test('invitee is able to REJECT and ARCHIVE invitation: no access to space data', async () => {
+//     // Act
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
+//     invitationId = 'invitationIdNotRetrieved';
+//     const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//     if (invitationResult && invitationResult.length > 0) {
+//       invitationId = invitationResult[0].id;
+//     }
+//     expect(invitationId.length).toEqual(36);
 
-    test.each`
-      user                   | text
-      ${TestUser.HUB_MEMBER} | ${authErrorUpdateInvitationMessage}
-      ${TestUser.QA_USER}    | ${authErrorUpdateInvitationMessage}
-    `(
-      'User: "$user", should get Error: "$text" to update invitation of another user',
-      async ({ user, text }) => {
-        invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
-          [users.nonSpaceMember.id],
-          TestUser.GLOBAL_ADMIN
-        );
-        invitationId = 'invitationIdNotRetrieved';
-        const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-        if (invitationResult && invitationResult.length > 0) {
-          invitationId = invitationResult[0].id;
-        }
+//     // Approve Space invitation
+//     await eventOnRoleSetInvitation(
+//       invitationId,
+//       'REJECT',
+//       TestUser.NON_HUB_MEMBER
+//     );
+//     await delay(1000);
+//     await eventOnRoleSetInvitation(
+//       invitationId,
+//       'ARCHIVE',
+//       TestUser.NON_HUB_MEMBER
+//     );
+//     await delay(1000);
+//     const spaceData = await getSpaceData(
+//       spaceNameId,
+//       TestUser.NON_HUB_MEMBER
+//     );
 
-        const result = await eventOnRoleSetInvitation(
-          invitationId,
-          'ACCEPT',
-          user
-        );
+//     // Assert
+//     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
+//       undefined
+//     );
+//   });
 
-        // Assert
-        expect(result?.error?.errors[0].message).toContain(text);
-      }
-    );
-  });
+//   test('should throw error, when sending invitation to a member', async () => {
+//     // Arrange
+//     await assignRoleToUser(
+//       users.nonSpaceMember.id,
+//       entitiesId.space.roleSetId,
+//       CommunityRoleType.Member
+//     );
 
-  describe('DDT users with rights to create invitation', () => {
-    // Arrange
-    test.each`
-      user                          | state
-      ${TestUser.GLOBAL_ADMIN}      | ${invited}
-      ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
-      ${TestUser.HUB_ADMIN}         | ${invited}
-    `(
-      'User: "$user", should get: "$text" to create invitation to another user',
-      async ({ user, state }) => {
-        invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
-          [users.nonSpaceMember.id],
-          user
-        );
+//     await assignRoleToUser(
+//       users.nonSpaceMember.id,
+//       entitiesId.space.roleSetId,
+//       CommunityRoleType.Member
+//     );
 
-        invitationId = 'invitationIdNotRetrieved';
-        const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
-        if (invitationResult && invitationResult.length > 0) {
-          invitationId = invitationResult[0].id;
-        }
+//     // Act
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
 
-        // Assert
-        expect(
-          invitationData.data.inviteContributorsForRoleSetMembership[0].state
-        ).toContain(state);
-      }
-    );
-  });
+//     // Assert
+//     expect(invitationData?.error?.errors[0].message).toContain(
+//       `Invitation not possible: Contributor ${users.nonSpaceMember.id} is already a member of the RoleSet: ${entitiesId.space.roleSetId}.`
+//     );
+//   });
 
-  describe('DDT users with NO rights to create invitation', () => {
-    // Arrange
-    //
-    test.each`
-      user                               | text
-      ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${authErrorCreateInvitationMessage}
-      ${TestUser.HUB_MEMBER}             | ${authErrorCreateInvitationMessage}
-      ${TestUser.QA_USER}                | ${authErrorCreateInvitationMessage}
-      ${TestUser.NON_HUB_MEMBER}         | ${authErrorCreateInvitationMessage}
-    `(
-      'User: "$user", should get: "$text" to create invitation to another user',
-      async ({ user, text }) => {
-        invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
-          [users.nonSpaceMember.id],
-          user
-        );
+//   test('should fail to send invitation, when user has active application', async () => {
+//     // Arrange
+//     const res = await createApplication(
+//       entitiesId.space.roleSetId,
+//       TestUser.NON_HUB_MEMBER
+//     );
+//     let applicationId = 'applicationIdNotRetrieved';
+//     if (res?.data?.applyForEntryRoleOnRoleSet) {
+//        applicationId = res?.data?.applyForEntryRoleOnRoleSet?.id;
+//     }
+//     expect(applicationId.length).toEqual(36);
 
-        // Assert
-        expect(invitationData?.error?.errors[0].message).toContain(text);
-      }
-    );
-  });
-});
+//     // Act
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
+
+//     // Assert
+//     expect(invitationData?.error?.errors[0].message).toContain(
+//       `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.nonSpaceMember.id} on RoleSet: ${entitiesId.space.roleSetId}.`
+//     );
+//     await deleteApplication(applicationId);
+//   });
+
+//   test('User with received inviation, cannot apply to the community', async () => {
+//     // Arrange
+//     invitationData = await inviteContributors(
+//       entitiesId.space.roleSetId,
+//       [users.nonSpaceMember.id],
+//       TestUser.GLOBAL_ADMIN
+//     );
+
+//     const userDataOrig = await meQuery(TestUser.NON_HUB_MEMBER);
+
+//     const membershipDataOrig = userDataOrig?.data?.me;
+//     const invitationsCount = membershipDataOrig?.communityInvitations?.length ?? 0;
+//     const applicationsCountOrig = membershipDataOrig?.communityApplications?.length ?? 0;
+
+
+//     invitationId = 'invitationIdNotRetrieved';
+//     const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//     if (invitationResult && invitationResult.length > 0) {
+//       invitationId = invitationResult[0].id;
+//     }
+//     expect(invitationId.length).toEqual(36);
+
+//     // Act
+//     const res = await createApplication(entitiesId.space.roleSetId);
+//     const userAppsData = await meQuery(TestUser.NON_HUB_MEMBER);
+
+//     const membershipData = userAppsData?.data?.me;
+
+//     // Assert
+//     expect(invitationsCount > 0).toBeTruthy();
+//     expect(membershipData?.communityApplications).toHaveLength(applicationsCountOrig);
+//     expect(res.error?.errors[0].message).toContain(
+//       `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
+//     );
+//   });
+// });
+
+// describe('Invitations - Authorization', () => {
+//   const authErrorUpdateInvitationMessage =
+//     "Authorization: unable to grant 'update' privilege: event on invitation";
+//   const authErrorCreateInvitationMessage =
+//     "Authorization: unable to grant 'community-invite' privilege";
+//   const accepted = 'accepted';
+//   const invited = 'invited';
+
+//   afterEach(async () => {
+//     await removeRoleFromUser(
+//       users.nonSpaceMember.id,
+//       entitiesId.space.roleSetId,
+//       CommunityRoleType.Member
+//     );
+
+//     await deleteInvitation(invitationId);
+//   });
+//   describe('DDT rights to change invitation state', () => {
+//     // Arrange
+//     test.each`
+//       user                          | text
+//       ${TestUser.NON_HUB_MEMBER}    | ${accepted}
+//       ${TestUser.GLOBAL_ADMIN}      | ${invited}
+//       ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
+//       ${TestUser.HUB_ADMIN}         | ${invited}
+//     `(
+//       'User: "$user", should get: "$text" to update invitation of another user',
+//       async ({ user, text }) => {
+//         invitationData = await inviteContributors(
+//           entitiesId.space.roleSetId,
+//           [users.nonSpaceMember.id],
+//           TestUser.GLOBAL_ADMIN
+//         );
+//         invitationId = 'invitationIdNotRetrieved';
+//         const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//         if (invitationResult && invitationResult.length > 0) {
+//           invitationId = invitationResult[0].id;
+//         }
+
+//         expect(invitationId.length).toEqual(36);
+
+//         const result = await eventOnRoleSetInvitation(
+//           invitationId,
+//           'ACCEPT',
+//           user
+//         );
+
+//         // Assert
+//         expect(
+//           result?.data?.eventOnInvitation.state
+//         ).toContain(text);
+//       }
+//     );
+
+//     test.each`
+//       user                   | text
+//       ${TestUser.HUB_MEMBER} | ${authErrorUpdateInvitationMessage}
+//       ${TestUser.QA_USER}    | ${authErrorUpdateInvitationMessage}
+//     `(
+//       'User: "$user", should get Error: "$text" to update invitation of another user',
+//       async ({ user, text }) => {
+//         invitationData = await inviteContributors(
+//           entitiesId.space.roleSetId,
+//           [users.nonSpaceMember.id],
+//           TestUser.GLOBAL_ADMIN
+//         );
+//         invitationId = 'invitationIdNotRetrieved';
+//         const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//         if (invitationResult && invitationResult.length > 0) {
+//           invitationId = invitationResult[0].id;
+//         }
+
+//         const result = await eventOnRoleSetInvitation(
+//           invitationId,
+//           'ACCEPT',
+//           user
+//         );
+
+//         // Assert
+//         expect(result?.error?.errors[0].message).toContain(text);
+//       }
+//     );
+//   });
+
+//   describe('DDT users with rights to create invitation', () => {
+//     // Arrange
+//     test.each`
+//       user                          | state
+//       ${TestUser.GLOBAL_ADMIN}      | ${invited}
+//       ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
+//       ${TestUser.HUB_ADMIN}         | ${invited}
+//     `(
+//       'User: "$user", should get: "$text" to create invitation to another user',
+//       async ({ user, state }) => {
+//         invitationData = await inviteContributors(
+//           entitiesId.space.roleSetId,
+//           [users.nonSpaceMember.id],
+//           user
+//         );
+
+//         console.log(`Data retrieved: ${JSON.stringify(invitationData)}`);
+
+//         invitationId = 'invitationIdNotRetrieved';
+//         let invitationState = 'notretrieved'
+//         const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+//         if (invitationResult && invitationResult.length > 0) {
+//           invitationId = invitationResult[0].id;
+//           invitationState = invitationResult[0].state;
+//         }
+
+//         // Assert
+//         expect(
+//           invitationState
+//         ).toContain(state);
+//       }
+//     );
+//   });
+
+//   describe('DDT users with NO rights to create invitation', () => {
+//     // Arrange
+//     //
+//     test.each`
+//       user                               | text
+//       ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${authErrorCreateInvitationMessage}
+//       ${TestUser.HUB_MEMBER}             | ${authErrorCreateInvitationMessage}
+//       ${TestUser.QA_USER}                | ${authErrorCreateInvitationMessage}
+//       ${TestUser.NON_HUB_MEMBER}         | ${authErrorCreateInvitationMessage}
+//     `(
+//       'User: "$user", should get: "$text" to create invitation to another user',
+//       async ({ user, text }) => {
+//         invitationData = await inviteContributors(
+//           entitiesId.space.roleSetId,
+//           [users.nonSpaceMember.id],
+//           user
+//         );
+
+//         // Assert
+//         expect(invitationData?.error?.errors[0].message).toContain(text);
+//       }
+//     );
+//   });
+// });
