@@ -321,26 +321,26 @@ describe('Application-flows', () => {
 
     const membershipData = userAppsData?.data?.me?.communityApplications;
     const challengeAppOb = [
-      {
-        application: {
+      expect.objectContaining({
+        application: expect.objectContaining({
           id: challengeApplicationId,
           state: 'new',
           isFinalized: false,
           nextEvents: ['APPROVE', 'REJECT'],
-        },
-        spacePendingMembershipInfo: { id: entitiesId.challenge.id },
-      },
+        }),
+        spacePendingMembershipInfo: expect.objectContaining({
+          id: entitiesId.challenge.id,
+        }),
+      }),
     ];
 
     const filteredMembershipData =
       membershipData?.filter(app => app.application.state == 'new') ?? [];
+
     // Assert
-    // ToDO: this may need tweaking.
-      expect(filteredMembershipData).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining(challengeAppOb),
-        ])
-      );
+    expect(filteredMembershipData).toEqual(
+      expect.arrayContaining(challengeAppOb)
+    );
   });
 
   test('should return updated membershipUser applications', async () => {
