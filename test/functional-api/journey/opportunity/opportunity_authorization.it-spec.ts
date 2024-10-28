@@ -7,13 +7,13 @@ import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import {
-  assignRoleToUser,
-  removeRoleFromUser,
-} from '@test/functional-api/roleset/roles-request.params';
 import { CommunityRoleType } from '@test/generated/alkemio-schema';
 import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';
+import {
+  assignRoleToUserExtendedData,
+  removeRoleFromUserExtendedData,
+} from '../../roleset/roles-request.params';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);
@@ -65,7 +65,7 @@ afterAll(async () => {
 describe('Opportunity Admin', () => {
   test('should create opportunity admin', async () => {
     // Act
-    const res = await assignRoleToUser(
+    const res = await assignRoleToUserExtendedData(
       users.challengeMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
@@ -94,13 +94,13 @@ describe('Opportunity Admin', () => {
     const opportunityRoleSetId2 = oppDataTwo?.community?.roleSet.id ?? '';
 
     // Act
-    const resOne = await assignRoleToUser(
+    const resOne = await assignRoleToUserExtendedData(
       users.challengeMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
-    const resTwo = await assignRoleToUser(
+    const resTwo = await assignRoleToUserExtendedData(
       users.opportunityMember.id,
       opportunityRoleSetId2,
       CommunityRoleType.Admin
@@ -128,19 +128,19 @@ describe('Opportunity Admin', () => {
 
   test('should be able one opportunity admin to remove another admin from opportunity', async () => {
     // Arrange
-    await assignRoleToUser(
+    await assignRoleToUserExtendedData(
       users.challengeMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
-    await assignRoleToUser(
+    await assignRoleToUserExtendedData(
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
-    const res = await removeRoleFromUser(
+    const res = await removeRoleFromUserExtendedData(
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
@@ -160,14 +160,14 @@ describe('Opportunity Admin', () => {
 
   test('should remove the only admin of an opportunity', async () => {
     // Arrange
-    await assignRoleToUser(
+    await assignRoleToUserExtendedData(
       users.challengeMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
     // Act
-    const res = await removeRoleFromUser(
+    const res = await removeRoleFromUserExtendedData(
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
