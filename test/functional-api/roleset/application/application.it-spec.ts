@@ -374,7 +374,7 @@ describe('Application-flows', () => {
     ];
 
     // Assert
-    expect(membershipDataAfter).not.toContainObject(challengeAppOb);
+    expect(membershipDataAfter).not.toContain(challengeAppOb);
 
     // Unset the challengeApplicationId so that afterEach does not try to delete it again
     challengeApplicationId = '';
@@ -476,5 +476,32 @@ describe('Application-flows', () => {
     // Unset the challengeApplicationId so that afterEach does not try to delete it again
     applicationId = '';
     challengeApplicationId = '';
+  });
+
+  test('User should not be able to approve own application', async () => {
+    // Act
+    // Create challenge application
+    applicationData = await createApplication(
+      entitiesId.space.roleSetId,
+      TestUser.QA_USER
+    );
+    const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
+    applicationId = createAppData?.id;
+
+    const eventResponseData = await eventOnRoleSetApplication(
+      applicationId,
+      'APPROVE'
+    );
+    const application = eventResponseData?.data?.eventOnApplication;
+
+    const userAppsData = await meQuery(TestUser.QA_USER);
+    const applicationState =
+      userAppsData?.data?.me?.communityApplications[0].application.state;
+
+    // Assert
+    expect(applicationState).toEqual('new');
+    expect(eventResponseData.error?.errors[0].message).toContain('Error');
+
+    applicationId = '';
   });
 });
