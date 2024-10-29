@@ -41,6 +41,7 @@ export const graphqlErrorWrapper = async <TData>(
     );
     if (badErrors.length > 0) {
       console.error(badErrors);
+      console.error(`Unable to complete call '${fn}'`);
     }
     return {
       error: {
