@@ -51,6 +51,7 @@ describe('Organization verification status', () => {
         setEvent
       );
 
+
       const data = updateState.data?.eventOnOrganizationVerification;
       const organizationData = await getOrganizationData(organizationId);
       const organizationDataResponse =
