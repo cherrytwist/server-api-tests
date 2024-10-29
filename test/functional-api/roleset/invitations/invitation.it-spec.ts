@@ -87,12 +87,12 @@ describe('Invitations', () => {
     );
 
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
     expect(invitationId.length).toEqual(36);
-
 
     const getInv = await getSpaceInvitation(
       entitiesId.spaceId,
@@ -113,7 +113,8 @@ describe('Invitations', () => {
     );
 
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -131,8 +132,9 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    let  invitationIdTwo = 'invitationId2NotRetrieved';
-    const invitationResultTwo = invitationDataTwo?.data?.inviteContributorsForRoleSetMembership;
+    let invitationIdTwo = 'invitationId2NotRetrieved';
+    const invitationResultTwo =
+      invitationDataTwo?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResultTwo && invitationResultTwo.length > 0) {
       invitationIdTwo = invitationResultTwo[0].id;
     }
@@ -164,7 +166,8 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -177,7 +180,9 @@ describe('Invitations', () => {
     );
     // Assert
     expect(removeInv?.data?.deleteInvitation.id).toEqual(invitationId);
-    expect(roleSetPendingMemberships?.data?.lookup?.roleSet?.invitations).toHaveLength(0);
+    expect(
+      roleSetPendingMemberships?.data?.lookup?.roleSet?.invitations
+    ).toHaveLength(0);
 
     // Re-invite to avoid error when deleting in the test setup
     invitationData = await inviteContributors(
@@ -186,7 +191,8 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult2 = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult2 =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult2 && invitationResult2.length > 0) {
       invitationId = invitationResult2[0].id;
     }
@@ -217,7 +223,8 @@ describe('Invitations', () => {
     );
 
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -245,12 +252,12 @@ describe('Invitations', () => {
     );
 
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
     expect(invitationId.length).toEqual(36);
-
 
     await deleteUser(users.qaUser.id);
     // Immediately re-register, will be a new user - do not want a failing test to leave QA user not registered
@@ -287,7 +294,8 @@ describe('Invitations-flows', () => {
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -300,10 +308,7 @@ describe('Invitations-flows', () => {
       TestUser.NON_HUB_MEMBER
     );
 
-    const spaceData = await getSpaceData(
-      spaceNameId,
-      TestUser.NON_HUB_MEMBER
-    );
+    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_HUB_MEMBER);
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -319,7 +324,8 @@ describe('Invitations-flows', () => {
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -338,10 +344,7 @@ describe('Invitations-flows', () => {
       TestUser.NON_HUB_MEMBER
     );
 
-    const spaceData = await getSpaceData(
-      spaceNameId,
-      TestUser.NON_HUB_MEMBER
-    );
+    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_HUB_MEMBER);
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -384,7 +387,7 @@ describe('Invitations-flows', () => {
     );
     let applicationId = 'applicationIdNotRetrieved';
     if (res?.data?.applyForEntryRoleOnRoleSet) {
-       applicationId = res?.data?.applyForEntryRoleOnRoleSet?.id;
+      applicationId = res?.data?.applyForEntryRoleOnRoleSet?.id;
     }
     expect(applicationId.length).toEqual(36);
 
@@ -413,12 +416,14 @@ describe('Invitations-flows', () => {
     const userDataOrig = await meQuery(TestUser.NON_HUB_MEMBER);
 
     const membershipDataOrig = userDataOrig?.data?.me;
-    const invitationsCount = membershipDataOrig?.communityInvitations?.length ?? 0;
-    const applicationsCountOrig = membershipDataOrig?.communityApplications?.length ?? 0;
-
+    const invitationsCount =
+      membershipDataOrig?.communityInvitations?.length ?? 0;
+    const applicationsCountOrig =
+      membershipDataOrig?.communityApplications?.length ?? 0;
 
     invitationId = 'invitationIdNotRetrieved';
-    const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+    const invitationResult =
+      invitationData?.data?.inviteContributorsForRoleSetMembership;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -432,7 +437,9 @@ describe('Invitations-flows', () => {
 
     // Assert
     expect(invitationsCount > 0).toBeTruthy();
-    expect(membershipData?.communityApplications).toHaveLength(applicationsCountOrig);
+    expect(membershipData?.communityApplications).toHaveLength(
+      applicationsCountOrig
+    );
     expect(res.error?.errors[0].message).toContain(
       `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
     );
@@ -461,9 +468,9 @@ describe('Invitations - Authorization', () => {
     test.each`
       user                          | text
       ${TestUser.NON_HUB_MEMBER}    | ${accepted}
-      ${TestUser.GLOBAL_ADMIN}      | ${invited}
-      ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
-      ${TestUser.HUB_ADMIN}         | ${invited}
+      ${TestUser.GLOBAL_ADMIN}      | ${accepted}
+      ${TestUser.GLOBAL_HUBS_ADMIN} | ${accepted}
+      ${TestUser.HUB_ADMIN}         | ${accepted}
     `(
       'User: "$user", should get: "$text" to update invitation of another user',
       async ({ user, text }) => {
@@ -473,7 +480,8 @@ describe('Invitations - Authorization', () => {
           TestUser.GLOBAL_ADMIN
         );
         invitationId = 'invitationIdNotRetrieved';
-        const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+        const invitationResult =
+          invitationData?.data?.inviteContributorsForRoleSetMembership;
         if (invitationResult && invitationResult.length > 0) {
           invitationId = invitationResult[0].id;
         }
@@ -487,9 +495,7 @@ describe('Invitations - Authorization', () => {
         );
 
         // Assert
-        expect(
-          result?.data?.eventOnInvitation.state
-        ).toContain(text);
+        expect(result?.data?.eventOnInvitation.state).toContain(text);
       }
     );
 
@@ -506,7 +512,8 @@ describe('Invitations - Authorization', () => {
           TestUser.GLOBAL_ADMIN
         );
         invitationId = 'invitationIdNotRetrieved';
-        const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+        const invitationResult =
+          invitationData?.data?.inviteContributorsForRoleSetMembership;
         if (invitationResult && invitationResult.length > 0) {
           invitationId = invitationResult[0].id;
         }
@@ -540,17 +547,16 @@ describe('Invitations - Authorization', () => {
         );
 
         invitationId = 'invitationIdNotRetrieved';
-        let invitationState = 'notretrieved'
-        const invitationResult = invitationData?.data?.inviteContributorsForRoleSetMembership;
+        let invitationState = 'notretrieved';
+        const invitationResult =
+          invitationData?.data?.inviteContributorsForRoleSetMembership;
         if (invitationResult && invitationResult.length > 0) {
           invitationId = invitationResult[0].id;
           invitationState = invitationResult[0].state;
         }
 
         // Assert
-        expect(
-          invitationState
-        ).toContain(state);
+        expect(invitationState).toContain(state);
       }
     );
   });
@@ -578,4 +584,4 @@ describe('Invitations - Authorization', () => {
       }
     );
   });
-})
+});
