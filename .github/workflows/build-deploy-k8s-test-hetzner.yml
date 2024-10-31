@@ -106,9 +106,7 @@ jobs:
             run_ids+=($run_id)  # Add run_id to the array
           done
 
-          echo "run_ids=${run_ids[@]}" >> $GITHUB_ENV  # Export run_ids array as an environment variable
-          echo "::set-output name=run_ids::${run_ids[@]}"  # Set output for use in other jobs
-
+          echo "run_ids=${run_ids[@]}" >> $GITHUB_OUTPUT  # Write output to GITHUB_OUTPUT for use in other jobs
 
   wait-for-triggered-workflows:
     needs: trigger
@@ -122,24 +120,27 @@ jobs:
         run: |
           run_ids=($RUN_IDS)  # Convert the output into an array
 
-          for run_id in ${run_ids[@]}; do
-            echo "Checking status for run_id: $run_id"
+          for i in ${!run_ids[@]}; do
+            run_id=${run_ids[$i]}
+            repo=${repos[$i]}  # Ensure the repository name matches the run_id being checked
+
+            echo "Checking status for run_id: $run_id in repository: $repo"
 
             while :; do
               status=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-                "https://api.github.com/repos/alkem-io/<target-repo>/actions/runs/$run_id" | jq -r '.status')
+                "https://api.github.com/repos/alkem-io/$repo/actions/runs/$run_id" | jq -r '.status')
 
               conclusion=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-                "https://api.github.com/repos/alkem-io/<target-repo>/actions/runs/$run_id" | jq -r '.conclusion')
+                "https://api.github.com/repos/alkem-io/$repo/actions/runs/$run_id" | jq -r '.conclusion')
 
-              echo "Status: $status, Conclusion: $conclusion for run_id: $run_id"
+              echo "Status: $status, Conclusion: $conclusion for run_id: $run_id in repository: $repo"
 
               if [[ "$status" == "completed" ]]; then
                 if [[ "$conclusion" == "success" ]]; then
                   echo "Workflow $run_id completed successfully."
                   break
                 else
-                  echo "Workflow $run_id failed with conclusion: $conclusion"
+                  echo "Workflow $run_id in $repo failed with conclusion: $conclusion"
                   exit 1
                 fi
               fi
