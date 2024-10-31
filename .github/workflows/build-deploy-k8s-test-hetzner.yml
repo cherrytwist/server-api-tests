@@ -1,12 +1,11 @@
 name: Nightly Clean up environment and trigger tests
 
 on:
-  workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 * * *' # Runs every day at midnight UTC
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
 
 jobs:
-  deploy:
+  cleanup-db:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout GitHub Action'
