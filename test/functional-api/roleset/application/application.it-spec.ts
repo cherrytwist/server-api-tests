@@ -232,6 +232,33 @@ describe('Application', () => {
     expect(event.error?.errors[0].message).toContain('Error');
   });
 
+  test('User should not be able to approve own application', async () => {
+    // Act
+    applicationData = await createApplication(
+      entitiesId.space.roleSetId,
+      TestUser.QA_USER
+    );
+    const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
+    const applicationSpaceId = createAppData?.id;
+
+    const eventResponseData = await eventOnRoleSetApplication(
+      applicationSpaceId,
+      'APPROVE',
+      TestUser.QA_USER
+    );
+    const userAppsData = await meQuery(TestUser.QA_USER);
+
+    const applicationState =
+      userAppsData?.data?.me?.communityApplications[0].application.state;
+
+    // Assert
+    expect(applicationState).toEqual('new');
+    expect(eventResponseData.error?.errors[0].message).toContain(
+      `Authorization: unable to grant 'community-apply-accept' privilege: event on application: ${applicationSpaceId} user: ${users.qaUser.id} `
+    );
+    await deleteApplication(applicationSpaceId);
+  });
+
   test('should return applications after user is removed', async () => {
     // Arrange
     const applicationsBeforeCreateDelete = await getRoleSetInvitationsApplications(
@@ -476,32 +503,5 @@ describe('Application-flows', () => {
     // Unset the challengeApplicationId so that afterEach does not try to delete it again
     applicationId = '';
     challengeApplicationId = '';
-  });
-
-  test('User should not be able to approve own application', async () => {
-    // Act
-    // Create challenge application
-    applicationData = await createApplication(
-      entitiesId.space.roleSetId,
-      TestUser.QA_USER
-    );
-    const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
-    applicationId = createAppData?.id;
-
-    const eventResponseData = await eventOnRoleSetApplication(
-      applicationId,
-      'APPROVE'
-    );
-    const application = eventResponseData?.data?.eventOnApplication;
-
-    const userAppsData = await meQuery(TestUser.QA_USER);
-    const applicationState =
-      userAppsData?.data?.me?.communityApplications[0].application.state;
-
-    // Assert
-    expect(applicationState).toEqual('new');
-    expect(eventResponseData.error?.errors[0].message).toContain('Error');
-
-    applicationId = '';
   });
 });
