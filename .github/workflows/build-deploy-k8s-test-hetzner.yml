@@ -150,6 +150,7 @@ jobs:
           done
 
   trigger-e2e-tests-travis-ci:
+    needs: wait-for-triggered-workflows
     runs-on: ubuntu-latest
     steps:
       - name: Run e2e Tests
