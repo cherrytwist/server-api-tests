@@ -62,7 +62,7 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     outputs:
-      run_ids: ${{ steps.trigger-workflow.outputs.run_ids }}
+      run_repo_map: ${{ steps.trigger-workflow.outputs.run_repo_map }}
     steps:
       - name: Set Repositories
         id: set-repos
@@ -75,7 +75,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_WORKFLOWS }}
         run: |
-          run_ids=()  # Array to hold run_ids of triggered workflows
+          run_repo_map=()  # Array to hold repo-run_id pairs
 
           for repo in ${repos[@]}; do
             echo "Triggering workflow in repository: $repo"
@@ -103,26 +103,28 @@ jobs:
               exit 1
             fi
 
-            run_ids+=($run_id)  # Add run_id to the array
+            run_repo_map+=("$repo=$run_id")  # Store repo and run_id as a pair
           done
 
-          echo "run_ids=${run_ids[@]}" >> $GITHUB_OUTPUT  # Write output to GITHUB_OUTPUT for use in other jobs
+          # Join all repo-run_id pairs and export as output
+          echo "run_repo_map=${run_repo_map[*]}" >> $GITHUB_OUTPUT
 
   wait-for-triggered-workflows:
     needs: trigger
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_WORKFLOWS }}
-      RUN_IDS: ${{ needs.trigger.outputs.run_ids }}
+      RUN_REPO_MAP: ${{ needs.trigger.outputs.run_repo_map }}
     steps:
       - name: Check statuses of all triggered workflows
         id: check-status
         run: |
-          run_ids=($RUN_IDS)  # Convert the output into an array
+          # Convert RUN_REPO_MAP into an array of pairs
+          run_repo_map=($RUN_REPO_MAP)
 
-          for i in ${!run_ids[@]}; do
-            run_id=${run_ids[$i]}
-            repo=${repos[$i]}  # Ensure the repository name matches the run_id being checked
+          for pair in "${run_repo_map[@]}"; do
+            repo="${pair%%=*}"  # Extract repo name
+            run_id="${pair##*=}"  # Extract run_id
 
             echo "Checking status for run_id: $run_id in repository: $repo"
 
@@ -137,7 +139,7 @@ jobs:
 
               if [[ "$status" == "completed" ]]; then
                 if [[ "$conclusion" == "success" ]]; then
-                  echo "Workflow $run_id completed successfully."
+                  echo "Workflow $run_id in $repo completed successfully."
                   break
                 else
                   echo "Workflow $run_id in $repo failed with conclusion: $conclusion"
