@@ -116,19 +116,31 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_WORKFLOWS }}
       RUN_REPO_MAP: ${{ needs.trigger.outputs.run_repo_map }}
     steps:
-      - name: Check statuses of all triggered workflows
+      - name: Check statuses of all triggered workflows with timeout
         id: check-status
         run: |
           # Convert RUN_REPO_MAP into an array of pairs
           run_repo_map=($RUN_REPO_MAP)
+          timeout_seconds=900  # Set timeout limit to 15 minutes (900 seconds)
 
           for pair in "${run_repo_map[@]}"; do
             repo="${pair%%=*}"  # Extract repo name
             run_id="${pair##*=}"  # Extract run_id
+            start_time=$(date +%s)  # Record start time
 
             echo "Checking status for run_id: $run_id in repository: $repo"
 
             while :; do
+              # Check if timeout exceeded
+              current_time=$(date +%s)
+              elapsed=$(( current_time - start_time ))
+
+              if (( elapsed > timeout_seconds )); then
+                echo "Timeout exceeded: Workflow $run_id in $repo took longer than 10 minutes."
+                exit 1
+              fi
+
+              # Check the status and conclusion of the run
               status=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
                 "https://api.github.com/repos/alkem-io/$repo/actions/runs/$run_id" | jq -r '.status')
 
