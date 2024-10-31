@@ -1,8 +1,9 @@
 name: Nightly Clean up environment and trigger tests
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 0 * * *' # Runs every day at midnight UTC
 
 jobs:
   cleanup-db:
@@ -57,6 +58,96 @@ jobs:
           fi
 
           echo "Migration job completed successfully."
+
+  trigger:
+    runs-on: ubuntu-latest
+    outputs:
+      run_ids: ${{ steps.trigger-workflow.outputs.run_ids }}
+    steps:
+      - name: Set Repositories
+        id: set-repos
+        run: |
+          repos=("server" "client-web" "notifications" "whiteboard-collaboration-service" "matrix-adapter" "file-service" "virtual-contributor-ingest-space" "virtual-contributor-engine-generic" "virtual-contributor-engine-expert" "virtual-contributor-engine-openai-assistant")  # List of target repositories
+          echo "repos=${repos[*]}" >> $GITHUB_ENV
+
+      - name: Trigger workflows in target repositories
+        id: trigger-workflow
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_WORKFLOWS }}
+        run: |
+          run_ids=()  # Array to hold run_ids of triggered workflows
+
+          for repo in ${repos[@]}; do
+            echo "Triggering workflow in repository: $repo"
+
+            # Trigger the workflow
+            response=$(curl -X POST \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              https://api.github.com/repos/alkem-io/$repo/actions/workflows/build-deploy-k8s-test-hetzner.yml/dispatches \
+              -d '{"ref":"develop"}' \
+              -w "%{http_code}" -o response.json)
+
+            if [ "$response" != "204" ]; then
+              echo "Failed to trigger workflow in $repo"; cat response.json; exit 1;
+            fi
+
+            sleep 5  # Allow GitHub time to start the workflow run
+
+            # Get the run_id of the most recent workflow run
+            run_id=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/alkem-io/$repo/actions/runs?branch=develop&event=workflow_dispatch&per_page=1" | jq -r '.workflow_runs[0].id')
+
+            if [ -z "$run_id" ] || [ "$run_id" == "null" ]; then
+              echo "Failed to retrieve run_id for $repo"
+              exit 1
+            fi
+
+            run_ids+=($run_id)  # Add run_id to the array
+          done
+
+          echo "run_ids=${run_ids[@]}" >> $GITHUB_ENV  # Export run_ids array as an environment variable
+          echo "::set-output name=run_ids::${run_ids[@]}"  # Set output for use in other jobs
+
+
+  wait-for-triggered-workflows:
+    needs: trigger
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_WORKFLOWS }}
+      RUN_IDS: ${{ needs.trigger.outputs.run_ids }}
+    steps:
+      - name: Check statuses of all triggered workflows
+        id: check-status
+        run: |
+          run_ids=($RUN_IDS)  # Convert the output into an array
+
+          for run_id in ${run_ids[@]}; do
+            echo "Checking status for run_id: $run_id"
+
+            while :; do
+              status=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/alkem-io/<target-repo>/actions/runs/$run_id" | jq -r '.status')
+
+              conclusion=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/alkem-io/<target-repo>/actions/runs/$run_id" | jq -r '.conclusion')
+
+              echo "Status: $status, Conclusion: $conclusion for run_id: $run_id"
+
+              if [[ "$status" == "completed" ]]; then
+                if [[ "$conclusion" == "success" ]]; then
+                  echo "Workflow $run_id completed successfully."
+                  break
+                else
+                  echo "Workflow $run_id failed with conclusion: $conclusion"
+                  exit 1
+                fi
+              fi
+
+              # Wait and poll again
+              sleep 10
+            done
+          done
 
   trigger-e2e-tests-travis-ci:
     runs-on: ubuntu-latest
