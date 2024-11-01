@@ -40,7 +40,7 @@ export const updatePostTemplate = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.UpdateTemplate(
+    graphqlClient.UpdatePostTemplate(
       {
         profile: {
           displayName,
@@ -48,6 +48,33 @@ export const updatePostTemplate = async (
         },
         templateId: ID,
         postDefaultDescription: defaultDescription,
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const updatePostTemplateNew = async (
+  ID: string,
+
+  displayName = 'Default post template title - Update',
+  description = 'Default post template info description - Update',
+  postDefaultDescription = 'Default post template description - Update',
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.UpdatePostTemplate(
+      {
+        profile: {
+          displayName,
+          description,
+        },
+        templateId: ID,
+        postDefaultDescription,
       },
       {
         authorization: `Bearer ${authToken}`,

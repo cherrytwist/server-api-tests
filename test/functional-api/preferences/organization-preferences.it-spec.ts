@@ -80,6 +80,9 @@ describe('Organization preferences', () => {
           'false',
           userRole
         );
+        console.log("update org prefs",res.data);
+
+        console.log("update org prefs",res.error?.errors[0].message);
 
         // Assert
         expect(

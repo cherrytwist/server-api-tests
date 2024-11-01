@@ -3,6 +3,7 @@ import {
   createPostTemplate,
   getPostTemplatesCountForSpace,
   updatePostTemplate,
+  updatePostTemplateNew,
 } from './post-template.request.params';
 import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
 import { uniqueId } from '@test/utils/mutations/create-mutation';
@@ -96,7 +97,7 @@ describe('Post templates - CRUD', () => {
     );
   });
 
-  test('Update Post template', async () => {
+  test.only('Update Post template', async () => {
     // Arrange
     const resCreatePostTempl = await createPostTemplate(
       entitiesId.space.templateSetId
@@ -104,10 +105,11 @@ describe('Post templates - CRUD', () => {
     postTemplateId = resCreatePostTempl?.data?.createTemplate.id ?? '';
 
     // Act
-    const resUpdatePostTempl = await updatePostTemplate(
+    const resUpdatePostTempl = await updatePostTemplateNew(
       postTemplateId,
       typeFromSpacetemplate + ' - Update'
     );
+    console.log(resUpdatePostTempl.error)
 
     const postDataUpdate = resUpdatePostTempl?.data?.updateTemplate;
     const { data: getUpatedPostData } = await GetTemplateById(postTemplateId);
@@ -389,14 +391,14 @@ describe('Post templates - CRUD Authorization', () => {
         'User: "$userRole" get message: "$message", when intend to update space post template ',
         async ({ userRole }) => {
           // Act
-          const resUpdatePostTempl = await updatePostTemplate(
+          const resUpdatePostTempl = await updatePostTemplateNew(
             postTemplateId,
             'update default description test',
             'update title',
             'update description',
             userRole
           );
-
+console.log(resUpdatePostTempl.error)
           // Assert
           expect(
             resUpdatePostTempl.data?.updateTemplate.postDefaultDescription
