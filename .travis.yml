@@ -1,39 +1,40 @@
 language: node_js
 node_js:
-  - v16.15.0
+- v16.15.0
 addons:
   chrome: stable
 cache:
   directories:
-    - node_modules
+  - node_modules
 env:
   matrix:
-    - ALKEMIO_SERVER=https://test-alkem.io/api/private/non-interactive/graphql ALKEMIO_SERVER_URL=https://test-alkem.io/api/private/non-interactive/graphql
-      ALKEMIO_BASE_URL=https://test-alkem.io MAIL_SLURPER_ENDPOINT=https://test-alkem.io/mailslurper-api/mail
-      KRATOS_ENDPOINT=https://test-alkem.io/ory/kratos/public ALKEMIO_SERVER_WS=wss://test.alkem.io/graphql
+  - ALKEMIO_SERVER=https://test-alkem.io/api/private/non-interactive/graphql ALKEMIO_SERVER_URL=https://test-alkem.io/api/private/non-interactive/graphql
+    ALKEMIO_BASE_URL=https://test-alkem.io MAIL_SLURPER_ENDPOINT=https://test-alkem.io/mailslurper-api/mail
+    KRATOS_ENDPOINT=https://test-alkem.io/ory/kratos/public ALKEMIO_SERVER_WS=wss://test.alkem.io/graphql
+  global:
+    secure: hFsOoSRo11y2ZzJ7awyVsdfH9SXwf7AALC36TfFPPHnRp9ZrCrfDDiJKTVcuEut00Q5+P/k2fl9jvWgHBa5MPK4YW6MQ6pB4BtBuEPIBuYcIbNpbPSehV0j5eviTqBukkENZl9rY4KjsqEVXH9O2/voTlFSiONL4Ynez0ohky92J16U5/+4v7GIPdC7tc/dwkmvqi3c8LcHhVeR6MA2/W/DWN5h5OZyTdZz6nDzVsHsF+yoURp+gLDtgJ2QmBEcawRHm3AhsR6qBLUSJH7/gJUeiGD4TeYzwSh+WDiESURFGus07P5NvoR/bwJ3AVHzn8W5+5aRs2dDTLe/+jfvVGza+pZfjTt9Fvv+I8OW1HrafaJ05e4X4EkYi/5LPgOEtS5vHo7u53DbvZotxqt+xyQ9iN+9uduJjgPmVrEH4ijIL52va/kuPtGy6w4ubTCQi5TWC02M4ffAxyrqbNs/sCTZTYZ2vSYtRKVawyKFUhO3vj5TJbZp/rRf4LJ6GZ1W57E+qWwgDvBjDT2Le1mW2e8VQVODOR+RM4HBXM1mS6QojQ6oTmSyHRLkeEd+q5/potLnXt3WF1MmL2RokP4sQTGQ8FSB3v2hjSInDkNSoz7OkbPUTLremZ/vtZwFaZvJEERCAYbdCblK1C0VurQQ2y9izBaytLaFYNQKCyMk5O1Y=
 before_install:
-  - npm i -g npm@8.5.5
+- npm i -g npm@8.5.5
 install:
-  - npm install
+- npm install
 script:
-  - npm run test:organization
-  - npm run test:preferences
-  - npm run test:roleset
-  - npm run test:lifecycle
-  - npm run test:contributormanagement
-  - npm run test:callouts
-  - npm run test:communication
-  - npm run test:activity-logs
-  - npm run test:storage
-  - npm run test:journey
-  - npm run test:notifications:callouts
-  - npm run test:notifications:messaging
-  - npm run test:notifications:community
+- npm run test:organization
+- npm run test:preferences
+- npm run test:roleset
+- npm run test:lifecycle
+- npm run test:contributormanagement
+- npm run test:callouts
+- npm run test:communication
+- npm run test:activity-logs
+- npm run test:storage
+- npm run test:journey
+- npm run test:notifications:callouts
+- npm run test:notifications:messaging
+- npm run test:notifications:community
 notifications:
   email:
     recipients:
-      - valentin@alkem.io
-      - evgeni@alkem.io
-    # Options: always, never, change (only if status changes)
+    - valentin@alkem.io
+    - evgeni@alkem.io
     on_success: always
     on_failure: always
