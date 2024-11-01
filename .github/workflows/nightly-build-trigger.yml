@@ -1,4 +1,4 @@
-name: Nightly Clean up environment and trigger tests
+name: Nightly Clean Up Environment and Trigger Tests
 
 on:
   workflow_dispatch:
