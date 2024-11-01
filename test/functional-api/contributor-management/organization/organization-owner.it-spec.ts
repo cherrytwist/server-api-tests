@@ -57,14 +57,16 @@ describe('Organization Owner', () => {
 
     // Act
     const resOne = await assignUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
+    console.log('resOne', resOne.error);
 
     const resTwo = await assignUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationIdTwo
     );
+    console.log('resTwo', resTwo.error);
 
     // Assert
     expect(
@@ -83,18 +85,18 @@ describe('Organization Owner', () => {
   test('should remove user owner from organization', async () => {
     // Arrange
     await assignUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
 
     await assignUserAsOrganizationOwner(
-      users.nonSpaceMember.email,
+      users.nonSpaceMember.id,
       organizationId
     );
 
     // Act
     const res = await removeUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
 
@@ -107,26 +109,26 @@ describe('Organization Owner', () => {
   test('should not remove the only owner of an organization', async () => {
     // Arrange
     await assignUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
 
     // Act
     const res = await removeUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
 
     // Assert
     expect(res?.error?.errors[0].message).toContain(
-      `Not allowed to remove last owner for organisaiton: ${organizationId}`
+      `Not allowed to remove last owner for Organization: ${organizationId}`
     );
   });
 
-  test('should not return user credentials for removing user not owner of an organization', async () => {
+  test('should not return user credentials for removing user not owner of an Organization', async () => {
     // Act
     const res = await removeUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
 
@@ -139,13 +141,13 @@ describe('Organization Owner', () => {
   test('should throw error for assigning same organization owner twice', async () => {
     // Arrange
     await assignUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
 
     // Act
     const res = await assignUserAsOrganizationOwner(
-      users.spaceMember.email,
+      users.spaceMember.id,
       organizationId
     );
     // Assert

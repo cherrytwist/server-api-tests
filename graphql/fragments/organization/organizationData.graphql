@@ -26,8 +26,11 @@ fragment OrganizationData on Organization {
     }
     id
     status
+    state
+    nextEvents
+    isFinalized
     lifecycle {
-      ...LifecycleData
+      id
     }
   }
   preferences {

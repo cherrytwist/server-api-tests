@@ -26,7 +26,7 @@ module.exports = async () => {
     try {
       await userRegisterFlow(username);
     } catch (error) {
-      console.error(error);
+      console.error(`Unable to register user ${username}: ${error}`);
     }
   }
 };

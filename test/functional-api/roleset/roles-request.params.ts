@@ -46,6 +46,30 @@ export const assignRoleToUser = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
+export const assignRoleToUserExtendedData = async (
+  userID: string,
+  roleSetID: string,
+  role: CommunityRoleType,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.AssignRoleToUserExtendedData(
+      {
+        roleData: {
+          contributorID: userID,
+          roleSetID,
+          role,
+        },
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
 export const removeRoleFromUser = async (
   userID: string,
   roleSetID: string,
@@ -55,6 +79,30 @@ export const removeRoleFromUser = async (
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.removeRoleFromUser(
+      {
+        roleData: {
+          contributorID: userID,
+          roleSetID,
+          role,
+        },
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const removeRoleFromUserExtendedData = async (
+  userID: string,
+  roleSetID: string,
+  role: CommunityRoleType = CommunityRoleType.Member,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.RemoveRoleFromUserExtendedData(
       {
         roleData: {
           contributorID: userID,

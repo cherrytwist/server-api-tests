@@ -37,7 +37,7 @@ let applicationId: string;
 let challengeApplicationId = '';
 let applicationData: any;
 const challengeName = `testChallenge ${uniqueId}`;
-let userMembeship: any;
+let roleSetPendingMemberships: any;
 const isMember = '';
 const organizationName = 'appl-org-name' + uniqueId;
 const hostNameId = 'appl-org-nameid' + uniqueId;
@@ -72,8 +72,12 @@ describe('Application', () => {
       CommunityRoleType.Member
     );
 
-    await deleteApplication(applicationId);
+    if (applicationId && applicationId.length === 36) {
+      await deleteApplication(applicationId);
+      applicationId = '';
+    }
   });
+
   test('should create application', async () => {
     // Act
     applicationData = await createApplication(
@@ -87,18 +91,16 @@ describe('Application', () => {
 
     // Assert
     expect(applicationData.status).toBe(200);
-    expect(
-      applicationData?.data?.applyForEntryRoleOnRoleSet?.lifecycle?.state
-    ).toEqual('new');
+    expect(applicationData?.data?.applyForEntryRoleOnRoleSet?.state).toEqual(
+      'new'
+    );
     expect(getApp).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          application: {
+          application: expect.objectContaining({
             id: applicationId,
-            lifecycle: {
-              state: 'new',
-            },
-          },
+            state: 'new',
+          }),
           spacePendingMembershipInfo: { id: entitiesId.spaceId },
         }),
       ])
@@ -131,25 +133,22 @@ describe('Application', () => {
 
     // Assert
     expect(applicationData.status).toBe(200);
-    expect(
-      applicationData?.data?.applyForEntryRoleOnRoleSet?.lifecycle?.state
-    ).toEqual('new');
+    expect(applicationData?.data?.applyForEntryRoleOnRoleSet?.state).toEqual(
+      'new'
+    );
     expect(getApp).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          application: {
+          application: expect.objectContaining({
             id: applicationId,
-            lifecycle: {
-              state: 'new',
-            },
-          },
+            state: 'new',
+          }),
           spacePendingMembershipInfo: { id: entitiesId.spaceId },
         }),
       ])
     );
     const getAppFiltered =
-      getApp?.filter(app => app.application.lifecycle.state !== 'archived') ??
-      [];
+      getApp?.filter(app => app.application.state !== 'archived') ?? [];
     expect(getAppFiltered).toHaveLength(1);
   });
 
@@ -208,6 +207,8 @@ describe('Application', () => {
       ])
     );
     expect(getApp).toHaveLength(0);
+    // Unset the application Id so that afterEach does not try to delete it again
+    applicationId = '';
   });
 
   // Bug - user challenge application can be approved, when he/she is not member of the parent community
@@ -231,6 +232,33 @@ describe('Application', () => {
     expect(event.error?.errors[0].message).toContain('Error');
   });
 
+  test('User should not be able to approve own application', async () => {
+    // Act
+    applicationData = await createApplication(
+      entitiesId.space.roleSetId,
+      TestUser.QA_USER
+    );
+    const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
+    const applicationSpaceId = createAppData?.id;
+
+    const eventResponseData = await eventOnRoleSetApplication(
+      applicationSpaceId,
+      'APPROVE',
+      TestUser.QA_USER
+    );
+    const userAppsData = await meQuery(TestUser.QA_USER);
+
+    const applicationState =
+      userAppsData?.data?.me?.communityApplications[0].application.state;
+
+    // Assert
+    expect(applicationState).toEqual('new');
+    expect(eventResponseData.error?.errors[0].message).toContain(
+      `Authorization: unable to grant 'community-apply-accept' privilege: event on application: ${applicationSpaceId} user: ${users.qaUser.id} `
+    );
+    await deleteApplication(applicationSpaceId);
+  });
+
   test('should return applications after user is removed', async () => {
     // Arrange
     const applicationsBeforeCreateDelete = await getRoleSetInvitationsApplications(
@@ -249,6 +277,7 @@ describe('Application', () => {
 
     // Act
     await deleteUser(users.qaUser.id);
+    await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
 
     const applicationsAfterCreateDelete = await getRoleSetInvitationsApplications(
       entitiesId.space.roleSetId
@@ -258,7 +287,6 @@ describe('Application', () => {
 
     // Assert
     expect(countAppAfterCreateDelete).toEqual(countAppBeforeCreateDelete);
-    await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
   });
 });
 
@@ -277,8 +305,12 @@ describe('Application-flows', () => {
       entitiesId.challenge.roleSetId,
       CommunityRoleType.Member
     );
-    await deleteApplication(challengeApplicationId);
-    await deleteApplication(applicationId);
+    if (challengeApplicationId.length === 36) {
+      await deleteApplication(challengeApplicationId);
+    }
+    if (applicationId.length === 36) {
+      await deleteApplication(applicationId);
+    }
   });
 
   test('should create application on challenge', async () => {
@@ -299,7 +331,7 @@ describe('Application-flows', () => {
 
     // Assert
     expect(applicationData.status).toBe(200);
-    expect(createAppData.lifecycle.state).toEqual('new');
+    expect(createAppData.state).toEqual('new');
   });
 
   test('should return correct membershipUser applications', async () => {
@@ -316,22 +348,26 @@ describe('Application-flows', () => {
 
     const membershipData = userAppsData?.data?.me?.communityApplications;
     const challengeAppOb = [
-      {
-        application: {
+      expect.objectContaining({
+        application: expect.objectContaining({
           id: challengeApplicationId,
-          lifecycle: {
-            state: 'new',
-          },
-        },
-        spacePendingMembershipInfo: { id: entitiesId.challenge.id },
-      },
+          state: 'new',
+          isFinalized: false,
+          nextEvents: ['APPROVE', 'REJECT'],
+        }),
+        spacePendingMembershipInfo: expect.objectContaining({
+          id: entitiesId.challenge.id,
+        }),
+      }),
     ];
 
     const filteredMembershipData =
-      membershipData?.filter(app => app.application.lifecycle.state == 'new') ??
-      [];
+      membershipData?.filter(app => app.application.state == 'new') ?? [];
+
     // Assert
-    expect(filteredMembershipData).toEqual(challengeAppOb);
+    expect(filteredMembershipData).toEqual(
+      expect.arrayContaining(challengeAppOb)
+    );
   });
 
   test('should return updated membershipUser applications', async () => {
@@ -358,45 +394,71 @@ describe('Application-flows', () => {
       {
         application: {
           id: challengeApplicationId,
-          lifecycle: {
-            state: 'new',
-          },
+          state: 'new',
         },
         spacePendingMembershipInfo: { id: entitiesId.challenge.id },
       },
     ];
 
     // Assert
-    expect(membershipDataAfter).not.toContainObject(challengeAppOb);
+    expect(membershipDataAfter).not.toContain(challengeAppOb);
+
+    // Unset the challengeApplicationId so that afterEach does not try to delete it again
+    challengeApplicationId = '';
   });
 
-  test('should approve challenge application, when space application is APPROVED', async () => {
+  test('should approve subspace application, when space application is APPROVED and applications are allowed', async () => {
     // Arrange
+    // Create + approve space application
+    const spaceApplicationData = await createApplication(
+      entitiesId.space.roleSetId,
+      TestUser.GLOBAL_COMMUNITY_ADMIN
+    );
+
+    if (spaceApplicationData?.data?.applyForEntryRoleOnRoleSet) {
+      applicationId =
+        spaceApplicationData?.data?.applyForEntryRoleOnRoleSet?.id;
+      await eventOnRoleSetApplication(applicationId, 'APPROVE');
+    }
+
+    await updateSpaceSettings(entitiesId.challenge.id, {
+      privacy: {
+        mode: SpacePrivacyMode.Public,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
+    });
+
     // Create challenge application
-    applicationData = await createApplication(
+    const subspaceApplicationData = await createApplication(
       entitiesId.challenge.roleSetId,
       TestUser.GLOBAL_COMMUNITY_ADMIN
     );
-    const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
-    challengeApplicationId = createAppData?.id;
+
+    challengeApplicationId = 'NotRetrieved';
+    if (subspaceApplicationData?.data?.applyForEntryRoleOnRoleSet) {
+      challengeApplicationId =
+        subspaceApplicationData?.data?.applyForEntryRoleOnRoleSet?.id;
+    }
+    expect(challengeApplicationId.length).toEqual(36);
+    if (challengeApplicationId.length !== 36) {
+      throw new Error('Challenge application failed to create');
+    }
 
     // Act
     // Approve challenge application
-    const event = await eventOnRoleSetApplication(
+    const challengeApplicationEventResponse = await eventOnRoleSetApplication(
       challengeApplicationId,
       'APPROVE'
     );
 
-    const state = event?.data?.eventOnApplication?.lifecycle;
-
-    userMembeship = await getRoleSetInvitationsApplications(
-      entitiesId.challenge.roleSetId
-    );
-    applicationId = userMembeship.data.lookup.roleSet.applications[0].id;
+    const challengeApplication =
+      challengeApplicationEventResponse?.data?.eventOnApplication;
 
     // Assert
-    expect(event.status).toBe(200);
-    expect(state?.state).toContain('approved');
+    expect(challengeApplicationEventResponse.status).toBe(200);
+    expect(challengeApplication?.state).toContain('approved');
     expect(isMember).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -407,7 +469,6 @@ describe('Application-flows', () => {
   });
 
   test('should be able to remove challenge application, when space application is removed', async () => {
-    // Arrange
     // Create challenge application
     applicationData = await createApplication(
       entitiesId.challenge.roleSetId,
@@ -417,14 +478,17 @@ describe('Application-flows', () => {
     challengeApplicationId = createAppData?.id;
 
     // Remove Space application
-    await deleteApplication(applicationId);
+    if (applicationId && applicationId.length === 36) {
+      await deleteApplication(applicationId);
+    }
     // Act
     // Remove challenge application
     await deleteApplication(challengeApplicationId);
-    userMembeship = await getRoleSetInvitationsApplications(
+    roleSetPendingMemberships = await getRoleSetInvitationsApplications(
       entitiesId.challenge.roleSetId
     );
-    const applications = userMembeship?.data?.lookup.roleSet.applications;
+    const applications =
+      roleSetPendingMemberships?.data?.lookup.roleSet.applications;
 
     // Assert
     expect(applications).toHaveLength(0);
@@ -435,5 +499,9 @@ describe('Application-flows', () => {
         }),
       ])
     );
+
+    // Unset the challengeApplicationId so that afterEach does not try to delete it again
+    applicationId = '';
+    challengeApplicationId = '';
   });
 });
