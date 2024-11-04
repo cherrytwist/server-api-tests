@@ -3,7 +3,6 @@ import {
   createPostTemplate,
   getPostTemplatesCountForSpace,
   updatePostTemplate,
-  updatePostTemplateNew,
 } from './post-template.request.params';
 import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
 import { uniqueId } from '@test/utils/mutations/create-mutation';
@@ -79,7 +78,7 @@ describe('Post templates - CRUD', () => {
     const resCreatePostTempl = await createPostTemplate(
       entitiesId.space.templateSetId
     );
-    console.log('resCreatePostTempl', resCreatePostTempl.error);
+
     const postDataCreate = resCreatePostTempl?.data?.createTemplate;
     postTemplateId = postDataCreate?.id ?? '';
     const countAfter = await getPostTemplatesCountForSpace(entitiesId.spaceId);
@@ -97,7 +96,7 @@ describe('Post templates - CRUD', () => {
     );
   });
 
-  test.only('Update Post template', async () => {
+  test('Update Post template', async () => {
     // Arrange
     const resCreatePostTempl = await createPostTemplate(
       entitiesId.space.templateSetId
@@ -105,11 +104,12 @@ describe('Post templates - CRUD', () => {
     postTemplateId = resCreatePostTempl?.data?.createTemplate.id ?? '';
 
     // Act
-    const resUpdatePostTempl = await updatePostTemplateNew(
+    const resUpdatePostTempl = await updatePostTemplate(
       postTemplateId,
+      'test title - Update',
+      'test description - Update',
       typeFromSpacetemplate + ' - Update'
     );
-    console.log(resUpdatePostTempl.error)
 
     const postDataUpdate = resUpdatePostTempl?.data?.updateTemplate;
     const { data: getUpatedPostData } = await GetTemplateById(postTemplateId);
@@ -240,6 +240,8 @@ describe('Post templates - Utilization in posts', () => {
       // Act
       await updatePostTemplate(
         postTemplateId,
+        'update title',
+        'update description',
         'update default description - Updated'
       );
 
@@ -391,14 +393,14 @@ describe('Post templates - CRUD Authorization', () => {
         'User: "$userRole" get message: "$message", when intend to update space post template ',
         async ({ userRole }) => {
           // Act
-          const resUpdatePostTempl = await updatePostTemplateNew(
+          const resUpdatePostTempl = await updatePostTemplate(
             postTemplateId,
-            'update default description test',
             'update title',
             'update description',
+            'update default description test',
             userRole
           );
-console.log(resUpdatePostTempl.error)
+
           // Assert
           expect(
             resUpdatePostTempl.data?.updateTemplate.postDefaultDescription
@@ -490,9 +492,7 @@ describe('Post templates - Negative Scenarios', () => {
   test('Delete non existent Post template', async () => {
     // Act
 
-    const res = await deleteTemplate(
-      '0bade07d-6736-4ee2-93c0-b2af22a998ff'
-    );
+    const res = await deleteTemplate('0bade07d-6736-4ee2-93c0-b2af22a998ff');
     expect(res.error?.errors[0].message).toContain(errorNoPostTemplate);
   });
 });
