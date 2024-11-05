@@ -11,6 +11,9 @@ query GetTemplateById($templateId: UUID!) {
       authorization {
         myPrivileges
       }
+      collaboration {
+        id
+      }
       whiteboard {
         id
       }
