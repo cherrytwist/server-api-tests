@@ -33,5 +33,6 @@ notifications:
     recipients:
       - valentin@alkem.io
       - evgeni@alkem.io
+      - 65f46fd0.alkem.io@emea.teams.ms
     on_success: always
     on_failure: always
