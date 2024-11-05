@@ -7,7 +7,7 @@ export const getLicensePlans = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.GetPlatgformLicensePlans(
+    graphqlClient.GetPlatformLicensePlans(
       {},
       {
         authorization: `Bearer ${authToken}`,
@@ -19,7 +19,7 @@ export const getLicensePlans = async (
 
 export const getVCLicensePlan = async (licenseCredential: string) => {
   const response = await getLicensePlans();
-  const allLicensePlans = response.data?.platform.licensing.plans ?? [];
+  const allLicensePlans = response.data?.platform.licensingFramework.plans ?? [];
   const filteredLicensePlan = allLicensePlans.filter(
     plan =>
       plan.licenseCredential.includes(licenseCredential) ||

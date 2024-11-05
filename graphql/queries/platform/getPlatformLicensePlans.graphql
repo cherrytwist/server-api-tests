@@ -1,6 +1,6 @@
-query GetPlatgformLicensePlans {
+query GetPlatformLicensePlans {
   platform {
-    licensing {
+    licensingFramework {
       plans {
         ...LicensePlanData
       }

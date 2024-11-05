@@ -1,4 +1,4 @@
 fragment featureFlagRules on LicensePolicyCredentialRule {
   name
-  grantedPrivileges
+  grantedEntitlements
 }
