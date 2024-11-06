@@ -45,17 +45,17 @@ beforeAll(async () => {
   );
 
   await assignUserAsOrganizationAdmin(
-    users.challengeAdmin.email,
+    users.challengeAdmin.id,
     entitiesId.organization.id
   );
 
   await assignUserAsOrganizationOwner(
-    users.spaceAdmin.email,
+    users.spaceAdmin.id,
     entitiesId.organization.id
   );
 
   await assignUserToOrganization(
-    users.spaceMember.email,
+    users.spaceMember.id,
     entitiesId.organization.id
   );
 });

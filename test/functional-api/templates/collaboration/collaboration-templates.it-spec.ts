@@ -77,6 +77,9 @@ describe('Subspace templates - CRUD', () => {
 
   test('Delete subspace template', async () => {
     // Arrange
+    const countBefore = await getCollaborationTemplatesCountForSpace(
+      entitiesId.spaceId
+    );
     const res = await createTemplateFromCollaboration(
       entitiesId.challenge.collaborationId,
       entitiesId.space.templateSetId,
@@ -84,13 +87,10 @@ describe('Subspace templates - CRUD', () => {
     );
 
     templateId = res?.data?.createTemplateFromCollaboration.id ?? '';
-    const countBefore = await getCollaborationTemplatesCountForSpace(
-      entitiesId.spaceId
-    );
+
 
     // Act
     const resDeleteTemplate = await deleteTemplate(templateId);
-console.log(resDeleteTemplate.error)
     const countAfter = await getCollaborationTemplatesCountForSpace(
       entitiesId.spaceId
     );
