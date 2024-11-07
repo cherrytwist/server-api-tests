@@ -47,7 +47,7 @@ beforeAll(async () => {
   });
 
   await assignUserAsOrganizationOwner(
-    users.spaceMember.email,
+    users.spaceMember.id,
     entitiesId.organization.id
   );
 

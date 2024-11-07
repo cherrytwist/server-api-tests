@@ -33,39 +33,22 @@ export const createPostTemplate = async (
 
 export const updatePostTemplate = async (
   ID: string,
-  defaultDescription = 'Default post template description - Update',
-  displayName = 'Default post template title - Update',
-  description = 'Default post template info description - Update',
+
+  displayName: string,
+  description: string,
+  postDefaultDescription: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.UpdateTemplate(
+    graphqlClient.UpdatePostTemplate(
       {
         profile: {
           displayName,
           description,
         },
         templateId: ID,
-        postDefaultDescription: defaultDescription,
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const deletePostTemplate = async (
-  postTemplateId: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.deleteTemplate(
-      {
-        templateId: postTemplateId,
+        postDefaultDescription,
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -78,7 +61,7 @@ export const deletePostTemplate = async (
 export const getPostTemplatesCountForSpace = async (spaceId: string) => {
   const template = await getSpaceData(spaceId);
   const spacePostTemplates =
-    template?.data?.space?.library?.postTemplates ?? [];
+    template?.data?.space?.templatesManager?.templatesSet?.postTemplates ?? [];
 
   return spacePostTemplates.length;
 };
