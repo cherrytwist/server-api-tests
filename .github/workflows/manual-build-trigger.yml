@@ -57,6 +57,14 @@ jobs:
 
           echo "Migration job completed successfully."
 
+      - name: Restart deployment
+        run: |
+          # Restart the deployment
+          kubectl rollout restart deployment/alkemio-server-deployment
+
+          # Wait for the deployment to complete successfully
+          kubectl rollout status deployment/alkemio-server-deployment --timeout=600s
+
   trigger-e2e-tests-travis-ci:
     needs: cleanup-db
     runs-on: ubuntu-latest
