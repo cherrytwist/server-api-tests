@@ -1,9 +1,8 @@
 name: Nightly Clean Up Environment and Trigger Tests
 
 on:
-  workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 * * *' # Runs every day at midnight UTC
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
 
 jobs:
   cleanup-db:
@@ -39,27 +38,8 @@ jobs:
           # Kill the port-forward process
           kill $PORT_FORWARD_PID
 
-      - name: Create and run migration job
-        run: |
-          # Define a unique job name based on the GitHub run ID
-          MIGRATION_JOB_NAME="alkemio-server-migration-job-${{ github.run_id }}"
-
-          # Create the job from the cronjob
-          kubectl create job --from=cronjob/alkemio-server-migration $MIGRATION_JOB_NAME
-
-          # Wait for the migration job to complete
-          kubectl wait --for=condition=complete job/$MIGRATION_JOB_NAME --timeout=600s
-
-          # Check job status and fail the step if the job didn't succeed
-          MIGRATION_JOB_STATUS=$(kubectl get job $MIGRATION_JOB_NAME -o jsonpath='{.status.succeeded}')
-          if [ "$MIGRATION_JOB_STATUS" != "1" ]; then
-            echo "Migration job failed!"
-            exit 1
-          fi
-
-          echo "Migration job completed successfully."
-
   trigger:
+    needs: cleanup-db
     runs-on: ubuntu-latest
     outputs:
       run_repo_map: ${{ steps.trigger-workflow.outputs.run_repo_map }}
@@ -164,8 +144,40 @@ jobs:
             done
           done
 
-  trigger-e2e-tests-travis-ci:
+  run-migration:
     needs: wait-for-triggered-workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run migration job
+        run: |
+          # Define a unique job name based on the GitHub run ID
+          MIGRATION_JOB_NAME="server-migration-job-${{ github.run_id }}"
+
+          # Create the job from the cronjob
+          kubectl create job --from=cronjob/alkemio-server-migration $MIGRATION_JOB_NAME
+
+          # Wait for the migration job to complete
+          kubectl wait --for=condition=complete job/$MIGRATION_JOB_NAME --timeout=600s
+
+          # Check job status and fail the step if the job didn't succeed
+          MIGRATION_JOB_STATUS=$(kubectl get job $MIGRATION_JOB_NAME -o jsonpath='{.status.succeeded}')
+          if [ "$MIGRATION_JOB_STATUS" != "1" ]; then
+            echo "Migration job failed!"
+            exit 1
+          fi
+
+          echo "Migration job completed successfully."
+
+      - name: Restart deployment
+        run: |
+          # Restart the deployment
+          kubectl rollout restart deployment/alkemio-server-deployment
+
+          # Wait for the deployment to complete successfully
+          kubectl rollout status deployment/alkemio-server-deployment --timeout=600s
+
+  trigger-e2e-tests-travis-ci:
+    needs: run-migration
     runs-on: ubuntu-latest
     steps:
       - name: Run e2e Tests

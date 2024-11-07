@@ -40,7 +40,7 @@ jobs:
       - name: Create and run migration job
         run: |
           # Define a unique job name based on the GitHub run ID
-          MIGRATION_JOB_NAME="alkemio-server-migration-job-${{ github.run_id }}"
+          MIGRATION_JOB_NAME="server-migration-job-${{ github.run_id }}"
 
           # Create the job from the cronjob
           kubectl create job --from=cronjob/alkemio-server-migration $MIGRATION_JOB_NAME
