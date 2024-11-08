@@ -468,9 +468,9 @@ describe('Invitations - Authorization', () => {
     test.each`
       user                          | text
       ${TestUser.NON_HUB_MEMBER}    | ${accepted}
-      ${TestUser.GLOBAL_ADMIN}      | ${accepted}
-      ${TestUser.GLOBAL_HUBS_ADMIN} | ${accepted}
-      ${TestUser.HUB_ADMIN}         | ${accepted}
+      ${TestUser.GLOBAL_ADMIN}      | ${invited}
+      ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
+      ${TestUser.HUB_ADMIN}         | ${invited}
     `(
       'User: "$user", should get: "$text" to update invitation of another user',
       async ({ user, text }) => {
