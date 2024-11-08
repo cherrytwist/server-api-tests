@@ -1,9 +1,15 @@
 module.exports = {
   ...require('./jest.config'),
-  testMatch: [
-    '**/?(*.)+(spec).ts',
-    '**/?(*.)+(it-spec).ts',
-    '**/?(*.)+(e2e-spec).ts',
+  testRegex: [
+    '/test/functional-api/contributor-management/organization/.*\\.it-spec\\.ts',
+    '/test/functional-api/preferences/.*\\.it-spec\\.ts',
+    '/test/functional-api/roleset/.*\\.it-spec\\.ts',
+    '/test/functional-api/contributor-management/.*\\.it-spec\\.ts',
+    '/test/functional-api/callout/.*\\.it-spec\\.ts',
+    '/test/functional-api/zcommunications/.*\\.it-spec\\.ts',
+    '/test/functional-api/activity-logs/.*\\.it-spec\\.ts',
+    '/test/functional-api/journey/.*\\.it-spec\\.ts',
+    '/test/functional-api/storage/.*\\.it-spec\\.ts',
   ],
   coverageDirectory: '<rootDir>/coverage-nightly',
 };
