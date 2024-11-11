@@ -1,9 +1,8 @@
 name: Scheduled Weekly Synapse Reset
 
 on:
-  workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 * * 0' # Runs every week at midnight UTC
+  schedule:
+    - cron: '0 0 * * 0' # Runs every week at midnight UTC
 
 jobs:
   cleanup-synapse-db:
