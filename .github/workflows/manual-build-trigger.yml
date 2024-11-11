@@ -37,7 +37,22 @@ jobs:
           # Kill the port-forward process
           kill $PORT_FORWARD_PID
 
-      - name: Create and run migration job
+  run-migration:
+    needs: cleanup-db
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v4.0.0
+        with:
+          version: 'v1.27.6' # Ensure this matches the version used in your cluster
+
+      - name: Set up Kubeconfig for Hetzner k3s
+        run: |
+          mkdir -p $HOME/.kube  # Ensure the .kube directory exists
+          echo "${{ secrets.KUBECONFIG_SECRET_HETZNER_TEST }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Run migration job
         run: |
           # Define a unique job name based on the GitHub run ID
           MIGRATION_JOB_NAME="server-migration-job-${{ github.run_id }}"
@@ -66,7 +81,7 @@ jobs:
           kubectl rollout status deployment/alkemio-server-deployment --timeout=600s
 
   trigger-e2e-tests-travis-ci:
-    needs: cleanup-db
+    needs: run-migration
     runs-on: ubuntu-latest
     steps:
       - name: Run e2e Tests
