@@ -1,9 +1,8 @@
 name: Nightly Clean Up Environment and Trigger Tests
 
 on:
-  workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 * * *' # Runs every day at midnight UTC
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
 
 jobs:
   cleanup-db:
