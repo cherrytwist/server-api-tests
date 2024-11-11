@@ -6,7 +6,7 @@ on:
   #   - cron: '0 0 * * 0' # Runs every week at midnight UTC
 
 jobs:
-  cleanup-postgres-db:
+  cleanup-synapse-db:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout GitHub Action'
@@ -33,7 +33,7 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         run: |
           # Port-forward to the PostgreSQL service in the background
-          kubectl port-forward svc/DB 5432:5432 &
+          kubectl port-forward svc/postgres 5432:5432 &
           PORT_FORWARD_PID=$!
           sleep 5  # Give port-forwarding some time to start
 
@@ -51,3 +51,49 @@ jobs:
 
           # Kill the port-forward process
           kill $PORT_FORWARD_PID
+
+  restart-synapse-server:
+    needs: cleanup-synapse-db
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v4.0.0
+        with:
+          version: 'v1.29.6' # Ensure this matches the version used in your cluster
+
+      - name: Set up Kubeconfig for Hetzner k3s
+        run: |
+          mkdir -p $HOME/.kube  # Ensure the .kube directory exists
+          echo "${{ secrets.KUBECONFIG_SECRET_HETZNER_TEST }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Restart deployment
+        run: |
+          # Restart the deployment
+          kubectl rollout restart deployment/synapse-deployment
+
+          # Wait for the deployment to complete successfully
+          kubectl rollout status deployment/synapse-deployment --timeout=600s
+
+  restart-matrix-adapter:
+    needs: restart-synapse-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v4.0.0
+        with:
+          version: 'v1.29.6' # Ensure this matches the version used in your cluster
+
+      - name: Set up Kubeconfig for Hetzner k3s
+        run: |
+          mkdir -p $HOME/.kube  # Ensure the .kube directory exists
+          echo "${{ secrets.KUBECONFIG_SECRET_HETZNER_TEST }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Restart deployment
+        run: |
+          # Restart the deployment
+          kubectl rollout restart deployment/alkemio-matrix-adapter-deployment
+
+          # Wait for the deployment to complete successfully
+          kubectl rollout status deployment/alkemio-matrix-adapter-deployment --timeout=600s
