@@ -33,7 +33,7 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         run: |
           # Port-forward to the PostgreSQL service in the background
-          kubectl port-forward svc/DB 5432:5432 &
+          kubectl port-forward svc/postgres 5432:5432 &
           PORT_FORWARD_PID=$!
           sleep 5  # Give port-forwarding some time to start
 
