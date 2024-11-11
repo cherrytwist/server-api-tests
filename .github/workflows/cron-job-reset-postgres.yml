@@ -42,17 +42,33 @@ jobs:
           PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c \
             "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();"
 
+          # Wait a bit to ensure connections are fully terminated
+          echo "Waiting for connections to close..."
+          sleep 10  # Increase wait time to give PostgreSQL time to release all connections
+
           # Retry mechanism to ensure the database is dropped
           DROP_ATTEMPTS=5
           for i in $(seq 1 $DROP_ATTEMPTS); do
             echo "Attempt $i to drop the database $POSTGRES_DB"
-            DROP_RESULT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c "DROP DATABASE IF EXISTS $POSTGRES_DB;")
 
-            if [[ $DROP_RESULT == *"DROP DATABASE"* ]]; then
-              echo "Database $POSTGRES_DB dropped successfully."
-              break
+            # Check if there are still any connections to the database
+            ACTIVE_CONNECTIONS=$(PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -t -c \
+              "SELECT COUNT(*) FROM pg_stat_activity WHERE datname = '$POSTGRES_DB';")
+
+            if [[ "$ACTIVE_CONNECTIONS" -eq 0 ]]; then
+              # Drop the database only if there are no active connections
+              DROP_RESULT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c \
+                "DROP DATABASE IF EXISTS $POSTGRES_DB;")
+
+              if [[ $DROP_RESULT == *"DROP DATABASE"* ]]; then
+                echo "Database $POSTGRES_DB dropped successfully."
+                break
+              else
+                echo "Failed to drop the database. Retrying in 5 seconds..."
+                sleep 5
+              fi
             else
-              echo "Failed to drop the database. Retrying in 5 seconds..."
+              echo "There are still $ACTIVE_CONNECTIONS active connections. Retrying in 5 seconds..."
               sleep 5
             fi
           done
@@ -63,7 +79,6 @@ jobs:
 
           # Kill the port-forward process
           kill $PORT_FORWARD_PID
-
 
   restart-synapse-server:
     needs: cleanup-synapse-db
