@@ -33,17 +33,29 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         run: |
           # Port-forward to the PostgreSQL service in the background
-          kubectl port-forward svc/postgres 5432:5432 &
+          kubectl port-forward svc/DB 5432:5432 &
           PORT_FORWARD_PID=$!
           sleep 5  # Give port-forwarding some time to start
 
           # Drop all connections to the target database
           echo "Dropping all connections to the database $POSTGRES_DB"
-          PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();"
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c \
+            "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();"
 
-          # Drop the target database
-          echo "Dropping the database $POSTGRES_DB"
-          PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c "DROP DATABASE IF EXISTS $POSTGRES_DB;"
+          # Retry mechanism to ensure the database is dropped
+          DROP_ATTEMPTS=5
+          for i in $(seq 1 $DROP_ATTEMPTS); do
+            echo "Attempt $i to drop the database $POSTGRES_DB"
+            DROP_RESULT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -h 127.0.0.1 -p 5432 -U $POSTGRES_USER -d postgres -c "DROP DATABASE IF EXISTS $POSTGRES_DB;")
+
+            if [[ $DROP_RESULT == *"DROP DATABASE"* ]]; then
+              echo "Database $POSTGRES_DB dropped successfully."
+              break
+            else
+              echo "Failed to drop the database. Retrying in 5 seconds..."
+              sleep 5
+            fi
+          done
 
           # Recreate the target database
           echo "Creating the database $POSTGRES_DB"
@@ -51,6 +63,7 @@ jobs:
 
           # Kill the port-forward process
           kill $PORT_FORWARD_PID
+
 
   restart-synapse-server:
     needs: cleanup-synapse-db
