@@ -8,7 +8,6 @@ import { TestUser } from '../../../utils/token.helper';
 import { getGraphqlClient } from '@test/utils/graphqlClient';
 import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
 
-
 const uniqueId = Math.random()
   .toString(12)
   .slice(-6);
@@ -202,6 +201,7 @@ export const updateSpaceSettings = async (
       allowMembersToCreateCallouts?: boolean;
       allowMembersToCreateSubspaces?: boolean;
       inheritMembershipRights?: boolean;
+      allowEventsFromSubspaces?: boolean;
     };
     //},
     // },
@@ -241,6 +241,8 @@ export const updateSpaceSettings = async (
                 settings?.collaboration?.allowMembersToCreateSubspaces || false,
               inheritMembershipRights:
                 settings?.collaboration?.inheritMembershipRights ?? true,
+              allowEventsFromSubspaces:
+                settings?.collaboration?.allowEventsFromSubspaces || true,
             },
           }, // Add an empty object for the settings property
         },

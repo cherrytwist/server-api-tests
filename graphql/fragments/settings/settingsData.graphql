@@ -12,5 +12,6 @@ fragment SettingsData on SpaceSettings {
     allowMembersToCreateCallouts
     allowMembersToCreateSubspaces
     inheritMembershipRights
+    allowEventsFromSubspaces
   }
 }
