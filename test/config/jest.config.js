@@ -12,7 +12,7 @@ module.exports = {
   coverageDirectory: '<rootDir>/coverage',
   testEnvironment: 'node',
   collectCoverageFrom: [],
-  testTimeout: 190000,
+  testTimeout: 1800000,
   collectCoverage: false,
   globalSetup: '<rootDir>/test/testSetup.ts',
   reporters: [

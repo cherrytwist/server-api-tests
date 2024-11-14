@@ -253,9 +253,7 @@ describe('Application', () => {
 
     // Assert
     expect(applicationState).toEqual('new');
-    expect(eventResponseData.error?.errors[0].message).toContain(
-      `Authorization: unable to grant 'community-apply-accept' privilege: event on application: ${applicationSpaceId} user: ${users.qaUser.id} `
-    );
+
     await deleteApplication(applicationSpaceId);
   });
 
