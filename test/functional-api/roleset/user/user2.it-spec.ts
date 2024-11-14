@@ -41,7 +41,6 @@ beforeAll(async () => {
 
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createChallengeForOrgSpace(challengeName);
-  console.log(entitiesId.challenge.nameId);
   await createOpportunityForChallenge(opportunityName);
 
   await assignRoleToUser(

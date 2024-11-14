@@ -345,8 +345,6 @@ describe('Upload visual to innovation space', () => {
     //const spaceAccountId = spaceData?.account.id ?? '';
 
     const innovationHubData = await createInnovationHub(orgAccountId);
-    console.log('innovationHubData', innovationHubData.error?.errors);
-    console.log('innovationHubData', innovationHubData.error?.errors);
     const innovationHubInfo = innovationHubData?.data?.createInnovationHub;
     innovationHubVisualId = innovationHubInfo?.profile.visuals[0].id ?? '';
     innovationHubId = innovationHubInfo?.id ?? '';

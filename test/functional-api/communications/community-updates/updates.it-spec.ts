@@ -131,7 +131,6 @@ describe('Communities', () => {
         entitiesId.spaceId,
         TestUser.NON_HUB_MEMBER
       );
-      console.log(spaceDataReaderNotMemberIn.error);
       const spaceDataReaderNotMember =
         spaceDataReaderNotMemberIn?.data?.space?.community?.communication
           ?.updates.messages ?? [];
