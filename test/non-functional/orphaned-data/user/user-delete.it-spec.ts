@@ -32,10 +32,6 @@ describe('Full User Deletion', () => {
     const userData = await getUserData(email);
     userId = userData?.data?.user.id ?? '';
 
-    // User application to space community
-    // const a = await createApplication(entitiesId.space.communityId, userId);
-    // console.log(a.body);
-
     await assignRoleToUser(
       userId,
       entitiesId.space.communityId,
