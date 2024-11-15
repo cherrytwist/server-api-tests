@@ -132,10 +132,7 @@ describe('Update space platform settings', () => {
       `(
         'User: "$user", should have private Space privileges: "$spaceMyPrivileges"',
         async ({ user, spaceMyPrivileges }) => {
-          const request = await getPrivateSpaceData(
-            entitiesId.spaceId,
-            user
-          );
+          const request = await getPrivateSpaceData(entitiesId.spaceId, user);
           const result = request?.data?.space;
 
           // Assert
@@ -171,10 +168,7 @@ describe('Update space platform settings', () => {
       `(
         'User: "$user", should have private Space privileges: "$spaceMyPrivileges"',
         async ({ user, spaceMyPrivileges }) => {
-          const request = await getPrivateSpaceData(
-            entitiesId.spaceId,
-            user
-          );
+          const request = await getPrivateSpaceData(entitiesId.spaceId, user);
           const result = request?.data?.space;
 
           // Assert
@@ -246,7 +240,6 @@ describe('Update space platform settings', () => {
           entitiesId.spaceId,
           user
         );
-        console.log('spaceDataAfterArchive', spaceDataAfterArchive);
         const allSpaces = spaceDataAfterArchive?.data?.spaces;
         const data = allSpaces?.filter((obj: { nameID: string }) => {
           return obj.nameID.includes(spaceNameId);
@@ -311,10 +304,7 @@ describe('Update space platform settings', () => {
           email,
           SpaceVisibility.Archived
         );
-        console.log(
-          'getUserRoleSpaceDataAfterArchive',
-          getUserRoleSpaceDataAfterArchive.error
-        );
+
         const afterVisibilityChangeAllSpaces =
           getUserRoleSpaceDataAfterArchive?.data?.rolesUser.spaces;
         const dataAfterVisibilityChange = afterVisibilityChangeAllSpaces?.filter(
@@ -328,16 +318,10 @@ describe('Update space platform settings', () => {
           user
         );
 
-        console.log(
-          'spaceDataAfterArchive',
-          spaceDataAfterArchive.error?.errors
-        );
         const allSpaces = spaceDataAfterArchive?.data?.spaces;
-        console.log('allSpaces', allSpaces);
         const data = allSpaces?.filter((obj: { nameID: string }) => {
           return obj.nameID.includes(spaceNameId);
         });
-        console.log(data);
         // Assert
         //expect(dataBeforeVisibilityChange).toEqual(dataAfterVisibilityChange);
         expect(data?.[0].visibility).toEqual(SpaceVisibility.Archived);

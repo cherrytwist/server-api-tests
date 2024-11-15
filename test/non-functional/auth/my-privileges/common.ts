@@ -156,7 +156,6 @@ export const sorted__create_read_update_delete_grant_addMember_apply_invite_addV
   'COMMUNITY_APPLY',
   'COMMUNITY_INVITE',
   'COMMUNITY_ADD_MEMBER_VC_FROM_ACCOUNT',
-  'ACCESS_VIRTUAL_CONTRIBUTOR',
 ].sort();
 
 export const sorted__create_read_update_delete_grant_addMember_apply_join_invite = [
@@ -211,7 +210,6 @@ export const sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC
   'COMMUNITY_APPLY',
   'COMMUNITY_INVITE',
   'COMMUNITY_ADD_MEMBER_VC_FROM_ACCOUNT',
-  'ACCESS_VIRTUAL_CONTRIBUTOR',
 ].sort();
 
 export const sorted__create_read_update_delete_grant_addMember_apply = [

@@ -65,7 +65,6 @@ export const createOrgAndSpace = async (
   entitiesId.space.collaborationId = spaceData?.collaboration?.id ?? '';
   entitiesId.space.templateSetId =
     spaceData?.templatesManager?.templatesSet?.id ?? '';
-    console.log(entitiesId.space.templateSetId)
 
   const callForPostCalloutData = await createCalloutOnCollaboration(
     entitiesId.space.collaborationId,

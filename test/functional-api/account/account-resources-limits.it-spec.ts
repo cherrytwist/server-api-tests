@@ -46,7 +46,6 @@ describe('Limits on account resources creation', () => {
           users.globalAdmin.accountId,
           TestUser.GLOBAL_ADMIN
         );
-        console.log('createSpace', createSpace.error);
         spaceId = createSpace.data?.createSpace.id ?? '';
 
         const spaceData = await getSpaceData(spaceId);
@@ -73,7 +72,6 @@ describe('Limits on account resources creation', () => {
           users.betaTester.accountId,
           TestUser.BETA_TESTER
         );
-        console.log('createSpace', createSpace.error);
         spaceId = createSpace.data?.createSpace.id ?? '';
 
         const spaceData = await getSpaceData(spaceId);
@@ -104,7 +102,6 @@ describe('Limits on account resources creation', () => {
           users.opportunityAdmin.accountId,
           TestUser.CHALLENGE_ADMIN
         );
-        console.log('createSpace', createSpace.error);
         spaceId = createSpace.data?.createSpace.id ?? '';
         spaceId = spaceIdn;
 

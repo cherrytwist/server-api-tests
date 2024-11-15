@@ -91,7 +91,6 @@ beforeAll(async () => {
       allowMembersToCreateSubspaces: false,
     },
   });
-  console.log(a.error);
 });
 afterAll(async () => {
   await deleteSpace(entitiesId.challenge.id);

@@ -104,11 +104,7 @@ describe('myPrivileges - Private Space', () => {
         entitiesId.spaceId,
         TestUser.NON_HUB_MEMBER
       );
-      console.log('response', response.data);
 
-      console.log('response', response.data?.space);
-
-      console.log('response', response.data?.space.community?.authorization);
       const data =
         response.data?.space.community?.authorization?.myPrivileges ?? [];
 

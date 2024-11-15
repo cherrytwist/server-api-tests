@@ -27,16 +27,10 @@ describe('Full User Deletion', () => {
   test('should delete all user related data', async () => {
     // Act
     const email = `dis${uniqueId}@${domain}`;
-    const a = await registerVerifiedUser(email, firstName, lastName);
-    console.log(a);
+    await registerVerifiedUser(email, firstName, lastName);
 
     const userData = await getUserData(email);
-    console.log(userData);
     userId = userData?.data?.user.id ?? '';
-
-    // User application to space community
-    // const a = await createApplication(entitiesId.space.communityId, userId);
-    // console.log(a.body);
 
     await assignRoleToUser(
       userId,

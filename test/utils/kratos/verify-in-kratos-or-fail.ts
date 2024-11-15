@@ -110,10 +110,8 @@ const getVerificationCode = async () =>
     .then(x => {
       const urlRegex = /(((https?:\/\/)|(https:\/\/)|(www\.))[^\s]+)/g;
       const cleanText = x.replace(/<.*?>/gm, '');
-      // console.log(cleanText);
 
       const url = cleanText.match(urlRegex)?.[0]?.toString() ?? '';
-      // console.log(url);
       return url.replace('&amp;', '&');
     })
     .catch(x => {

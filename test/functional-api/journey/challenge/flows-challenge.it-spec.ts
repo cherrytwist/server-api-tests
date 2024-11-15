@@ -1,13 +1,7 @@
-import {
-  createSubspace,
-  getSubspaceData,
-} from './challenge.request.params';
+import { createSubspace, getSubspaceData } from './challenge.request.params';
 import '@test/utils/array.matcher';
 import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import {
-  deleteSpace,
-  updateSpaceContext,
-} from '../space/space.request.params';
+import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import { entitiesId } from '@test/types/entities-helper';
 // import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { createOrgAndSpace } from '@test/utils/data-setup/entities';
@@ -25,12 +19,7 @@ const spaceName = 'flowch-sp-name' + uniqueId;
 const spaceNameId = 'flowch-sp-nameid' + uniqueId;
 
 beforeAll(async () => {
-  await createOrgAndSpace(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
 });
 
 afterAll(async () => {
@@ -61,7 +50,6 @@ describe('Flows challenge', () => {
       entitiesId.spaceId,
       challengeId
     );
-    console.log(responseGroupQuery.data?.space.subspace.community);
 
     // Assert
     expect(responseGroupQuery.status).toBe(200);
