@@ -2,7 +2,7 @@ import { graphqlRequestAuth } from '../graphql.request';
 import { TestUser } from '../token.helper';
 import { getGraphqlClient } from '../graphqlClient';
 import { graphqlErrorWrapper } from '../graphql.wrapper';
-import { PlatformRole } from '@test/generated/alkemio-schema';
+import { PlatformRole } from '@alkemio/client-lib';
 
 export const assignPlatformRoleToUser = async (
   userID: string,

@@ -1,6 +1,6 @@
 import { createOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
 import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { createInnovationPackOnLibrary } from './innovation_pack.request.params';
+import { createInnovationPack } from './innovation_pack.request.params';
 import {
   whiteboardTemplateValues1,
   whiteboardTemplateValues2,
@@ -29,7 +29,7 @@ describe('Organization', () => {
 
   describe('Innovation pack library', () => {
     test('Create', async () => {
-      const packData = await createInnovationPackOnLibrary(
+      const packData = await createInnovationPack(
         packName,
         packNameId,
         orgId

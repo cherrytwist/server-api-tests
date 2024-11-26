@@ -1,6 +1,7 @@
 query GetPlatformLicensePlans {
   platform {
     licensingFramework {
+      id
       plans {
         ...LicensePlanData
       }

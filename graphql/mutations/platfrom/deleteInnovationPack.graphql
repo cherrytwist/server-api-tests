@@ -1,0 +1,6 @@
+mutation deleteInnovationPack($innovationPackId: UUID_NAMEID!) {
+  deleteInnovationPack(deleteData: { ID: $innovationPackId }) {
+    id
+    __typename
+  }
+}

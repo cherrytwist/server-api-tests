@@ -11,6 +11,7 @@
     "url": "git+https://github.com/alkemio/test-suites.git"
   },
   "scripts": {
+    "ts:watch": "tsc --noEmit --watch",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -44,6 +45,7 @@
     "test:organization": "jest --forceExit --maxWorkers=6 --config ./test/config/jest.config.organization.js",
     "test:search": "jest --forceExit --maxWorkers=6 --config ./test/config/jest.config.search.js",
     "test:communication": "jest --forceExit --runInBand --config ./test/config/jest.config.communication.js",
+    "test:entitlements": "jest --forceExit --runInBand --config ./test/config/jest.config.entitlements.js",
     "test:journey": "jest --forceExit --runInBand --config ./test/config/jest.config.journey.js",
     "test:activity-logs": "jest --forceExit --runInBand --config ./test/config/jest.config.activity-logs.js",
     "test:contributormanagement": "jest --forceExit --runInBand --config ./test/config/jest.config.contributor-management.js",
