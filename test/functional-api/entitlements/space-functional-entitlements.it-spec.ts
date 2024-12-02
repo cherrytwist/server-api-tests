@@ -1,3 +1,29 @@
+/**
+ * Functional tests for space creation by a VC Campaign user.
+ *
+ * This suite tests the following scenarios:
+ *
+ * - Assigning the VC Campaign platform role to a user.
+ * - Verifying the user's entitlements before and after creating spaces.
+ * - Creating spaces with different entitlements and verifying the results.
+ * - Handling the creation of a space over the license limit.
+ * - Creating a space after removing a space that exceeded the license limit.
+ *
+ * The tests use the following utilities and queries:
+ *
+ * - `assignPlatformRoleToUser` and `removePlatformRoleFromUser` for managing user roles.
+ * - `getMyEntitlementsQuery` for fetching user entitlements.
+ * - `createSpaceBasicData` and `deleteSpace` for managing spaces.
+ * - `getAccountMainEntities` for retrieving account-related data.
+ *
+ * The tests are organized as follows:
+ *
+ * - `beforeAll`: Assigns the VC Campaign role to a non-space member user.
+ * - `afterAll`: Cleans up by deleting created spaces and removing the VC Campaign role from the user.
+ * - `test.each`: Tests space creation with different entitlements.
+ * - `test`: Tests creating a space over the license limit.
+ * - `test`: Tests creating a space after removing a space that exceeded the license limit.
+ */
 import { PlatformRole } from '@alkemio/client-lib';
 import { TestUser } from '@test/utils';
 import {
@@ -57,9 +83,9 @@ describe('Functional tests - Space', () => {
 
     test.each`
       spaceName               | availableEntitlements | error
-      ${`space1-${uniqueId}`} | ${allPrivileges}    | ${undefined}
-      ${`space2-${uniqueId}`} | ${allPrivileges}    | ${undefined}
-      ${`space3-${uniqueId}`} | ${allPrivileges}    | ${undefined}
+      ${`space1-${uniqueId}`} | ${allPrivileges}      | ${undefined}
+      ${`space2-${uniqueId}`} | ${allPrivileges}      | ${undefined}
+      ${`space3-${uniqueId}`} | ${allPrivileges}      | ${undefined}
     `(
       'User: VC campaign has license $availableEntitlements to creates a space with name: $spaceName',
       async ({ spaceName, availableEntitlements, error }) => {

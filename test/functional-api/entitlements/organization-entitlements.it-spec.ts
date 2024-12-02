@@ -1,3 +1,30 @@
+
+/**
+ * This test suite verifies the organization account authorization and license privileges.
+ * It includes tests for scenarios with no licenses assigned, with account licenses assigned,
+ * and with account licenses plus additional resources (Space, Virtual Contributor, and Innovation Pack).
+ *
+ * The following utilities and data are imported:
+ * - TestUser and users from '@test/utils'
+ * - License management functions from '@test/functional-api/license/license.params.request'
+ * - Organization entitlements data from './organization-entitlements-data'
+ * - Entitlements query function from './entitlements-request.params'
+ * - Space management functions from '@test/functional-api/journey/space/space.request.params'
+ * - Virtual Contributor management functions from '@test/functional-api/contributor-management/virtual-contributor/vc.request.params'
+ * - Innovation Pack management functions from '@test/functional-api/innovation-pack/innovation_pack.request.params'
+ * - Organization management functions from '@test/functional-api/contributor-management/organization/organization.request.params'
+ * - Authorization mutation function from '@test/utils/mutations/authorization-organization-mutation'
+ *
+ * The test suite includes the following tests:
+ * - 'No licenses assigned': Verifies the entitlements and authorization when no licenses are assigned to the organization account.
+ * - 'User admin of Organization with accountLicensesPlus assigned': Verifies the entitlements and authorization when the ACCOUNT_LICENSE_PLUS license is assigned to the organization account.
+ * - 'User admin of Organization with accountLicensesPlus assigned and created Space, VC and Innovation Pack': Verifies the entitlements and authorization when the ACCOUNT_LICENSE_PLUS license is assigned and additional resources (Space, Virtual Contributor, and Innovation Pack) are created.
+ *
+ * The test suite also includes setup and teardown logic:
+ * - `beforeAll`: Creates an organization and assigns a user as an organization admin.
+ * - `afterAll`: Deletes the organization.
+ * - `afterAll` in 'Account license plus cleanup': Cleans up created resources (Space, Virtual Contributor, Innovation Pack) and revokes the ACCOUNT_LICENSE_PLUS license from the organization account.
+ */
 import { TestUser } from '@test/utils';
 import { users } from '@test/utils/queries/users-data';
 import {
@@ -10,7 +37,7 @@ import {
   organizationAccountNoLicenses,
   organizationAccountLicensePlus1SpaceVCPack,
 } from './organization-entitlements-data';
-import { getOrganiazationEntitlementsQuery } from './entitlements-request.params';
+import { getOrganazationEntitlementsQuery } from './entitlements-request.params';
 import {
   createSpaceAndGetData,
   deleteSpace,
@@ -66,7 +93,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     await revokeLicensePlanFromAccount(orgAccountId, accountLicensePlusId);
 
     // Act
-    const response = await getOrganiazationEntitlementsQuery(
+    const response = await getOrganazationEntitlementsQuery(
       orgId,
       TestUser.NON_HUB_MEMBER
     );
@@ -93,7 +120,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     await assignLicensePlanToAccount(orgAccountId, accountLicensePlusId);
 
     // Act
-    const response = await getOrganiazationEntitlementsQuery(
+    const response = await getOrganazationEntitlementsQuery(
       orgId,
       TestUser.NON_HUB_MEMBER
     );
@@ -119,7 +146,6 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     await revokeLicensePlanFromAccount(orgAccountId, accountLicensePlusId);
   });
 
-  // skipped due to bug: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/server/4726
   describe('Account license plus cleanup', () => {
     afterAll(async () => {
       await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
@@ -155,7 +181,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';
 
       // Act
-      const response = await getOrganiazationEntitlementsQuery(
+      const response = await getOrganazationEntitlementsQuery(
         orgId,
         TestUser.NON_HUB_MEMBER
       );

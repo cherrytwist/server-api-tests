@@ -17,7 +17,7 @@ export const getMyEntitlementsQuery = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getOrganiazationEntitlementsQuery = async (
+export const getOrganazationEntitlementsQuery = async (
   organizationId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {

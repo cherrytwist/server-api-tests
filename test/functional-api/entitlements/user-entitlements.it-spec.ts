@@ -1,3 +1,24 @@
+/**
+ * This test suite verifies the user account authorization and license privileges
+ * for different scenarios including no licenses, VC campaign licenses, and Beta tester licenses.
+ *
+ * The tests cover the following scenarios:
+ *
+ * - No licenses assigned to the user.
+ * - VC campaign licenses assigned to the user.
+ * - User with VC campaign licenses assigned and created Space, VC, and Innovation Pack.
+ * - Beta tester licenses assigned to the user.
+ * - User with Beta tester licenses assigned and created Space, VC, and Innovation Pack.
+ *
+ * Each test performs the following steps:
+ *
+ * 1. Arrange: Set up the initial state by assigning or removing platform roles.
+ * 2. Act: Execute the `getMyEntitlementsQuery` to fetch the user's entitlements.
+ * 3. Assert: Verify the response data against the expected entitlements, authorizations, subscriptions, and spaces.
+ *
+ * The cleanup steps ensure that any created resources (spaces, virtual contributors, innovation packs) are deleted
+ * and the platform roles are removed after the tests are executed.
+ */
 import { PlatformRole } from '@alkemio/client-lib';
 import { TestUser } from '@test/utils';
 import {
@@ -83,9 +104,6 @@ describe('Get User Account Authorization and License privileges ', () => {
     );
     expect(accountData?.subscriptions).toEqual(
       accountVCCampaignLicenses.subscriptions
-    );
-    expect(accountData?.spaces).toEqual(
-      expect.arrayContaining(accountVCCampaignLicenses.spaces)
     );
     expect(accountData?.spaces).toEqual(
       expect.arrayContaining(accountVCCampaignLicenses.spaces)

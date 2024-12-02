@@ -1,3 +1,26 @@
+/**
+ * Functional tests for Innovation Pack feature.
+ *
+ * This test suite verifies the creation and deletion of innovation packs by a VC Campaign user.
+ *
+ * The tests include:
+ * - Assigning and removing platform roles to/from users.
+ * - Creating innovation packs with different names.
+ * - Verifying entitlements before and after creating innovation packs.
+ * - Handling errors when creating innovation packs over the license limit.
+ *
+ * The tests use the following utilities and queries:
+ * - `assignPlatformRoleToUser` and `removePlatformRoleFromUser` for role management.
+ * - `getMyEntitlementsQuery` to fetch user entitlements.
+ * - `createInnovationPack` and `deleteInnovationPack` for innovation pack management.
+ * - `getAccountMainEntities` to fetch account-related data.
+ *
+ * The tests are organized as follows:
+ * - `beforeAll` hook assigns the VC Campaign role to a non-space member user.
+ * - `afterAll` hook cleans up by deleting created innovation packs and removing the assigned role.
+ * - Parameterized tests to create innovation packs and verify entitlements.
+ * - A test to handle the scenario where the innovation pack creation exceeds the license limit.
+ */
 import { PlatformRole } from '@alkemio/client-lib';
 import { TestUser } from '@test/utils';
 import {
@@ -58,9 +81,9 @@ describe('Functional tests - Innovation Pack', () => {
 
     test.each`
       packName               | availableEntitlements | error
-      ${`pack1-${uniqueId}`} | ${allPrivileges}    | ${undefined}
-      ${`pack2-${uniqueId}`} | ${allPrivileges}    | ${undefined}
-      ${`pack3-${uniqueId}`} | ${allPrivileges}    | ${undefined}
+      ${`pack1-${uniqueId}`} | ${allPrivileges}      | ${undefined}
+      ${`pack2-${uniqueId}`} | ${allPrivileges}      | ${undefined}
+      ${`pack3-${uniqueId}`} | ${allPrivileges}      | ${undefined}
     `(
       'User: VC campaign has license $availableEntitlements to creates an innovation pack with name: $packName',
       async ({ packName, availableEntitlements, error }) => {

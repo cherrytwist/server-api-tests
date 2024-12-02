@@ -10,6 +10,7 @@ module.exports = {
     '/test/functional-api/activity-logs/.*\\.it-spec\\.ts',
     '/test/functional-api/journey/.*\\.it-spec\\.ts',
     '/test/functional-api/storage/.*\\.it-spec\\.ts',
+    '/test/functional-api/entitlements/.*\\.it-spec\\.ts',
   ],
   coverageDirectory: '<rootDir>/coverage-nightly',
 };

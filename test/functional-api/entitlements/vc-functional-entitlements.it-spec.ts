@@ -1,3 +1,25 @@
+
+/**
+ * Functional tests for Virtual Contributor (VC) creation and entitlements.
+ *
+ * This test suite verifies the following scenarios:
+ *
+ * - Assigning and removing platform roles to/from users.
+ * - Creating and deleting spaces and virtual contributors.
+ * - Checking user entitlements and licenses.
+ *
+ * The tests are organized as follows:
+ *
+ * - Before all tests, assign the `VcCampaign` platform role to a non-space member user.
+ * - After all tests, clean up by deleting any created virtual contributors and spaces, and remove the `VcCampaign` platform role from the user.
+ *
+ * The tests include:
+ *
+ * - Creating virtual contributors with different entitlements.
+ * - Verifying that the user has the correct entitlements.
+ * - Attempting to create a virtual contributor over the license limit and verifying the entitlements.
+ *
+ */
 import { PlatformRole } from '@alkemio/client-lib';
 import { TestUser } from '@test/utils';
 import {
@@ -19,7 +41,7 @@ import { getAccountMainEntities } from '../account/account.params.request';
 const uniqueId = Math.random()
   .toString(12)
   .slice(-6);
-let spaceName = `space-name-${uniqueId}`;
+const spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;
 let vcId = '';
 
@@ -50,10 +72,7 @@ describe('Functional tests - VC', () => {
       const vcs = spaceData.data?.account?.virtualContributors;
       for (const vc of vcs || []) {
         const vcId = vc.id;
-        const a = await deleteVirtualContributorOnAccount(
-          vcId,
-          TestUser.GLOBAL_ADMIN
-        );
+        await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
       }
 
       const spaces = spaceData.data?.account?.spaces;
@@ -70,9 +89,9 @@ describe('Functional tests - VC', () => {
 
     test.each`
       vcName               | availableEntitlements | error
-      ${`vc1-${uniqueId}`} | ${allPrivileges}    | ${undefined}
-      ${`vc2-${uniqueId}`} | ${allPrivileges}    | ${undefined}
-      ${`vc3-${uniqueId}`} | ${allPrivileges}    | ${undefined}
+      ${`vc1-${uniqueId}`} | ${allPrivileges}      | ${undefined}
+      ${`vc2-${uniqueId}`} | ${allPrivileges}      | ${undefined}
+      ${`vc3-${uniqueId}`} | ${allPrivileges}      | ${undefined}
     `(
       'User: VC campaign has license $availableEntitlements to creates a vc with name: $vcName',
       async ({ vcName, availableEntitlements, error }) => {
