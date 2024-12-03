@@ -7,7 +7,6 @@ export const verifySignUpPageElements = async (page: Page) => {
   await expect(
     page.getByRole('heading', { name: 'Create an account to start' })
   ).toBeVisible();
-  await expect(page.getByText('To keep the platform safe,')).toBeVisible();
   await expect(page.locator('label')).toBeVisible();
   await expect(
     page.locator('div').filter({ hasText: /^Connect with LinkedIn$/ })

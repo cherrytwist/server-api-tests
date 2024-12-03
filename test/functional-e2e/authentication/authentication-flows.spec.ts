@@ -4,13 +4,13 @@ import { delay } from '@test/utils';
 import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
 import { getEmails, getRecoveryCode } from '@test/utils/ui.test.helper';
 import {
-  navigateToLoginPageFromHeaderLink,
   navigateToLoginPageFromMenu,
   navigateToRegistrationFromSignUp,
   navigateToSignUpFromSignIn,
 } from './login-page-objects';
 import {
   fillUpSignUpPageElements,
+  fillUpSignUpPasswordElements,
   pressSignUpButtonRegistrationPage,
   verifyRegistrationPageElements,
 } from '../identity-flows/registration-page-objects';
@@ -30,7 +30,7 @@ import {
 } from './common-authentication-page-elements';
 
 const password = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
-const baseUrl = process.env.ALKEMIO_BASE_URL_ || '';
+const baseUrl = process.env.ALKEMIO_BASE_URL || '';
 
 const userEmail = `test+${uniqueId}@alkem.io`;
 const newPassword = 'Test1234!!**';
@@ -61,7 +61,7 @@ test('verify verification page', async ({ page }) => {
 });
 
 test('user successful authentication', async ({ page }) => {
-  await navigateToLoginPageFromHeaderLink(baseUrl, page);
+  await navigateToLoginPageFromMenu(baseUrl, page);
   await fillUpSignInPageElements('admin@alkem.io', password, page);
   await pressSignInButtonSignInPage(page);
   await verifyMyDashboardWelcomeElement(page, 'admin');
@@ -69,7 +69,9 @@ test('user successful authentication', async ({ page }) => {
 
 test('user successful registration email', async ({ page }) => {
   await navigateToRegistrationFromSignUp(baseUrl, page);
-  await fillUpSignUpPageElements(userEmail, password, 'Test', 'Alkemio', page);
+  await fillUpSignUpPageElements(userEmail, 'Test', 'Alkemio', page);
+  await pressSignUpButtonRegistrationPage(page);
+  await fillUpSignUpPasswordElements(password, page);
   await pressSignUpButtonRegistrationPage(page);
 
   await expect(
@@ -97,7 +99,7 @@ test('user successful registration email', async ({ page }) => {
 
   await pressSignInButtonSignInPage(page);
   await expect(
-    page.getByRole('heading', { name: 'Welcome back Test!' })
+    page.getByRole('heading', { name: 'Welcome back, Test!' })
   ).toBeVisible();
 
   // const getUserId = await getUserData(userEmail);
@@ -107,7 +109,7 @@ test('user successful registration email', async ({ page }) => {
 });
 
 test('user successful password recovery', async ({ page }) => {
-  await navigateToLoginPageFromHeaderLink(baseUrl, page);
+  await navigateToLoginPageFromMenu(baseUrl, page);
 
   await page.getByRole('link', { name: 'Reset password' }).click();
   await emailField(page).click();
