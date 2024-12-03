@@ -13,7 +13,7 @@
 
 import { PlatformRole } from '@alkemio/client-lib';
 import { TestUser } from '@test/utils';
-import { assignPlatformRoleToUser } from '@test/utils/mutations/authorization-platform-mutation';
+import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@test/utils/mutations/authorization-platform-mutation';
 import { users } from '@test/utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
@@ -36,7 +36,6 @@ const uniqueId = Math.random()
   .slice(-6);
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
-let licensePlanIdAccountPlus = '';
 
 beforeAll(async () => {
   await assignPlatformRoleToUser(
@@ -46,10 +45,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await revokeLicensePlanFromAccount(
-    spaceId,
-    licensePlanIdAccountPlus,
-    TestUser.GLOBAL_ADMIN
+  await removePlatformRoleFromUser(
+    users.nonSpaceMember.id,
+    PlatformRole.VcCampaign
   );
   await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
 });

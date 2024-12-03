@@ -43,6 +43,17 @@ let packId = '';
 const packName = `packname-${uniqueId}`;
 
 describe('Functional tests - Innovation Pack', () => {
+  afterEach(async () => {
+    const spaceData = await getAccountMainEntities(
+      users.nonSpaceMember.accountId,
+      TestUser.NON_HUB_MEMBER
+    );
+    const packs = spaceData.data?.account?.innovationPacks;
+    for (const pack of packs || []) {
+      const packId = pack.id;
+      await deleteInnovationPack(packId, TestUser.GLOBAL_ADMIN);
+    }
+  });
   describe('VC Campaign user innovation pack creation', () => {
     beforeAll(async () => {
       await assignPlatformRoleToUser(
@@ -63,16 +74,6 @@ describe('Functional tests - Innovation Pack', () => {
     ].sort();
 
     afterAll(async () => {
-      const spaceData = await getAccountMainEntities(
-        users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
-      );
-      const packs = spaceData.data?.account?.innovationPacks;
-      for (const pack of packs || []) {
-        const packId = pack.id;
-        await deleteInnovationPack(packId, TestUser.GLOBAL_ADMIN);
-      }
-
       await removePlatformRoleFromUser(
         users.nonSpaceMember.id,
         PlatformRole.VcCampaign
@@ -106,21 +107,31 @@ describe('Functional tests - Innovation Pack', () => {
         expect(createPack?.error?.errors?.[0].message).toEqual(error);
       }
     );
-    // Test is dependant on the above test
+
     test('Create a innovation pack over the license limit', async () => {
       // Arrange
+      // Create maximum allowed packs first
+      const maxPacks = 3;
+      for (let i = 0; i < maxPacks; i++) {
+        const a = await createInnovationPack(
+          `setup-pack-${i}-${uniqueId}`,
+          `setup-pack-${i}-${uniqueId}`,
+          users.nonSpaceMember.accountId,
+          TestUser.NON_HUB_MEMBER
+        );
+      }
       const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
 
       // Act
       const createPack = await createInnovationPack(
-        packName,
-        packName,
+        `excess-pack-${uniqueId}`,
+        `excess-pack-${uniqueId}`,
         users.nonSpaceMember.accountId,
         TestUser.NON_HUB_MEMBER
       );
-      packId = createPack?.data?.createInnovationPack?.id ?? '';
 
       // Assert
+      expect(createPack?.error?.errors).toHaveLength(1);
       expect(
         response?.data?.me.user?.account?.license?.availableEntitlements?.sort()
       ).toEqual(withoutPack);

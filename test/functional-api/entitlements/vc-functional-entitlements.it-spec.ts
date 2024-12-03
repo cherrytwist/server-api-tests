@@ -1,4 +1,3 @@
-
 /**
  * Functional tests for Virtual Contributor (VC) creation and entitlements.
  *
@@ -46,6 +45,23 @@ const vcName = `vcname1-${uniqueId}`;
 let vcId = '';
 
 describe('Functional tests - VC', () => {
+  afterEach(async () => {
+    const spaceData = await getAccountMainEntities(
+      users.nonSpaceMember.accountId,
+      TestUser.NON_HUB_MEMBER
+    );
+    const vcs = spaceData.data?.account?.virtualContributors;
+    for (const vc of vcs || []) {
+      const vcId = vc.id;
+      await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
+    }
+
+    const spaces = spaceData.data?.account?.spaces;
+    for (const space of spaces || []) {
+      const spaceId = space.id;
+      await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
+    }
+  });
   describe('VC Campaign user vc creation', () => {
     beforeAll(async () => {
       await assignPlatformRoleToUser(
@@ -59,28 +75,14 @@ describe('Functional tests - VC', () => {
       'ACCOUNT_VIRTUAL_CONTRIBUTOR',
       'ACCOUNT_INNOVATION_PACK',
     ].sort();
-    const withoutCreateSpaceAndVs = [
+
+    const withoutCreateVs = [
       'ACCOUNT_INNOVATION_HUB',
       'ACCOUNT_INNOVATION_PACK',
+      'ACCOUNT_SPACE_FREE',
     ].sort();
 
     afterAll(async () => {
-      const spaceData = await getAccountMainEntities(
-        users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
-      );
-      const vcs = spaceData.data?.account?.virtualContributors;
-      for (const vc of vcs || []) {
-        const vcId = vc.id;
-        await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
-      }
-
-      const spaces = spaceData.data?.account?.spaces;
-      for (const space of spaces || []) {
-        const spaceId = space.id;
-        await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
-      }
-
       await removePlatformRoleFromUser(
         users.nonSpaceMember.id,
         PlatformRole.VcCampaign
@@ -123,10 +125,9 @@ describe('Functional tests - VC', () => {
         expect(createVc?.error?.errors?.[0].message).toEqual(error);
       }
     );
-    // Test is dependant on the above test
+
     test('Create a vc over the license limit', async () => {
       // Arrange
-      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
@@ -135,20 +136,34 @@ describe('Functional tests - VC', () => {
       );
 
       const spaceId = createSpace.data?.createSpace.id ?? '';
+      // Create maximum allowed VCs first
+      const maxVCs = 3;
+      for (let i = 0; i < maxVCs; i++) {
+        const tempVcName = `temp-vc-${i}-${uniqueId}`;
+        await createVirtualContributorOnAccount(
+          tempVcName,
+          users.nonSpaceMember.accountId,
+          spaceId,
+          TestUser.NON_HUB_MEMBER
+        );
+      }
+      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
 
-      // Act
+      // // Act
       const createVc = await createVirtualContributorOnAccount(
         vcName,
         users.nonSpaceMember.accountId,
         spaceId,
         TestUser.NON_HUB_MEMBER
       );
-      vcId = createVc?.data?.createVirtualContributor?.id ?? '';
 
       // Assert
+      expect(createVc.error?.errors?.[0].message).toContain(
+        'Entitlement limit of 3 of type account-virtual-contributor reached'
+      );
       expect(
         response?.data?.me.user?.account?.license?.availableEntitlements?.sort()
-      ).toEqual(withoutCreateSpaceAndVs);
+      ).toEqual(withoutCreateVs);
     });
   });
 });

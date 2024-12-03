@@ -17,20 +17,6 @@ export const getLicensePlans = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getVCLicensePlan = async (licenseCredential: string) => {
-  const response = await getLicensePlans();
-  const allLicensePlans =
-    response.data?.platform.licensingFramework.plans ?? [];
-  const filteredLicensePlan = allLicensePlans.filter(
-    plan =>
-      plan.licenseCredential.includes(licenseCredential) ||
-      plan.id === licenseCredential
-  );
-  const licensePlan = filteredLicensePlan;
-
-  return licensePlan;
-};
-
 export const getLicensePlanByName = async (licenseCredential: string) => {
   const response = await getLicensePlans();
   const allLicensePlans =
