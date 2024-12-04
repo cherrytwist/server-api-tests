@@ -7,6 +7,7 @@ import {
 import { TestUser } from '../../../utils/token.helper';
 import { getGraphqlClient } from '@test/utils/graphqlClient';
 import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { getLicensePlanByName, getLicensePlans } from '@test/functional-api/license/license.params.request';
 
 const uniqueId = Math.random()
   .toString(12)
@@ -19,8 +20,13 @@ export const createSpaceBasicData = async (
   spaceName: string,
   spaceNameId: string,
   accountID: string,
+  //licensePlanID?: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
+  // const getLicensePlanSpaceFree = await getLicensePlanByName(
+  //   'SPACE_LICENSE_FREE'
+  // );
+  // licensePlanID = getLicensePlanSpaceFree[0].id;
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.CreateSpaceBasicData(
@@ -34,6 +40,7 @@ export const createSpaceBasicData = async (
             addTutorialCallouts: true,
           },
           accountID,
+         // licensePlanID,
         },
       },
       {
@@ -145,7 +152,10 @@ export const spaceId = async (): Promise<any> => {
   return response;
 };
 
-export const deleteSpace = async (spaceId: string) => {
+export const deleteSpace = async (
+  spaceId: string,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.deleteSpace(
@@ -159,7 +169,7 @@ export const deleteSpace = async (spaceId: string) => {
       }
     );
 
-  return graphqlErrorWrapper(callback, TestUser.GLOBAL_ADMIN);
+  return graphqlErrorWrapper(callback, userRole);
 };
 
 export const updateSpacePlatformSettings = async (

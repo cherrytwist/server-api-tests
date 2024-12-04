@@ -17,9 +17,10 @@ export const getLicensePlans = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getVCLicensePlan = async (licenseCredential: string) => {
+export const getLicensePlanByName = async (licenseCredential: string) => {
   const response = await getLicensePlans();
-  const allLicensePlans = response.data?.platform.licensingFramework.plans ?? [];
+  const allLicensePlans =
+    response.data?.platform.licensingFramework.plans ?? [];
   const filteredLicensePlan = allLicensePlans.filter(
     plan =>
       plan.licenseCredential.includes(licenseCredential) ||
@@ -30,7 +31,7 @@ export const getVCLicensePlan = async (licenseCredential: string) => {
   return licensePlan;
 };
 
-export const assignLicensePlanToAccount = async (
+export const assignLicensePlanToSpace = async (
   spaceID: string,
   licensePlanID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
@@ -43,6 +44,71 @@ export const assignLicensePlanToAccount = async (
           spaceID,
           licensePlanID,
         },
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const revokeLicensePlanFromSpace = async (
+  spaceID: string,
+  licensePlanID: string,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const res = await getLicensePlans();
+  const licensingID = res.data?.platform.licensingFramework.id ?? '';
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.RevokeLicensePlanFromSpace(
+      { planData: { spaceID, licensePlanID, licensingID } },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const assignLicensePlanToAccount = async (
+  accountId: string,
+  licensePlanId: string,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const res = await getLicensePlans();
+  const licensingId = res.data?.platform.licensingFramework.id ?? '';
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.AssignLicensePlanToAccount(
+      {
+        accountId,
+        licensePlanId,
+        licensingId,
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const revokeLicensePlanFromAccount = async (
+  accountId: string,
+  licensePlanId: string,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const res = await getLicensePlans();
+  const licensingId = res.data?.platform.licensingFramework.id ?? '';
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.RevokeLicensePlanFromAccount(
+      {
+        accountId,
+        licensePlanId,
+        licensingId,
       },
       {
         authorization: `Bearer ${authToken}`,

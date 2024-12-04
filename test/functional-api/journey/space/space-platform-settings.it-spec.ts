@@ -1,5 +1,5 @@
 import { TestUser } from '@test/utils';
-import '../../../utils/array.matcher';
+import '@test/utils/array.matcher';
 import {
   getSpaceData,
   getUserRoleSpacesVisibility,

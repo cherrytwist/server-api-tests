@@ -24,7 +24,7 @@ import { SearchVisibility, SpaceVisibility } from '@alkemio/client-lib';
 import { createChallenge } from '@test/utils/mutations/journeys/challenge';
 import {
   assignLicensePlanToAccount,
-  getVCLicensePlan,
+  getLicensePlanByName,
 } from '@test/functional-api/license/license.params.request';
 import {
   deleteInvitation,
@@ -56,7 +56,7 @@ let vcSpaceAccountId = '';
 const vcName = 'vcName1' + uniqueId;
 
 beforeAll(async () => {
-  const vcLicensePlan = await getVCLicensePlan('FEATURE_VIRTUAL_CONTRIBUTORS');
+  const vcLicensePlan = await getLicensePlanByName('FEATURE_VIRTUAL_CONTRIBUTORS');
   await createOrgAndSpaceWithUsers(
     organizationName,
     hostNameId,
@@ -65,7 +65,6 @@ beforeAll(async () => {
   );
   vcLicensePlanId = vcLicensePlan[0].id;
 
-  // await createChallengeForOrgSpace(challengeName);
   await updateSpaceSettings(entitiesId.spaceId, {
     privacy: {
       mode: SpacePrivacyMode.Public,
