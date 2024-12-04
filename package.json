@@ -60,7 +60,8 @@
     "test:configuration": "jest --forceExit --maxWorkers=1 --verbose --config ./test/config/jest.config.configuration.js",
     "innovation-pack-with-templates": "ts-node-dev ./test/functional-api/innovation-pack/innovation-pack-with-templates.ts",
     "test:orphaned": "jest --forceExit --maxWorkers=1 --verbose --config ./test/config/jest.config.orphaned.js",
-    "register-user": "ts-node-dev ./test/utils/register-user.ts"
+    "register-user": "ts-node-dev ./test/utils/register-user.ts",
+    "test:auth-playwright": "playwright test"
   },
   "dependencies": {
     "@alkemio/client-lib": "^0.32.0",
