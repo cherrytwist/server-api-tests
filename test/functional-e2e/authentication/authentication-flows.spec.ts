@@ -1,16 +1,20 @@
 import { test, expect } from '@playwright/test';
-import { uniqueId } from '@test/functional-api/contributor-management/user/user.request.params';
+import {
+  deleteUser,
+  getUserData,
+  uniqueId,
+} from '@test/functional-api/contributor-management/user/user.request.params';
 import { delay } from '@test/utils';
 import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
 import { getEmails, getRecoveryCode } from '@test/utils/ui.test.helper';
 import {
-  navigateToLoginPageFromHeaderLink,
   navigateToLoginPageFromMenu,
   navigateToRegistrationFromSignUp,
   navigateToSignUpFromSignIn,
 } from './login-page-objects';
 import {
   fillUpSignUpPageElements,
+  fillUpSignUpPasswordElements,
   pressSignUpButtonRegistrationPage,
   verifyRegistrationPageElements,
 } from '../identity-flows/registration-page-objects';
@@ -30,7 +34,7 @@ import {
 } from './common-authentication-page-elements';
 
 const password = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
-const baseUrl = process.env.ALKEMIO_BASE_URL_ || '';
+const baseUrl = process.env.ALKEMIO_BASE_URL || '';
 
 const userEmail = `test+${uniqueId}@alkem.io`;
 const newPassword = 'Test1234!!**';
@@ -61,7 +65,7 @@ test('verify verification page', async ({ page }) => {
 });
 
 test('user successful authentication', async ({ page }) => {
-  await navigateToLoginPageFromHeaderLink(baseUrl, page);
+  await navigateToLoginPageFromMenu(baseUrl, page);
   await fillUpSignInPageElements('admin@alkem.io', password, page);
   await pressSignInButtonSignInPage(page);
   await verifyMyDashboardWelcomeElement(page, 'admin');
@@ -69,13 +73,16 @@ test('user successful authentication', async ({ page }) => {
 
 test('user successful registration email', async ({ page }) => {
   await navigateToRegistrationFromSignUp(baseUrl, page);
-  await fillUpSignUpPageElements(userEmail, password, 'Test', 'Alkemio', page);
+  await fillUpSignUpPageElements(userEmail, 'Test', 'Alkemio', page);
+  await pressSignUpButtonRegistrationPage(page);
+  await fillUpSignUpPasswordElements(password, page);
   await pressSignUpButtonRegistrationPage(page);
 
   await expect(
     page.getByRole('link', { name: '…or continue to the platform' })
   ).toBeVisible();
 
+  await delay(1000);
   const getEmailsData = await getEmails();
   const urlFromEmail = getEmailsData[0];
   if (urlFromEmail === undefined) {
@@ -97,23 +104,23 @@ test('user successful registration email', async ({ page }) => {
 
   await pressSignInButtonSignInPage(page);
   await expect(
-    page.getByRole('heading', { name: 'Welcome back Test!' })
+    page.getByRole('heading', { name: 'Welcome back, Test!' })
   ).toBeVisible();
 
-  // const getUserId = await getUserData(userEmail);
-  // const registeredUserId = getUserId.data?.user.id ?? '';
+  const getUserId = await getUserData(userEmail);
+  const registeredUserId = getUserId.data?.user.id ?? '';
 
-  // await deleteUser(registeredUserId);
+  await deleteUser(registeredUserId);
 });
 
 test('user successful password recovery', async ({ page }) => {
-  await navigateToLoginPageFromHeaderLink(baseUrl, page);
+  await navigateToLoginPageFromMenu(baseUrl, page);
 
   await page.getByRole('link', { name: 'Reset password' }).click();
   await emailField(page).click();
   await emailField(page).fill('non.space@alkem.io');
   await submitButton(page).click();
-  await delay(2000);
+  await delay(1300);
   const getEmailsData = await getRecoveryCode();
   const recoveryCodeFromEmail = getEmailsData[0];
   if (recoveryCodeFromEmail === undefined) {
@@ -129,7 +136,11 @@ test('user successful password recovery', async ({ page }) => {
     page.getByRole('heading', { name: 'User Settings' })
   ).toBeVisible();
   await saveButton(page).click();
+  await expect(page.getByText('BioKeywordsNo tags available.')).toBeVisible();
   await expect(
-    page.getByLabel('Avatar of non space').getByRole('img')
+    page
+      .locator('div')
+      .filter({ hasText: /^non space$/ })
+      .nth(3)
   ).toBeVisible();
 });

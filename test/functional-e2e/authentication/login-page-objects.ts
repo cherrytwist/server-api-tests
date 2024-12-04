@@ -11,14 +11,6 @@ export const navigateToLoginPageFromMenu = async (
   await page.getByRole('menuitem', { name: 'Log In | Sign Up' }).click();
 };
 
-export const navigateToLoginPageFromHeaderLink = async (
-  endPoint: string,
-  page: Page
-) => {
-  await page.goto(endPoint);
-  await page.getByRole('link', { name: 'Sign in here', exact: true }).click();
-};
-
 export const navigateToLoginPageFromSpace = async (
   endPoint: string,
   page: Page
