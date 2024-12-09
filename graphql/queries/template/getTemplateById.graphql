@@ -20,9 +20,6 @@ query GetTemplateById($templateId: UUID!) {
       callout {
         id
       }
-      innovationFlow {
-        id
-      }
       postDefaultDescription
     }
   }
