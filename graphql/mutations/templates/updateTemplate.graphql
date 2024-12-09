@@ -13,7 +13,6 @@ mutation UpdateTemplate(
     ...TemplateProfileData
     ...CalloutTemplateData
     ...CommunityGuidelinesTemplateData
-    ...InnovationFlowTemplateData
     ...PostTemplateData
     ...WhiteboardTemplateData
   }

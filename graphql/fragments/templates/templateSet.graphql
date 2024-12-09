@@ -1,9 +1,5 @@
 fragment TemplatesSetData on TemplatesSet {
   id
-  innovationFlowTemplates {
-    ...TemplateProfileData
-    ...InnovationFlowTemplateData
-  }
   collaborationTemplates {
     ...TemplateProfileData
     ...CollaborationTemplateData
