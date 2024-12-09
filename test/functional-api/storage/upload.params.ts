@@ -71,10 +71,7 @@ export const uploadFileOnStorageBucket = async (
   return res;
 };
 
-export const deleteDocument = async (
-  ID: string,
-  userRole?: TestUser
-) => {
+export const deleteDocument = async (ID: string, userRole?: TestUser) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.DeleteDocument(
@@ -163,17 +160,15 @@ export const getSpaceProfileDocuments = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getChallengeProfileDocuments = async (
-  spaceId: string,
-  challengeId: string,
+export const getProfileDocuments = async (
+  profileID: string,
   userRole?: TestUser
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.GetChallengeDocumentAndStorageData(
+    graphqlClient.GetProfileDocuments(
       {
-        ID: spaceId,
-        challengeID: challengeId,
+        profileID,
       },
       setAuthHeader(authToken)
     );
