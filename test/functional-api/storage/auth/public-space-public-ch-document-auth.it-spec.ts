@@ -337,7 +337,7 @@ describe('Public Space - Public Challenge - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          entitiesId.challenge.profileId,
           userRole
         );
         const data = res.data?.lookup.profile?.storageBucket;

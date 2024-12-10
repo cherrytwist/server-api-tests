@@ -139,8 +139,7 @@ describe('Private Space - Private Challenge - visual on profile', () => {
           entitiesId.challenge.profileId,
           userRole
         );
-        const data =
-          res.data?.space?.subspace?.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
