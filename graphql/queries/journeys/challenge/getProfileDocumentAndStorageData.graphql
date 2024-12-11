@@ -1,18 +1,18 @@
-query getSpaceDocumentAndStorageData($ID: UUID_NAMEID!) {
-  space(ID: $ID) {
-    profile {
+query GetProfileDocuments($profileID: UUID!) {
+  lookup {
+    profile(ID: $profileID) {
+      id
       storageBucket {
-        id
-        authorization {
-          anonymousReadAccess
-          myPrivileges
-        }
         id
         parentEntity {
           displayName
           id
           type
           url
+        }
+        authorization {
+          anonymousReadAccess
+          myPrivileges
         }
         documents {
           id

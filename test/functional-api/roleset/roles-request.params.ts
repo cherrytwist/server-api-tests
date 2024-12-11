@@ -1,4 +1,7 @@
-import { CommunityRoleType, OrganizationRole } from '../../generated/alkemio-schema';
+import {
+  CommunityRoleType,
+  OrganizationRole,
+} from '../../generated/alkemio-schema';
 import { TestUser } from '../../utils';
 import { graphqlErrorWrapper } from '../../utils/graphql.wrapper';
 import { getGraphqlClient } from '../../utils/graphqlClient';

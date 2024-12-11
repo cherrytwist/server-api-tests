@@ -3,7 +3,7 @@ import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { TestUser } from '@test/utils';
 import {
   deleteDocument,
-  getOrganizationProfileDocuments,
+  getProfileDocuments,
   uploadFileOnRef,
   uploadFileOnStorageBucket,
   uploadImageOnVisual,
@@ -78,13 +78,12 @@ describe('Organization - documents', () => {
         path.join(__dirname, 'files-to-upload', '190-410.jpg'),
         visualId
       );
-      const getDocId = await getOrganizationProfileDocuments(
-        entitiesId.organization.id,
+      const getDocId = await getProfileDocuments(
+        entitiesId.organization.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
-        getDocId.data?.organization?.profile?.storageBucket?.documents[0].id ??
-        '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -99,12 +98,11 @@ describe('Organization - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile visual document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getOrganizationProfileDocuments(
-          entitiesId.organization.id,
+        const res = await getProfileDocuments(
+          entitiesId.organization.profileId,
           userRole
         );
-        const data =
-          res.data?.organization?.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -130,11 +128,11 @@ describe('Organization - documents', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getOrganizationProfileDocuments(
-          entitiesId.organization.id,
+        const res = await getProfileDocuments(
+          entitiesId.organization.profileId,
           userRole
         );
-        const data = res.data?.organization?.profile?.storageBucket;
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(
@@ -159,13 +157,12 @@ describe('Organization - documents', () => {
         refId
       );
 
-      const getDocId = await getOrganizationProfileDocuments(
-        entitiesId.organization.id,
+      const getDocId = await getProfileDocuments(
+        entitiesId.organization.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
-        getDocId.data?.organization?.profile?.storageBucket?.documents[0].id ??
-        '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -180,12 +177,11 @@ describe('Organization - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization reference document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getOrganizationProfileDocuments(
-          entitiesId.organization.id,
+        const res = await getProfileDocuments(
+          entitiesId.organization.profileId,
           userRole
         );
-        const data =
-          res.data?.organization?.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -211,11 +207,11 @@ describe('Organization - documents', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getOrganizationProfileDocuments(
-          entitiesId.organization.id,
+        const res = await getProfileDocuments(
+          entitiesId.organization.profileId,
           userRole
         );
-        const data = res.data?.organization?.profile?.storageBucket;
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(
@@ -231,27 +227,26 @@ describe('Organization - documents', () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
-      const getSpaceStorageId = await getOrganizationProfileDocuments(
-        entitiesId.organization.id,
+      const getSpaceStorageId = await getProfileDocuments(
+        entitiesId.organization.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       const storageId =
-        getSpaceStorageId.data?.organization?.profile?.storageBucket?.id ?? '';
+        getSpaceStorageId.data?.lookup?.profile?.storageBucket?.id ?? '';
 
       await uploadFileOnStorageBucket(
         path.join(__dirname, 'files-to-upload', 'image.png'),
         storageId
       );
 
-      const getDocId = await getOrganizationProfileDocuments(
-        entitiesId.spaceId,
+      const getDocId = await getProfileDocuments(
+        entitiesId.space.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       documentId =
-        getDocId.data?.organization?.profile?.storageBucket?.documents[0].id ??
-        '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -266,12 +261,11 @@ describe('Organization - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization description visual document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getOrganizationProfileDocuments(
-          entitiesId.organization.id,
+        const res = await getProfileDocuments(
+          entitiesId.organization.profileId,
           userRole
         );
-        const data =
-          res.data?.organization?.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -297,11 +291,11 @@ describe('Organization - documents', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getOrganizationProfileDocuments(
-          entitiesId.organization.id,
+        const res = await getProfileDocuments(
+          entitiesId.organization.profileId,
           userRole
         );
-        const data = res.data?.organization?.profile?.storageBucket;
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(

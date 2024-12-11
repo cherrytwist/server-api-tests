@@ -3,7 +3,7 @@ import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { TestUser } from '@test/utils';
 import {
   deleteDocument,
-  getChallengeProfileDocuments,
+  getProfileDocuments,
   uploadFileOnLink,
   uploadFileOnRef,
   uploadFileOnStorageBucket,
@@ -113,15 +113,13 @@ describe('Private Space - Private Challenge - visual on profile', () => {
         visualId
       );
 
-      const getDocId = await getChallengeProfileDocuments(
-        entitiesId.spaceId,
-        entitiesId.challenge.id,
+      const getDocId = await getProfileDocuments(
+        entitiesId.challenge.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       documentId =
-        getDocId.data?.space?.subspace.profile?.storageBucket?.documents[0]
-          .id ?? '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -137,13 +135,11 @@ describe('Private Space - Private Challenge - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge profile visual document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getChallengeProfileDocuments(
-          entitiesId.spaceId,
-          entitiesId.challenge.id,
+        const res = await getProfileDocuments(
+          entitiesId.challenge.profileId,
           userRole
         );
-        const data =
-          res.data?.space?.subspace?.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -170,12 +166,11 @@ describe('Private Space - Private Challenge - visual on profile', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getChallengeProfileDocuments(
-          entitiesId.spaceId,
-          entitiesId.challenge.id,
+        const res = await getProfileDocuments(
+          entitiesId.challenge.profileId,
           userRole
         );
-        const data = res.data?.space?.subspace.profile?.storageBucket;
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(
@@ -200,14 +195,12 @@ describe('Private Space - Private Challenge - visual on profile', () => {
         refId
       );
 
-      const getDocId = await getChallengeProfileDocuments(
-        entitiesId.spaceId,
-        entitiesId.challenge.id,
+      const getDocId = await getProfileDocuments(
+        entitiesId.challenge.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
-        getDocId.data?.space?.subspace.profile?.storageBucket?.documents[0]
-          .id ?? '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -223,14 +216,13 @@ describe('Private Space - Private Challenge - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge profile reference document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getChallengeProfileDocuments(
-          entitiesId.spaceId,
-          entitiesId.challenge.id,
+        const res = await getProfileDocuments(
+          entitiesId.challenge.profileId,
           userRole
         );
 
-        const data =
-          res.data?.space?.subspace.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
+
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -257,13 +249,12 @@ describe('Private Space - Private Challenge - visual on profile', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getChallengeProfileDocuments(
-          entitiesId.spaceId,
-          entitiesId.challenge.id,
+        const res = await getProfileDocuments(
+          entitiesId.challenge.profileId,
           userRole
         );
 
-        const data = res.data?.space?.subspace.profile?.storageBucket;
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(
@@ -279,30 +270,26 @@ describe('Private Space - Private Challenge - visual on profile', () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
-      const getSpaceStorageId = await getChallengeProfileDocuments(
-        entitiesId.spaceId,
-        entitiesId.challenge.id,
+      const getSpaceStorageId = await getProfileDocuments(
+        entitiesId.challenge.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       const storageId =
-        getSpaceStorageId.data?.space?.subspace.profile?.storageBucket?.id ??
-        '';
+        getSpaceStorageId.data?.lookup?.profile?.storageBucket?.id ?? '';
 
       await uploadFileOnStorageBucket(
         path.join(__dirname, 'files-to-upload', 'image.png'),
         storageId
       );
 
-      const getDocId = await getChallengeProfileDocuments(
-        entitiesId.spaceId,
-        entitiesId.challenge.id,
+      const getDocId = await getProfileDocuments(
+        entitiesId.challenge.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       documentId =
-        getDocId.data?.space?.subspace.profile?.storageBucket?.documents[0]
-          .id ?? '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -318,14 +305,13 @@ describe('Private Space - Private Challenge - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space context (storageBucket) document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getChallengeProfileDocuments(
-          entitiesId.spaceId,
-          entitiesId.challenge.id,
+        const res = await getProfileDocuments(
+          entitiesId.challenge.profileId,
           userRole
         );
 
-        const data =
-          res.data?.space?.subspace.profile?.storageBucket?.documents[0];
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
+
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -352,12 +338,11 @@ describe('Private Space - Private Challenge - visual on profile', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getChallengeProfileDocuments(
-          entitiesId.spaceId,
-          entitiesId.challenge.id,
+        const res = await getProfileDocuments(
+          entitiesId.challenge.profileId,
           userRole
         );
-        const data = res.data?.space?.subspace.profile?.storageBucket;
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(

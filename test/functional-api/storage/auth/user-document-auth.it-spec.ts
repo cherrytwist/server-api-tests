@@ -3,7 +3,7 @@ import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { TestUser } from '@test/utils';
 import {
   deleteDocument,
-  getUserProfileDocuments,
+  getProfileDocuments,
   uploadFileOnRef,
   uploadFileOnStorageBucket,
   uploadImageOnVisual,
@@ -60,13 +60,13 @@ describe('User - documents', () => {
         TestUser.QA_USER
       );
 
-      const getDocId = await getUserProfileDocuments(
-        users.qaUser.id,
+      const getDocId = await getProfileDocuments(
+        users.qaUser.profileId,
         TestUser.QA_USER
       );
 
       documentId =
-        getDocId.data?.user?.profile?.storageBucket?.documents[0].id ?? '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -79,8 +79,8 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile visual document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getUserProfileDocuments(users.qaUser.id, userRole);
-        const data = res.data?.user?.profile?.storageBucket?.documents[0];
+        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -104,8 +104,8 @@ describe('User - documents', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getUserProfileDocuments(users.qaUser.id, userRole);
-        const data = res.data?.user?.profile?.storageBucket;
+        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(
@@ -133,12 +133,12 @@ describe('User - documents', () => {
         TestUser.QA_USER
       );
 
-      const getDocId = await getUserProfileDocuments(
-        users.qaUser.id,
+      const getDocId = await getProfileDocuments(
+        users.qaUser.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
-        getDocId.data?.user?.profile?.storageBucket?.documents[0].id ?? '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -151,8 +151,8 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user reference document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getUserProfileDocuments(users.qaUser.id, userRole);
-        const data = res.data?.user?.profile?.storageBucket?.documents[0];
+        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -176,8 +176,8 @@ describe('User - documents', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getUserProfileDocuments(users.qaUser.id, userRole);
-        const data = res.data?.user?.profile?.storageBucket;
+        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(
@@ -194,13 +194,13 @@ describe('User - documents', () => {
       await deleteReferenceOnProfile(refId);
     });
     beforeAll(async () => {
-      const getSpaceStorageId = await getUserProfileDocuments(
-        users.qaUser.id,
+      const getSpaceStorageId = await getProfileDocuments(
+        users.qaUser.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       const storageId =
-        getSpaceStorageId.data?.user?.profile?.storageBucket?.id ?? '';
+        getSpaceStorageId.data?.lookup?.profile?.storageBucket?.id ?? '';
 
       await uploadFileOnStorageBucket(
         path.join(__dirname, 'files-to-upload', 'image.png'),
@@ -208,13 +208,13 @@ describe('User - documents', () => {
         TestUser.QA_USER
       );
 
-      const getDocId = await getUserProfileDocuments(
-        users.qaUser.id,
+      const getDocId = await getProfileDocuments(
+        users.qaUser.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
       documentId =
-        getDocId.data?.user?.profile?.storageBucket?.documents[0].id ?? '';
+        getDocId.data?.lookup?.profile?.storageBucket?.documents[0].id ?? '';
     });
 
     // Arrange
@@ -227,8 +227,8 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description visual document',
       async ({ userRole, privileges, anonymousReadAccess }) => {
-        const res = await getUserProfileDocuments(users.qaUser.id, userRole);
-        const data = res.data?.user?.profile?.storageBucket?.documents[0];
+        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -252,8 +252,8 @@ describe('User - documents', () => {
         anonymousReadAccess,
         parentEntityType,
       }) => {
-        const res = await getUserProfileDocuments(users.qaUser.id, userRole);
-        const data = res.data?.user?.profile?.storageBucket;
+        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
         expect(data?.authorization?.anonymousReadAccess).toEqual(

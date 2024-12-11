@@ -71,10 +71,7 @@ export const uploadFileOnStorageBucket = async (
   return res;
 };
 
-export const deleteDocument = async (
-  ID: string,
-  userRole?: TestUser
-) => {
+export const deleteDocument = async (ID: string, userRole?: TestUser) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.DeleteDocument(
@@ -148,62 +145,15 @@ export const getOrgVisualUriInnovationHub = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getSpaceProfileDocuments = async (
-  spaceId: string,
+export const getProfileDocuments = async (
+  profileID: string,
   userRole?: TestUser
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.getSpaceDocumentAndStorageData(
+    graphqlClient.GetProfileDocuments(
       {
-        ID: spaceId,
-      },
-      setAuthHeader(authToken)
-    );
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const getChallengeProfileDocuments = async (
-  spaceId: string,
-  challengeId: string,
-  userRole?: TestUser
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.GetChallengeDocumentAndStorageData(
-      {
-        ID: spaceId,
-        challengeID: challengeId,
-      },
-      setAuthHeader(authToken)
-    );
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const getOrganizationProfileDocuments = async (
-  organizationId: string,
-  userRole?: TestUser
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.GetOrganizationDocumentAndStorageData(
-      {
-        ID: organizationId,
-      },
-      setAuthHeader(authToken)
-    );
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const getUserProfileDocuments = async (
-  userId: string,
-  userRole?: TestUser
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.GetUserDocumentAndStorageData(
-      {
-        ID: userId,
+        profileID,
       },
       setAuthHeader(authToken)
     );
