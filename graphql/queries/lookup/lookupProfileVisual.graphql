@@ -5,7 +5,6 @@ query lookupProfileVisuals($ID: UUID!) {
       displayName
       storageBucket {
         authorization {
-          anonymousReadAccess
           myPrivileges
         }
         id
@@ -18,7 +17,6 @@ query lookupProfileVisuals($ID: UUID!) {
         documents {
           id
           authorization {
-            anonymousReadAccess
             myPrivileges
           }
           displayName
@@ -33,7 +31,6 @@ query lookupProfileVisuals($ID: UUID!) {
         name
         uri
         authorization {
-          anonymousReadAccess
           myPrivileges
         }
       }

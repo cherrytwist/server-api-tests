@@ -58,19 +58,6 @@ export const assignUserAsOrganizationOwner = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const setSpaceVisibilityVariableData = (ID: string, state: boolean) => {
-  const variables = {
-    spaceData: {
-      ID,
-      authorizationPolicy: {
-        anonymousReadAccess: state,
-      },
-    },
-  };
-  const responseData = JSON.stringify(variables);
-  return responseData;
-};
-
 export const assignUserAsOrganizationAdmin = async (
   userID: string,
   organizationID: string,

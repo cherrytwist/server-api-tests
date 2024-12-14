@@ -101,7 +101,6 @@ fragment WhiteboardDetails on Whiteboard {
   authorization {
     id
     myPrivileges
-    anonymousReadAccess
     __typename
   }
   contentUpdatePolicy
@@ -172,7 +171,6 @@ fragment CommentsWithMessages on Room {
   authorization {
     id
     myPrivileges
-    anonymousReadAccess
   }
   messages {
     ...MessageDetails
