@@ -1,30 +1,30 @@
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import {
   deleteChallenge,
   getChallengeData,
-} from '@test/functional-api/journey/challenge/challenge.request.params';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { createRelation } from '@test/functional-api/relations/relations.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+} from '@functional-api/journey/challenge/challenge.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { createRelation } from '@functional-api/relations/relations.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   changePreferenceChallenge,
   changePreferenceSpace,
-} from '@test/utils/mutations/preferences-mutation';
-import { users } from '@test/utils/queries/users-data';
+} from '@utils/mutations/preferences-mutation';
+import { users } from '@utils/queries/users-data';
 import {
   createChallengeForOrgSpace,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+} from '@utils/data-setup/entities';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import {
   ChallengePreferenceType,
   SpacePreferenceType,
 } from '@alkemio/client-lib';
 import { entitiesId } from '@test/types/entities-helper';
-import { assignRoleToUser } from '@test/functional-api/roleset/roles-request.params';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { CommunityRole } from '@test/generated/alkemio-schema';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;

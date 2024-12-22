@@ -1,8 +1,8 @@
-import { updateUser } from '@test/functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@test/utils';
-import '@test/utils/array.matcher';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { updateUser } from '@functional-api/contributor-management/user/user.request.params';
+import { TestUser } from '@utils';
+import '@utils/array.matcher';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { updateOpportunityLocation } from '../journey/opportunity/opportunity.request.params';
 import {
@@ -26,7 +26,7 @@ import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { entitiesId } from '../../types/entities-helper';
 import { SpaceVisibility } from '@test/generated/graphql';
 import { SpacePrivacyMode } from '@test/generated/alkemio-schema';

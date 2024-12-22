@@ -1,6 +1,6 @@
-import { getGraphqlClient } from '@test/utils/graphqlClient';
+import { getGraphqlClient } from '@utils/graphqlClient';
 import { TestUser } from '../../../utils/token.helper';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { SearchVisibility } from '@alkemio/client-lib';
 
 export const createVirtualContributorOnAccount = async (

@@ -1,4 +1,4 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import { createUser, deleteUser, getUserData } from './user.request.params';
 export const uniqueId = Math.random()
   .toString(12)

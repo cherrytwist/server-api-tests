@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser, delay } from '@test/utils';
+import { TestUser, delay } from '@utils';
 import {
   getPlatformDiscussionsDataById,
   deleteDiscussion,

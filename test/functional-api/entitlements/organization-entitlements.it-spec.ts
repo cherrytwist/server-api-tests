@@ -5,15 +5,15 @@
  * and with account licenses plus additional resources (Space, Virtual Contributor, and Innovation Pack).
  *
  * The following utilities and data are imported:
- * - TestUser and users from '@test/utils'
- * - License management functions from '@test/functional-api/license/license.params.request'
+ * - TestUser and users from '@utils'
+ * - License management functions from '@functional-api/license/license.params.request'
  * - Organization entitlements data from './organization-entitlements-data'
  * - Entitlements query function from './entitlements-request.params'
- * - Space management functions from '@test/functional-api/journey/space/space.request.params'
- * - Virtual Contributor management functions from '@test/functional-api/contributor-management/virtual-contributor/vc.request.params'
- * - Innovation Pack management functions from '@test/functional-api/innovation-pack/innovation_pack.request.params'
- * - Organization management functions from '@test/functional-api/contributor-management/organization/organization.request.params'
- * - Authorization mutation function from '@test/utils/mutations/authorization-organization-mutation'
+ * - Space management functions from '@functional-api/journey/space/space.request.params'
+ * - Virtual Contributor management functions from '@functional-api/contributor-management/virtual-contributor/vc.request.params'
+ * - Innovation Pack management functions from '@functional-api/innovation-pack/innovation_pack.request.params'
+ * - Organization management functions from '@functional-api/contributor-management/organization/organization.request.params'
+ * - Authorization mutation function from '@utils/mutations/authorization-organization-mutation'
  *
  * The test suite includes the following tests:
  * - 'No licenses assigned': Verifies the entitlements and authorization when no licenses are assigned to the organization account.
@@ -25,13 +25,13 @@
  * - `afterAll`: Deletes the organization.
  * - `afterAll` in 'Account license plus cleanup': Cleans up created resources (Space, Virtual Contributor, Innovation Pack) and revokes the ACCOUNT_LICENSE_PLUS license from the organization account.
  */
-import { TestUser } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
+import { TestUser } from '@utils';
+import { users } from '@utils/queries/users-data';
 import {
   assignLicensePlanToAccount,
   getLicensePlanByName,
   revokeLicensePlanFromAccount,
-} from '@test/functional-api/license/license.params.request';
+} from '@functional-api/license/license.params.request';
 import {
   organizationAccountLicensePlus,
   organizationAccountNoLicenses,
@@ -41,20 +41,20 @@ import { getOrganazationEntitlementsQuery } from './entitlements-request.params'
 import {
   createSpaceAndGetData,
   deleteSpace,
-} from '@test/functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 import {
   createVirtualContributorOnAccount,
   deleteVirtualContributorOnAccount,
-} from '@test/functional-api/contributor-management/virtual-contributor/vc.request.params';
+} from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import {
   createInnovationPack,
   deleteInnovationPack,
-} from '@test/functional-api/innovation-pack/innovation_pack.request.params';
+} from '@functional-api/innovation-pack/innovation_pack.request.params';
 import {
   createOrganization,
   deleteOrganization,
-} from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { assignUserAsOrganizationAdmin } from '@test/utils/mutations/authorization-organization-mutation';
+} from '@functional-api/contributor-management/organization/organization.request.params';
+import { assignUserAsOrganizationAdmin } from '@utils/mutations/authorization-organization-mutation';
 
 const uniqueId = Math.random()
   .toString(12)

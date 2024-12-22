@@ -1,11 +1,11 @@
-import { TestUser } from '@test/utils/token.helper';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { TestUser } from '@utils/token.helper';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { SpacePreferenceType as SpacePreferenceType } from '@test/generated/alkemio-schema';
-import { changePreferenceSpace } from '@test/utils/mutations/preferences-mutation';
+import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 import {
   getSpaceData,
   deleteSpace,
-} from '@test/functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 import {
   readPrivilege,
   sorted__create_read_update_delete_grant_createRelation_createCallout_contribute,
@@ -24,19 +24,19 @@ import {
   sorted__create_read_update_delete_grant_createDiscussion_communityAddMember_Privilege,
   sorted__create_read_update_delete_grant_createDiscussion_Privilege,
 } from '../../common';
-import { deleteChallenge } from '@test/functional-api/journey/challenge/challenge.request.params';
-import { deleteSubspace } from '@test/functional-api/journey/opportunity/opportunity.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteChallenge } from '@functional-api/journey/challenge/challenge.request.params';
+import { deleteSubspace } from '@functional-api/journey/opportunity/opportunity.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   assignUserAsGlobalAdmin,
   removeUserAsGlobalAdmin,
-} from '@test/utils/mutations/authorization-mutation';
-import { users } from '@test/utils/queries/users-data';
+} from '@utils/mutations/authorization-mutation';
+import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { entitiesId } from '@test/types/entities-helper';
 
 const organizationName = 'ch-pref-org-name' + uniqueId;

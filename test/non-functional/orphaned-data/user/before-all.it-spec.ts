@@ -2,8 +2,8 @@ import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+} from '@utils/data-setup/entities';
+import { uniqueId } from '@utils/mutations/create-mutation';
 
 const organizationName = 'post-org-name' + uniqueId;
 const hostNameId = 'post-org-nameid' + uniqueId;

@@ -6,8 +6,8 @@ import {
   getUsersData,
   updateUser,
 } from './user.request.params';
-import '@test/utils/array.matcher';
-import { users } from '@test/utils/queries/users-data';
+import '@utils/array.matcher';
+import { users } from '@utils/queries/users-data';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

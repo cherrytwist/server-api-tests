@@ -1,6 +1,6 @@
 import { TestUser } from '../../../utils/token.helper';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 
 const uniqueId = (Date.now() + Math.random()).toString();
 export const challengeNameId = `chalNaId${uniqueId}`;

@@ -5,7 +5,7 @@ import {
   assignUserAsGlobalCommunityAdmin,
   assignUserAsGlobalSupport,
 } from '../mutations/authorization-platform-mutation';
-import { getUserData } from '@test/functional-api/contributor-management/user/user.request.params';
+import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
 
 interface UserData {
   email: string;

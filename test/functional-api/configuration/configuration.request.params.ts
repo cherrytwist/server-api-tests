@@ -1,5 +1,5 @@
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 
 export const fullConfiguration = async () => {
   const graphqlClient = getGraphqlClient();

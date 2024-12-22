@@ -1,7 +1,7 @@
-import { TestUser } from '../token.helper';
-import { getGraphqlClient } from '../graphqlClient';
-import { graphqlErrorWrapper } from '../graphql.wrapper';
-import { OrganizationRole } from '@test/generated/alkemio-schema';
+import { TestUser } from '@utils/token.helper';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
+import { OrganizationRole } from '@generated/alkemio-schema';
 
 export const grantCredentialToUserVariablesData = (
   userID: string,

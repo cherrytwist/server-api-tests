@@ -1,7 +1,7 @@
-import { TestUser } from '@test/utils/token.helper';
+import { TestUser } from '@utils/token.helper';
 
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 
 export const eventOnRoleSetApplication = async (
   applicationID: string,

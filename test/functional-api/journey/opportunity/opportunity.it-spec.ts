@@ -1,5 +1,5 @@
-import '@test/utils/array.matcher';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import '@utils/array.matcher';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import {
   createSubspace,
@@ -10,8 +10,8 @@ import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
-import { createOpportunity } from '@test/utils/mutations/journeys/opportunity';
+} from '@utils/data-setup/entities';
+import { createOpportunity } from '@utils/mutations/journeys/opportunity';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

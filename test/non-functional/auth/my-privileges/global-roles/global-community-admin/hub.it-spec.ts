@@ -1,17 +1,17 @@
 import {
   createPostOnCallout,
   getDataPerSpaceCallout,
-} from '@test/functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/post/post.request.params';
 import {
   deleteSpace,
   getSpaceData,
-} from '@test/functional-api/journey/space/space.request.params';
-import { createRelation } from '@test/functional-api/relations/relations.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { mutation } from '@test/utils/graphql.request';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { changePreferenceSpace } from '@test/utils/mutations/preferences-mutation';
+} from '@functional-api/journey/space/space.request.params';
+import { createRelation } from '@functional-api/relations/relations.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { mutation } from '@utils/graphql.request';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 
 import {
   sorted_sorted__create_read_update_delete_grant_createComment_Privilege,
@@ -25,15 +25,15 @@ import {
 import {
   assignUserAsGlobalCommunityAdmin,
   removeUserAsGlobalCommunityAdmin,
-} from '@test/utils/mutations/authorization-mutation';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+} from '@utils/mutations/authorization-mutation';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   entitiesId,
   users,
 } from '@test/types/entities-helper';
 import { SpacePreferenceType } from '@test/generated/alkemio-schema';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;
 const hostNameId = 'auth-ga-org-nameid' + uniqueId;

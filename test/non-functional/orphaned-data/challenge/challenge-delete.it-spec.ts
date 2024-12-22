@@ -1,24 +1,24 @@
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
-import { createCalloutOnCollaboration } from '@test/functional-api/callout/callouts.request.params';
-import { deleteChallenge } from '@test/functional-api/journey/challenge/challenge.request.params';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { changePreferenceChallenge } from '@test/utils/mutations/preferences-mutation';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
+import { createCalloutOnCollaboration } from '@functional-api/callout/callouts.request.params';
+import { deleteChallenge } from '@functional-api/journey/challenge/challenge.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { changePreferenceChallenge } from '@utils/mutations/preferences-mutation';
 import {
   createChallengeForOrgSpace,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { ChallengePreferenceType, CommunityRole } from '@alkemio/client-lib';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
-import { createWhiteboardOnCallout } from '@test/functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
+import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   assignRoleToUser,
   assignRoleToOrganization,
-} from '@test/functional-api/roleset/roles-request.params';
-import { users } from '@test/utils/queries/users-data';
+} from '@functional-api/roleset/roles-request.params';
+import { users } from '@utils/queries/users-data';
 
 const organizationName = 'post-org-name' + uniqueId;
 const hostNameId = 'post-org-nameid' + uniqueId;

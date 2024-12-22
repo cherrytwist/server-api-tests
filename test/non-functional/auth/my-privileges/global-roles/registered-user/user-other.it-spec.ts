@@ -2,9 +2,9 @@ import {
   createUser,
   getUserData,
   deleteUser,
-} from '@test/functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+} from '@functional-api/contributor-management/user/user.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
 
 const userEmail = `space${uniqueId}@alkem.io`;
 let userId = '';

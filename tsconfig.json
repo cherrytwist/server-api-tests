@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
+    "target": "ES2020", // JavaScript version to compile to
+    "module": "CommonJS",
     "lib": ["es2018", "dom"],
     "sourceMap": true,
+    "baseUrl": "./",
     "outDir": "./dist",
     "removeComments": true,
+    "moduleResolution": "node",
     "strict": true,
-    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -18,7 +19,9 @@
     "allowJs": true,
     "paths": {
       "@test/*": ["test/*"],
-      "@generated/*": ["test/generated/*"]
+      "@generated/*": ["test/generated/*"],
+      "@utils/*": ["test/utils/*"],
+      "@functional-api/*": ["test/functional-api/*"]
     }
   }
 }

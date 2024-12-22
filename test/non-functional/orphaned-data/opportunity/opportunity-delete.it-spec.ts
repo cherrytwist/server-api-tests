@@ -1,24 +1,24 @@
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { deleteSubspace } from '@test/functional-api/journey/opportunity/opportunity.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { deleteSubspace } from '@functional-api/journey/opportunity/opportunity.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   createChallengeWithUsers,
   createOpportunityForChallenge,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
-import { createCalloutOnCollaboration } from '@test/functional-api/callout/callouts.request.params';
-import { createWhiteboardOnCallout } from '@test/functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
+} from '@utils/data-setup/entities';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
+import { createCalloutOnCollaboration } from '@functional-api/callout/callouts.request.params';
+import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 
 import { entitiesId } from '@test/types/entities-helper';
 import {
   assignRoleToUser,
   assignRoleToOrganization,
-} from '@test/functional-api/roleset/roles-request.params';
-import { users } from '@test/utils/queries/users-data';
+} from '@functional-api/roleset/roles-request.params';
+import { users } from '@utils/queries/users-data';
 import { CommunityRoleType } from '@test/generated/graphql';
 
 const organizationName = 'post-org-name' + uniqueId;

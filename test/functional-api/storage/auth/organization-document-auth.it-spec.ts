@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { TestUser } from '@test/utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { TestUser } from '@utils';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -10,7 +10,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
@@ -22,8 +22,8 @@ import {
 import {
   assignUserAsOrganizationAdmin,
   assignUserAsOrganizationOwner,
-} from '@test/utils/mutations/authorization-organization-mutation';
-import { users } from '@test/utils/queries/users-data';
+} from '@utils/mutations/authorization-organization-mutation';
+import { users } from '@utils/queries/users-data';
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { assignUserToOrganization } from '../../roleset/roles-request.params';

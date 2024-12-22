@@ -1,22 +1,22 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   deleteUser,
   getUserData,
   registerVerifiedUser,
-} from '@test/functional-api/contributor-management/user/user.request.params';
+} from '@functional-api/contributor-management/user/user.request.params';
 import { orgId } from '@test/non-functional/auth/common-auth-variables';
 
 import { entitiesId } from '@test/types/entities-helper';
 import {
   assignRoleToUser,
   assignUserToOrganization,
-} from '@test/functional-api/roleset/roles-request.params';
+} from '@functional-api/roleset/roles-request.params';
 import { CommunityRoleType } from '@test/generated/graphql';
 import {
   assignUserAsOrganizationAdmin,
   assignUserAsOrganizationOwner,
   removeUserAsOrganizationOwner,
-} from '@test/utils/mutations/authorization-organization-mutation';
+} from '@utils/mutations/authorization-organization-mutation';
 
 const domain = 'alkem.io';
 const firstName = `fn${uniqueId}`;

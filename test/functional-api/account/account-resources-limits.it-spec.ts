@@ -1,11 +1,11 @@
-import '@test/utils/array.matcher';
-import { TestUser } from '@test/utils';
+import '@utils/array.matcher';
+import { TestUser } from '@utils';
 import {
   createSpaceBasicData,
   deleteSpace,
   getSpaceData,
-} from '@test/functional-api/journey/space/space.request.params';
-import { users } from '@test/utils/queries/users-data';
+} from '@functional-api/journey/space/space.request.params';
+import { users } from '@utils/queries/users-data';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

@@ -1,19 +1,19 @@
 import {
   createPostOnCallout,
   getDataPerSpaceCallout,
-} from '@test/functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/post/post.request.params';
 import {
   getSpaceData,
   deleteSpace,
-} from '@test/functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { createRelation } from '@test/functional-api/relations/relations.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { mutation } from '@test/utils/graphql.request';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { changePreferenceSpace } from '@test/utils/mutations/preferences-mutation';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+} from '@functional-api/journey/space/space.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { createRelation } from '@functional-api/relations/relations.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { mutation } from '@utils/graphql.request';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 
 import {
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
@@ -26,7 +26,7 @@ import {
   sorted__create_read_update_delete_grant_createMessage_messageReaction_messageReply,
   sorted__create_read_update_delete_grant_createPost_contribute_calloutPublished,
 } from '../../common';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { SpacePreferenceType } from '@alkemio/client-lib/dist/types/alkemio-schema';
 import { entitiesId } from '@test/types/entities-helper';
 

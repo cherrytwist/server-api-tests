@@ -1,6 +1,6 @@
-import { TestUser } from '@test/utils';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
+import { TestUser } from '@utils';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
 import { SpaceVisibility } from '../../generated/alkemio-schema';
 
 export const updateSpacePlatformSettings = async (

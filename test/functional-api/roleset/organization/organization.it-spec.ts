@@ -1,10 +1,10 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   removeRoleFromOrganization,
   assignRoleToOrganization,
@@ -12,7 +12,7 @@ import {
 import { entitiesId } from '../../../types/entities-helper';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import { CommunityRoleType } from '@test/generated/graphql';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;

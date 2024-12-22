@@ -1,16 +1,16 @@
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { delay } from '@test/utils/delay';
-import { users } from '@test/utils/queries/users-data';
-import { TestUser } from '@test/utils';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { delay } from '@utils/delay';
+import { users } from '@utils/queries/users-data';
+import { TestUser } from '@utils';
 import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
+import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
 import {
   createDiscussion,
   deleteDiscussion,
   getPlatformForumData,
   sendMessageToRoom,
-} from '@test/functional-api/communications/communication.params';
-import { sendMessageReplyToRoom } from '@test/functional-api/communications/replies/reply.request.params';
+} from '@functional-api/communications/communication.params';
+import { sendMessageReplyToRoom } from '@functional-api/communications/replies/reply.request.params';
 import { ForumDiscussionCategory } from '@test/generated/alkemio-schema';
 import { getMailsData } from '@test/types/entities-helper';
 

@@ -1,17 +1,13 @@
-
 import { entitiesId } from '../../../types/entities-helper';
 import {
   deleteOrganization,
   getOrganizationData,
   updateOrganization,
 } from './organization.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import {
-  assignUserAsOrganizationOwner,
-} from '@test/utils/mutations/authorization-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { updateOrganizationSettings } from './organization.request.params';
-import { eventOnOrganizationVerification } from '@test/functional-api/templates/lifecycle/innovation-flow.request.params';
-
+import { TestUser } from '@utils/token.helper';
+import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 
 const organizationName = 'h-pref-org-name' + uniqueId;
 const hostNameId = 'h-pref-org-nameid' + uniqueId;
@@ -70,16 +66,16 @@ describe('Organization preferences', () => {
           entitiesId.organization.id,
           {
             membership: {
-              allowUsersMatchingDomainToJoin: false
-            }
+              allowUsersMatchingDomainToJoin: false,
+            },
           },
           userRole
         );
 
         // Assert
         expect(
-          res?.data?.updatePreferenceOnOrganization.definition.type
-        ).toContain(message);
+          res?.data?.updateOrganizationSettings.settings.membership.allowUsersMatchingDomainToJoin
+        ).toEqual(true);
       }
     );
   });
@@ -97,8 +93,8 @@ describe('Organization preferences', () => {
           entitiesId.organization.id,
           {
             membership: {
-              allowUsersMatchingDomainToJoin: false
-            }
+              allowUsersMatchingDomainToJoin: false,
+            },
           },
           userRole
         );
@@ -115,14 +111,11 @@ describe('Organization preferences', () => {
     });
     test("don't assign new user to organization,domain preference enabled", async () => {
       // Arrange
-      await updateOrganizationSettings(
-        entitiesId.organization.id,
-        {
-          membership: {
-            allowUsersMatchingDomainToJoin: true
-          }
+      await updateOrganizationSettings(entitiesId.organization.id, {
+        membership: {
+          allowUsersMatchingDomainToJoin: true,
         },
-      );
+      });
 
       // Act
       const email = `enm${uniqueId}@${domain}`;
@@ -147,14 +140,11 @@ describe('Organization preferences', () => {
 
     test("don't assign new user to organization, domain preference disabled", async () => {
       // Arrange
-      await updateOrganizationSettings(
-        entitiesId.organization.id,
-        {
-          membership: {
-            allowUsersMatchingDomainToJoin: false
-          }
+      await updateOrganizationSettings(entitiesId.organization.id, {
+        membership: {
+          allowUsersMatchingDomainToJoin: false,
         },
-      );
+      });
 
       // Act
       const email = `dism${uniqueId}@${domain}`;
@@ -179,14 +169,11 @@ describe('Organization preferences', () => {
 
     test("don't assign new user with different domain to organization,domain preference enabled", async () => {
       // Arrange
-      await updateOrganizationSettings(
-        entitiesId.organization.id,
-        {
-          membership: {
-            allowUsersMatchingDomainToJoin: true
-          }
+      await updateOrganizationSettings(entitiesId.organization.id, {
+        membership: {
+          allowUsersMatchingDomainToJoin: true,
         },
-      );
+      });
 
       // Act
       const email = `enms${uniqueId}@a${domain}`;
@@ -229,14 +216,11 @@ describe('Organization preferences', () => {
     });
     test('assign new user to organization,domain preference enabled', async () => {
       // Arrange
-      await updateOrganizationSettings(
-        entitiesId.organization.id,
-        {
-          membership: {
-            allowUsersMatchingDomainToJoin: true
-          }
+      await updateOrganizationSettings(entitiesId.organization.id, {
+        membership: {
+          allowUsersMatchingDomainToJoin: true,
         },
-      );
+      });
 
       // Act
       const email = `en${uniqueId}@${domain}`;
@@ -261,20 +245,17 @@ describe('Organization preferences', () => {
 
     test("don't assign new user to organization, domain preference disabled", async () => {
       // Arrange
-      await updateOrganizationSettings(
-        entitiesId.organization.id,
-        {
-          membership: {
-            allowUsersMatchingDomainToJoin: false
-          }
+      await updateOrganizationSettings(entitiesId.organization.id, {
+        membership: {
+          allowUsersMatchingDomainToJoin: false,
         },
-      );
+      });
 
       // Act
       const email = `dis${uniqueId}@${domain}`;
       userId = await registerVerifiedUser(email, firstName, lastName);
 
-      const organizationData = await  getOrganizationData(
+      const organizationData = await getOrganizationData(
         entitiesId.organization.id
       );
       const organizationMembers =
@@ -293,14 +274,11 @@ describe('Organization preferences', () => {
 
     test("don't assign new user with different domain to organization,domain preference enabled", async () => {
       // Arrange
-      await updateOrganizationSettings(
-        entitiesId.organization.id,
-        {
-          membership: {
-            allowUsersMatchingDomainToJoin: true
-          }
+      await updateOrganizationSettings(entitiesId.organization.id, {
+        membership: {
+          allowUsersMatchingDomainToJoin: true,
         },
-      );
+      });
 
       // Act
       const email = `en${uniqueId}@a${domain}`;

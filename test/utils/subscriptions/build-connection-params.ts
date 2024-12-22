@@ -1,4 +1,4 @@
-import { TestUser, TestUtil } from '@test/utils';
+import { TestUser, TestUtil } from '@utils';
 
 export const buildConnectionParams = async (user: TestUser) => {
   const token = (await TestUtil.Instance()).userTokenMap.get(user);

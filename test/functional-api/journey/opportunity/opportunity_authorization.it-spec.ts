@@ -1,14 +1,14 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import { createSubspace } from '../challenge/challenge.request.params';
 import { deleteSpace } from '../space/space.request.params';
-import { TestUser } from '@test/utils/token.helper';
-import { users } from '@test/utils/queries/users-data';
+import { TestUser } from '@utils/token.helper';
+import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { CommunityRoleType } from '@test/generated/alkemio-schema';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   assignRoleToUserExtendedData,

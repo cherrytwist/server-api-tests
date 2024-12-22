@@ -3,10 +3,10 @@ import {
   deleteUser,
   getUserData,
   uniqueId,
-} from '@test/functional-api/contributor-management/user/user.request.params';
-import { delay } from '@test/utils';
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { getEmails, getRecoveryCode } from '@test/utils/ui.test.helper';
+} from '@functional-api/contributor-management/user/user.request.params';
+import { delay } from '@utils';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { getEmails, getRecoveryCode } from '@utils/ui.test.helper';
 import {
   navigateToLoginPageFromMenu,
   navigateToRegistrationFromSignUp,

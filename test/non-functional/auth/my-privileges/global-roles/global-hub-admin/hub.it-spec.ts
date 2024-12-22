@@ -1,16 +1,16 @@
 import {
   createPostOnCallout,
   getDataPerSpaceCallout,
-} from '@test/functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/post/post.request.params';
 import {
   deleteSpace,
   getSpaceData,
-} from '@test/functional-api/journey/space/space.request.params';
-import { createRelation } from '@test/functional-api/relations/relations.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { changePreferenceSpace } from '@test/utils/mutations/preferences-mutation';
+} from '@functional-api/journey/space/space.request.params';
+import { createRelation } from '@functional-api/relations/relations.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 import {
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
   sorted_sorted__create_read_update_delete_grant_createComment_Privilege,
@@ -22,11 +22,11 @@ import {
   sorted__create_read_update_delete_grant_applyToCommunity_joinCommunity_addMember_Invite,
   sorted__create_read_update_delete_grant_createPost_contribute_calloutPublished,
 } from '../../common';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { SpacePreferenceType } from '@alkemio/client-lib';
 import { entitiesId } from '@test/types/entities-helper';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;
 const hostNameId = 'auth-ga-org-nameid' + uniqueId;

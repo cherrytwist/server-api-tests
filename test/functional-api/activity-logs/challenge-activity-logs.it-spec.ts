@@ -1,10 +1,10 @@
-import '@test/utils/array.matcher';
-import { TestUser } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
+import '@utils/array.matcher';
+import { TestUser } from '@utils';
+import { users } from '@utils/queries/users-data';
 import {
   createChallengeForOrgSpace,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   CalloutState,
   CalloutType,
@@ -17,14 +17,14 @@ import {
 import {
   deleteSpace,
   updateSpaceSettings,
-} from '@test/functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 import { getActivityLogOnCollaboration } from './activity-log-params';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
   updateCalloutVisibility,
-} from '@test/functional-api/callout/callouts.request.params';
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/callouts.request.params';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '../communications/communication.params';
 import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { assignRoleToUser, joinRoleSet } from '../roleset/roles-request.params';

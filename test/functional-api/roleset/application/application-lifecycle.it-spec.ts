@@ -1,17 +1,17 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   deleteSpace,
   getSpaceData,
   updateSpaceSettings,
-} from '@test/functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 
 import {
   deleteApplication,
   createApplication,
   getRoleSetInvitationsApplications,
-} from '@test/functional-api/roleset/application/application.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
+} from '@functional-api/roleset/application/application.request.params';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { CommunityMembershipPolicy } from '@alkemio/client-lib';
 import { entitiesId } from '../../../types/entities-helper';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';

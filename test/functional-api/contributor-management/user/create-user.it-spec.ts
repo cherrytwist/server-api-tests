@@ -4,7 +4,7 @@ import {
   getUserData,
   registerVerifiedUser,
 } from './user.request.params';
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

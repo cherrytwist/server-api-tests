@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   createApplication,
   deleteApplication,
   getRoleSetInvitationsApplications,
   meQuery,
-} from '@test/functional-api/roleset/application/application.request.params';
+} from '@functional-api/roleset/application/application.request.params';
 import {
   deleteInvitation,
   getSpaceInvitation,
@@ -16,21 +16,21 @@ import {
   getSpaceData,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser, registerInAlkemioOrFail } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
+import { TestUser, registerInAlkemioOrFail } from '@utils';
+import { users } from '@utils/queries/users-data';
 import { readPrivilege } from '@test/non-functional/auth/my-privileges/common';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import {
   removeRoleFromUser,
   assignRoleToUser,
-} from '@test/functional-api/roleset/roles-request.params';
+} from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
   SpacePrivacyMode,
 } from '@test/generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 export const uniqueId = Math.random()

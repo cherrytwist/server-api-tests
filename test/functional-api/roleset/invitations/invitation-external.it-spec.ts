@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   deleteExternalInvitation,
   inviteExternalUser,
@@ -8,14 +8,14 @@ import {
   createSpaceAndGetData,
   deleteSpace,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils';
 import {
   registerVerifiedUser,
   deleteUser,
 } from '../../contributor-management/user/user.request.params';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { getRoleSetInvitationsApplications } from '../application/application.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 export const uniqueId = Math.random()
   .toString(12)

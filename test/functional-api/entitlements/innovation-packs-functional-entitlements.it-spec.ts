@@ -22,17 +22,17 @@
  * - A test to handle the scenario where the innovation pack creation exceeds the license limit.
  */
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
-} from '@test/utils/mutations/authorization-platform-mutation';
-import { users } from '@test/utils/queries/users-data';
+} from '@utils/mutations/authorization-platform-mutation';
+import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createInnovationPack,
   deleteInnovationPack,
-} from '@test/functional-api/innovation-pack/innovation_pack.request.params';
+} from '@functional-api/innovation-pack/innovation_pack.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 
 const uniqueId = Math.random()

@@ -1,12 +1,12 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   createPostTemplate,
   getPostTemplatesCountForSpace,
   updatePostTemplate,
 } from './post-template.request.params';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { TestUser } from '@test/utils/token.helper';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { TestUser } from '@utils/token.helper';
 import {
   errorAuthCreatePostTemplate,
   errorAuthDeleteTemplate,
@@ -18,7 +18,7 @@ import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { PostDataFragment } from '@test/generated/alkemio-schema';
 import {
   deletePost,
@@ -27,8 +27,8 @@ import {
   updatePost,
   getPostData,
 } from '../../callout/post/post.request.params';
-import { GetTemplateById } from '@test/functional-api/templates/template.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { GetTemplateById } from '@functional-api/templates/template.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
 

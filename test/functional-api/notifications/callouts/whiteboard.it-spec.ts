@@ -1,21 +1,21 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { TestUser } from '@test/utils/token.helper';
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { delay } from '@test/utils/delay';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { TestUser } from '@utils/token.helper';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { delay } from '@utils/delay';
+import { users } from '@utils/queries/users-data';
 import {
   createWhiteboardCalloutOnCollaboration,
   updateCalloutVisibility,
-} from '@test/functional-api/callout/callouts.request.params';
+} from '@functional-api/callout/callouts.request.params';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
-import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
-import { createWhiteboardOnCallout } from '@test/functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
-import { deleteWhiteboard } from '@test/functional-api/callout/whiteboard/whiteboard-callout.params.request';
+} from '@utils/data-setup/entities';
+import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
+import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
+import { deleteWhiteboard } from '@functional-api/callout/whiteboard/whiteboard-callout.params.request';
 
 import {
   CalloutType,
@@ -23,7 +23,7 @@ import {
   PreferenceType,
 } from '@test/generated/alkemio-schema';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;

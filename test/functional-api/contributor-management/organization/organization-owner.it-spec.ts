@@ -1,14 +1,14 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   createOrganization,
   deleteOrganization,
 } from '../organization/organization.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
 import {
   assignUserAsOrganizationOwner,
   removeUserAsOrganizationOwner,
-} from '@test/utils/mutations/authorization-organization-mutation';
+} from '@utils/mutations/authorization-organization-mutation';
 
 let organizationId = '';
 const credentialsType = 'ORGANIZATION_OWNER';

@@ -7,7 +7,7 @@ import {
   TagsetReservedName,
   CreateCollaborationInput,
 } from '@test/generated/graphql';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 
 export const lifecycleDefaultDefinition: InnovationFlowState[] = [
   {

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import {
@@ -10,14 +10,14 @@ import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   removeRoleFromUser,
   assignRoleToUser,
 } from '../roles-request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { CommunityRoleType } from '@test/generated/alkemio-schema';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;

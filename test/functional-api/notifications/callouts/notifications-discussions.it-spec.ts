@@ -1,24 +1,24 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { TestUser } from '@test/utils/token.helper';
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { delay } from '@test/utils/delay';
-import { deleteUser } from '@test/functional-api/contributor-management/user/user.request.params';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { TestUser } from '@utils/token.helper';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { delay } from '@utils/delay';
+import { deleteUser } from '@functional-api/contributor-management/user/user.request.params';
+import { users } from '@utils/queries/users-data';
 
 import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
+import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
 import {
   createDiscussion,
   sendMessageToRoom,
-} from '@test/functional-api/communications/communication.params';
+} from '@functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   createOrgAndSpaceWithUsers,
   createChallengeWithUsers,
   registerUsersAndAssignToAllEntitiesAsMembers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 
 const organizationName = 'not-disc-org-name' + uniqueId;
 const hostNameId = 'not-disc-org-nameid' + uniqueId;

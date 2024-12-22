@@ -1,8 +1,8 @@
 import { AlkemioClient } from '@alkemio/client-lib';
-import { TestUser } from '@test/utils';
-import { setAuthHeader } from '@test/utils/graphql.authorization.header';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
+import { TestUser } from '@utils';
+import { setAuthHeader } from '@utils/graphql.authorization.header';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
 import { PathLike } from 'fs';
 
 const server = process.env.ALKEMIO_SERVER || '';

@@ -11,12 +11,12 @@ import { convertChallengeToSpace } from './conversions.request.params';
 import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   createChallenge,
   createChallenge,
-} from '@test/utils/mutations/journeys/challenge';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+} from '@utils/mutations/journeys/challenge';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   assignRoleToOrganization,
   assignRoleToUser,

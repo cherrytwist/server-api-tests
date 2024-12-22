@@ -20,21 +20,21 @@
  *
  */
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
-} from '@test/utils/mutations/authorization-platform-mutation';
-import { users } from '@test/utils/queries/users-data';
+} from '@utils/mutations/authorization-platform-mutation';
+import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createSpaceBasicData,
   deleteSpace,
-} from '@test/functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 import {
   createVirtualContributorOnAccount,
   deleteVirtualContributorOnAccount,
-} from '@test/functional-api/contributor-management/virtual-contributor/vc.request.params';
+} from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 
 const uniqueId = Math.random()

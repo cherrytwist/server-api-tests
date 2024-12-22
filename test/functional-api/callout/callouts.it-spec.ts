@@ -1,5 +1,5 @@
-import '@test/utils/array.matcher';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import '@utils/array.matcher';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
@@ -7,16 +7,16 @@ import {
   updateCallout,
   updateCalloutVisibility,
 } from './callouts.request.params';
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { CalloutState, CalloutType } from '@test/generated/alkemio-schema';
 import { CalloutVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { getDataPerSpaceCallout } from './post/post.request.params';
 import { entitiesId } from '../../types/entities-helper';
 

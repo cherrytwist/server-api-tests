@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { TestUser } from '@test/utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { TestUser } from '@utils';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -11,7 +11,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import {
   deleteSpace,

@@ -1,9 +1,9 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
 import { createSpaceAndGetData } from '../../functional-api/journey/space/space.request.params';
 import { createUser } from '../../functional-api/contributor-management/user/user.request.params';
 import { createOpportunity } from '../mutations/journeys/opportunity';
-import { assignRoleToUser } from '@test/functional-api/roleset/roles-request.params';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CalloutType,
   CalloutVisibility,
@@ -11,7 +11,7 @@ import {
 } from '@test/generated/alkemio-schema';
 import { TestUser } from '../token.helper';
 import { delay } from '../delay';
-import { createOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   createCalloutOnCollaboration,
@@ -19,7 +19,7 @@ import {
   getCalloutDetails,
   getCollaborationCalloutsData,
   updateCalloutVisibility,
-} from '@test/functional-api/callout/callouts.request.params';
+} from '@functional-api/callout/callouts.request.params';
 import { createChallenge } from '../mutations/journeys/challenge';
 
 export const createOrgAndSpace = async (

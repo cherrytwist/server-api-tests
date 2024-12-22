@@ -1,12 +1,12 @@
 import {
   createUser,
   deleteUser,
-} from '@test/functional-api/contributor-management/user/user.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { delay } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
-import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
+} from '@functional-api/contributor-management/user/user.request.params';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { delay } from '@utils';
+import { users } from '@utils/queries/users-data';
+import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
 import { PreferenceType } from '@alkemio/client-lib';
 import { getMailsData } from '@test/types/entities-helper';
 

@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser, getAuthDocument } from '@test/utils';
+import { TestUser, getAuthDocument } from '@utils';
 import {
   deleteDocument,
   getOrgReferenceUri,

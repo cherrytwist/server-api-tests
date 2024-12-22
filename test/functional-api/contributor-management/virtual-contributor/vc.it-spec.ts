@@ -1,4 +1,4 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   createVirtualContributorOnAccount,
   deleteVirtualContributorOnAccount,
@@ -12,20 +12,20 @@ import {
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { TestUser } from '@utils';
+import { users } from '@utils/queries/users-data';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@test/generated/alkemio-schema';
 import { SearchVisibility, SpaceVisibility } from '@alkemio/client-lib';
-import { createChallenge } from '@test/utils/mutations/journeys/challenge';
+import { createChallenge } from '@utils/mutations/journeys/challenge';
 import {
   assignLicensePlanToAccount,
   getLicensePlanByName,
-} from '@test/functional-api/license/license.params.request';
+} from '@functional-api/license/license.params.request';
 import {
   deleteInvitation,
   inviteContributors,

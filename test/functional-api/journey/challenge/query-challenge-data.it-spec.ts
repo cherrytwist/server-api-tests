@@ -1,4 +1,4 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 
 import {
   createSubspace,
@@ -7,16 +7,16 @@ import {
 import {
   createOrganization,
   deleteOrganization,
-} from '@test/functional-api/contributor-management/organization/organization.request.params';
+} from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   deleteSpace,
   updateSpaceContext,
 } from '../space/space.request.params';
 import { entitiesId } from '@test/types/entities-helper';
-// import { uniqueId } from '@test/utils/mutations/create-mutation';
+// import { uniqueId } from '@utils/mutations/create-mutation';
 
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
-//import { uniqueId } from '@test/utils/mutations/journeys/challenge';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
+//import { uniqueId } from '@utils/mutations/journeys/challenge';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

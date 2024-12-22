@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils/test.user';
 import { sendMessageReplyToRoom } from './reply.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { addReaction } from '../reactions/reactions.request.params';
 import {
   createDiscussion,

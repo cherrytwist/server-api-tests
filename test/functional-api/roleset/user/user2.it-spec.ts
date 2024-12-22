@@ -1,5 +1,5 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
 import {
   createSpaceAndGetData,
   deleteSpace,
@@ -10,11 +10,11 @@ import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { SpaceVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
 
-import { createChallenge } from '@test/utils/mutations/journeys/challenge';
-import { TestUser } from '@test/utils';
+import { createChallenge } from '@utils/mutations/journeys/challenge';
+import { TestUser } from '@utils';
 import {
   assignRoleToUser,
   assignUserToOrganization,

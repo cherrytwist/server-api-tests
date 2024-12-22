@@ -1,11 +1,11 @@
-import { delay, TestUser } from '@test/utils';
-import { SubscriptionClient } from '@test/utils/subscriptions';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { delay, TestUser } from '@utils';
+import { SubscriptionClient } from '@utils/subscriptions';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionChallengeCreated } from './subscrition-queries';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { deleteOrganization } from '../organization/organization.request.params';
-import { createChallenge } from '@test/utils/mutations/journeys/challenge';
+import { createChallenge } from '@utils/mutations/journeys/challenge';
 import { entitiesId } from '../../types/entities-helper';
 
 const organizationName = 'com-sub-org-n' + uniqueId;

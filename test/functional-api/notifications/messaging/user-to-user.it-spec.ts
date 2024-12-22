@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { delay } from '@test/utils/delay';
-import { TestUser } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { delay } from '@utils/delay';
+import { TestUser } from '@utils';
+import { users } from '@utils/queries/users-data';
 import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
-import { sendMessageToUser } from '@test/functional-api/communications/communication.params';
+import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
+import { sendMessageToUser } from '@functional-api/communications/communication.params';
 import { getMailsData } from '@test/types/entities-helper';
 
 let receiver_userDisplayName = '';

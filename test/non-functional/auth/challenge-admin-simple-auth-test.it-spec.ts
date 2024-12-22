@@ -2,17 +2,17 @@ import {
   assignChallengeAdmin,
   removeUserAsChallengeAdmin,
   userAsChallengeAdminVariablesData,
-} from '@test/utils/mutations/authorization-mutation';
+} from '@utils/mutations/authorization-mutation';
 import {
   createSpace,
   spaceVariablesData,
   uniqueId,
-} from '@test/utils/mutations/create-mutation';
+} from '@utils/mutations/create-mutation';
 import {
   updateSpace,
   updateSpaceVariablesData,
-} from '@test/utils/mutations/update-mutation';
-import { TestUser } from '@test/utils/token.helper';
+} from '@utils/mutations/update-mutation';
+import { TestUser } from '@utils/token.helper';
 import { mutation } from '../../utils/graphql.request';
 import {
   qaUserId,

@@ -1,10 +1,10 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   assignRoleToOrganization,
   getOrganizationRole,

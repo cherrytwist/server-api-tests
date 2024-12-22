@@ -1,11 +1,11 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
 import {
   deleteSpace,
   getRoleSetUserPrivilege,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils';
 import {
   sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC,
   sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC,
@@ -16,7 +16,7 @@ import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { removeRoleFromUser } from '../roles-request.params';
 
 import { entitiesId } from '../../../types/entities-helper';
@@ -25,7 +25,7 @@ import {
   CommunityRoleType,
   SpacePrivacyMode,
 } from '@test/generated/alkemio-schema';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;

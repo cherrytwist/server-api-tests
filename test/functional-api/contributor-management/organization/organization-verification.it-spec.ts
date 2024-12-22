@@ -1,5 +1,5 @@
-import '@test/utils/array.matcher';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import '@utils/array.matcher';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   deleteOrganization,
   createOrganization,

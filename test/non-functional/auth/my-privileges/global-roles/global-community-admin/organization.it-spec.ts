@@ -1,12 +1,12 @@
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { sorted__create_read_update_delete_grant } from '../../common';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {
   deleteOrganization,
   getOrganizationData,
-} from '@test/functional-api/contributor-management/organization/organization.request.params';
+} from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;

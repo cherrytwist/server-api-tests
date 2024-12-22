@@ -6,8 +6,8 @@ import {
   getSpacesData,
   updateSpacePlatformSettings,
 } from './space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { createOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

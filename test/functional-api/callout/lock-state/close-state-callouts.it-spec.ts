@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
-import '@test/utils/array.matcher';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import '@utils/array.matcher';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   deleteCallout,
   createCalloutOnCollaboration,
@@ -11,7 +11,7 @@ import {
   createPostOnCallout,
   getDataPerSpaceCallout,
 } from '../post/post.request.params';
-import { TestUser } from '@test/utils';
+import { TestUser } from '@utils';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
@@ -19,15 +19,15 @@ import {
   getDefaultChallengeCalloutByNameId,
   getDefaultOpportunityCalloutByNameId,
   getDefaultSpaceCalloutByNameId,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   CalloutState,
   CalloutVisibility,
 } from '@test/generated/alkemio-schema';
 import { deleteSpace } from '../../journey/space/space.request.params';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId } from '@test/types/entities-helper';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

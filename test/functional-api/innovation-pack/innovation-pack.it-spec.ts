@@ -1,5 +1,5 @@
-import { createOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { createInnovationPack } from './innovation_pack.request.params';
 import {
   whiteboardTemplateValues1,
@@ -10,7 +10,7 @@ import {
   whiteboardTemplateValues6,
 } from './whiteboard-values-fixed';
 import { createWhiteboardTemplate } from '../templates/whiteboard/templates.request.params';
-import { authorizationPolicyResetOnPlatform } from '@test/utils/mutations/authorization-platform-mutation';
+import { authorizationPolicyResetOnPlatform } from '@utils/mutations/authorization-platform-mutation';
 
 describe('Organization', () => {
   const organizationName = 'Organization with many whiteboardes' + uniqueId;

@@ -12,14 +12,14 @@
  */
 
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@test/utils';
-import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@test/utils/mutations/authorization-platform-mutation';
-import { users } from '@test/utils/queries/users-data';
+import { TestUser } from '@utils';
+import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@utils/mutations/authorization-platform-mutation';
+import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createSpaceBasicData,
   deleteSpace,
-} from '@test/functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 import {
   revokeLicensePlanFromSpace,
   getLicensePlanByName,

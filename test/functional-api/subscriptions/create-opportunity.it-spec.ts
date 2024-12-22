@@ -1,13 +1,13 @@
-import { delay, TestUser } from '@test/utils';
-import { SubscriptionClient } from '@test/utils/subscriptions';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { delay, TestUser } from '@utils';
+import { SubscriptionClient } from '@utils/subscriptions';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { deleteSpace } from '../journey/space/space.request.params';
-import { createOpportunity } from '@test/utils/mutations/journeys/opportunity';
+import { createOpportunity } from '@utils/mutations/journeys/opportunity';
 import { subscriptionOpportunityCreated } from './subscrition-queries';
 import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import { deleteOrganization } from '../organization/organization.request.params';
 import { entitiesId } from '../../types/entities-helper';
 

@@ -1,4 +1,4 @@
-import { getMails } from '@test/utils/mailslurper.rest.requests';
+import { getMails } from '@utils/mailslurper.rest.requests';
 
 // To be used only in tests, when there is dependancy on thrid party service (i.e. mailslurper)
 export function delay(ms: number) {

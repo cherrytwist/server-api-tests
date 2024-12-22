@@ -1,7 +1,7 @@
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import { TestUser } from '../../../utils/token.helper';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 export const opportunityNameId = `oppNaId${uniqueId}`;
 
 export const createOpportunity = async (

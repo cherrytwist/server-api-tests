@@ -2,15 +2,15 @@ import {
   getSpaceData,
   deleteSpace,
   updateSpaceSettings,
-} from '@test/functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { TestUser } from '@test/utils/token.helper';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { users } from '@test/utils/queries/users-data';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
+} from '@functional-api/journey/space/space.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { TestUser } from '@utils/token.helper';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { users } from '@utils/queries/users-data';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { entitiesId } from '@test/types/entities-helper';
-import { assignRoleToUser } from '@test/functional-api/roleset/roles-request.params';
-import { delay } from '@test/utils';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
+import { delay } from '@utils';
 import {
   CommunityRoleType,
   SpacePrivacyMode,

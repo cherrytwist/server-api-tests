@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   getPlatformDiscussionsDataById,
   createDiscussion,

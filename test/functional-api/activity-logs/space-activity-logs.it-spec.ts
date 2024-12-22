@@ -1,8 +1,8 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
+import { TestUser } from '@utils';
+import { users } from '@utils/queries/users-data';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {
   CalloutState,
   CalloutType,
@@ -20,9 +20,9 @@ import {
   createCalloutOnCollaboration,
   deleteCallout,
   updateCalloutVisibility,
-} from '@test/functional-api/callout/callouts.request.params';
+} from '@functional-api/callout/callouts.request.params';
 import { getActivityLogOnCollaboration } from './activity-log-params';
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '../communications/communication.params';
 import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { assignRoleToUser, joinRoleSet } from '../roleset/roles-request.params';

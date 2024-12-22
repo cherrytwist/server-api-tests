@@ -1,21 +1,21 @@
 /* eslint-disable prettier/prettier */
 
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { delay } from '@test/utils/delay';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { assignUserAsOrganizationAdmin } from '@test/utils/mutations/authorization-organization-mutation';
-import { users } from '@test/utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { delay } from '@utils/delay';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { assignUserAsOrganizationAdmin } from '@utils/mutations/authorization-organization-mutation';
+import { users } from '@utils/queries/users-data';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
-import { sendMessageToOrganization } from '@test/functional-api/communications/communication.params';
+import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
+import { sendMessageToOrganization } from '@functional-api/communications/communication.params';
 import {
   entitiesId,
   getMailsData,
 } from '@test/types/entities-helper';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const firstOrganizationName = 'sample-org-name' + uniqueId;
 const hostNameId = 'sample-org-nameid' + uniqueId;

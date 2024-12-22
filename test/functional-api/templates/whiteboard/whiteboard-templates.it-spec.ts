@@ -1,13 +1,13 @@
-import '@test/utils/array.matcher';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import '@utils/array.matcher';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
-import { GetTemplateById } from '@test/functional-api/templates/template.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+} from '@utils/data-setup/entities';
+import { GetTemplateById } from '@functional-api/templates/template.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   createWhiteboardTemplate,

@@ -1,7 +1,7 @@
 import '../../../utils/array.matcher';
 import { deleteSpace } from '../space/space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   createSubspace,

@@ -1,5 +1,5 @@
-import { TestUser } from '@test/utils';
-import '@test/utils/array.matcher';
+import { TestUser } from '@utils';
+import '@utils/array.matcher';
 import {
   getSpaceData,
   getUserRoleSpacesVisibility,
@@ -13,7 +13,7 @@ import {
 import {
   createOrganization,
   deleteOrganization,
-} from '@test/functional-api/contributor-management/organization/organization.request.params';
+} from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   readPrivilege,
   sorted__create_read_update_delete_grant_createSubspace,
@@ -25,7 +25,7 @@ import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 import {
   SpacePrivacyMode,
   SpaceVisibility,

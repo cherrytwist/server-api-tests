@@ -1,25 +1,25 @@
 import {
   createPostOnCallout,
   getDataPerSpaceCallout,
-} from '@test/functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/post/post.request.params';
 import {
   deleteSpace,
   getSpaceData,
-} from '@test/functional-api/journey/space/space.request.params';
-import { createRelation } from '@test/functional-api/relations/relations.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { changePreferenceSpace } from '@test/utils/mutations/preferences-mutation';
+} from '@functional-api/journey/space/space.request.params';
+import { createRelation } from '@functional-api/relations/relations.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 
 import {
   readPrivilege,
   sorted__read_applyToCommunity_joinCommunity,
   sorted__read_createRelation,
 } from '../../common';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { SpacePreferenceType } from '@alkemio/client-lib';
 import { entitiesId } from '@test/types/entities-helper';
 

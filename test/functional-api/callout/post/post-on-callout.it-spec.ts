@@ -1,4 +1,4 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   deletePost,
   postDataPerSpaceCallout,
@@ -7,27 +7,27 @@ import {
   updatePost,
   getPostData,
 } from './post.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { TestUser } from '@test/utils/token.helper';
-import { users } from '@test/utils/queries/users-data';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { TestUser } from '@utils/token.helper';
+import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
-} from '@test/utils/data-setup/entities';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+} from '@utils/data-setup/entities';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
-} from '@test/functional-api/communications/communication.params';
+} from '@functional-api/communications/communication.params';
 import { errorAuthUpdatePost } from '../../templates/post/post-template-testdata';
 import {
   createReferenceOnProfile,
   deleteReferenceOnProfile,
-} from '@test/functional-api/references/references.request.params';
+} from '@functional-api/references/references.request.params';
 import { entitiesId } from '@test/types/entities-helper';
-import { delay } from '@test/utils';
+import { delay } from '@utils';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

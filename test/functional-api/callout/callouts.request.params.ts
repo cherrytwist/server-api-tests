@@ -1,6 +1,6 @@
-import { TestUser } from '@test/utils';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { TestUser } from '@utils';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import {
   CalloutState,
   CalloutType,

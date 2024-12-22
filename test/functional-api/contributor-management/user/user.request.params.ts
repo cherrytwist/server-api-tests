@@ -1,9 +1,9 @@
-import { registerInKratosOrFail } from '@test/utils/kratos/register-in-kratos-or-fail';
-import { verifyInKratosOrFail } from '@test/utils/kratos/verify-in-kratos-or-fail';
-import { registerInAlkemioOrFail } from '@test/utils/register-in-alkemio-or-fail';
+import { registerInKratosOrFail } from '@utils/kratos/register-in-kratos-or-fail';
+import { verifyInKratosOrFail } from '@utils/kratos/verify-in-kratos-or-fail';
+import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 import { TestUser } from '../../../utils/token.helper';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 
 export const uniqueId = Math.random()
   .toString(12)

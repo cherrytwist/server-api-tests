@@ -1,18 +1,18 @@
 import {
   createPostOnCallout,
   getDataPerChallengeCallout,
-} from '@test/functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/post/post.request.params';
 import {
   deleteChallenge,
   getChallengeData,
-} from '@test/functional-api/journey/challenge/challenge.request.params';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { createRelation } from '@test/functional-api/relations/relations.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { changePreferenceChallenge } from '@test/utils/mutations/preferences-mutation';
-import { users } from '@test/utils/queries/users-data';
+} from '@functional-api/journey/challenge/challenge.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { createRelation } from '@functional-api/relations/relations.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { changePreferenceChallenge } from '@utils/mutations/preferences-mutation';
+import { users } from '@utils/queries/users-data';
 import {
   sorted_sorted__create_read_update_delete_grant_createComment_Privilege,
   sorted__create_read_update_delete_grant_createMessage_messageReaction_messageReply,
@@ -27,12 +27,12 @@ import {
 import {
   createChallengeForOrgSpace,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+} from '@utils/data-setup/entities';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { ChallengePreferenceType, CommunityRole } from '@alkemio/client-lib';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId } from '@test/types/entities-helper';
-import { assignRoleToUser } from '@test/functional-api/roleset/roles-request.params';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;
 const hostNameId = 'auth-ga-org-nameid' + uniqueId;

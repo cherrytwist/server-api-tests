@@ -1,7 +1,7 @@
-import { TestUser } from '@test/utils/token.helper';
-import { getSpaceData } from '@test/functional-api/journey/space/space.request.params';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { TestUser } from '@utils/token.helper';
+import { getSpaceData } from '@functional-api/journey/space/space.request.params';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { TemplateType } from '@test/generated/alkemio-schema';
 
 export const createPostTemplate = async (

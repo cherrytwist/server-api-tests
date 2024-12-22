@@ -5,9 +5,9 @@ import {
   SpaceVisibility,
 } from '../../../generated/alkemio-schema';
 import { TestUser } from '../../../utils/token.helper';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
-import { getLicensePlanByName, getLicensePlans } from '@test/functional-api/license/license.params.request';
+import { getGraphqlClient } from '@utils/graphqlClient';
+import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
+import { getLicensePlanByName, getLicensePlans } from '@functional-api/license/license.params.request';
 
 const uniqueId = Math.random()
   .toString(12)

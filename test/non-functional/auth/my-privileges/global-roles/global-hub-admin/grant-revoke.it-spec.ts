@@ -1,8 +1,8 @@
 import {
   createUser,
   deleteUser,
-} from '@test/functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@test/utils';
+} from '@functional-api/contributor-management/user/user.request.params';
+import { TestUser } from '@utils';
 import {
   assignUserAsGlobalAdmin,
   assignUserAsGlobalCommunityAdmin,
@@ -10,8 +10,8 @@ import {
   removeUserAsGlobalAdmin,
   removeUserAsGlobalCommunityAdmin,
   removeUserAsGlobalSpacesAdmin,
-} from '@test/utils/mutations/authorization-mutation';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+} from '@utils/mutations/authorization-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 
 const userEmail = `space${uniqueId}@alkem.io`;
 const firstName = `fn${uniqueId}`;

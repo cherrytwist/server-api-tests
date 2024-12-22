@@ -1,7 +1,7 @@
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
+import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   createOrgAndSpaceWithUsers,
   createChallengeForOrgSpace,

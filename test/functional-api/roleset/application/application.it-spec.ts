@@ -1,4 +1,4 @@
-import '@test/utils/array.matcher';
+import '@utils/array.matcher';
 import {
   createApplication,
   deleteApplication,
@@ -9,12 +9,12 @@ import {
   deleteSpace,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { registerInAlkemioOrFail, TestUser } from '@test/utils';
-import { users } from '@test/utils/queries/users-data';
+import { registerInAlkemioOrFail, TestUser } from '@utils';
+import { users } from '@utils/queries/users-data';
 import {
   createChallengeForOrgSpace,
   createOrgAndSpace,
-} from '@test/utils/data-setup/entities';
+} from '@utils/data-setup/entities';
 
 import {
   CommunityMembershipPolicy,
@@ -25,9 +25,9 @@ import { deleteUser } from '../../contributor-management/user/user.request.param
 import {
   assignRoleToUser,
   removeRoleFromUser,
-} from '@test/functional-api/roleset/roles-request.params';
+} from '@functional-api/roleset/roles-request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
 export const uniqueId = Math.random()
   .toString(12)

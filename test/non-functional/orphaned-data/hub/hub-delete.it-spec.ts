@@ -2,23 +2,23 @@ import {
   deleteSpace,
   updateSpacePlatformSettings,
   updateSpaceSettings,
-} from '@test/functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
-import { createApplication } from '@test/functional-api/roleset/application/application.request.params';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { createOrgAndSpace } from '@test/utils/data-setup/entities';
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
-import { createCalloutOnCollaboration } from '@test/functional-api/callout/callouts.request.params';
-import { createWhiteboardOnCallout } from '@test/functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
+} from '@functional-api/journey/space/space.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { createApplication } from '@functional-api/roleset/application/application.request.params';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { createOrgAndSpace } from '@utils/data-setup/entities';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
+import { createCalloutOnCollaboration } from '@functional-api/callout/callouts.request.params';
+import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 
-import { users } from '@test/utils/queries/users-data';
+import { users } from '@utils/queries/users-data';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   assignRoleToUser,
   assignRoleToOrganization,
-} from '@test/functional-api/roleset/roles-request.params';
+} from '@functional-api/roleset/roles-request.params';
 import { CommunityRoleType, SpaceVisibility } from '@test/generated/alkemio-schema';
 
 const organizationName = 'post-org-name' + uniqueId;

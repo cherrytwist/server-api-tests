@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
-import { delay } from '@test/utils/delay';
-import { TestUser } from '@test/utils';
-import { uniqueId } from '@test/utils/mutations/create-mutation';
-import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
-import { users } from '@test/utils/queries/users-data';
-import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
+import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { delay } from '@utils/delay';
+import { TestUser } from '@utils';
+import { uniqueId } from '@utils/mutations/create-mutation';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { users } from '@utils/queries/users-data';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { PreferenceType } from '@generated/alkemio-schema';
-import { changePreferenceUser } from '@test/functional-api/contributor-management/user/user-preferences-mutation';
-import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
-import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrgAndSpaceWithUsers, createChallengeWithUsers, createOpportunityWithUsers } from '../../../utils/data-setup/entities';
 
 const organizationName = 'urole-org-name' + uniqueId;
