@@ -1,7 +1,7 @@
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
-import { createSpaceAndGetData } from '../../functional-api/journey/space/space.request.params';
-import { createUser } from '../../functional-api/contributor-management/user/user.request.params';
+import { createSpaceAndGetData } from '@functional-api/journey/space/space.request.params';
+import { createUser } from '@functional-api/contributor-management/user/user.request.params';
 import { createOpportunity } from '../mutations/journeys/opportunity';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {

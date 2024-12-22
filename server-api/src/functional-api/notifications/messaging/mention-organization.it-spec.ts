@@ -2,18 +2,18 @@
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
 import { TestUser } from '@common/enum/test.user';
-import { deleteOrganization, updateOrganization } from '../../../functional-api/contributor-management/organization/organization.request.params';
-import { deleteSpace } from '../../../functional-api/journey/space/space.request.params';
+import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
 import {
   createPostOnCallout,
-} from '../../../functional-api/callout/post/post.request.params';
+} from '@functional-api/callout/post/post.request.params';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
-import { sendMessageToRoom } from '../../../functional-api/communications/communication.params';
+import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '../../../types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';

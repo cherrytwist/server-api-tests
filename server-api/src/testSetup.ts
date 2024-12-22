@@ -1,8 +1,7 @@
 import { config } from 'dotenv';
-
 import { AxiosError } from 'axios';
 import { UiText } from '@ory/kratos-client';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@src/common/enum/test.user';
 import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 

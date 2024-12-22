@@ -5,13 +5,13 @@ import { TestUser } from '@common/enum/test.user';
 import {
   deleteSpace,
   updateSpaceSettings,
-} from '../../../functional-api/journey/space/space.request.params';
+} from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
-import { sendMessageToCommunityLeads } from '../../../functional-api/communications/communication.params';
+import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
 import {
   entitiesId,
   getMailsData,
@@ -21,8 +21,8 @@ import {
   assignRoleToUser,
   assignRoleToOrganization,
   removeRoleFromOrganization,
-} from '../../../functional-api/roleset/roles-request.params';
-import { deleteOrganization, updateOrganization } from '../../../functional-api/contributor-management/organization/organization.request.params';
+} from '@functional-api/roleset/roles-request.params';
+import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
 import { uniqueId } from '@utils/uniqueId';
