@@ -4,6 +4,9 @@
 /html-report
 client-web/dist
 client-web/node_modules
+server-api/html-report
+server-api/dist
+server-api/node_modules
 
 # Logs
 logs

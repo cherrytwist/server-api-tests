@@ -1,5 +1,0 @@
-mutation SendMessageToOrganization(
-  $messageData: CommunicationSendMessageToOrganizationInput!
-) {
-  sendMessageToOrganization(messageData: $messageData)
-}

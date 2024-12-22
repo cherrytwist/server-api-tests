@@ -1,0 +1,46 @@
+query MyEntitlementsQuery {
+  me {
+    user {
+      account {
+        subscriptions {
+          expires
+          name
+        }
+        authorization {
+          myPrivileges
+        }
+        license {
+          authorization {
+            myPrivileges
+          }
+          availableEntitlements
+          entitlements {
+            type
+            isAvailable
+            enabled
+            limit
+            usage
+            dataType
+          }
+          type
+        }
+        spaces {
+          license {
+            authorization {
+              myPrivileges
+            }
+            entitlements {
+              type
+              isAvailable
+              enabled
+              limit
+              usage
+              dataType
+            }
+            type
+          }
+        }
+      }
+    }
+  }
+}

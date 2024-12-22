@@ -1,0 +1,5 @@
+mutation eventOnApplication($input: ApplicationEventInput!) {
+  eventOnApplication(eventData: $input) {
+    ...ApplicationData
+  }
+}

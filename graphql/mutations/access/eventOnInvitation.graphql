@@ -1,5 +1,0 @@
-mutation InvitationStateEvent($input: InvitationEventInput!) {
-  eventOnInvitation(eventData: $input) {
-    ...InvitationData
-  }
-}

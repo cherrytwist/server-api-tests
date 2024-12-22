@@ -1,5 +1,0 @@
-mutation UpdateLicensePlan($LicensePlan: UpdateLicensePlanInput!) {
-  updateLicensePlan(updateData: $LicensePlan) {
-    ...LicensePlanData
-  }
-}

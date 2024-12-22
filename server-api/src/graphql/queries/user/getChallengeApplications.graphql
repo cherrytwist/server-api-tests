@@ -1,0 +1,18 @@
+query getChallengeApplications(
+  $spaceId: UUID_NAMEID!
+  $subspaceId: UUID_NAMEID!
+) {
+  space(ID: $spaceId) {
+    id
+    subspace(ID: $subspaceId) {
+      community {
+        roleSet {
+          id
+          applications {
+            ...ApplicationData
+          }
+        }
+      }
+    }
+  }
+}

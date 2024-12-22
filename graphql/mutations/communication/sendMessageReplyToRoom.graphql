@@ -1,5 +1,0 @@
-mutation SendMessageReplyToRoom($messageData: RoomSendMessageReplyInput!) {
-  sendMessageReplyToRoom(messageData: $messageData) {
-    ...MessageData
-  }
-}
