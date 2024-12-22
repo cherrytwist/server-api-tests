@@ -33,8 +33,13 @@ fragment OrganizationData on Organization {
       id
     }
   }
-  preferences {
-    ...PreferenceData
+  settings {
+    privacy {
+      contributionRolesPubliclyVisible
+    }
+    membership {
+      allowUsersMatchingDomainToJoin
+    }
   }
   authorization {
     ...AuthorizationData

@@ -17,7 +17,8 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "paths": {
-      "@test/*": ["test/*"]
+      "@test/*": ["test/*"],
+      "@generated/*": ["test/generated/*"]
     }
   }
 }

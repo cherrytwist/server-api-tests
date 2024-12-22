@@ -3,6 +3,7 @@ import { graphqlRequestAuth } from '@test//utils/graphql.request';
 import { TestUser } from '@test//utils/token.helper';
 import { getGraphqlClient } from '@test/utils/graphqlClient';
 import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { OrganizationSettings } from '@generated/graphql';
 
 const uniqueId = Math.random()
   .toString(12)
@@ -129,4 +130,24 @@ export const getOrganizationsData = async (
   };
 
   return await graphqlRequestAuth(requestParams, userRole);
+};
+
+export const updateOrganizationSettings = async (
+  organizationID: string,
+  settingsData: OrganizationSettings,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN,
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.updateOrganizationSettings(
+      {
+        organizationID,
+        settingsData
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
 };

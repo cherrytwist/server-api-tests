@@ -18,6 +18,14 @@ fragment UserData on User {
   preferences {
     ...PreferenceData
   }
+  settings {
+    privacy {
+      contributionRolesPubliclyVisible
+    }
+    communication {
+      allowOtherUsersToSendMessages
+    }
+  }
   authorization {
     myPrivileges
     credentialRules {
