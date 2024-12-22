@@ -8,7 +8,7 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { createRelation } from '@functional-api/relations/relations.request.params';
 import { createApplication } from '@functional-api/roleset/application/application.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { mutation } from '@utils/graphql.request';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
@@ -32,7 +32,7 @@ import {
   entitiesId,
   users,
 } from '@test/types/entities-helper';
-import { SpacePreferenceType } from '@test/generated/alkemio-schema';
+import { SpacePreferenceType } from '@generated/alkemio-schema';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;

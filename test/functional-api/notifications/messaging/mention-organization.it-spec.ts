@@ -1,13 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
-import { TestUser } from '../../../utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '../../../utils/mutations/create-mutation';
 import { deleteOrganization, updateOrganization } from '../../../functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '../../../functional-api/journey/space/space.request.params';
-import { assignUserAsOrganizationAdmin } from '../../../utils/mutations/authorization-organization-mutation';
 import { users } from '../../../utils/queries/users-data';
-import { changePreferenceOrganization, changePreferenceUser } from '../../../utils/mutations/preferences-mutation';
 import {
   createPostOnCallout,
 } from '../../../functional-api/callout/post/post.request.params';

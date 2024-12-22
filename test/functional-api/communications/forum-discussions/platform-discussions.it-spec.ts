@@ -11,7 +11,7 @@ import {
   sendMessageToRoom,
   removeMessageOnRoom,
 } from '../communication.params';
-import { ForumDiscussionCategory } from '@test/generated/alkemio-schema';
+import { ForumDiscussionCategory } from '@generated/alkemio-schema';
 
 let platformDiscussionId = '';
 let discussionId = '';

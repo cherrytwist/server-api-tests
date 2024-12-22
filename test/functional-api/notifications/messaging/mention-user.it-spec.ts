@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@utils/delay';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';

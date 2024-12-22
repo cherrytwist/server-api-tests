@@ -1,4 +1,4 @@
-import { TestUser } from '../../../utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import {
   createUser,
   deleteUser,

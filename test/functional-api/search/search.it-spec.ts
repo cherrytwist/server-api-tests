@@ -1,5 +1,5 @@
 import { updateUser } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import '@utils/array.matcher';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { users } from '@utils/queries/users-data';
@@ -28,8 +28,8 @@ import {
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { entitiesId } from '../../types/entities-helper';
-import { SpaceVisibility } from '@test/generated/graphql';
-import { SpacePrivacyMode } from '@test/generated/alkemio-schema';
+import { SpaceVisibility } from '@generated/graphql';
+import { SpacePrivacyMode } from '@generated/alkemio-schema';
 
 let secondSpaceId = '';
 const userName = 'qa user';

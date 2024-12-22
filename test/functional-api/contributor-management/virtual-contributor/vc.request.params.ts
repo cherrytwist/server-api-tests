@@ -1,5 +1,5 @@
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { TestUser } from '../../../utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { SearchVisibility } from '@alkemio/client-lib';
 

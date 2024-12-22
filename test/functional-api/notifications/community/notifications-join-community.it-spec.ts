@@ -6,7 +6,7 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@utils/delay';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
@@ -22,10 +22,10 @@ import {
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 
 const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;

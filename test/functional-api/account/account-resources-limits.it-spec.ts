@@ -1,5 +1,5 @@
 import '@utils/array.matcher';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   createSpaceBasicData,
   deleteSpace,

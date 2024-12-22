@@ -1,7 +1,7 @@
 import { TestUser } from '@test//utils/token.helper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { TemplateType } from '@test/generated/alkemio-schema';
+import { TemplateType } from '@generated/alkemio-schema';
 import { whiteboardTemplateValuesEmpty } from './whiteboard-values-empty';
 
 export const getWhiteboardTemplatesCountByTemplateSetId = async (

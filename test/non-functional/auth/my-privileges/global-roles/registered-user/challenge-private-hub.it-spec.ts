@@ -6,7 +6,7 @@ import {
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { createRelation } from '@functional-api/relations/relations.request.params';
 import { createApplication } from '@functional-api/roleset/application/application.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   changePreferenceChallenge,
@@ -25,7 +25,7 @@ import {
 } from '@alkemio/client-lib';
 import { entitiesId } from '@test/types/entities-helper';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { CommunityRole } from '@test/generated/alkemio-schema';
+import { CommunityRole } from '@generated/alkemio-schema';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;
 const hostNameId = 'auth-ga-org-nameid' + uniqueId;

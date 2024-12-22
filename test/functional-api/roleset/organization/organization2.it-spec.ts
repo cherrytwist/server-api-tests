@@ -10,7 +10,7 @@ import {
   getOrganizationRole,
 } from '../roles-request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 
 const organizationName = 'orole-org-name' + uniqueId;

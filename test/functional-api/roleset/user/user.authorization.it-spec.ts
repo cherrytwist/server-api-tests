@@ -5,7 +5,7 @@ import {
   getRoleSetUserPrivilege,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC,
   sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC,
@@ -24,7 +24,7 @@ import {
   CommunityMembershipPolicy,
   CommunityRoleType,
   SpacePrivacyMode,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;

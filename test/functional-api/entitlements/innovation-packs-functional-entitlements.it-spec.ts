@@ -22,7 +22,7 @@
  * - A test to handle the scenario where the innovation pack creation exceeds the license limit.
  */
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,

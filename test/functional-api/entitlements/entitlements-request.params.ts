@@ -1,4 +1,4 @@
-import { TestUser } from '../../utils';
+import { TestUser } from '@utils/test.user';
 import { graphqlErrorWrapper } from '../../utils/graphql.wrapper';
 import { getGraphqlClient } from '../../utils/graphqlClient';
 

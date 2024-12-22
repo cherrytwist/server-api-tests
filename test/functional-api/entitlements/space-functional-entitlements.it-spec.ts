@@ -25,7 +25,7 @@
  * - `test`: Tests creating a space after removing a space that exceeded the license limit.
  */
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,

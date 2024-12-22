@@ -1,5 +1,5 @@
 import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 
 describe('myPrivileges User', () => {

@@ -1,7 +1,7 @@
 import { registerInKratosOrFail } from '@utils/kratos/register-in-kratos-or-fail';
 import { verifyInKratosOrFail } from '@utils/kratos/verify-in-kratos-or-fail';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-import { TestUser } from '../../../utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 

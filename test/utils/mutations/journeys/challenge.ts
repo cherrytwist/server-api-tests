@@ -1,7 +1,7 @@
 import { entitiesId } from '@test/types/entities-helper';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@utils/test.user';
 
 export const uniqueId = Math.random()
   .toString(12)

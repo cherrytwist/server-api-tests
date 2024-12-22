@@ -16,7 +16,6 @@ import {
   getSpaceData,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser, registerInAlkemioOrFail } from '@utils';
 import { users } from '@utils/queries/users-data';
 import { readPrivilege } from '@test/non-functional/auth/my-privileges/common';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
@@ -28,11 +27,13 @@ import {
   CommunityMembershipPolicy,
   CommunityRoleType,
   SpacePrivacyMode,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
+import { TestUser } from '@utils/test.user';
+import { registerInAlkemioOrFail } from '@test/utils/register-in-alkemio-or-fail';
 export const uniqueId = Math.random()
   .toString(12)
   .slice(-6);

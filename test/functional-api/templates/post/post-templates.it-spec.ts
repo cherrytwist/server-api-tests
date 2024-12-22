@@ -19,7 +19,7 @@ import {
   createOpportunityForChallenge,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
-import { PostDataFragment } from '@test/generated/alkemio-schema';
+import { PostDataFragment } from '@generated/alkemio-schema';
 import {
   deletePost,
   createPostOnCallout,

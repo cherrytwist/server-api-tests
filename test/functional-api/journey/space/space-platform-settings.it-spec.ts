@@ -1,4 +1,4 @@
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import '@utils/array.matcher';
 import {
   getSpaceData,
@@ -29,7 +29,7 @@ import {
 import {
   SpacePrivacyMode,
   SpaceVisibility,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { entitiesId } from '@test/types/entities-helper';
 
 const uniqueId = Math.random()

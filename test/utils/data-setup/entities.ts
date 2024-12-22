@@ -8,8 +8,8 @@ import {
   CalloutType,
   CalloutVisibility,
   CommunityRoleType,
-} from '@test/generated/alkemio-schema';
-import { TestUser } from '../token.helper';
+} from '@generated/alkemio-schema';
+import { TestUser } from '@utils/test.user';
 import { delay } from '../delay';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@test/types/entities-helper';

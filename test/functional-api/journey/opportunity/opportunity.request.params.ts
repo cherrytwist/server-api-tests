@@ -1,5 +1,5 @@
 import { uniqueId } from '@utils/mutations/create-mutation';
-import { TestUser } from '../../../utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 export const opportunityNameId = `oppNaId${uniqueId}`;

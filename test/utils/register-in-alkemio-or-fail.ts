@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { userData } from './common-params';
 import { getUserToken } from './get-user-token';
-import { TestUser } from './token.helper';
+import { TestUser } from '@utils/test.user';
 
 const SERVER_URL = process.env.ALKEMIO_SERVER_URL;
 

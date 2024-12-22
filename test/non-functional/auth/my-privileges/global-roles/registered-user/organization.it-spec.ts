@@ -1,5 +1,5 @@
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { readPrivilege } from '../../common';
 import { createOrgAndSpace } from '@utils/data-setup/entities';

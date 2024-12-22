@@ -5,7 +5,7 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createApplication } from '@functional-api/roleset/application/application.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
@@ -19,7 +19,7 @@ import {
   assignRoleToUser,
   assignRoleToOrganization,
 } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType, SpaceVisibility } from '@test/generated/alkemio-schema';
+import { CommunityRoleType, SpaceVisibility } from '@generated/alkemio-schema';
 
 const organizationName = 'post-org-name' + uniqueId;
 const hostNameId = 'post-org-nameid' + uniqueId;

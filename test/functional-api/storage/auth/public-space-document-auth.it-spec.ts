@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/mutations/create-mutation';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -40,7 +40,7 @@ import {
 import {
   SpacePrivacyMode,
   SpaceVisibility,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import {
   createWhiteboardCollectionCallout,
   createWhiteboardOnCallout,

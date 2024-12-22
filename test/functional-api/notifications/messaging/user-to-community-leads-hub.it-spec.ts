@@ -2,7 +2,7 @@
 import { changePreferenceUser } from '../../../utils/mutations/preferences-mutation';
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
-import { TestUser } from '../../../utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '../../../utils/mutations/create-mutation';
 import {
   deleteSpace,

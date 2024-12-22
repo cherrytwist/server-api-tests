@@ -1,11 +1,11 @@
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import {
   CalloutState,
   CalloutType,
   CalloutVisibility,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { uniqueId } from '../contributor-management/user/user.request.params';
 
 export const defaultPostTemplate = {

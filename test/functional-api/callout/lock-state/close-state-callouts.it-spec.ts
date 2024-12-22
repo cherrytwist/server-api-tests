@@ -11,7 +11,7 @@ import {
   createPostOnCallout,
   getDataPerSpaceCallout,
 } from '../post/post.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
@@ -23,7 +23,7 @@ import {
 import {
   CalloutState,
   CalloutVisibility,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId } from '@test/types/entities-helper';

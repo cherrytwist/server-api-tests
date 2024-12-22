@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { TestUtil } from './test.util';
-import { TestUser } from './token.helper';
+import { TestUser } from '@utils/test.user';
 
 const SERVER_REST_URL = process.env.ALKEMIO_SERVER_REST;
 

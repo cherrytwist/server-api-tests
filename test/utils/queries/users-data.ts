@@ -1,5 +1,5 @@
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '../token.helper';
+import { TestUser } from '@utils/test.user';
 import {
   assignPlatformRoleToUser,
   assignUserAsGlobalCommunityAdmin,

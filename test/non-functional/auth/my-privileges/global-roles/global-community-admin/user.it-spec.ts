@@ -3,7 +3,7 @@ import {
   getUserData,
   deleteUser,
 } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { sorted__create_read_update_delete } from '../../common';
 

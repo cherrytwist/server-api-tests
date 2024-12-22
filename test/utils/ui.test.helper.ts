@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { TestUser } from './token.helper';
+import { TestUser } from '@utils/test.user';
 import { getMails } from './mailslurper.rest.requests';
 
 /**

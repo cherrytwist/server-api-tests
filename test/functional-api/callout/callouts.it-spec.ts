@@ -7,13 +7,13 @@ import {
   updateCallout,
   updateCalloutVisibility,
 } from './callouts.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { CalloutState, CalloutType } from '@test/generated/alkemio-schema';
+import { CalloutState, CalloutType } from '@generated/alkemio-schema';
 import { CalloutVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';

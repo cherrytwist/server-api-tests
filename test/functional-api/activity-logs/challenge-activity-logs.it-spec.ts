@@ -1,5 +1,5 @@
 import '@utils/array.matcher';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeForOrgSpace,
@@ -13,7 +13,7 @@ import {
   CalloutVisibility,
   SpacePrivacyMode,
   CommunityMembershipPolicy,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import {
   deleteSpace,
   updateSpaceSettings,

@@ -11,7 +11,7 @@ import {
 } from '../roles-request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { getRoleSetMembersList } from '../roleset.request.params';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;

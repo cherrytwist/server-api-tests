@@ -9,7 +9,7 @@ import {
   deleteSubspace,
 } from '@functional-api/journey/opportunity/opportunity.request.params';
 import { createRelation } from '@functional-api/relations/relations.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { users } from '@utils/queries/users-data';
 import {

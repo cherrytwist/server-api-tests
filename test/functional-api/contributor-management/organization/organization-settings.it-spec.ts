@@ -6,8 +6,10 @@ import {
 } from './organization.request.params';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { updateOrganizationSettings } from './organization.request.params';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
+import { users } from '@test/utils/queries/users-data';
+import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 
 const organizationName = 'h-pref-org-name' + uniqueId;
 const hostNameId = 'h-pref-org-nameid' + uniqueId;

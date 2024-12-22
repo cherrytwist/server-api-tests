@@ -12,14 +12,14 @@ import {
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { entitiesId } from '@test/types/entities-helper';
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { SearchVisibility, SpaceVisibility } from '@alkemio/client-lib';
 import { createChallenge } from '@utils/mutations/journeys/challenge';
 import {

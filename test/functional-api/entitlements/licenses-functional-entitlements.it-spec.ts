@@ -12,7 +12,7 @@
  */
 
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@utils/mutations/authorization-platform-mutation';
 import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';

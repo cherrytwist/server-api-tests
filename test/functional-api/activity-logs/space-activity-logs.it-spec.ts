@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {
@@ -11,7 +11,7 @@ import {
   CalloutVisibility,
   SpacePrivacyMode,
   CommunityMembershipPolicy,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import {
   deleteSpace,
   updateSpaceSettings,

@@ -21,7 +21,7 @@ import {
   assignRoleToOrganization,
   assignRoleToUser,
 } from '../roleset/roles-request.params';
-import { CommunityRoleType } from '@test/generated/alkemio-schema';
+import { CommunityRoleType } from '@generated/alkemio-schema';
 import {
   createOrganization,
   deleteOrganization,

@@ -10,7 +10,7 @@ import {
   deleteInvitation,
   inviteContributors,
 } from '@functional-api/roleset/invitations/invitation.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,

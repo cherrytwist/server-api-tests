@@ -20,7 +20,7 @@ import {
   CommunityMembershipPolicy,
   CommunityRoleType,
   SpacePrivacyMode,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
 import {
   assignRoleToUser,

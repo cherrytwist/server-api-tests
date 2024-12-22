@@ -5,10 +5,7 @@ import {
 } from '../organization/organization.request.params';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { users } from '@utils/queries/users-data';
-import {
-  assignUserAsOrganizationOwner,
-  removeUserAsOrganizationOwner,
-} from '@utils/mutations/authorization-organization-mutation';
+import { assignUserAsOrganizationOwner, removeUserAsOrganizationOwner } from './organization-authorization-mutation';
 
 let organizationId = '';
 const credentialsType = 'ORGANIZATION_OWNER';

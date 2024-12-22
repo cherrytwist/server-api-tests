@@ -1,6 +1,6 @@
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { deleteSubspace } from '@functional-api/journey/opportunity/opportunity.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import {
   createChallengeWithUsers,
@@ -19,7 +19,7 @@ import {
   assignRoleToOrganization,
 } from '@functional-api/roleset/roles-request.params';
 import { users } from '@utils/queries/users-data';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 
 const organizationName = 'post-org-name' + uniqueId;
 const hostNameId = 'post-org-nameid' + uniqueId;

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
-import { TestUser } from '../../../utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '../../../utils/mutations/create-mutation';
 import {
   deleteSpace,
@@ -12,7 +12,6 @@ import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
-import { assignUserAsOrganizationAdmin } from '../../../utils/mutations/authorization-organization-mutation';
 import { sendMessageToCommunityLeads } from '../../../functional-api/communications/communication.params';
 import {
   entitiesId,

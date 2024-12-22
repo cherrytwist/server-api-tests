@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/mutations/create-mutation';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -52,7 +52,7 @@ import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-cal
 import { SpaceVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { SpacePrivacyMode } from '@test/generated/alkemio-schema';
+import { SpacePrivacyMode } from '@generated/alkemio-schema';
 
 const organizationName = 'org-name' + uniqueId;
 const hostNameId = 'org-nameid' + uniqueId;

@@ -1,4 +1,4 @@
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { OrganizationRole } from '@generated/alkemio-schema';

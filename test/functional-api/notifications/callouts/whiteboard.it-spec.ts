@@ -21,7 +21,7 @@ import {
   CalloutType,
   CalloutVisibility,
   PreferenceType,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 

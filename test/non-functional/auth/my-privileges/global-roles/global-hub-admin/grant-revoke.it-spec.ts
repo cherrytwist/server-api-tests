@@ -2,7 +2,7 @@ import {
   createUser,
   deleteUser,
 } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   assignUserAsGlobalAdmin,
   assignUserAsGlobalCommunityAdmin,

@@ -14,7 +14,7 @@ import {
 } from '../roleset.request.params';
 import { users } from '@utils/queries/users-data';
 import { assignRoleToUser, removeRoleFromUser } from '../roles-request.params';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;

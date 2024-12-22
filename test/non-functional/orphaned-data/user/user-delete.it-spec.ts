@@ -11,7 +11,7 @@ import {
   assignRoleToUser,
   assignUserToOrganization,
 } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 import {
   assignUserAsOrganizationAdmin,
   assignUserAsOrganizationOwner,

@@ -14,13 +14,13 @@ import {
 import { SpaceVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
 
 import { createChallenge } from '@utils/mutations/journeys/challenge';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   assignRoleToUser,
   assignUserToOrganization,
 } from '../roles-request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 import {
   createOrganization,
   deleteOrganization,

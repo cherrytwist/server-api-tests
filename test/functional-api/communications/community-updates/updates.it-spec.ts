@@ -14,7 +14,7 @@ import { delay } from '@utils';
 import {
   CommunityRoleType,
   SpacePrivacyMode,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,

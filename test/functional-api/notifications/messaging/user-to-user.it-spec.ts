@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@utils/delay';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@utils/mutations/preferences-mutation';

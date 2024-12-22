@@ -13,7 +13,7 @@ import {
   removeRoleFromOrganization,
 } from '../roles-request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { CommunityRoleType } from '@test/generated/alkemio-schema';
+import { CommunityRoleType } from '@generated/alkemio-schema';
 import { createOrganization, deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 const organizationName = 'com-org-name' + uniqueId;

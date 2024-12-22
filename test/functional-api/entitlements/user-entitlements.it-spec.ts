@@ -20,7 +20,7 @@
  * and the platform roles are removed after the tests are executed.
  */
 import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,

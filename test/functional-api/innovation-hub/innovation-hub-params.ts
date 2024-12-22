@@ -1,8 +1,8 @@
 import {
   InnovationHubType,
   SpaceVisibility,
-} from '@test/generated/alkemio-schema';
-import { TestUser } from '@utils';
+} from '@generated/alkemio-schema';
+import { TestUser } from '@utils/test.user';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 

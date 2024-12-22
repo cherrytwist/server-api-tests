@@ -20,7 +20,7 @@ import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
-} from '@test/generated/alkemio-schema';
+} from '@generated/alkemio-schema';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@utils/mutations/preferences-mutation';

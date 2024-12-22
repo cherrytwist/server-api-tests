@@ -4,7 +4,7 @@ import {
   getOpportunityData,
   deleteSubspace,
 } from '@functional-api/journey/opportunity/opportunity.request.params';
-import { TestUser } from '@utils';
+import { TestUser } from '@utils/test.user';
 import { uniqueId } from '@utils/mutations/create-mutation';
 import { users } from '@utils/queries/users-data';
 import { readPrivilege, sorted__read_createRelation } from '../../common';
@@ -17,7 +17,7 @@ import { deleteOrganization } from '@functional-api/contributor-management/organ
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId } from '@test/types/entities-helper';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@test/generated/graphql';
+import { CommunityRoleType } from '@generated/graphql';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;
 const hostNameId = 'auth-ga-org-nameid' + uniqueId;
