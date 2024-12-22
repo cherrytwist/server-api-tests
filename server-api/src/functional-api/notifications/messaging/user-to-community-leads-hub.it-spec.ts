@@ -20,13 +20,14 @@ import { uniqueId } from '@utils/uniqueId';
 import { CommunityRoleType, PreferenceType, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
 
-let preferencesConfig: any[] = [];
+let usersList: any[] = [];
 
 const senders = (communityName: string) => {
   return `You have sent a message to ${communityName} community`;
@@ -69,16 +70,7 @@ beforeAll(async () => {
     entitiesId.organization.id
   );
 
-  preferencesConfig = [
-    {
-      userID: users.spaceAdmin.email,
-      type: PreferenceType.NotificationCommunicationMessage,
-    },
-    {
-      userID: users.spaceMember.email,
-      type: PreferenceType.NotificationCommunicationMessage,
-    },
-  ];
+  usersList = [users.spaceAdmin.email, users.spaceMember.email];
 });
 
 afterAll(async () => {
@@ -89,8 +81,8 @@ afterAll(async () => {
 describe('Notifications - send messages to Private space hosts', () => {
   describe('Notifications - hosts (COMMUNICATION_MESSAGE pref: enabled)', () => {
     beforeAll(async () => {
-      for (const config of preferencesConfig)
-        await changePreferenceUser(config.userID, config.type, 'true');
+      for (const userOnList of usersList)
+        await updateUserSettingCommunicationMessage(userOnList.userID, true);
 
       await updateSpaceSettings(entitiesId.spaceId, {
         privacy: {
@@ -169,7 +161,7 @@ describe('Notifications - send messages to Private space hosts', () => {
 
   describe('Notifications - hosts (COMMUNICATION_MESSAGE pref: disabled)', () => {
     beforeAll(async () => {
-      for (const config of preferencesConfig)
+      for (const config of usersList)
         await changePreferenceUser(config.userID, config.type, 'false');
     });
 
@@ -250,7 +242,7 @@ describe('Notifications - messages to Public space hosts', () => {
   });
   describe('Notifications - hosts (COMMUNICATION_MESSAGE pref: enabled)', () => {
     beforeAll(async () => {
-      for (const config of preferencesConfig)
+      for (const config of usersList)
         await changePreferenceUser(config.userID, config.type, 'true');
     });
 
@@ -323,7 +315,7 @@ describe('Notifications - messages to Public space hosts', () => {
 
   describe('Notifications - hosts (COMMUNICATION_MESSAGE pref: disabled)', () => {
     beforeAll(async () => {
-      for (const config of preferencesConfig)
+      for (const config of usersList)
         await changePreferenceUser(config.userID, config.type, 'false');
     });
 

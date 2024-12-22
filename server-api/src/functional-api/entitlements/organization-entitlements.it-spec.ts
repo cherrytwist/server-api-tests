@@ -54,10 +54,10 @@ import {
   createOrganization,
   deleteOrganization,
 } from '@functional-api/contributor-management/organization/organization.request.params';
-import { assignUserAsOrganizationAdmin } from '@utils/mutations/authorization-organization-mutation';
 
 
 import { uniqueId } from '@utils/uniqueId';
+import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 
 let spaceId = '';
 let orgId = '';

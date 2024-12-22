@@ -16,6 +16,7 @@ import { deleteOrganization } from '@functional-api/contributor-management/organ
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
 
 const firstOrganizationName = 'sample-org-name' + uniqueId;
 const hostNameId = 'sample-org-nameid' + uniqueId;
@@ -157,10 +158,9 @@ describe('Notifications - user to organization messages', () => {
       PreferenceType.NotificationOrganizationMessage,
       'true'
     );
-    await changePreferenceUser(
+    await updateUserSettingCommunicationMessage(
       users.spaceAdmin.id,
-      PreferenceType.NotificationCommunicationMessage,
-      'false'
+      false
     );
     // Act
     await sendMessageToOrganization(

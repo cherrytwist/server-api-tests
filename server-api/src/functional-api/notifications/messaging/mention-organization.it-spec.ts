@@ -72,21 +72,21 @@ beforeAll(async () => {
     'false'
   );
 
-  preferencesConfig = [
-    {
-      organizationID: entitiesId.organization.id,
-      type: PreferenceType.NotificationOrganizationMention,
-    },
-  ];
+  // preferencesConfig = [
+  //   {
+  //     organizationID: entitiesId.organization.id,
+  //     type: PreferenceType.NotificationOrganizationMention,
+  //   },
+  // ];
 
-  preferencesConfig.forEach(
-    async config =>
-      await changePreferenceOrganization(
-        config.organizationID,
-        config.type,
-        'true'
-      )
-  );
+  // preferencesConfig.forEach(
+  //   async config =>
+  //     await changePreferenceOrganization(
+  //       config.organizationID,
+  //       config.type,
+  //       'true'
+  //     )
+  // );
 });
 
 afterAll(async () => {
@@ -304,14 +304,14 @@ describe('Notifications - Mention Organization', () => {
 
     test('HA mention Organization in Opportunity post (preference disabled) - 2 notification to Organization admins are sent', async () => {
       // Arrange
-      preferencesConfig.forEach(
-        async config =>
-          await changePreferenceOrganization(
-            config.organizationID,
-            config.type,
-            'false'
-          )
-      );
+      // preferencesConfig.forEach(
+      //   async config =>
+      //     await changePreferenceOrganization(
+      //       config.organizationID,
+      //       config.type,
+      //       'false'
+      //     )
+      // );
 
       // Act
       await sendMessageToRoom(

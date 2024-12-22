@@ -6,8 +6,7 @@ import { getGraphqlClient } from '@utils/graphqlClient';
 export const updateSpacePlatformSettings = async (
   spaceID: string,
   visibility: SpaceVisibility,
-  nameID?: string,
-  hostID?: string,
+  nameID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -16,6 +15,7 @@ export const updateSpacePlatformSettings = async (
       {
         spaceId: spaceID,
         visibility,
+        nameId: nameID,
       },
       {
         authorization: `Bearer ${authToken}`,

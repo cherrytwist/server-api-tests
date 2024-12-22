@@ -29,7 +29,6 @@ const main = async () => {
     packData?.data?.createInnovationPack.templatesSet?.id ?? '';
   await createWhiteboardTemplate(
     templateSetId,
-    whiteboardTemplateTitle,
     whiteboardTemplateValues
   );
 };

@@ -5,6 +5,8 @@ import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { uniqueId } from '@utils/uniqueId';
+import { PreferenceType } from '@generated/graphql';
+import { UpdateUserSettingsEntityInput } from '@generated/alkemio-schema';
 
 export const registerVerifiedUser = async (
   email: string,
@@ -18,7 +20,6 @@ export const registerVerifiedUser = async (
 };
 
 export const getDefaultUserData = () => {
-
   return {
     firstName: `fn${uniqueId}`,
     lastName: `ln${uniqueId}`,
@@ -110,7 +111,7 @@ export const deleteUser = async (
 };
 
 export const getUsersData = async (
-  userId: string,
+  userID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -155,4 +156,64 @@ export const getUserPendingMemberships = async (
       }
     );
   return graphqlErrorWrapper(callback, userRole);
+};
+
+export const changePreferenceUser = async (
+  userID: string,
+  type: PreferenceType = PreferenceType.NotificationUserSignUp,
+  value: string,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.UpdatePreferenceOnUser(
+      {
+        preferenceData: {
+          userID,
+          type,
+          value,
+        },
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const updateUserSettings = async (
+  userID: string,
+  settings: UpdateUserSettingsEntityInput,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.updateUserSettings(
+      {
+        userID,
+        settingsData: settings,
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};
+
+export const updateUserSettingCommunicationMessage = async (
+  userID: string,
+  value: boolean,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  return updateUserSettings(
+    userID,
+    {
+      communication: {
+        allowOtherUsersToSendMessages: value,
+      },
+    },
+    userRole
+  );
 };

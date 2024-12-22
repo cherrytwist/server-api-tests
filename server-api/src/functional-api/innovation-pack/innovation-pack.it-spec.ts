@@ -9,8 +9,8 @@ import {
   whiteboardTemplateValues5,
   whiteboardTemplateValues6,
 } from './whiteboard-values-fixed';
-import { createWhiteboardTemplate } from '../templates/whiteboard/templates.request.params';
 import { authorizationPolicyResetOnPlatform } from '@utils/mutations/authorization-platform-mutation';
+import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';
 
 describe('Organization', () => {
   const organizationName = 'Organization with many whiteboardes' + uniqueId;
@@ -39,37 +39,31 @@ describe('Organization', () => {
 
       await createWhiteboardTemplate(
         templateSetId,
-        whiteboardTemplateTitle,
         whiteboardTemplateValues1
       );
 
       await createWhiteboardTemplate(
         templateSetId,
-        whiteboardTemplateTitle,
         whiteboardTemplateValues2
       );
 
       await createWhiteboardTemplate(
         templateSetId,
-        whiteboardTemplateTitle,
         whiteboardTemplateValues3
       );
 
       await createWhiteboardTemplate(
         templateSetId,
-        whiteboardTemplateTitle,
         whiteboardTemplateValues4
       );
 
       await createWhiteboardTemplate(
         templateSetId,
-        whiteboardTemplateTitle,
         whiteboardTemplateValues5
       );
 
       await createWhiteboardTemplate(
         templateSetId,
-        whiteboardTemplateTitle,
         whiteboardTemplateValues6
       );
 

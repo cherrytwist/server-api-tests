@@ -7,10 +7,11 @@ import { sendMessageToUser } from '@functional-api/communications/communication.
 import { getMailsData } from '@src/types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
 
 let receiver_userDisplayName = '';
 let sender_userDisplayName = '';
-let preferencesConfig: any[] = [];
+let usersList: any[] = [];
 let receiver = '';
 let sender = '';
 
@@ -27,26 +28,13 @@ beforeAll(async () => {
   receiver = `${sender_userDisplayName} sent you a message!`;
   sender = `You have sent a message to ${receiver_userDisplayName}!`;
 
-  preferencesConfig = [
-    {
-      userID: users.globalAdmin.id,
-      type: PreferenceType.NotificationCommunicationMessage,
-    },
-    {
-      userID: users.nonSpaceMember.id,
-      type: PreferenceType.NotificationCommunicationMessage,
-    },
-    {
-      userID: users.qaUser.id,
-      type: PreferenceType.NotificationCommunicationMessage,
-    },
-  ];
+  usersList = [users.globalAdmin.id,users.nonSpaceMember.id, users.qaUser.id];
 });
 
 describe('Notifications - user to user messages', () => {
   beforeAll(async () => {
-    for (const config of preferencesConfig)
-      await changePreferenceUser(config.userID, config.type, 'true');
+    for (const user of usersList)
+      await updateUserSettingCommunicationMessage(user.userID, true);
   });
 
   beforeEach(async () => {
@@ -115,10 +103,9 @@ describe('Notifications - user to user messages', () => {
   // Skipping until behavior is cleared, whather the bahavior of receiving email for each sent message is right
   test.skip("User 'A'(pref:true) send message to 2 users: 'B'(pref:true) and 'C'(pref:false) - 2 messages are sent", async () => {
     // Arrange
-    await changePreferenceUser(
+    await updateUserSettingCommunicationMessage(
       users.qaUser.id,
-      PreferenceType.NotificationCommunicationMessage,
-      'false'
+      false
     );
 
     // Act
@@ -145,19 +132,17 @@ describe('Notifications - user to user messages', () => {
         }),
       ])
     );
-    await changePreferenceUser(
+    await updateUserSettingCommunicationMessage(
       users.qaUser.id,
-      PreferenceType.NotificationCommunicationMessage,
-      'true'
+      true
     );
   });
 
   test("User 'A'(pref:true) send message to user 'B'(pref:false) - 1 messages are sent", async () => {
     // Arrange
-    await changePreferenceUser(
+    await updateUserSettingCommunicationMessage(
       users.globalAdmin.id,
-      PreferenceType.NotificationCommunicationMessage,
-      'false'
+      false
     );
 
     // Act
@@ -184,16 +169,14 @@ describe('Notifications - user to user messages', () => {
 
   test("User 'A'(pref:false) send message to user 'B'(pref:true) - 2 messages are sent", async () => {
     // Arrange
-    await changePreferenceUser(
+    await updateUserSettingCommunicationMessage(
       users.globalAdmin.id,
-      PreferenceType.NotificationCommunicationMessage,
-      'true'
+      true
     );
 
-    await changePreferenceUser(
+    await updateUserSettingCommunicationMessage(
       users.nonSpaceMember.id,
-      PreferenceType.NotificationCommunicationMessage,
-      'false'
+      false
     );
 
     // Act
