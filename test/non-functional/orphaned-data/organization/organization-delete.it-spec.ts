@@ -11,7 +11,6 @@ import {
 } from '@test/utils/mutations/authorization-mutation';
 import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { changePreferenceOrganization } from '@test/utils/mutations/preferences-mutation';
-import { OrganizationPreferenceType } from '@alkemio/client-lib';
 import { eventOnOrganizationVerification } from '@test/functional-api/templates/lifecycle/innovation-flow.request.params';
 import {
   assignOrganizationAsCommunityLead,
@@ -56,23 +55,18 @@ describe('Full Organization Deletion', () => {
     );
 
     // Change organization preference
-    await changePreferenceOrganization(
-      orgId,
-      OrganizationPreferenceType.AuthorizationOrganizationMatchDomain,
-      'true'
-    );
+    await updateOrganizationSettings(orgId, {
+      membership: {
+        allowUsersMatchingDomainToJoin: true,
+      },
+    });
+
     // Assign user as organization member
     await assignUserToOrganization(users.notificationsAdmin.id, orgId);
 
     // Assign organization as space community member and lead
-    await assignRoleToOrganization(
-      spaceCommunityId,
-      'eco1host'
-    );
-    await assignOrganizationAsCommunityLead(
-      spaceCommunityId,
-      'eco1host'
-    );
+    await assignRoleToOrganization(spaceCommunityId, 'eco1host');
+    await assignOrganizationAsCommunityLead(spaceCommunityId, 'eco1host');
 
     // Assign organization owner
     await mutation(

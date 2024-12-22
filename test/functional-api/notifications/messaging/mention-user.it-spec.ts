@@ -6,7 +6,7 @@ import { uniqueId } from '@test/utils/mutations/create-mutation';
 import { deleteSpace } from '@test/functional-api/journey/space/space.request.params';
 import { users } from '@test/utils/queries/users-data';
 import { createPostOnCallout } from '@test/functional-api/callout/post/post.request.params';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
@@ -51,42 +51,42 @@ beforeAll(async () => {
 
   await changePreferenceUser(
     users.globalAdmin.id,
-    UserPreferenceType.NotificationPostCommentCreated,
+    PreferenceType.NotificationPostCommentCreated,
     'false'
   );
 
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationMention,
+      type: PreferenceType.NotificationCommunicationMention,
     },
   ];
 

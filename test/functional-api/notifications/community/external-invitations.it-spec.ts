@@ -16,7 +16,7 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 
 import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
@@ -62,27 +62,27 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunityInvitationUser,
+      type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCommunityInvitationUser,
+      type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationCommunityInvitationUser,
+      type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunityInvitationUser,
+      type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationCommunityInvitationUser,
+      type: PreferenceType.NotificationCommunityInvitationUser,
     },
   ];
 });
@@ -96,13 +96,13 @@ describe('Notifications - invitations', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationCommunityInvitationUser,
+      PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
 
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationCommunityInvitationUser,
+      PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
     for (const config of preferencesConfig)

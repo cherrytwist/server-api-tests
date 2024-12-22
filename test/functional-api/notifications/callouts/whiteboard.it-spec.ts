@@ -20,7 +20,7 @@ import { deleteWhiteboard } from '@test/functional-api/callout/whiteboard/whiteb
 import {
   CalloutType,
   CalloutVisibility,
-  UserPreferenceType,
+  PreferenceType,
 } from '@test/generated/alkemio-schema';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
 import { deleteOrganization } from '@test/functional-api/contributor-management/organization/organization.request.params';
@@ -126,42 +126,42 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationWhiteboardCreated,
+      type: PreferenceType.NotificationWhiteboardCreated,
     },
   ];
 });
@@ -181,7 +181,7 @@ describe('Notifications - whiteboard', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationWhiteboardCreated,
+      PreferenceType.NotificationWhiteboardCreated,
       'false'
     );
     preferencesConfig.forEach(

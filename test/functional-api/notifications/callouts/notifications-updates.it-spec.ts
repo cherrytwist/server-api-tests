@@ -9,7 +9,7 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
@@ -63,59 +63,59 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdates,
+      type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
   ];
 });
@@ -132,23 +132,23 @@ describe.skip('Notifications - updates', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationCommunicationUpdates,
+      PreferenceType.NotificationCommunicationUpdates,
       'false'
     );
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      PreferenceType.NotificationCommunicationUpdateSentAdmin,
       'false'
     );
 
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationCommunicationUpdates,
+      PreferenceType.NotificationCommunicationUpdates,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationCommunicationUpdateSentAdmin,
+      PreferenceType.NotificationCommunicationUpdateSentAdmin,
       'false'
     );
 

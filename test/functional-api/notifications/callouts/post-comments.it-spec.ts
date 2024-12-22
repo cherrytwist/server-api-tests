@@ -13,7 +13,7 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import {
   removeMessageOnRoom,
@@ -54,106 +54,106 @@ beforeAll(async () => {
   preferencesPostConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationPostCreated,
+      type: PreferenceType.NotificationPostCreated,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationPostCreatedAdmin,
+      type: PreferenceType.NotificationPostCreatedAdmin,
     },
   ];
 
   preferencesPostCommentsConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationPostCommentCreated,
+      type: PreferenceType.NotificationPostCommentCreated,
     },
   ];
 });
@@ -179,33 +179,33 @@ describe('Notifications - post comments', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationPostCommentCreated,
+      PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationPostCreated,
+      PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationPostCreatedAdmin,
+      PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
 
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationPostCommentCreated,
+      PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationPostCreated,
+      PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationPostCreatedAdmin,
+      PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
     preferencesPostConfig.forEach(

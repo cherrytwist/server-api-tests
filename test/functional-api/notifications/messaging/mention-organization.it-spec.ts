@@ -16,7 +16,7 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { sendMessageToRoom } from '../../../functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '../../../types/entities-helper';
 
@@ -68,14 +68,14 @@ beforeAll(async () => {
 
   await changePreferenceUser(
     users.globalAdmin.id,
-    UserPreferenceType.NotificationPostCommentCreated,
+    PreferenceType.NotificationPostCommentCreated,
     'false'
   );
 
   preferencesConfig = [
     {
       organizationID: entitiesId.organization.id,
-      type: UserPreferenceType.NotificationOrganizationMention,
+      type: PreferenceType.NotificationOrganizationMention,
     },
   ];
 

@@ -6,7 +6,7 @@ import { delay } from '@test/utils/delay';
 import { deleteUser } from '@test/functional-api/contributor-management/user/user.request.params';
 import { users } from '@test/utils/queries/users-data';
 
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import {
   createDiscussion,
@@ -54,75 +54,75 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
 
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: spaceMemOnly,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: spaceMemOnly,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: challengeAndSpaceMemOnly,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: challengeAndSpaceMemOnly,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
       userID: opportunityAndChallengeAndSpaceMem,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: opportunityAndChallengeAndSpaceMem,
-      type: UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
   ];
 });
@@ -143,12 +143,12 @@ describe.skip('Notifications - discussions', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationForumDiscussionCreated,
+      PreferenceType.NotificationForumDiscussionCreated,
       'false'
     );
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
+      PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
       'false'
     );
 

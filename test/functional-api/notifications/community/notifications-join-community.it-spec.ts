@@ -12,7 +12,7 @@ import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib/dist/types/alkemio-schema';
+import { PreferenceType } from '@alkemio/client-lib/dist/types/alkemio-schema';
 
 import {
   joinRoleSet,
@@ -69,39 +69,39 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommunityNewMemberAdmin,
+      type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunityNewMember,
+      type: PreferenceType.NotificationCommunityNewMember,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunityNewMemberAdmin,
+      type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCommunityNewMember,
+      type: PreferenceType.NotificationCommunityNewMember,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationCommunityNewMemberAdmin,
+      type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationCommunityNewMember,
+      type: PreferenceType.NotificationCommunityNewMember,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCommunityNewMember,
+      type: PreferenceType.NotificationCommunityNewMember,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCommunityNewMemberAdmin,
+      type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationCommunityNewMember,
+      type: PreferenceType.NotificationCommunityNewMember,
     },
   ];
 });
@@ -117,7 +117,7 @@ describe('Notifications - member join community', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationCommunityNewMemberAdmin,
+      PreferenceType.NotificationCommunityNewMemberAdmin,
       'false'
     );
     for (const config of preferencesConfig) {

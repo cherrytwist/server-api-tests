@@ -14,7 +14,7 @@ import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 
 import { assignRoleToUser } from '@test/functional-api/roleset/roles-request.params';
 import {
@@ -51,35 +51,35 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationApplicationReceived,
+      type: PreferenceType.NotificationApplicationReceived,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationApplicationSubmitted,
+      type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationApplicationSubmitted,
+      type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationApplicationReceived,
+      type: PreferenceType.NotificationApplicationReceived,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationApplicationSubmitted,
+      type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationApplicationReceived,
+      type: PreferenceType.NotificationApplicationReceived,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationApplicationSubmitted,
+      type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationApplicationReceived,
+      type: PreferenceType.NotificationApplicationReceived,
     },
   ];
 });
@@ -94,22 +94,22 @@ describe('Notifications - applications', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationApplicationSubmitted,
+      PreferenceType.NotificationApplicationSubmitted,
       'false'
     );
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationApplicationReceived,
+      PreferenceType.NotificationApplicationReceived,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationApplicationSubmitted,
+      PreferenceType.NotificationApplicationSubmitted,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationApplicationReceived,
+      PreferenceType.NotificationApplicationReceived,
       'false'
     );
     for (const config of preferencesConfig)

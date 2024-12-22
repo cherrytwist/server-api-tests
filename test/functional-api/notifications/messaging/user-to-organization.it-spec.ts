@@ -8,7 +8,7 @@ import { deleteSpace } from '@test/functional-api/journey/space/space.request.pa
 import { assignUserAsOrganizationAdmin } from '@test/utils/mutations/authorization-organization-mutation';
 import { users } from '@test/utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import { sendMessageToOrganization } from '@test/functional-api/communications/communication.params';
 import {
@@ -52,11 +52,11 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationOrganizationMessage,
+      type: PreferenceType.NotificationOrganizationMessage,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationOrganizationMessage,
+      type: PreferenceType.NotificationOrganizationMessage,
     },
   ];
 });
@@ -115,7 +115,7 @@ describe('Notifications - user to organization messages', () => {
     // Arrange
     await changePreferenceUser(
       users.spaceAdmin.id,
-      UserPreferenceType.NotificationOrganizationMessage,
+      PreferenceType.NotificationOrganizationMessage,
       'false'
     );
     // Act
@@ -154,12 +154,12 @@ describe('Notifications - user to organization messages', () => {
     // Arrange
     await changePreferenceUser(
       users.spaceAdmin.id,
-      UserPreferenceType.NotificationOrganizationMessage,
+      PreferenceType.NotificationOrganizationMessage,
       'true'
     );
     await changePreferenceUser(
       users.spaceAdmin.id,
-      UserPreferenceType.NotificationCommunicationMessage,
+      PreferenceType.NotificationCommunicationMessage,
       'false'
     );
     // Act

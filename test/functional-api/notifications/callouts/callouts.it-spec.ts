@@ -16,7 +16,7 @@ import {
 } from '@test/utils/data-setup/entities';
 import {
   CalloutVisibility,
-  UserPreferenceType,
+  PreferenceType,
 } from '@alkemio/client-lib/dist/types/alkemio-schema';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import { users } from '@test/utils/queries/users-data';
@@ -71,42 +71,42 @@ beforeAll(async () => {
   preferencesConfigCallout = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCalloutPublished,
+      type: PreferenceType.NotificationCalloutPublished,
     },
   ];
 });
@@ -132,12 +132,12 @@ describe('Notifications - post', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationCalloutPublished,
+      PreferenceType.NotificationCalloutPublished,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationCalloutPublished,
+      PreferenceType.NotificationCalloutPublished,
       'false'
     );
 

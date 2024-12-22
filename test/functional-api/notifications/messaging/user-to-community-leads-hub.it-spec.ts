@@ -11,7 +11,7 @@ import {
 import { assignUserAsOrganizationAdmin } from '../../../utils/mutations/authorization-organization-mutation';
 import { users } from '../../../utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '../../../utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { sendMessageToCommunityLeads } from '../../../functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '../../../types/entities-helper';
 import {
@@ -75,11 +75,11 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.spaceAdmin.email,
-      type: UserPreferenceType.NotificationCommunicationMessage,
+      type: PreferenceType.NotificationCommunicationMessage,
     },
     {
       userID: users.spaceMember.email,
-      type: UserPreferenceType.NotificationCommunicationMessage,
+      type: PreferenceType.NotificationCommunicationMessage,
     },
   ];
 });

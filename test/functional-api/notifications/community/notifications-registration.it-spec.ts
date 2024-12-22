@@ -7,7 +7,7 @@ import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
 import { delay } from '@test/utils';
 import { users } from '@test/utils/queries/users-data';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { getMailsData } from '@test/types/entities-helper';
 
 let userName = '';
@@ -24,32 +24,32 @@ describe('Notifications - User registration', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationUserRemoved,
+      PreferenceType.NotificationUserRemoved,
       'false'
     );
     await changePreferenceUser(
       users.globalAdmin.id,
-      UserPreferenceType.NotificationUserRemoved,
+      PreferenceType.NotificationUserRemoved,
       'false'
     );
     await changePreferenceUser(
       users.globalAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'true'
     );
     await changePreferenceUser(
       users.globalSpacesAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'true'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'true'
     );
   });
@@ -98,17 +98,17 @@ describe('Notifications - User registration', () => {
     // Arrange
     await changePreferenceUser(
       users.globalAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
       users.globalSpacesAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
       users.globalCommunityAdmin.id,
-      UserPreferenceType.NotificationUserSignUp,
+      PreferenceType.NotificationUserSignUp,
       'false'
     );
 
@@ -139,7 +139,7 @@ describe('Notifications - User removal', () => {
     // Arrange
     await changePreferenceUser(
       users.globalAdmin.id,
-      UserPreferenceType.NotificationUserRemoved,
+      PreferenceType.NotificationUserRemoved,
       'true'
     );
 

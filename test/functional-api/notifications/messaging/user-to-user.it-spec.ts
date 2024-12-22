@@ -3,7 +3,7 @@ import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
 import { delay } from '@test/utils/delay';
 import { TestUser } from '@test/utils';
 import { users } from '@test/utils/queries/users-data';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import { sendMessageToUser } from '@test/functional-api/communications/communication.params';
 import { getMailsData } from '@test/types/entities-helper';
@@ -30,15 +30,15 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommunicationMessage,
+      type: PreferenceType.NotificationCommunicationMessage,
     },
     {
       userID: users.nonSpaceMember.id,
-      type: UserPreferenceType.NotificationCommunicationMessage,
+      type: PreferenceType.NotificationCommunicationMessage,
     },
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationCommunicationMessage,
+      type: PreferenceType.NotificationCommunicationMessage,
     },
   ];
 });
@@ -117,7 +117,7 @@ describe('Notifications - user to user messages', () => {
     // Arrange
     await changePreferenceUser(
       users.qaUser.id,
-      UserPreferenceType.NotificationCommunicationMessage,
+      PreferenceType.NotificationCommunicationMessage,
       'false'
     );
 
@@ -147,7 +147,7 @@ describe('Notifications - user to user messages', () => {
     );
     await changePreferenceUser(
       users.qaUser.id,
-      UserPreferenceType.NotificationCommunicationMessage,
+      PreferenceType.NotificationCommunicationMessage,
       'true'
     );
   });
@@ -156,7 +156,7 @@ describe('Notifications - user to user messages', () => {
     // Arrange
     await changePreferenceUser(
       users.globalAdmin.id,
-      UserPreferenceType.NotificationCommunicationMessage,
+      PreferenceType.NotificationCommunicationMessage,
       'false'
     );
 
@@ -186,13 +186,13 @@ describe('Notifications - user to user messages', () => {
     // Arrange
     await changePreferenceUser(
       users.globalAdmin.id,
-      UserPreferenceType.NotificationCommunicationMessage,
+      PreferenceType.NotificationCommunicationMessage,
       'true'
     );
 
     await changePreferenceUser(
       users.nonSpaceMember.id,
-      UserPreferenceType.NotificationCommunicationMessage,
+      PreferenceType.NotificationCommunicationMessage,
       'false'
     );
 

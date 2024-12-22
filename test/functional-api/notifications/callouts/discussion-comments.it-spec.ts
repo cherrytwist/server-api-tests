@@ -9,7 +9,7 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@test/utils/data-setup/entities';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import { sendMessageToRoom } from '@test/functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@test/types/entities-helper';
@@ -66,42 +66,42 @@ beforeAll(async () => {
   preferencesConfig = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.challengeMember.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.opportunityMember.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.spaceAdmin.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.challengeAdmin.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
       userID: users.opportunityAdmin.id,
-      type: UserPreferenceType.NotificationDiscussionCommentCreated,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
     },
   ];
 });
@@ -121,7 +121,7 @@ describe('Notifications - callout comments', () => {
   beforeAll(async () => {
     await changePreferenceUser(
       users.notificationsAdmin.id,
-      UserPreferenceType.NotificationDiscussionCommentCreated,
+      PreferenceType.NotificationDiscussionCommentCreated,
       'false'
     );
 

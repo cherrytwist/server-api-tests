@@ -9,6 +9,8 @@ import { uniqueId } from '@test/utils/mutations/create-mutation';
 import {
   assignUserAsOrganizationOwner,
 } from '@test/utils/mutations/authorization-mutation';
+import { updateOrganizationSettings } from './organization.request.params';
+import { eventOnOrganizationVerification } from '@test/functional-api/templates/lifecycle/innovation-flow.request.params';
 
 
 const organizationName = 'h-pref-org-name' + uniqueId;

@@ -2,7 +2,7 @@ import { deleteMailSlurperMails } from '@test/utils/mailslurper.rest.requests';
 import { delay } from '@test/utils/delay';
 import { users } from '@test/utils/queries/users-data';
 import { TestUser } from '@test/utils';
-import { UserPreferenceType } from '@alkemio/client-lib';
+import { PreferenceType } from '@alkemio/client-lib';
 import { changePreferenceUser } from '@test/utils/mutations/preferences-mutation';
 import {
   createDiscussion,
@@ -37,57 +37,57 @@ beforeAll(async () => {
   preferencesConfigDiscussions = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.globalSpacesAdmin.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationForumDiscussionCreated,
+      type: PreferenceType.NotificationForumDiscussionCreated,
     },
   ];
 
   preferencesConfigComments = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationForumDiscussionComment,
+      type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationForumDiscussionComment,
+      type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
       userID: users.globalSpacesAdmin.id,
-      type: UserPreferenceType.NotificationForumDiscussionComment,
+      type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationForumDiscussionComment,
+      type: PreferenceType.NotificationForumDiscussionComment,
     },
   ];
 
   preferencesConfigCommentsReply = [
     {
       userID: users.globalAdmin.id,
-      type: UserPreferenceType.NotificationCommentReply,
+      type: PreferenceType.NotificationCommentReply,
     },
     {
       userID: users.qaUser.id,
-      type: UserPreferenceType.NotificationCommentReply,
+      type: PreferenceType.NotificationCommentReply,
     },
     {
       userID: users.globalSpacesAdmin.id,
-      type: UserPreferenceType.NotificationCommentReply,
+      type: PreferenceType.NotificationCommentReply,
     },
     {
       userID: users.spaceMember.id,
-      type: UserPreferenceType.NotificationCommentReply,
+      type: PreferenceType.NotificationCommentReply,
     },
   ];
 });
