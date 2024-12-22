@@ -9,14 +9,14 @@ import {
 } from './post.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@utils/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@test/utils/uniqueId';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,

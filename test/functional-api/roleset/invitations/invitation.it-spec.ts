@@ -34,9 +34,7 @@ import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@utils/test.user';
 import { registerInAlkemioOrFail } from '@test/utils/register-in-alkemio-or-fail';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let invitationId = '';
 let invitationData: any;

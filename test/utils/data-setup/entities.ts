@@ -1,4 +1,4 @@
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createSpaceAndGetData } from '../../functional-api/journey/space/space.request.params';
 import { createUser } from '../../functional-api/contributor-management/user/user.request.params';

@@ -3,7 +3,7 @@
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@utils/delay';
 import { TestUser } from '@utils/test.user';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { assignUserAsOrganizationAdmin } from '@utils/mutations/authorization-organization-mutation';
 import { users } from '@utils/queries/users-data';

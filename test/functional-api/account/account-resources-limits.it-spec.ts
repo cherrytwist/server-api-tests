@@ -6,9 +6,7 @@ import {
   getSpaceData,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let spaceId = '';
 let spaceIdn: string;

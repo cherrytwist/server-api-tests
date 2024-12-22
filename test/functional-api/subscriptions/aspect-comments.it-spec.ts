@@ -1,6 +1,6 @@
 import { delay, TestUser } from '@utils';
 import { SubscriptionClient } from '@utils/subscriptions';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionRooms } from './subscrition-queries';

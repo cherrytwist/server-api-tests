@@ -31,9 +31,8 @@ import {
   accountVCCampaignLicenses1SpaceVCPack,
 } from './entitlements-data';
 
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
+
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
 

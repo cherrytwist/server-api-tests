@@ -14,9 +14,7 @@ import {
   assignRoleToUserExtendedData,
   removeRoleFromUserExtendedData,
 } from '../../roleset/roles-request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 const credentialsType = 'SPACE_ADMIN';
 const opportunityName = `op-dname${uniqueId}`;

@@ -30,9 +30,7 @@ import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/white
 import { assignRoleToUser, joinRoleSet } from '../roleset/roles-request.params';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let challengeName = 'post-chal';
 let calloutDisplayName = '';

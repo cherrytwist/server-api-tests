@@ -5,7 +5,7 @@ import {
   updatePostTemplate,
 } from './post-template.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { TestUser } from '@utils/token.helper';
 import {
   errorAuthCreatePostTemplate,

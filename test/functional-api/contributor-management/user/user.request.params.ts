@@ -4,10 +4,7 @@ import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 export const registerVerifiedUser = async (
   email: string,
@@ -21,9 +18,7 @@ export const registerVerifiedUser = async (
 };
 
 export const getDefaultUserData = () => {
-  const uniqueId = Math.random()
-    .toString(8)
-    .slice(-6);
+
   return {
     firstName: `fn${uniqueId}`,
     lastName: `ln${uniqueId}`,

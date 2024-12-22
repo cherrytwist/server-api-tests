@@ -36,10 +36,8 @@ import {
   deleteVirtualContributorOnAccount,
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
+import { uniqueId } from '@test/utils/uniqueId';
 
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
 const spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;
 let vcId = '';

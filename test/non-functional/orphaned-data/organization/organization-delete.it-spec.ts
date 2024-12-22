@@ -9,7 +9,7 @@ import {
   removeUserAsOrganizationOwner,
   userAsOrganizationOwnerVariablesData,
 } from '@utils/mutations/authorization-mutation';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { changePreferenceOrganization } from '@utils/mutations/preferences-mutation';
 import { eventOnOrganizationVerification } from '@functional-api/templates/lifecycle/innovation-flow.request.params';
 import {

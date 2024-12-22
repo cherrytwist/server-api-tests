@@ -8,9 +8,7 @@ import {
   getSubspaceData,
   getSubspacesData,
 } from './challenge.request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let challengeName = '';
 let challengeId = '';

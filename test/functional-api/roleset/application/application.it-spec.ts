@@ -29,9 +29,7 @@ import {
 import { entitiesId } from '../../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let applicationId: string;
 let challengeApplicationId = '';

@@ -46,9 +46,8 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
+
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;

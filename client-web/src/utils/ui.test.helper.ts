@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '../common/enums/test.user';
 import { getMails } from './mailslurper.rest.requests';
 
 /**

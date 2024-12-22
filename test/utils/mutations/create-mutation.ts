@@ -1,10 +1,6 @@
 import { entitiesId } from '@test/types/entities-helper';
 import { challengeDataTest, spaceData, userData } from '../common-params';
 
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
-
 export const createUser = `
   mutation createUser($userData: CreateUserInput!) {
     createUser(userData: $userData) {

@@ -33,9 +33,7 @@ import {
 import { getRoleSetInvitationsApplications } from '../../roleset/application/application.request.params';
 import { deleteOrganization } from '../organization/organization.request.params';
 import { createUser, deleteUser } from '../user/user.request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let invitationId = '';
 let invitationData: any;

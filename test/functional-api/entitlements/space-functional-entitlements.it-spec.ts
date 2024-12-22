@@ -38,9 +38,8 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
+
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
 

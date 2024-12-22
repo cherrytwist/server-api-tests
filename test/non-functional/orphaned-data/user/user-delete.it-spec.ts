@@ -1,4 +1,4 @@
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import {
   deleteUser,
   getUserData,

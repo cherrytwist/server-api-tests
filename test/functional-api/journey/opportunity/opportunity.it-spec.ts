@@ -12,9 +12,7 @@ import {
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { createOpportunity } from '@utils/mutations/journeys/opportunity';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let opportunityName = '';
 let opportunityNameId = '';

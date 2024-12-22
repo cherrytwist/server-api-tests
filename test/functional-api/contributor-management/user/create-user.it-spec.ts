@@ -5,9 +5,7 @@ import {
   registerVerifiedUser,
 } from './user.request.params';
 import '@utils/array.matcher';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let userName = '';
 let userId = '';

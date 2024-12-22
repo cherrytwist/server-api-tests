@@ -1,8 +1,6 @@
 import '@utils/array.matcher';
 import { createUser, deleteUser, getUserData } from './user.request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let userName = '';
 let userId: string;

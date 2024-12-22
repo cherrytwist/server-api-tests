@@ -8,9 +8,7 @@ import {
 } from './user.request.params';
 import '@utils/array.matcher';
 import { users } from '@utils/queries/users-data';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let userName = '';
 let userFirstName = '';

@@ -10,7 +10,7 @@ import {
   createApplication,
   getRoleSetInvitationsApplications,
 } from '@functional-api/roleset/application/application.request.params';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { CommunityMembershipPolicy } from '@alkemio/client-lib';
 import { entitiesId } from '../../../types/entities-helper';

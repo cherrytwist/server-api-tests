@@ -31,9 +31,7 @@ import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/white
 import { assignRoleToUser } from '../roleset/roles-request.params';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

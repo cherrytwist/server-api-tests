@@ -1,8 +1,8 @@
 import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
+import { uniqueId } from '@utils/uniqueId';
 
-const uniqueId = (Date.now() + Math.random()).toString();
 export const challengeNameId = `chalNaId${uniqueId}`;
 
 export const getSubspaceData = async (

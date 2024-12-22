@@ -1,5 +1,5 @@
 import { TestUser } from '@utils/token.helper';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { SpacePreferenceType as SpacePreferenceType } from '@generated/alkemio-schema';
 import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 import {

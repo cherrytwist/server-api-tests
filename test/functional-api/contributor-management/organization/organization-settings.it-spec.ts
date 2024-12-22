@@ -4,7 +4,7 @@ import {
   getOrganizationData,
   updateOrganization,
 } from './organization.request.params';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@test/utils/uniqueId';
 import { updateOrganizationSettings } from './organization.request.params';
 import { TestUser } from '@utils/test.user';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';

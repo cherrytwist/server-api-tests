@@ -1,7 +1,7 @@
 import { updateUser } from '@functional-api/contributor-management/user/user.request.params';
 import { TestUser } from '@utils/test.user';
 import '@utils/array.matcher';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { updateOpportunityLocation } from '../journey/opportunity/opportunity.request.params';

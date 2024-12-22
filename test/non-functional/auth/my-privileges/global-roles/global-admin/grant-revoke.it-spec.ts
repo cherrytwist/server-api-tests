@@ -10,7 +10,7 @@ import {
   removeUserAsGlobalCommunityAdmin,
   removeUserAsGlobalSpacesAdmin,
 } from '@utils/mutations/authorization-mutation';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 
 const userEmail = `space${uniqueId}@alkem.io`;
 const firstName = `fn${uniqueId}`;

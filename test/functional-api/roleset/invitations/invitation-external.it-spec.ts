@@ -17,9 +17,7 @@ import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { getRoleSetInvitationsApplications } from '../application/application.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let emailExternalUser = '';
 const firstNameExternalUser = `FirstName${uniqueId}`;

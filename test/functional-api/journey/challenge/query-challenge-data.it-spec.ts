@@ -13,13 +13,10 @@ import {
   updateSpaceContext,
 } from '../space/space.request.params';
 import { entitiesId } from '@test/types/entities-helper';
-// import { uniqueId } from '@utils/mutations/create-mutation';
+// import { uniqueId } from '@utils/uniqueId';
 
 import { createOrgAndSpace } from '@utils/data-setup/entities';
-//import { uniqueId } from '@utils/mutations/journeys/challenge';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 let opportunityName = '';
 let opportunityNameId = '';

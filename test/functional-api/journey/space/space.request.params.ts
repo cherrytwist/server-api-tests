@@ -7,11 +7,7 @@ import {
 import { TestUser } from '@utils/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { getLicensePlanByName, getLicensePlans } from '@functional-api/license/license.params.request';
-
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@utils/uniqueId';
 
 export const spaceName = `testEcoName${uniqueId}`;
 export const spaceNameId = `testecoeid${uniqueId}`;

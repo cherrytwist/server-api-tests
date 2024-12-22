@@ -4,7 +4,7 @@ import {
   verifyInKratosOrFail,
   registerInAlkemioOrFail,
   TestUser,
-} from './utils';
+} from '@test/utils';
 import { AxiosError } from 'axios';
 import { UiText } from '@ory/kratos-client';
 

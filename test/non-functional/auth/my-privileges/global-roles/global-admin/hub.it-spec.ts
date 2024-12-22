@@ -11,7 +11,7 @@ import { createRelation } from '@functional-api/relations/relations.request.para
 import { createApplication } from '@functional-api/roleset/application/application.request.params';
 import { TestUser } from '@utils/test.user';
 import { mutation } from '@utils/graphql.request';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 

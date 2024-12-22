@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import '@utils/array.matcher';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@test/utils/uniqueId';
 import {
   deleteCallout,
   createCalloutOnCollaboration,

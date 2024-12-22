@@ -56,9 +56,9 @@ import {
 } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@utils/mutations/authorization-organization-mutation';
 
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+
+import { uniqueId } from '@test/utils/uniqueId';
+
 let spaceId = '';
 let orgId = '';
 let vcId = '';

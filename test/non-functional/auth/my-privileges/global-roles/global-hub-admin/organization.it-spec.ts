@@ -1,6 +1,6 @@
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { TestUser } from '@utils/test.user';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import {
   sorted__create_read_update_delete_grant_authorizationReset,
   sorted__create_read_update_delete_grant,

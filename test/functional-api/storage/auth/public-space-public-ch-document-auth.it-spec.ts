@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { TestUser } from '@utils/test.user';
 import {
   deleteDocument,

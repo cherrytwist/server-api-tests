@@ -10,7 +10,7 @@ import { deleteSpace } from '@functional-api/journey/space/space.request.params'
 import { createRelation } from '@functional-api/relations/relations.request.params';
 import { createApplication } from '@functional-api/roleset/application/application.request.params';
 import { TestUser } from '@utils/test.user';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import {
   changePreferenceChallenge,
   changePreferenceSpace,

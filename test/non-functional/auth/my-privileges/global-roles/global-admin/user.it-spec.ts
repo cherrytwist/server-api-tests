@@ -3,7 +3,7 @@ import {
   getUserData,
   deleteUser,
 } from '@functional-api/contributor-management/user/user.request.params';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import {
   sorted__create_read_update_delete_authorizationReset,
   sorted__create_read_update_delete,

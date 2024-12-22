@@ -2,9 +2,8 @@ import { getOrganizationsData } from '../contributor-management/organization/org
 import { createWhiteboardTemplate } from '../templates/whiteboard/templates.request.params';
 import { createInnovationPack } from './innovation_pack.request.params';
 import { whiteboardTemplateValues1 } from './whiteboard-values-fixed';
-export const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+
+import { uniqueId } from '@test/utils/uniqueId';
 
 const packName =
   process.env.PACK_NAME || `Default Innovation Pack Name ${uniqueId}`;

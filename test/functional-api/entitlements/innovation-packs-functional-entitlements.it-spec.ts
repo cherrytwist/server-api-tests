@@ -35,9 +35,7 @@ import {
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 
-const uniqueId = Math.random()
-  .toString(12)
-  .slice(-6);
+import { uniqueId } from '@test/utils/uniqueId';
 
 let packId = '';
 const packName = `packname-${uniqueId}`;

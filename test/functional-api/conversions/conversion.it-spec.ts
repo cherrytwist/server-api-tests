@@ -16,7 +16,7 @@ import {
   createChallenge,
   createChallenge,
 } from '@utils/mutations/journeys/challenge';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@test/utils/uniqueId';
 import {
   assignRoleToOrganization,
   assignRoleToUser,

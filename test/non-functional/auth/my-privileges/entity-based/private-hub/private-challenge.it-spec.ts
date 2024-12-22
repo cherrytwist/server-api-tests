@@ -1,5 +1,5 @@
 import { TestUser } from '@utils/token.helper';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { changePreferenceSpace } from '@utils/mutations/preferences-mutation';
 import {
   getSpaceData,

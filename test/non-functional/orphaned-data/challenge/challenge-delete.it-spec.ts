@@ -4,7 +4,7 @@ import { deleteChallenge } from '@functional-api/journey/challenge/challenge.req
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createApplication } from '@functional-api/roleset/application/application.request.params';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { changePreferenceChallenge } from '@utils/mutations/preferences-mutation';
 import {
   createChallengeForOrgSpace,

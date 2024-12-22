@@ -1,5 +1,5 @@
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { createInnovationPack } from './innovation_pack.request.params';
 import {
   whiteboardTemplateValues1,

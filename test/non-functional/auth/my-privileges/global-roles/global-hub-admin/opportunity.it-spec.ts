@@ -10,7 +10,7 @@ import {
 } from '@functional-api/journey/opportunity/opportunity.request.params';
 import { createRelation } from '@functional-api/relations/relations.request.params';
 import { TestUser } from '@utils/test.user';
-import { uniqueId } from '@utils/mutations/create-mutation';
+import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import {
   sorted_sorted__create_read_update_delete_grant_createComment_Privilege,

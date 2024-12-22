@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "lib": ["es2018", "dom"],
+    "sourceMap": true,
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "removeComments": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "paths": {
+      "@test/*": ["src/*"],
+      "@generated/*": ["src/generated/*"],
+      "@utils/*": ["src/utils/*"],
+      "@functional-api/*": ["src/functional-api/*"]
+    }
+  }
+}
