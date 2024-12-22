@@ -1,6 +1,6 @@
+import { getSdk } from '@generated/graphql';
 import dotenv from 'dotenv';
 import { GraphQLClient } from 'graphql-request';
-import { getSdk } from '../generated/graphql';
 
 dotenv.config();
 

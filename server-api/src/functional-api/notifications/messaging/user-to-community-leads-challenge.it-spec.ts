@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
-import { TestUser } from '@utils/test.user';
-import { uniqueId } from '../../../utils/mutations/create-mutation';
+import { TestUser } from '@common/enum/test.user';
 import {
   deleteSpace,
   updateSpaceSettings,
@@ -23,11 +22,10 @@ import {
   assignRoleToOrganization,
   removeRoleFromOrganization,
 } from '../../../functional-api/roleset/roles-request.params';
-import {
-  CommunityRoleType,
-  SpacePrivacyMode,
-} from '../../../generated/alkemio-schema';
 import { deleteOrganization, updateOrganization } from '../../../functional-api/contributor-management/organization/organization.request.params';
+import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
+import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
+import { uniqueId } from '@utils/uniqueId';
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;

@@ -1,4 +1,3 @@
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import {
@@ -6,14 +5,12 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@utils/delay';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { PreferenceType } from '@alkemio/client-lib/dist/types/alkemio-schema';
-
 import {
   joinRoleSet,
   assignRoleToUser,
@@ -23,9 +20,10 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { CommunityRoleType } from '@generated/graphql';
+import { CommunityRoleType, PreferenceType } from '@generated/graphql';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 
 const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;

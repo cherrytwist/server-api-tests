@@ -1,24 +1,23 @@
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@common/enum/test.user';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@utils/delay';
 import { deleteUser } from '@functional-api/contributor-management/user/user.request.params';
 import { users } from '@utils/queries/users-data';
-
-import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
 import {
   createDiscussion,
   sendMessageToRoom,
 } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   createOrgAndSpaceWithUsers,
   createChallengeWithUsers,
   registerUsersAndAssignToAllEntitiesAsMembers,
 } from '@utils/data-setup/entities';
+import { PreferenceType } from '@generated/graphql';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 
 const organizationName = 'not-disc-org-name' + uniqueId;
 const hostNameId = 'not-disc-org-nameid' + uniqueId;

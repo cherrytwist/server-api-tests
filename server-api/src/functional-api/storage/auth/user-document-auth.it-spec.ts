@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -13,18 +13,13 @@ import { deleteOrganization } from '../../contributor-management/organization/or
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import { deleteSpace } from '../../journey/space/space.request.params';
-import {
-  sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii,
-  sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin,
-  sorted__create_read_update_delete_grant_readUserPii_platformAdmin,
-  sorted__create_read_update_delete_readUserPii,
-} from '@test/non-functional/auth/my-privileges/common';
 import { users } from '@utils/queries/users-data';
 import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,
 } from '../../references/references.request.params';
 import { entitiesId } from '../../../types/entities-helper';
+import { sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii, sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin, sorted__create_read_update_delete_grant_readUserPii_platformAdmin, sorted__create_read_update_delete_readUserPii } from '@common/constants/privileges';
 
 const organizationName = 'org-name' + uniqueId;
 const hostNameId = 'org-nameid' + uniqueId;

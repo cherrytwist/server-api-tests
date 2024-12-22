@@ -9,10 +9,10 @@ import {
   CalloutVisibility,
   CommunityRoleType,
 } from '@generated/alkemio-schema';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { delay } from '../delay';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import {
   createCalloutOnCollaboration,
   createWhiteboardCalloutOnCollaboration,

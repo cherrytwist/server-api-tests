@@ -1,6 +1,6 @@
 import { Client, createClient, SubscribePayload } from 'graphql-ws';
 import { GraphQLError } from 'graphql';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { buildConnectionParams } from './build-connection-params';
 
 const SERVER_URL_WS = process.env.ALKEMIO_SERVER_WS ?? '';

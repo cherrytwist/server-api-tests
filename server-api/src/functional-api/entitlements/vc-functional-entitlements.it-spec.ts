@@ -19,8 +19,7 @@
  * - Attempting to create a virtual contributor over the license limit and verifying the entitlements.
  *
  */
-import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -36,7 +35,8 @@ import {
   deleteVirtualContributorOnAccount,
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { uniqueId } from '@test/utils/uniqueId';
+import { PlatformRole } from '@generated/graphql';
+import { uniqueId } from '@utils/uniqueId';
 
 const spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;

@@ -17,7 +17,7 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import { readPrivilege } from '@test/non-functional/auth/my-privileges/common';
+import { readPrivilege } from '@common/constants/privileges';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import {
   removeRoleFromUser,
@@ -32,9 +32,9 @@ import { deleteUser } from '../../contributor-management/user/user.request.param
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
-import { TestUser } from '@utils/test.user';
-import { registerInAlkemioOrFail } from '@test/utils/register-in-alkemio-or-fail';
+import { TestUser } from '@common/enum/test.user';
 import { uniqueId } from '@utils/uniqueId';
+import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 
 let invitationId = '';
 let invitationData: any;

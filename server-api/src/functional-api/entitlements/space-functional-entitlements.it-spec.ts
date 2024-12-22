@@ -24,8 +24,8 @@
  * - `test`: Tests creating a space over the license limit.
  * - `test`: Tests creating a space after removing a space that exceeded the license limit.
  */
-import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils/test.user';
+
+import { TestUser } from '@common/enum/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -37,8 +37,8 @@ import {
   deleteSpace,
 } from '@functional-api/journey/space/space.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
+import { PlatformRole } from '@generated/graphql';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;

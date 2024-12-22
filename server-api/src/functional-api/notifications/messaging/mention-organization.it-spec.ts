@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
-import { TestUser } from '@utils/test.user';
-import { uniqueId } from '../../../utils/mutations/create-mutation';
+import { TestUser } from '@common/enum/test.user';
 import { deleteOrganization, updateOrganization } from '../../../functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '../../../functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
@@ -14,9 +13,12 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
-import { PreferenceType } from '@alkemio/client-lib';
 import { sendMessageToRoom } from '../../../functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '../../../types/entities-helper';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
+import { uniqueId } from '@utils/uniqueId';
+import { PreferenceType } from '@generated/graphql';
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;

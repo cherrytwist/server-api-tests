@@ -1,4 +1,4 @@
-import { kratosDomain } from '../../const';
+import { kratosDomain } from '@common/constants/kratos';
 import { Configuration, IdentityApi, FrontendApi } from '@ory/kratos-client';
 
 /***

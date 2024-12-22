@@ -1,8 +1,8 @@
 import { graphqlRequestAuth } from '../graphql.request';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '../graphqlClient';
 import { graphqlErrorWrapper } from '../graphql.wrapper';
-import { PlatformRole } from '@alkemio/client-lib';
+import { PlatformRole } from '@generated/graphql';
 
 export const assignPlatformRoleToUser = async (
   userID: string,

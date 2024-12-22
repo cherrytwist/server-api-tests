@@ -1,10 +1,10 @@
 import { registerInKratosOrFail } from '@utils/kratos/register-in-kratos-or-fail';
 import { verifyInKratosOrFail } from '@utils/kratos/verify-in-kratos-or-fail';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 export const registerVerifiedUser = async (
   email: string,

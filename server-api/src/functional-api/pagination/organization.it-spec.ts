@@ -1,8 +1,4 @@
-import {
-  createOrganization,
-  deleteOrganization,
-} from '../organization/organization.request.params';
-import { getOrganizationData } from '../organization/organization.request.params';
+import { createOrganization, deleteOrganization, getOrganizationData } from '@functional-api/contributor-management/organization/organization.request.params';
 import { paginatedOrganization } from './pagination.request.params';
 
 let organizationDataConf: any[] = [];

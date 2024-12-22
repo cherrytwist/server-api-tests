@@ -1,12 +1,12 @@
 import '@utils/array.matcher';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   createSpaceBasicData,
   deleteSpace,
   getSpaceData,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 let spaceId = '';
 let spaceIdn: string;

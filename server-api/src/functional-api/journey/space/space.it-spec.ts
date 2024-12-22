@@ -1,5 +1,3 @@
-import { SpaceVisibility } from '@alkemio/client-lib';
-import '../../../utils/array.matcher';
 import {
   createSpaceAndGetData,
   deleteSpace,
@@ -8,6 +6,7 @@ import {
 } from './space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { SpaceVisibility } from '@generated/graphql';
 import { uniqueId } from '@utils/uniqueId';
 
 let spaceId = '';

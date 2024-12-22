@@ -1,5 +1,5 @@
 import * as Dom from 'graphql-request/dist/types.dom';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getTestUserToken } from './getTestUserToken';
 
 export type ErrorType = {

@@ -25,7 +25,7 @@
  * - `afterAll`: Deletes the organization.
  * - `afterAll` in 'Account license plus cleanup': Cleans up created resources (Space, Virtual Contributor, Innovation Pack) and revokes the ACCOUNT_LICENSE_PLUS license from the organization account.
  */
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   assignLicensePlanToAccount,
@@ -57,7 +57,7 @@ import {
 import { assignUserAsOrganizationAdmin } from '@utils/mutations/authorization-organization-mutation';
 
 
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 let spaceId = '';
 let orgId = '';

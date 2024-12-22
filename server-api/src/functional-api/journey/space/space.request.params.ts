@@ -1,13 +1,9 @@
 import { GraphQLClient } from 'graphql-request';
-import {
-  CommunityMembershipPolicy,
-  SpacePrivacyMode,
-  SpaceVisibility,
-} from '../../../generated/alkemio-schema';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { uniqueId } from '@utils/uniqueId';
+import { CommunityMembershipPolicy, SpacePrivacyMode, SpaceVisibility } from '@generated/graphql';
 
 export const spaceName = `testEcoName${uniqueId}`;
 export const spaceNameId = `testecoeid${uniqueId}`;

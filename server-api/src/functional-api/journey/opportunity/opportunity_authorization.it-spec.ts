@@ -1,7 +1,7 @@
 import '@utils/array.matcher';
 import { createSubspace } from '../challenge/challenge.request.params';
 import { deleteSpace } from '../space/space.request.params';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
@@ -9,7 +9,7 @@ import {
 } from '@utils/data-setup/entities';
 import { CommunityRoleType } from '@generated/alkemio-schema';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import {
   assignRoleToUserExtendedData,
   removeRoleFromUserExtendedData,

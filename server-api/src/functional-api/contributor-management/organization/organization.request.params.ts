@@ -1,11 +1,11 @@
 import { organizationData } from '@utils/common-params';
 import { graphqlRequestAuth } from '@utils/graphql.request';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { UpdateOrganizationSettingsEntityInput } from '@generated/graphql';
 
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 export const organizationName = `testorghost${uniqueId}`;
 export const hostNameId = `testorghost${uniqueId}`;
 

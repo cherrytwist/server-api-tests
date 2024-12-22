@@ -1,8 +1,7 @@
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import {
-  createCollaborationInputData,
   templateDefaultInfo,
 } from './collaboration-template-testdata';
 import { getSpaceData } from '../../journey/space/space.request.params';
@@ -14,7 +13,7 @@ export const getLifeCycleTemplateForSpaceByLifecycleTitle = async (
   const templatesPerSpace = await getSpaceData(spaceId);
   const allTemplates =
     templatesPerSpace?.data?.space?.templatesManager?.templatesSet
-      ?.innovationFlowTemplates ?? [];
+      ?.collaborationTemplates ?? [];
 
   const filteredTemplate = allTemplates?.filter(item => {
     return item.profile.displayName === displayName;

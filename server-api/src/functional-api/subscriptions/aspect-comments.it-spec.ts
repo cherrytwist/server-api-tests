@@ -1,4 +1,3 @@
-import { delay, TestUser } from '@utils';
 import { SubscriptionClient } from '@utils/subscriptions';
 import { uniqueId } from '@utils/uniqueId';
 import { createPostOnCallout } from '../callout/post/post.request.params';
@@ -10,9 +9,11 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { deleteOrganization } from '../organization/organization.request.params';
 import { sendMessageToRoom } from '../communications/communication.params';
 import { entitiesId } from '../../types/entities-helper';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { TestUser } from '@common/enum/test.user';
+import { delay } from '@utils/delay';
 
 const organizationName = 'com-sub-org-n' + uniqueId;
 const hostNameId = 'com-sub-org-nd' + uniqueId;

@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser, delay } from '@utils';
+import { TestUser } from '@common/enum/test.user';
 import {
   getPlatformDiscussionsDataById,
   deleteDiscussion,
@@ -12,6 +12,7 @@ import {
   removeMessageOnRoom,
 } from '../communication.params';
 import { ForumDiscussionCategory } from '@generated/alkemio-schema';
+import { delay } from '@utils/delay';
 
 let platformDiscussionId = '';
 let discussionId = '';

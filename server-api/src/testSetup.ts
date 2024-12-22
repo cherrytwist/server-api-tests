@@ -1,12 +1,10 @@
 import { config } from 'dotenv';
-import {
-  registerInKratosOrFail,
-  verifyInKratosOrFail,
-  registerInAlkemioOrFail,
-  TestUser,
-} from '@test/utils';
+
 import { AxiosError } from 'axios';
 import { UiText } from '@ory/kratos-client';
+import { TestUser } from '@common/enum/test.user';
+import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
+import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 
 config({ path: '.env' });
 

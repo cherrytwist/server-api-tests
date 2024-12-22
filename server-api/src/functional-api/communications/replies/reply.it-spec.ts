@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { sendMessageReplyToRoom } from './reply.request.params';
 import { addReaction } from '../reactions/reactions.request.params';
 import {
@@ -10,6 +10,7 @@ import {
   sendMessageToRoom,
   removeMessageOnRoom,
 } from '../communication.params';
+import { uniqueId } from '@utils/uniqueId';
 
 let platformDiscussionId = '';
 let discussionId = '';

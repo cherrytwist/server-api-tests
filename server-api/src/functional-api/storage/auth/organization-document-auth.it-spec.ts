@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -18,15 +18,12 @@ import {
   sorted__create_read_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin,
   sorted__create_read_update_delete_grant_platformAdmin,
-} from '@test/non-functional/auth/my-privileges/common';
-import {
-  assignUserAsOrganizationAdmin,
-  assignUserAsOrganizationOwner,
-} from '@utils/mutations/authorization-organization-mutation';
+} from '@common/constants/privileges';
 import { users } from '@utils/queries/users-data';
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { assignUserToOrganization } from '../../roleset/roles-request.params';
+import { assignUserAsOrganizationAdmin, assignUserAsOrganizationOwner } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 
 const organizationName = 'org-name' + uniqueId;
 const hostNameId = 'org-nameid' + uniqueId;

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { TestUtil } from './test.util';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 
 const SERVER_REST_URL = process.env.ALKEMIO_SERVER_REST;
 

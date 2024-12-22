@@ -9,14 +9,13 @@ import {
 } from './post.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { uniqueId } from '@test/utils/uniqueId';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
@@ -26,8 +25,9 @@ import {
   createReferenceOnProfile,
   deleteReferenceOnProfile,
 } from '@functional-api/references/references.request.params';
-import { entitiesId } from '@test/types/entities-helper';
-import { delay } from '@utils';
+import { entitiesId } from '@src/types/entities-helper';
+import { uniqueId } from '@utils/uniqueId';
+import { delay } from '@utils/delay';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

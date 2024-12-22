@@ -1,11 +1,11 @@
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
+import { SpaceVisibility } from '@generated/graphql';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { SpaceVisibility } from '../../generated/alkemio-schema';
 
 export const updateSpacePlatformSettings = async (
   spaceID: string,
-  visibility?: SpaceVisibility,
+  visibility: SpaceVisibility,
   nameID?: string,
   hostID?: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
@@ -14,10 +14,8 @@ export const updateSpacePlatformSettings = async (
   const callback = (authToken: string | undefined) =>
     graphqlClient.UpdateSpacePlatformSettings(
       {
-        spaceID,
+        spaceId: spaceID,
         visibility,
-        nameID,
-        hostID,
       },
       {
         authorization: `Bearer ${authToken}`,

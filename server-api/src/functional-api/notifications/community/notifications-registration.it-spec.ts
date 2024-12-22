@@ -4,11 +4,11 @@ import {
 } from '@functional-api/contributor-management/user/user.request.params';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { delay } from '@utils';
 import { users } from '@utils/queries/users-data';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
-import { PreferenceType } from '@alkemio/client-lib';
-import { getMailsData } from '@test/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { PreferenceType } from '@generated/graphql';
+import { delay } from '@utils/delay';
 
 let userName = '';
 let userId = '';

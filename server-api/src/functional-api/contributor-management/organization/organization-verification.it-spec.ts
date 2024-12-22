@@ -1,5 +1,5 @@
 import '@utils/array.matcher';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 import {
   deleteOrganization,
   createOrganization,

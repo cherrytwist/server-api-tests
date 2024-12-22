@@ -14,16 +14,16 @@ import {
   createChallengeWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { PreferenceType } from '@alkemio/client-lib';
 
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
 } from '@generated/alkemio-schema';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
+import { PreferenceType } from '@generated/graphql';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 
 const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;

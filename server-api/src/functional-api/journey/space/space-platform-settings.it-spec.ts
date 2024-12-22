@@ -1,4 +1,4 @@
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import '@utils/array.matcher';
 import {
   getSpaceData,
@@ -19,7 +19,7 @@ import {
   sorted__create_read_update_delete_grant_createSubspace,
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
   sorted__create_read_update_delete_grant_createSubspace_platformAdmin,
-} from '@test/non-functional/auth/my-privileges/common';
+} from '@common/constants/privileges';
 import { deleteSubspace } from '../opportunity/opportunity.request.params';
 import {
   createChallengeWithUsers,
@@ -30,7 +30,7 @@ import {
   SpacePrivacyMode,
   SpaceVisibility,
 } from '@generated/alkemio-schema';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 
 import { uniqueId } from '@utils/uniqueId';
 

@@ -8,7 +8,7 @@ import {
   createSpaceAndGetData,
   deleteSpace,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   registerVerifiedUser,
   deleteUser,

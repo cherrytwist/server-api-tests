@@ -11,8 +11,7 @@
  * the expected values.
  */
 
-import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@utils/mutations/authorization-platform-mutation';
 import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
@@ -31,7 +30,8 @@ import {
   accountVCCampaignLicenses1SpaceVCPack,
 } from './entitlements-data';
 
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
+import { PlatformRole } from '@generated/graphql';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;

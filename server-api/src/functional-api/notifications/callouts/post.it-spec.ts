@@ -1,5 +1,5 @@
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@common/enum/test.user';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@utils/delay';
@@ -13,10 +13,10 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { PreferenceType } from '@generated/graphql';
 
 const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;

@@ -1,7 +1,7 @@
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { OrganizationFilterInput, UserFilterInput } from '@alkemio/client-lib';
+import { OrganizationFilterInput, UserFilterInput } from '@generated/graphql';
 
 export const paginatedUser = async (
   options: {

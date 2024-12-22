@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import '@utils/array.matcher';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 import {
   deleteCallout,
   createCalloutOnCollaboration,
@@ -11,7 +11,7 @@ import {
   createPostOnCallout,
   getDataPerSpaceCallout,
 } from '../post/post.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
@@ -26,7 +26,7 @@ import {
 } from '@generated/alkemio-schema';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 let opportunityName = 'post-opp';

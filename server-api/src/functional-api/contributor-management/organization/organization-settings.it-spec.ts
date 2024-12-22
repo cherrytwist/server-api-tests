@@ -4,12 +4,15 @@ import {
   getOrganizationData,
   updateOrganization,
 } from './organization.request.params';
-import { uniqueId } from '@test/utils/uniqueId';
 import { updateOrganizationSettings } from './organization.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
-import { users } from '@test/utils/queries/users-data';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
+import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { uniqueId } from '@utils/uniqueId';
+import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
+import { users } from '@utils/queries/users-data';
+import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
 
 const organizationName = 'h-pref-org-name' + uniqueId;
 const hostNameId = 'h-pref-org-nameid' + uniqueId;

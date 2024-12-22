@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/uniqueId';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser, getAuthDocument } from '@utils';
 import {
   deleteDocument,
   getOrgReferenceUri,
@@ -24,6 +23,8 @@ import {
   createSpaceAndGetData,
   deleteSpace,
 } from '../journey/space/space.request.params';
+import { TestUser } from '@common/enum/test.user';
+import { getAuthDocument } from '@utils/get.document';
 
 const organizationName = 'org-name' + uniqueId;
 const hostNameId = 'org-nameid' + uniqueId;

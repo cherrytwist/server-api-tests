@@ -5,7 +5,7 @@ import {
   registerVerifiedUser,
 } from './user.request.params';
 import '@utils/array.matcher';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 let userName = '';
 let userId = '';

@@ -18,10 +18,11 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "paths": {
-      "@test/*": ["test/*"],
-      "@generated/*": ["test/generated/*"],
-      "@utils/*": ["test/utils/*"],
-      "@functional-api/*": ["test/functional-api/*"]
+      "@generated/*": ["src/core/generated/*"],
+      "@utils/*": ["src/utils/*"],
+      "@common/*": ["src/common/*"],
+      "@functional-api/*": ["src/functional-api/*"],
+      "@src/*": ["src/*"]
     }
   }
 }

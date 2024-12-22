@@ -1,15 +1,10 @@
 import { updateUser } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import '@utils/array.matcher';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { updateOpportunityLocation } from '../journey/opportunity/opportunity.request.params';
-import {
-  createOrganization,
-  deleteOrganization,
-  updateOrganization,
-} from '../organization/organization.request.params';
 import {
   searchContributions,
   searchContributor,
@@ -30,6 +25,7 @@ import {
 import { entitiesId } from '../../types/entities-helper';
 import { SpaceVisibility } from '@generated/graphql';
 import { SpacePrivacyMode } from '@generated/alkemio-schema';
+import { createOrganization, deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
 let secondSpaceId = '';
 const userName = 'qa user';

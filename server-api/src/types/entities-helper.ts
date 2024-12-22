@@ -1,10 +1,5 @@
 import { getMails } from '@utils/mailslurper.rest.requests';
 
-// To be used only in tests, when there is dependancy on thrid party service (i.e. mailslurper)
-export function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 /**
  * Returns 2 values:
  ** 1st: emails array

@@ -6,7 +6,6 @@ import {
 } from './post-template.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/token.helper';
 import {
   errorAuthCreatePostTemplate,
   errorAuthDeleteTemplate,
@@ -29,8 +28,9 @@ import {
 } from '../../callout/post/post.request.params';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
+import { TestUser } from '@common/enum/test.user';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

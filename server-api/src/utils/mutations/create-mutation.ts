@@ -1,5 +1,6 @@
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import { challengeDataTest, spaceData, userData } from '../common-params';
+import { uniqueId } from '@utils/uniqueId';
 
 export const createUser = `
   mutation createUser($userData: CreateUserInput!) {

@@ -19,8 +19,7 @@
  * The cleanup steps ensure that any created resources (spaces, virtual contributors, innovation packs) are deleted
  * and the platform roles are removed after the tests are executed.
  */
-import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -46,7 +45,8 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
+import { PlatformRole } from '@generated/graphql';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;

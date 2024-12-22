@@ -1,7 +1,7 @@
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 
 import { uniqueId } from '@utils/uniqueId';
 

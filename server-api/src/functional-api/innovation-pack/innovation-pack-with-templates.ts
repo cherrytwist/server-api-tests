@@ -1,9 +1,9 @@
+import { uniqueId } from '@utils/uniqueId';
 import { getOrganizationsData } from '../contributor-management/organization/organization.request.params';
-import { createWhiteboardTemplate } from '../templates/whiteboard/templates.request.params';
 import { createInnovationPack } from './innovation_pack.request.params';
 import { whiteboardTemplateValues1 } from './whiteboard-values-fixed';
+import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';
 
-import { uniqueId } from '@test/utils/uniqueId';
 
 const packName =
   process.env.PACK_NAME || `Default Innovation Pack Name ${uniqueId}`;

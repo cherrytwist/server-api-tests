@@ -1,4 +1,4 @@
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import {
@@ -6,7 +6,7 @@ import {
   CalloutType,
   CalloutVisibility,
 } from '@generated/alkemio-schema';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 export const defaultPostTemplate = {
   postTemplate: {

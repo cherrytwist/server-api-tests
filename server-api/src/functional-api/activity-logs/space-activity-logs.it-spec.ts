@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {
@@ -27,7 +27,7 @@ import { sendMessageToRoom } from '../communications/communication.params';
 import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { assignRoleToUser, joinRoleSet } from '../roleset/roles-request.params';
 import { entitiesId } from '../../types/entities-helper';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 let calloutDisplayName = '';
 let calloutId = '';

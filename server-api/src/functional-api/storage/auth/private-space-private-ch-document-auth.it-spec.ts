@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -29,7 +29,7 @@ import {
   sorted__create_read_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent,
-} from '@test/non-functional/auth/my-privileges/common';
+} from '@common/constants/privileges';
 import {
   createLinkCollectionCallout,
   createLinkOnCallout,
@@ -50,10 +50,10 @@ import {
   createWhiteboardOnCallout,
 } from '../../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-callout.params.request';
-import { SpaceVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { SpacePrivacyMode } from '@generated/alkemio-schema';
+import { SpaceVisibility } from '@generated/graphql';
 
 const organizationName = 'org-name' + uniqueId;
 const hostNameId = 'org-nameid' + uniqueId;

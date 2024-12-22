@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@utils/delay';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
@@ -9,7 +9,7 @@ import { createPostOnCallout } from '@functional-api/callout/post/post.request.p
 import { PreferenceType } from '@generated/alkemio-schema';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrgAndSpaceWithUsers, createChallengeWithUsers, createOpportunityWithUsers } from '../../../utils/data-setup/entities';
 

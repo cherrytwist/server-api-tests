@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
-import { TestUser } from '@utils/test.user';
-import { uniqueId } from '@test/utils/uniqueId';
+import { TestUser } from '@common/enum/test.user';
+import { uniqueId } from '@utils/uniqueId';
 import {
   getPlatformDiscussionsDataById,
   createDiscussion,

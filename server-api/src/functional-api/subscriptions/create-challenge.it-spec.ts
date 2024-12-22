@@ -1,12 +1,13 @@
-import { delay, TestUser } from '@utils';
 import { SubscriptionClient } from '@utils/subscriptions';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionChallengeCreated } from './subscrition-queries';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
-import { deleteOrganization } from '../organization/organization.request.params';
 import { createChallenge } from '@utils/mutations/journeys/challenge';
 import { entitiesId } from '../../types/entities-helper';
+import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { TestUser } from '@common/enum/test.user';
+import { delay } from '@utils/delay';
 
 const organizationName = 'com-sub-org-n' + uniqueId;
 const hostNameId = 'com-sub-org-nd' + uniqueId;

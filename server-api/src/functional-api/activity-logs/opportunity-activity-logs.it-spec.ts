@@ -1,5 +1,5 @@
 import '@utils/array.matcher';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
@@ -31,7 +31,7 @@ import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/white
 import { assignRoleToUser } from '../roleset/roles-request.params';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

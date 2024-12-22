@@ -1,9 +1,7 @@
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@utils/delay';
 import { users } from '@utils/queries/users-data';
-import { TestUser } from '@utils/test.user';
-import { PreferenceType } from '@alkemio/client-lib';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
+import { TestUser } from '@common/enum/test.user';
 import {
   createDiscussion,
   deleteDiscussion,
@@ -12,7 +10,9 @@ import {
 } from '@functional-api/communications/communication.params';
 import { sendMessageReplyToRoom } from '@functional-api/communications/replies/reply.request.params';
 import { ForumDiscussionCategory } from '@generated/alkemio-schema';
-import { getMailsData } from '@test/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { PreferenceType } from '@generated/graphql';
 
 let preferencesConfigDiscussions: any[] = [];
 let preferencesConfigComments: any[] = [];

@@ -10,16 +10,16 @@ import {
   deleteInvitation,
   inviteContributors,
 } from '@functional-api/roleset/invitations/invitation.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { PreferenceType } from '@alkemio/client-lib';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { PreferenceType } from '@generated/graphql';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 
 const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;

@@ -2,7 +2,7 @@ import '../../../utils/array.matcher';
 import { deleteSpace } from '../space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import {
   createSubspace,
   getSubspaceData,

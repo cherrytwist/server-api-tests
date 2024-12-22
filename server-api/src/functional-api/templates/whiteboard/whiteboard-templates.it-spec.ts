@@ -8,7 +8,7 @@ import {
 } from '@utils/data-setup/entities';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import {
   createWhiteboardTemplate,
   getWhiteboardTemplatesCount,

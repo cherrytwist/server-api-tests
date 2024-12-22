@@ -2,7 +2,7 @@ import { createSubspace, getSubspaceData } from './challenge.request.params';
 import '@utils/array.matcher';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { uniqueId } from '@utils/uniqueId';
 

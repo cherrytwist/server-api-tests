@@ -21,8 +21,8 @@
  * - Parameterized tests to create innovation packs and verify entitlements.
  * - A test to handle the scenario where the innovation pack creation exceeds the license limit.
  */
-import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils/test.user';
+
+import { TestUser } from '@common/enum/test.user';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -34,8 +34,8 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
+import { PlatformRole } from '@generated/graphql';
 
 let packId = '';
 const packName = `packname-${uniqueId}`;

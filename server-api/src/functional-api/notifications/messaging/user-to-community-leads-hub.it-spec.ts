@@ -1,28 +1,25 @@
-/* eslint-disable prettier/prettier */
-import { changePreferenceUser } from '../../../utils/mutations/preferences-mutation';
+
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../utils/delay';
-import { TestUser } from '@utils/test.user';
-import { uniqueId } from '../../../utils/mutations/create-mutation';
+import { TestUser } from '@common/enum/test.user';
 import {
   deleteSpace,
   updateSpaceSettings,
 } from '../../../functional-api/journey/space/space.request.params';
-import { assignUserAsOrganizationAdmin } from '../../../utils/mutations/authorization-organization-mutation';
 import { users } from '../../../utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '../../../utils/data-setup/entities';
-import { PreferenceType } from '@alkemio/client-lib';
 import { sendMessageToCommunityLeads } from '../../../functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,
 } from '../../../functional-api/roleset/roles-request.params';
-import {
-  CommunityRoleType,
-  SpacePrivacyMode,
-} from '../../../generated/alkemio-schema';
+
 import { deleteOrganization } from '../../../functional-api/contributor-management/organization/organization.request.params';
+import { uniqueId } from '@utils/uniqueId';
+import { CommunityRoleType, PreferenceType, SpacePrivacyMode } from '@generated/graphql';
+import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;

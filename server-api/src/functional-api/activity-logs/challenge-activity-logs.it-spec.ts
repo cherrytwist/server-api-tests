@@ -1,5 +1,5 @@
 import '@utils/array.matcher';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeForOrgSpace,

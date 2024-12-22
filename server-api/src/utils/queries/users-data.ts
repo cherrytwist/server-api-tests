@@ -1,11 +1,11 @@
-import { PlatformRole } from '@alkemio/client-lib';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   assignPlatformRoleToUser,
   assignUserAsGlobalCommunityAdmin,
   assignUserAsGlobalSupport,
 } from '../mutations/authorization-platform-mutation';
 import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
+import { PlatformRole } from '@generated/graphql';
 
 interface UserData {
   email: string;

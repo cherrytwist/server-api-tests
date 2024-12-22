@@ -5,7 +5,7 @@ import {
   createSubspace,
   getSubspaceData,
 } from '../challenge/challenge.request.params';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import {
   createChallengeForOrgSpace,
   createOpportunityForChallenge,

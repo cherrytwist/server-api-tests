@@ -1,5 +1,5 @@
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 export const opportunityNameId = `oppNaId${uniqueId}`;

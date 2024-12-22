@@ -1,4 +1,4 @@
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import {
   createUser,
   deleteUser,
@@ -8,7 +8,7 @@ import {
 } from './user.request.params';
 import '@utils/array.matcher';
 import { users } from '@utils/queries/users-data';
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 
 let userName = '';
 let userFirstName = '';

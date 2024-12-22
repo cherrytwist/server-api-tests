@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@utils/token.helper';
+import { TestUser } from '@common/enum/test.user';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@utils/delay';
@@ -14,14 +14,11 @@ import {
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import {
-  CalloutVisibility,
-  PreferenceType,
-} from '@alkemio/client-lib/dist/types/alkemio-schema';
-import { changePreferenceUser } from '@utils/mutations/preferences-mutation';
 import { users } from '@utils/queries/users-data';
-import { entitiesId, getMailsData } from '@test/types/entities-helper';
+import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { CalloutVisibility, PreferenceType } from '@generated/graphql';
+import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 
 const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;

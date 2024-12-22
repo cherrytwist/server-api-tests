@@ -12,15 +12,14 @@ import {
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@utils/test.user';
+import { TestUser } from '@common/enum/test.user';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
-import { entitiesId } from '@test/types/entities-helper';
+import { entitiesId } from '@src/types/entities-helper';
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import { SearchVisibility, SpaceVisibility } from '@alkemio/client-lib';
 import { createChallenge } from '@utils/mutations/journeys/challenge';
 import {
   assignLicensePlanToAccount,
@@ -33,7 +32,8 @@ import {
 import { getRoleSetInvitationsApplications } from '../../roleset/application/application.request.params';
 import { deleteOrganization } from '../organization/organization.request.params';
 import { createUser, deleteUser } from '../user/user.request.params';
-import { uniqueId } from '@test/utils/uniqueId';
+import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
+import { uniqueId } from '@utils/uniqueId';
 
 let invitationId = '';
 let invitationData: any;

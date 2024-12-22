@@ -1,4 +1,4 @@
-import { uniqueId } from '@test/utils/uniqueId';
+import { uniqueId } from '@utils/uniqueId';
 import {
   createOrganization,
   deleteOrganization,
