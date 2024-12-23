@@ -10,7 +10,7 @@ module.exports = {
   }),
   moduleFileExtensions: ['js', 'json', 'ts'],
   setupFiles: ['<rootDir>/src/setupTests.ts'],
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },

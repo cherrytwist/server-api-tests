@@ -1,20 +1,19 @@
-const { pathsToModuleNameMapper } = require('ts-jest');
-const { compilerOptions } = require('../../tsconfig');
+const { compilerOptions } = require('../tsconfig');
 
 
 module.exports = {
-  rootDir: '../../',
+  rootDir: '..',
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: {
-    '^@test/(.*)$': '<rootDir>/test/$1',
+    '^@src/(.*)$': '<rootDir>/src/$1',
     '^@generated/(.*)$': '<rootDir>/test/generated/$1',
     '^@utils/(.*)$': '<rootDir>/test/utils/$1',
     '^@functional-api/(.*)$': '<rootDir>/test/functional-api/$1',
   },
   moduleFileExtensions: ['js', 'json', 'ts'],
-  setupFiles: ['./test/setupTests.ts'],
-  roots: ['<rootDir>/test'],
+  setupFiles: ['./src/setupTests.ts'],
+  roots: ['<rootDir>/src'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
@@ -22,7 +21,7 @@ module.exports = {
   collectCoverageFrom: [],
   testTimeout: 1800000,
   collectCoverage: false,
-  globalSetup: '<rootDir>/test/testSetup.ts',
+  globalSetup: '<rootDir>/src/testSetup.ts',
   reporters: [
     'default',
     [
@@ -37,4 +36,4 @@ module.exports = {
 };
 
 
-console.log('Global Setup Path:', require.resolve('../../test/testSetup.ts'));
+console.log('Global Setup Path:', require.resolve('../src/testSetup.ts'));
