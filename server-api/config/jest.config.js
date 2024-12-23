@@ -1,19 +1,15 @@
 const { compilerOptions } = require('../tsconfig');
-
+const { pathsToModuleNameMapper } = require('ts-jest');
 
 module.exports = {
-  rootDir: '..',
+  rootDir: '../',
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleNameMapper: {
-    '^@src/(.*)$': '<rootDir>/src/$1',
-    '^@common/(.*)$': '<rootDir>/src/common/$1',
-    '^@generated/(.*)$': '<rootDir>/src/generated/$1',
-    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^@functional-api/(.*)$': '<rootDir>/src/functional-api/$1',
-  },
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/../',
+  }),
   moduleFileExtensions: ['js', 'json', 'ts'],
-  setupFiles: ['./src/setupTests.ts'],
+  setupFiles: ['<rootDir>/src/setupTests.ts'],
   roots: ['<rootDir>/src'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
@@ -22,7 +18,7 @@ module.exports = {
   collectCoverageFrom: [],
   testTimeout: 1800000,
   collectCoverage: false,
-  globalSetup: '<rootDir>/src/testSetup.ts',
+  globalSetup: '<rootDir>/src/globalTestsSetup.ts',
   reporters: [
     'default',
     [
@@ -35,3 +31,9 @@ module.exports = {
     ],
   ],
 };
+
+console.log('Path mappings:', compilerOptions.paths);
+// console.log(
+//   'Resolved @src/common/enum/test.user:',
+//   require.resolve('@src/common/enum/test.user')
+// );

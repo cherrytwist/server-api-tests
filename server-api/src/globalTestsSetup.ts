@@ -1,11 +1,14 @@
 import { config } from 'dotenv';
 import { AxiosError } from 'axios';
 import { UiText } from '@ory/kratos-client';
-import { TestUser } from '@src/common/enum/test.user';
+import { TestUser } from './common/enum/test.user';
 import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 
 config({ path: '.env' });
+
+console.log('Resolved @src/common/enum/test.user:', require.resolve('@src/common/enum/test.user'));
+
 
 module.exports = async () => {
   if (process.env.SKIP_USER_REGISTRATION === 'true') return;
