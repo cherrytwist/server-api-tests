@@ -8,12 +8,12 @@ import {
 import { users } from '@utils/queries/users-data';
 import { uniqueId } from '@utils/uniqueId';
 
-let spaceId = '';
-let spaceIdn: string;
-let spaceId1: string;
-let spaceId2: string;
-let spaceId3: string;
-let spaceId4: string;
+let localSpaceId = '';
+let localSpaceIdn = '';
+let localSpaceId1 = '';
+let localSpaceId2 = '';
+let localSpaceId3 = '';
+let localSpaceId4 = '';
 
 const organizationName = 'callout-org-name' + uniqueId;
 const hostNameId = 'callout-org-nameid' + uniqueId;
@@ -22,11 +22,11 @@ const spaceNameId = 'callout-eco-nameid' + uniqueId;
 
 describe('Limits on account resources creation', () => {
   // afterEach(async () => {
-  //   await deleteSpace(spaceId);
+  //   await deleteSpace(localSpaceId);
   // });
   describe('Global Admin space creation', () => {
     // afterEach(async () => {
-    //   await deleteSpace(spaceId);
+    //   await deleteSpace(localSpaceId);
     // });
     test.each`
       userRole | spaceName
@@ -44,9 +44,9 @@ describe('Limits on account resources creation', () => {
           users.globalAdmin.accountId,
           TestUser.GLOBAL_ADMIN
         );
-        spaceId = createSpace.data?.createSpace.id ?? '';
+        localSpaceId = createSpace.data?.createSpace.id ?? '';
 
-        const spaceData = await getSpaceData(spaceId);
+        const spaceData = await getSpaceData(localSpaceId);
 
         // Assert
         expect(spaceData.data?.space.profile.displayName).toEqual(spaceName);
@@ -70,9 +70,9 @@ describe('Limits on account resources creation', () => {
           users.betaTester.accountId,
           TestUser.BETA_TESTER
         );
-        spaceId = createSpace.data?.createSpace.id ?? '';
+        localSpaceId = createSpace.data?.createSpace.id ?? '';
 
-        const spaceData = await getSpaceData(spaceId);
+        const spaceData = await getSpaceData(localSpaceId);
 
         // Assert
         expect(spaceData.data?.space.profile.displayName).toEqual(spaceName);
@@ -82,17 +82,17 @@ describe('Limits on account resources creation', () => {
 
   describe.only('Non Space User space creation', () => {
     afterAll(async () => {
-      await deleteSpace(spaceId1);
+      await deleteSpace(localSpaceId1);
     });
     test.each`
-      userRole | spaceName               | spaceIdn    | message
-      ${1}     | ${`space1-${uniqueId}`} | ${spaceId1} | ${spaceName}
-      ${2}     | ${`space2-${uniqueId}`} | ${spaceId2} | ${spaceName}
-      ${3}     | ${`space3-${uniqueId}`} | ${spaceId3} | ${spaceName}
-      ${3}     | ${`space4-${uniqueId}`} | ${spaceId4} | ${'Soft limit of 3 reached'}
+      userRole | spaceName               | localSpaceIdn    | message
+      ${1}     | ${`space1-${uniqueId}`} | ${localSpaceId1} | ${spaceName}
+      ${2}     | ${`space2-${uniqueId}`} | ${localSpaceId2} | ${spaceName}
+      ${3}     | ${`space3-${uniqueId}`} | ${localSpaceId3} | ${spaceName}
+      ${3}     | ${`space4-${uniqueId}`} | ${localSpaceId4} | ${'Soft limit of 3 reached'}
     `(
       'User: Non Space User creates a space with name: $spaceName',
-      async ({ spaceName, spaceIdn }) => {
+      async ({ spaceName, localSpaceIdn }) => {
         // Act
         const createSpace = await createSpaceBasicData(
           spaceName,
@@ -100,10 +100,10 @@ describe('Limits on account resources creation', () => {
           users.opportunityAdmin.accountId,
           TestUser.CHALLENGE_ADMIN
         );
-        spaceId = createSpace.data?.createSpace.id ?? '';
-        spaceId = spaceIdn;
+        localSpaceId = createSpace.data?.createSpace.id ?? '';
+        localSpaceId = localSpaceIdn;
 
-        const spaceData = await getSpaceData(spaceIdn);
+        const spaceData = await getSpaceData(localSpaceIdn);
 
         // Assert
         expect(spaceData).toContain(spaceName);

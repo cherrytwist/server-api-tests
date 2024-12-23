@@ -1,6 +1,7 @@
-import * as Dom from 'graphql-request/dist/types.dom';
+//import * as Dom from 'graphql-request/dist/types.dom';
 import { TestUser } from '@common/enum/test.user';
 import { getTestUserToken } from './getTestUserToken';
+import Headers from 'graphql-request';
 
 export type ErrorType = {
   response: {
@@ -11,7 +12,7 @@ export type ErrorType = {
 export type GraphQLReturnType<TData> = Promise<{
   data: TData;
   extensions?: any;
-  headers: Dom.Headers;
+  headers: Headers;
   status: number;
 }>;
 export type GraphQLAwaitedReturnType<TData> = Awaited<GraphQLReturnType<TData>>;
