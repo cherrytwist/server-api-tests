@@ -1,0 +1,21 @@
+mutation updateUserSettings(
+  $userID: UUID!
+  $settingsData: UpdateUserSettingsEntityInput!
+) {
+  updateUserSettings(
+    settingsData: {
+      userID: $userID
+      settings: $settingsData
+    }
+  ) {
+    id
+    settings {
+      privacy {
+        contributionRolesPubliclyVisible
+      }
+      communication {
+        allowOtherUsersToSendMessages
+      }
+    }
+  }
+}

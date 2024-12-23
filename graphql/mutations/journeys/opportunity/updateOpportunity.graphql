@@ -1,5 +1,0 @@
-# mutation updateOpportunity($opportunityData: UpdateOpportunityInput!) {
-#   updateOpportunity(opportunityData: $opportunityData) {
-#     ...OpportunityData
-#   }
-# }

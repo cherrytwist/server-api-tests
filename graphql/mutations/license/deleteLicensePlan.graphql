@@ -1,5 +1,0 @@
-mutation DeleteLicensePlan($LicensePlan: DeleteLicensePlanInput!) {
-  deleteLicensePlan(deleteData: $LicensePlan) {
-    ...LicensePlanData
-  }
-}

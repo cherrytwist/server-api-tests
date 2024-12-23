@@ -1,5 +1,0 @@
-mutation UpdatePost($postData: UpdatePostInput!) {
-  updatePost(postData: $postData) {
-    ...PostData
-  }
-}

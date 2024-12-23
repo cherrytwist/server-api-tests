@@ -1,0 +1,36 @@
+query MeQuery {
+  me {
+    communityApplications {
+      application {
+        ...ApplicationData
+      }
+       spacePendingMembershipInfo {
+        id
+      }
+    }
+    communityInvitations {
+      invitation {
+        ...InvitationData
+      }
+      spacePendingMembershipInfo {
+        id
+      }
+    }
+    spaceMembershipsFlat {
+      id
+      space {
+        nameID
+      }
+      childMemberships {
+        space {
+          nameID
+        }
+        childMemberships {
+          space {
+            nameID
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,0 @@
-mutation CreateDiscussion($createData: ForumCreateDiscussionInput!) {
-  createDiscussion(createData: $createData) {
-    ...CommunicationsDiscussionData
-  }
-}

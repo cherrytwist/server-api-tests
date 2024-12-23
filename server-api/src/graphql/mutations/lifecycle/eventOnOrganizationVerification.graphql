@@ -1,0 +1,17 @@
+mutation eventOnOrganizationVerification(
+  $eventData: OrganizationVerificationEventInput!
+) {
+  eventOnOrganizationVerification(eventData: $eventData) {
+    authorization {
+      ...AuthorizationData
+    }
+    id
+    status
+    state
+    nextEvents
+    isFinalized
+    lifecycle {
+      id
+    }
+  }
+}

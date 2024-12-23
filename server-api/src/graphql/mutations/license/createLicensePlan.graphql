@@ -1,0 +1,5 @@
+mutation CreateLicensePlan($LicensePlan: CreateLicensePlanOnLicensingFrameworkInput!) {
+  createLicensePlan(planData: $LicensePlan) {
+    ...LicensePlanData
+  }
+}

@@ -1,0 +1,17 @@
+query CalloutStorageConfig($calloutId: UUID!) {
+  lookup {
+    callout(ID: $calloutId) {
+      id
+      framing {
+        id
+        profile {
+          ...ProfileStorageConfig
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

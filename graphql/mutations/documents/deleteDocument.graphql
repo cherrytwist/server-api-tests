@@ -1,5 +1,0 @@
-mutation DeleteDocument($deleteData: DeleteDocumentInput!) {
-  deleteDocument(deleteData: $deleteData) {
-    id
-  }
-}

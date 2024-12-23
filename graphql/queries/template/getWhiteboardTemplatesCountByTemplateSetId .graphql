@@ -1,7 +1,0 @@
-query GetWhiteboardTemplatesCountByTemplateSetId($templateSetId: UUID!) {
-  lookup {
-    templatesSet(ID: $templateSetId) {
-      whiteboardTemplatesCount
-    }
-  }
-}
