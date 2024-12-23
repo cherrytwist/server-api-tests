@@ -3,7 +3,7 @@ import { userData } from './common-params';
 import { getUserToken } from './get-user-token';
 import { TestUser } from '@common/enum/test.user';
 
-const SERVER_URL = process.env.ALKEMIO_SERVER_URL;
+const SERVER_URL = process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found';
 
 export const registerInAlkemioOrFail = async (
   firstName: string,

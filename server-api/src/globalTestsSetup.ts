@@ -44,8 +44,8 @@ const userRegisterFlow = async (userName: string) => {
     await registerInKratosOrFail(firstName, lastName, email);
 
     console.info(`User ${email} registered in Kratos`);
-  } catch (e) {
-    const errorMessages = (e as AxiosError).response?.data.ui
+  } catch (e: any) {
+    const errorMessages = (e as any).response?.data.ui
       .messages as UiText[];
     const errorMessage =
       errorMessages.map(x => x.text).join('\n') ?? 'Unknown error';
