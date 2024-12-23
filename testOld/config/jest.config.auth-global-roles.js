@@ -1,8 +1,8 @@
 module.exports = {
-  ...require('./jest.config'),
+  ...require('../../server-api/config/jest.config'),
   //testMatch: ['**/?(*.)+(it-spec).ts'],
   testRegex: [
-    '/src/non-functional/auth/my-privileges/entity-based/.*\\.it-spec\\.ts',
+    '/src/non-functional/auth/my-privileges/global-roles/.*\\.it-spec\\.ts',
   ],
 
   coverageDirectory: '<rootDir>/coverage-it',

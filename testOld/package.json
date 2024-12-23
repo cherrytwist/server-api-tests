@@ -23,7 +23,12 @@
     "test": "jest",
     "stop-process": "fuser 4000/tcp -k",
     "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:auth": "jest --detectOpenHandles --runInBand --config ./config/jest.config.auth.js",
+    "test:auth-entities": "jest ---forceExit ---runInBand --config ./config/jest.config.auth-entities.js",
+    "test:auth-global-roles": "jest ---forceExit --maxWorkers=4 --config ./config/jest.config.auth-global-roles.js",
+    "test:ut": "jest --detectOpenHandles --runInBand --config ./config/jest.config.js",
     "test:nightly": "jest  --maxWorkers=1 --config ./config/jest.config.nightly.js",
     "test:communications": "jest --forceExit --runInBand --config ./config/jest.config.communications.js",
     "test:notifications": "jest --forceExit --runInBand --config ./config/jest.config.notifications.js",
@@ -47,11 +52,13 @@
     "test:pagination": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.pagination.js",
     "test:roleset": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.roleset.js",
     "test:subscriptions": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.subscriptions.js",
+    "test:conversion": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.conversion.js",
     "test:templates": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.templates.js",
     "test:innovation": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.innovationPacks.js",
     "test:documents": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.documents.js",
     "test:configuration": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.configuration.js",
-    "innovation-pack-with-templates": "ts-node-dev ./src/functional-api/innovation-pack/innovation-pack-with-templates.ts"
+    "innovation-pack-with-templates": "ts-node-dev ./src/functional-api/innovation-pack/innovation-pack-with-templates.ts",
+    "test:orphaned": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.orphaned.js"
   },
   "dependencies": {
     "@alkemio/client-lib": "^0.32.0",
