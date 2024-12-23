@@ -1,7 +1,5 @@
 import request from 'supertest';
-import { userData } from './common-params';
 import { getUserToken } from './get-user-token';
-import { TestUser } from '@common/enum/test.user';
 
 const SERVER_URL = process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found';
 
@@ -45,7 +43,7 @@ export const createUserNewRegistration = async (
 ) => {
   const requestParams = {
     operationName: null,
-    query: `mutation createUserNewRegistration { createUserNewRegistration { ${userData}}}`,
+    query: `mutation createUserNewRegistration { createUserNewRegistration { id }}`,
     variables: {
       userData: {
         firstName,
@@ -66,27 +64,3 @@ export const createUserNewRegistration = async (
     .set('Authorization', `Bearer ${userToken}`);
 };
 
-export const assignGA = async (userID: string) => {
-  const requestParams = {
-    operationName: null,
-    query: `mutation assignUserAsGlobalAdmin($input: AssignGlobalAdminInput!) {
-      assignUserAsGlobalAdmin(membershipData: $input) {
-        id
-        displayName
-      }
-    }`,
-    variables: {
-      input: {
-        userID,
-      },
-    },
-  };
-
-  const userToken = await getUserToken(TestUser.GLOBAL_ADMIN);
-
-  return await request(SERVER_URL)
-    .post('')
-    .send({ ...requestParams })
-    .set('Accept', 'application/json')
-    .set('Authorization', `Bearer ${userToken}`);
-};

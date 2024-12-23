@@ -1,4 +1,3 @@
-import { organizationData } from '@utils/common-params';
 import { graphqlRequestAuth } from '@utils/graphql.request';
 import { TestUser } from '@common/enum/test.user';
 import { getGraphqlClient } from '@utils/graphqlClient';
@@ -118,16 +117,19 @@ export const getOrganizationData = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getOrganizationsData = async (
+export const getOrganizations = async (
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
-  const requestParams = {
-    operationName: null,
-    query: `query{organizations ${organizationData}}`,
-    variables: null,
-  };
-
-  return await graphqlRequestAuth(requestParams, userRole);
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.getOrganizationsData(
+      {
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+  return graphqlErrorWrapper(callback, userRole);
 };
 
 export const updateOrganizationSettings = async (

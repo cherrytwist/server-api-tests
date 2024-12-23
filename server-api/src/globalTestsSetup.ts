@@ -37,7 +37,6 @@ const getUserName = (userName: string): [string, string] => {
 const userRegisterFlow = async (userName: string) => {
   const [firstName, lastName] = getUserName(userName);
   const email = `${userName}@alkem.io`;
-
   try {
     await registerInKratosOrFail(firstName, lastName, email);
 

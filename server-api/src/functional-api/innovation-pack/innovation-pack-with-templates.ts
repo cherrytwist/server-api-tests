@@ -1,8 +1,8 @@
 import { uniqueId } from '@utils/uniqueId';
-import { getOrganizationsData } from '../contributor-management/organization/organization.request.params';
 import { createInnovationPack } from './innovation_pack.request.params';
 import { whiteboardTemplateValues1 } from './whiteboard-values-fixed';
 import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';
+import { getOrganizations } from '@functional-api/contributor-management/organization/organization.request.params';
 
 
 const packName =
@@ -16,10 +16,10 @@ const whiteboardTemplateTitle =
 const packNameId = `pack-nameid-${uniqueId}`;
 
 const main = async () => {
-  const organizationsData = await getOrganizationsData();
+  const organizationsData = await getOrganizations();
   const firstAvailableOrganizationId =
-    organizationsData.body.data.organizations[0].id;
-  const providerId = process.env.ORG_ID || firstAvailableOrganizationId;
+    organizationsData.data?.organizations[0].id;
+  const providerId = process.env.ORG_ID || firstAvailableOrganizationId || '';
   const packData = await createInnovationPack(
     packName,
     packNameId,
