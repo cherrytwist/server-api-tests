@@ -1,3 +1,5 @@
+// This is critical to be able to use TypeScript aliases in Jest tests
+require('tsconfig-paths/register');
 import { config } from 'dotenv';
 import { AxiosError } from 'axios';
 import { UiText } from '@ory/kratos-client';
