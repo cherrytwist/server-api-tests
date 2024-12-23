@@ -1,5 +1,0 @@
-query GetSpacesData {
-  spaces {
-    id
-  }
-}

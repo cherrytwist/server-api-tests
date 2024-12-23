@@ -1,5 +1,0 @@
-mutation AssignRoleToUserExtendedData($roleData: AssignRoleOnRoleSetToUserInput!) {
-  assignRoleToUser(roleData: $roleData) {
-    ...UserData
-  }
-}

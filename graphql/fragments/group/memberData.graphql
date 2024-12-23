@@ -1,6 +1,0 @@
-fragment MemberData on User {
-  ...UserData
-  profile {
-    ...ProfileDataUser
-  }
-}

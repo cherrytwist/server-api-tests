@@ -1,0 +1,24 @@
+query CalloutLinkContributionStorageConfig(
+  $linkId: UUID!
+  $calloutId: UUID!
+) {
+  lookup {
+    callout(ID: $calloutId) {
+      id
+      contributions(filter: { linkIDs: [$linkId] }) {
+        link {
+          id
+          profile {
+            ...ProfileStorageConfig
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+

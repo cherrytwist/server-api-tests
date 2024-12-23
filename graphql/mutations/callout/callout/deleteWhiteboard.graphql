@@ -1,5 +1,0 @@
-mutation DeleteWhiteboard($input: DeleteWhiteboardInput!) {
-  deleteWhiteboard(whiteboardData: $input) {
-    id
-  }
-}

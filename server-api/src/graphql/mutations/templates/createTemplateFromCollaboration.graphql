@@ -1,0 +1,28 @@
+mutation CreateTemplateFromCollaboration(
+  $templatesSetId: UUID!
+  $profileData: CreateProfileInput!
+  $tags: [String!]
+  $collaborationId: UUID!
+) {
+  createTemplateFromCollaboration(
+    templateData: {
+      templatesSetID: $templatesSetId
+      profileData: $profileData
+      tags: $tags
+      collaborationID: $collaborationId
+    }
+  ) {
+    id
+    type
+    profile {
+      displayName
+    }
+    authorization {
+      myPrivileges
+    }
+    collaboration {
+      id
+      isTemplate
+    }
+  }
+}

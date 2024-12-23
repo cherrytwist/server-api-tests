@@ -1,0 +1,14 @@
+query getSubspaceCommunity($spaceId: UUID_NAMEID!, $subspaceId: UUID_NAMEID!) {
+  space(ID: $spaceId) {
+    id
+    subspace(ID: $subspaceId) {
+      community {
+        id
+        roleSet {
+          id
+          ...MembersAndLeadsData
+        }
+      }
+    }
+  }
+}

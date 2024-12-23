@@ -1,0 +1,41 @@
+query GetProfileDocuments($profileID: UUID!) {
+  lookup {
+    profile(ID: $profileID) {
+      id
+      storageBucket {
+        id
+        parentEntity {
+          displayName
+          id
+          type
+          url
+        }
+        authorization {
+          anonymousReadAccess
+          myPrivileges
+        }
+        documents {
+          id
+          authorization {
+            anonymousReadAccess
+            myPrivileges
+          }
+          displayName
+          url
+          createdBy {
+            email
+          }
+        }
+      }
+      visuals {
+        id
+        name
+        uri
+        authorization {
+          anonymousReadAccess
+          myPrivileges
+        }
+      }
+    }
+  }
+}

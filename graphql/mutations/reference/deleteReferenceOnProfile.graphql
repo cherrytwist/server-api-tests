@@ -1,5 +1,0 @@
-mutation DeleteReference($deleteData: DeleteReferenceInput!) {
-  deleteReference(deleteData: $deleteData) {
-    id
-  }
-}
