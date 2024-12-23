@@ -1,16 +1,20 @@
-const { compilerOptions } = require('../tsconfig');
+const { compilerOptions } = require('../../tsconfig');
 const { pathsToModuleNameMapper } = require('ts-jest');
 
 module.exports = {
-  rootDir: '../',
+  rootDir: '../../',
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/../',
-  }),
+  moduleNameMapper: {
+    '^@generated/(.*)$': '<rootDir>/src/core/generated/$1',
+    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@common/(.*)$': '<rootDir>/src/common/$1',
+    '^@functional-api/(.*)$': '<rootDir>/src/functional-api/$1',
+    '^@src/(.*)$': '<rootDir>/src/$1',
+  },
   moduleFileExtensions: ['js', 'json', 'ts'],
   setupFiles: ['<rootDir>/src/setupTests.ts'],
-  roots: ['<rootDir>'],
+  roots: ['<rootDir>/src'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
@@ -37,3 +41,7 @@ console.log('Path mappings:', compilerOptions.paths);
 //   'Resolved @src/common/enum/test.user:',
 //   require.resolve('@src/common/enum/test.user')
 // );
+
+// pathsToModuleNameMapper(compilerOptions.paths, {
+//   prefix: '<rootDir>/',
+// }),
