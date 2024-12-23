@@ -85,16 +85,16 @@ describe('Organization - documents', () => {
 
     // Arrange
     test.each`
-      userRole                    | privileges                                               | anonymousReadAccess
-      ${undefined}                | ${['READ']}                                              | ${true}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                              | ${true}
-      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin} | ${true}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}               | ${true}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}               | ${true}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                              | ${true}
+      userRole                    | privileges
+      ${undefined}                | ${['READ']}
+      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin}
+      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}
+      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}
+      ${TestUser.HUB_MEMBER}      | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile visual document',
-      async ({ userRole, privileges, anonymousReadAccess }) => {
+      async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
           entitiesId.organization.profileId,
           userRole
@@ -103,26 +103,22 @@ describe('Organization - documents', () => {
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(dataAuthorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
       }
     );
 
     test.each`
-      userRole                    | privileges                                                              | anonymousReadAccess | parentEntityType
-      ${undefined}                | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin} | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}               | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}               | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
+      userRole                    | privileges                                                                           | parentEntityType
+      ${undefined}                | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin}              | ${'ORGANIZATION'}
+      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile storage bucket',
       async ({
         userRole,
         privileges,
-        anonymousReadAccess,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
@@ -132,9 +128,6 @@ describe('Organization - documents', () => {
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(data?.authorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
         expect(data?.parentEntity?.type).toEqual(parentEntityType);
       }
     );
@@ -164,16 +157,16 @@ describe('Organization - documents', () => {
 
     // Arrange
     test.each`
-      userRole                    | privileges                                               | anonymousReadAccess
-      ${undefined}                | ${['READ']}                                              | ${true}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                              | ${true}
-      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin} | ${true}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}               | ${true}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}               | ${true}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                              | ${true}
+      userRole                    | privileges
+      ${undefined}                | ${['READ']}
+      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin}
+      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}
+      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}
+      ${TestUser.HUB_MEMBER}      | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization reference document',
-      async ({ userRole, privileges, anonymousReadAccess }) => {
+      async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
           entitiesId.organization.profileId,
           userRole
@@ -182,26 +175,22 @@ describe('Organization - documents', () => {
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(dataAuthorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
       }
     );
 
     test.each`
-      userRole                    | privileges                                                              | anonymousReadAccess | parentEntityType
-      ${undefined}                | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin} | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}               | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}               | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
+      userRole                    | privileges                                                                           | parentEntityType
+      ${undefined}                | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin}              | ${'ORGANIZATION'}
+      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile reference storage bucket',
       async ({
         userRole,
         privileges,
-        anonymousReadAccess,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
@@ -211,9 +200,6 @@ describe('Organization - documents', () => {
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(data?.authorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
         expect(data?.parentEntity?.type).toEqual(parentEntityType);
       }
     );
@@ -248,16 +234,16 @@ describe('Organization - documents', () => {
 
     // Arrange
     test.each`
-      userRole                    | privileges                                               | anonymousReadAccess
-      ${undefined}                | ${['READ']}                                              | ${true}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                              | ${true}
-      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin} | ${true}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}               | ${true}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}               | ${true}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                              | ${true}
+      userRole                    | privileges
+      ${undefined}                | ${['READ']}
+      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin}
+      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}
+      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}
+      ${TestUser.HUB_MEMBER}      | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization description visual document',
-      async ({ userRole, privileges, anonymousReadAccess }) => {
+      async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
           entitiesId.organization.profileId,
           userRole
@@ -266,26 +252,22 @@ describe('Organization - documents', () => {
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(dataAuthorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
       }
     );
 
     test.each`
-      userRole                    | privileges                                                              | anonymousReadAccess | parentEntityType
-      ${undefined}                | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin} | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}               | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}               | ${true}             | ${'ORGANIZATION'}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                             | ${true}             | ${'ORGANIZATION'}
+      userRole                    | privileges                                                                           | parentEntityType
+      ${undefined}                | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin}              | ${'ORGANIZATION'}
+      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization description (storageBucket) document',
       async ({
         userRole,
         privileges,
-        anonymousReadAccess,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
@@ -295,9 +277,6 @@ describe('Organization - documents', () => {
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(data?.authorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
         expect(data?.parentEntity?.type).toEqual(parentEntityType);
       }
     );
