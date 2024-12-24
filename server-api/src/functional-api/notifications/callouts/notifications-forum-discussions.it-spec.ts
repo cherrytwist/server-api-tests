@@ -44,7 +44,7 @@ beforeAll(async () => {
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.globalSpacesAdmin.id,
+      userID: users.globalLicenseAdmin.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
@@ -63,7 +63,7 @@ beforeAll(async () => {
       type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
-      userID: users.globalSpacesAdmin.id,
+      userID: users.globalLicenseAdmin.id,
       type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
@@ -82,7 +82,7 @@ beforeAll(async () => {
       type: PreferenceType.NotificationCommentReply,
     },
     {
-      userID: users.globalSpacesAdmin.id,
+      userID: users.globalLicenseAdmin.id,
       type: PreferenceType.NotificationCommentReply,
     },
     {
@@ -138,7 +138,7 @@ describe('Notifications - forum discussions', () => {
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.globalSpacesAdmin.email],
+          toAddresses: [users.globalLicenseAdmin.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
@@ -175,7 +175,7 @@ describe('Notifications - forum discussions', () => {
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.globalSpacesAdmin.email],
+          toAddresses: [users.globalLicenseAdmin.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,

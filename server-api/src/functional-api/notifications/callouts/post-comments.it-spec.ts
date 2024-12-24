@@ -194,17 +194,17 @@ describe('Notifications - post comments', () => {
     );
 
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );

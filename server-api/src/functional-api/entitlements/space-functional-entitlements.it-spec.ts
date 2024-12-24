@@ -26,10 +26,6 @@
  */
 
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  assignPlatformRoleToUser,
-  removePlatformRoleFromUser,
-} from '@utils/mutations/authorization-platform-mutation';
 import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
@@ -39,6 +35,7 @@ import {
 import { getAccountMainEntities } from '../account/account.params.request';
 import { uniqueId } from '@utils/uniqueId';
 import { PlatformRole } from '@generated/graphql';
+import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;

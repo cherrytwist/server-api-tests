@@ -20,10 +20,6 @@
  * and the platform roles are removed after the tests are executed.
  */
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  assignPlatformRoleToUser,
-  removePlatformRoleFromUser,
-} from '@utils/mutations/authorization-platform-mutation';
 import { users } from '@utils/queries/users-data';
 import {
   accountNoLicenses,
@@ -47,6 +43,7 @@ import {
 
 import { uniqueId } from '@utils/uniqueId';
 import { PlatformRole } from '@generated/graphql';
+import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;

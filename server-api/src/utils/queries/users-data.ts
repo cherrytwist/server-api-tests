@@ -1,10 +1,7 @@
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  assignPlatformRoleToUser,
-  assignUserAsGlobalCommunityAdmin,
-  assignUserAsGlobalSupport,
-} from '../mutations/authorization-platform-mutation';
+
 import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
+import { assignPlatformRoleToUser, assignUserAsGlobalCommunityAdmin, assignUserAsGlobalSupport } from '@functional-api/platform/authorization-platform-mutation';
 import { PlatformRole } from '@generated/graphql';
 
 interface UserData {
@@ -19,8 +16,8 @@ interface UserData {
 
 interface Users {
   globalAdmin: UserData;
-  globalCommunityAdmin: UserData;
-  globalSpacesAdmin: UserData;
+  globalSupportAdmin: UserData;
+  globalLicenseAdmin: UserData;
   spaceAdmin: UserData;
   spaceMember: UserData;
   subspaceAdmin: UserData;
@@ -43,10 +40,10 @@ const createUserData = (email: string): UserData => ({
   accountId: '',
 });
 
-export const usersSetEmail: UserData[] = [
+const usersSetEmail: UserData[] = [
   createUserData('admin@alkem.io'),
   createUserData('global.support@alkem.io'),
-  createUserData('global.spaces@alkem.io'),
+  createUserData('global.license@alkem.io'),
   createUserData('space.admin@alkem.io'),
   createUserData('space.member@alkem.io'),
   createUserData('subspace.admin@alkem.io'),
@@ -61,8 +58,8 @@ export const usersSetEmail: UserData[] = [
 
 export const users: Users = {
   globalAdmin: usersSetEmail[0],
-  globalCommunityAdmin: usersSetEmail[1],
-  globalSpacesAdmin: usersSetEmail[2],
+  globalSupportAdmin: usersSetEmail[1],
+  globalLicenseAdmin: usersSetEmail[2],
   spaceAdmin: usersSetEmail[3],
   spaceMember: usersSetEmail[4],
   subspaceAdmin: usersSetEmail[5],
@@ -75,30 +72,4 @@ export const users: Users = {
   betaTester: usersSetEmail[12],
 };
 
-export const getUserIDs = async () => {
-  for (const user of usersSetEmail) {
-    const userData = await getUserData(user.email);
-    user.displayName = userData?.data?.user.profile.displayName || '';
-    user.id = userData?.data?.user.id || '';
-    user.profileId = userData?.data?.user.profile.id || '';
-    user.nameId = userData?.data?.user.nameID || '';
-    user.agentId = userData?.data?.user.agent.id || '';
-    user.accountId = userData?.data?.user?.account?.id || '';
-  }
 
-  // If necessary, this block can update the `users` object. However, since
-  // `users` is directly referencing `usersSetEmail`, it will automatically be updated.
-};
-
-beforeAll(async () => {
-  await getUserIDs();
-  await assignUserAsGlobalSupport(
-    users.globalSpacesAdmin.id,
-    TestUser.GLOBAL_ADMIN
-  );
-  await assignUserAsGlobalCommunityAdmin(
-    users.globalCommunityAdmin.id,
-    TestUser.GLOBAL_ADMIN
-  );
-  await assignPlatformRoleToUser(users.betaTester.id, PlatformRole.BetaTester);
-});

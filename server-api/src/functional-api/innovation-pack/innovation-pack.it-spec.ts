@@ -9,8 +9,8 @@ import {
   whiteboardTemplateValues5,
   whiteboardTemplateValues6,
 } from './whiteboard-values-fixed';
-import { authorizationPolicyResetOnPlatform } from '@utils/mutations/authorization-platform-mutation';
 import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';
+import { authorizationPolicyResetOnPlatform } from '@functional-api/platform/authorization-platform-mutation';
 
 describe('Organization', () => {
   const organizationName = 'Organization with many whiteboardes' + uniqueId;

@@ -103,12 +103,12 @@ describe('Notifications - applications', () => {
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationApplicationSubmitted,
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationApplicationReceived,
       'false'
     );
