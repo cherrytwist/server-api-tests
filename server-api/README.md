@@ -1,5 +1,4 @@
 # server-api-tests
-
 Alkemio API tests against the Alkemio GraphQL server endpoint
 
 # Quality Assurance + Testing

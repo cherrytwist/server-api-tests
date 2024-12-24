@@ -2,7 +2,7 @@ import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createSpaceAndGetData } from '@functional-api/journey/space/space.request.params';
 import { createUser } from '@functional-api/contributor-management/user/user.request.params';
-import { createOpportunity } from '../mutations/journeys/opportunity';
+import { createSubsubspace } from '../../graphql/mutations/journeys/subsubspace';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CalloutType,
@@ -20,7 +20,7 @@ import {
   getCollaborationCalloutsData,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
-import { createChallenge } from '../mutations/journeys/challenge';
+import { createSubspace } from '../../graphql/mutations/journeys/subspace';
 
 export const createOrgAndSpace = async (
   organizationName: string,
@@ -151,10 +151,10 @@ export const assignUsersToSpaceAndOrgAsMembers = async () => {
   const usersIdsToAssign: string[] = [
     users.spaceAdmin.id,
     users.spaceMember.id,
-    users.challengeAdmin.id,
-    users.challengeMember.id,
-    users.opportunityAdmin.id,
-    users.opportunityMember.id,
+    users.subspaceAdmin.id,
+    users.subspaceMember.id,
+    users.subsubspaceAdmin.id,
+    users.subsubspaceMember.id,
   ];
   for (const userId of usersIdsToAssign) {
     await assignRoleToUser(
@@ -184,27 +184,27 @@ export const createOrgAndSpaceWithUsers = async (
   await assignUsersToSpaceAndOrg();
 };
 
-export const createChallengeForOrgSpace = async (challengeName: string) => {
-  const responseChallenge = await createChallenge(
-    challengeName,
+export const createSubspaceForOrgSpace = async (subspaceName: string) => {
+  const responseSubspace = await createSubspace(
+    subspaceName,
     `chnameid${uniqueId}`,
     entitiesId.spaceId
   );
 
-  const subspaceData = responseChallenge.data?.createSubspace;
-  entitiesId.challenge.id = subspaceData?.id ?? '';
-  entitiesId.challenge.nameId = subspaceData?.nameID ?? '';
-  entitiesId.challenge.communityId = subspaceData?.community?.id ?? '';
-  entitiesId.challenge.roleSetId = subspaceData?.community?.roleSet?.id ?? '';
-  entitiesId.challenge.communicationId =
+  const subspaceData = responseSubspace.data?.createSubspace;
+  entitiesId.subspace.id = subspaceData?.id ?? '';
+  entitiesId.subspace.nameId = subspaceData?.nameID ?? '';
+  entitiesId.subspace.communityId = subspaceData?.community?.id ?? '';
+  entitiesId.subspace.roleSetId = subspaceData?.community?.roleSet?.id ?? '';
+  entitiesId.subspace.communicationId =
     subspaceData?.community?.communication?.id ?? '';
-  entitiesId.challenge.updatesId =
+  entitiesId.subspace.updatesId =
     subspaceData?.community?.communication?.updates.id ?? '';
-  entitiesId.challenge.collaborationId = subspaceData?.collaboration?.id ?? '';
-  entitiesId.challenge.contextId = subspaceData?.context?.id ?? '';
-  entitiesId.challenge.profileId = subspaceData?.profile?.id ?? '';
+  entitiesId.subspace.collaborationId = subspaceData?.collaboration?.id ?? '';
+  entitiesId.subspace.contextId = subspaceData?.context?.id ?? '';
+  entitiesId.subspace.profileId = subspaceData?.profile?.id ?? '';
   const callForPostCalloutData = await createCalloutOnCollaboration(
-    entitiesId.challenge.collaborationId,
+    entitiesId.subspace.collaborationId,
     {
       framing: {
         profile: {
@@ -216,16 +216,16 @@ export const createChallengeForOrgSpace = async (challengeName: string) => {
     }
   );
 
-  entitiesId.challenge.calloutId =
+  entitiesId.subspace.calloutId =
     callForPostCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    entitiesId.challenge.calloutId,
+    entitiesId.subspace.calloutId,
     CalloutVisibility.Published
   );
 
   const whiteboardCalloutData = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.challenge.collaborationId,
+    entitiesId.subspace.collaborationId,
     {
       framing: {
         profile: {
@@ -238,40 +238,40 @@ export const createChallengeForOrgSpace = async (challengeName: string) => {
     TestUser.GLOBAL_ADMIN
   );
 
-  entitiesId.challenge.whiteboardCalloutId =
+  entitiesId.subspace.whiteboardCalloutId =
     whiteboardCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    entitiesId.challenge.whiteboardCalloutId,
+    entitiesId.subspace.whiteboardCalloutId,
     CalloutVisibility.Published
   );
 
   const creatPostCallout = await createCalloutOnCollaboration(
-    entitiesId.challenge.collaborationId,
+    entitiesId.subspace.collaborationId,
     {
       framing: {
-        profile: { displayName: 'Challenge Post Callout' },
+        profile: { displayName: 'Subspace Post Callout' },
       },
     }
   );
   const postCalloutData = creatPostCallout.data?.createCalloutOnCollaboration;
 
-  entitiesId.challenge.discussionCalloutId = postCalloutData?.id ?? '';
-  entitiesId.challenge.discussionCalloutCommentsId =
+  entitiesId.subspace.discussionCalloutId = postCalloutData?.id ?? '';
+  entitiesId.subspace.discussionCalloutCommentsId =
     postCalloutData?.comments?.id ?? '';
   await updateCalloutVisibility(
-    entitiesId.challenge.discussionCalloutId,
+    entitiesId.subspace.discussionCalloutId,
     CalloutVisibility.Published
   );
 };
 
-export const getDefaultChallengeCalloutByNameId = async (
+export const getDefaultSubspaceCalloutByNameId = async (
   spaceId: string,
   collaborationId: string,
   nameID: string
 ) => {
   const calloutsPerCollaboration = await getCollaborationCalloutsData(
-    (collaborationId = entitiesId.challenge.collaborationId)
+    (collaborationId = entitiesId.subspace.collaborationId)
   );
   const allCallouts =
     calloutsPerCollaboration.data?.lookup?.collaboration?.callouts ?? [];
@@ -282,44 +282,44 @@ export const getDefaultChallengeCalloutByNameId = async (
   return colloutDetails;
 };
 
-export const assignUsersToChallengeAsMembers = async () => {
+export const assignUsersToSubspaceAsMembers = async () => {
   const usersIdsToAssign: string[] = [
-    users.challengeAdmin.id,
-    users.challengeMember.id,
-    users.opportunityAdmin.id,
-    users.opportunityMember.id,
+    users.subspaceAdmin.id,
+    users.subspaceMember.id,
+    users.subsubspaceAdmin.id,
+    users.subsubspaceMember.id,
   ];
   for (const userID of usersIdsToAssign) {
     await assignRoleToUser(
       userID,
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       CommunityRoleType.Member
     );
   }
 };
 
-export const assignUsersToChallenge = async () => {
-  await assignUsersToChallengeAsMembers();
+export const assignUsersToSubspace = async () => {
+  await assignUsersToSubspaceAsMembers();
 
   await assignRoleToUser(
-    users.challengeAdmin.id,
-    entitiesId.challenge.roleSetId,
+    users.subspaceAdmin.id,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Admin
   );
 };
 
-export const createChallengeWithUsers = async (challengeName: string) => {
-  await createChallengeForOrgSpace(challengeName);
-  await assignUsersToChallenge();
+export const createSubspaceWithUsers = async (subspaceName: string) => {
+  await createSubspaceForOrgSpace(subspaceName);
+  await assignUsersToSubspace();
 };
 
-export const getDefaultOpportunityCalloutByNameId = async (
+export const getDefaultSubsubspaceCalloutByNameId = async (
   spaceId: string,
   collaborationId: string,
   nameID: string
 ) => {
   const calloutsPerCollaboration = await getCollaborationCalloutsData(
-    (collaborationId = entitiesId.opportunity.collaborationId)
+    (collaborationId = entitiesId.subsubspace.collaborationId)
   );
 
   const allCallouts =
@@ -331,33 +331,33 @@ export const getDefaultOpportunityCalloutByNameId = async (
   return colloutDetails?.data?.lookup?.callout;
 };
 
-export const createOpportunityForChallenge = async (
-  opportunityName: string
+export const createSubsubspaceForSubspace = async (
+  subsubspaceName: string
 ) => {
-  const responseOpportunity = await createOpportunity(
-    opportunityName,
+  const responseSubsubspace = await createSubsubspace(
+    subsubspaceName,
     `opp-${uniqueId}`,
-    entitiesId.challenge.id
+    entitiesId.subspace.id
   );
 
-  entitiesId.opportunity.id = responseOpportunity.data?.createSubspace.id ?? '';
-  entitiesId.opportunity.nameId =
-    responseOpportunity.data?.createSubspace.nameID ?? '';
-  entitiesId.opportunity.communityId =
-    responseOpportunity.data?.createSubspace.community?.id ?? '';
-  entitiesId.opportunity.roleSetId =
-    responseOpportunity.data?.createSubspace.community?.roleSet.id ?? '';
-  entitiesId.opportunity.communicationId =
-    responseOpportunity.data?.createSubspace.community?.communication?.id ?? '';
-  entitiesId.opportunity.updatesId =
-    responseOpportunity.data?.createSubspace.community?.communication?.updates
+  entitiesId.subsubspace.id = responseSubsubspace.data?.createSubspace.id ?? '';
+  entitiesId.subsubspace.nameId =
+    responseSubsubspace.data?.createSubspace.nameID ?? '';
+  entitiesId.subsubspace.communityId =
+    responseSubsubspace.data?.createSubspace.community?.id ?? '';
+  entitiesId.subsubspace.roleSetId =
+    responseSubsubspace.data?.createSubspace.community?.roleSet.id ?? '';
+  entitiesId.subsubspace.communicationId =
+    responseSubsubspace.data?.createSubspace.community?.communication?.id ?? '';
+  entitiesId.subsubspace.updatesId =
+    responseSubsubspace.data?.createSubspace.community?.communication?.updates
       .id ?? '';
-  entitiesId.opportunity.collaborationId =
-    responseOpportunity.data?.createSubspace.collaboration?.id ?? '';
-  entitiesId.opportunity.contextId =
-    responseOpportunity.data?.createSubspace.context?.id ?? '';
+  entitiesId.subsubspace.collaborationId =
+    responseSubsubspace.data?.createSubspace.collaboration?.id ?? '';
+  entitiesId.subsubspace.contextId =
+    responseSubsubspace.data?.createSubspace.context?.id ?? '';
   const callForPostCalloutData = await createCalloutOnCollaboration(
-    entitiesId.opportunity.collaborationId,
+    entitiesId.subsubspace.collaborationId,
     {
       framing: {
         profile: {
@@ -369,16 +369,16 @@ export const createOpportunityForChallenge = async (
     }
   );
 
-  entitiesId.opportunity.calloutId =
+  entitiesId.subsubspace.calloutId =
     callForPostCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    entitiesId.opportunity.calloutId,
+    entitiesId.subsubspace.calloutId,
     CalloutVisibility.Published
   );
 
   const whiteboardCalloutData = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.opportunity.collaborationId,
+    entitiesId.subsubspace.collaborationId,
     {
       framing: {
         profile: {
@@ -391,65 +391,65 @@ export const createOpportunityForChallenge = async (
     TestUser.GLOBAL_ADMIN
   );
 
-  entitiesId.opportunity.whiteboardCalloutId =
+  entitiesId.subsubspace.whiteboardCalloutId =
     whiteboardCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    entitiesId.opportunity.whiteboardCalloutId,
+    entitiesId.subsubspace.whiteboardCalloutId,
     CalloutVisibility.Published
   );
 
   const creatPostCallout = await createCalloutOnCollaboration(
-    entitiesId.opportunity.collaborationId,
+    entitiesId.subsubspace.collaborationId,
     {
       framing: {
-        profile: { displayName: 'Opportunity Post Callout' },
+        profile: { displayName: 'Subsubspace Post Callout' },
       },
     }
   );
   const postCalloutData = creatPostCallout.data?.createCalloutOnCollaboration;
 
-  entitiesId.opportunity.discussionCalloutId = postCalloutData?.id ?? '';
-  entitiesId.opportunity.discussionCalloutCommentsId =
+  entitiesId.subsubspace.discussionCalloutId = postCalloutData?.id ?? '';
+  entitiesId.subsubspace.discussionCalloutCommentsId =
     postCalloutData?.comments?.id ?? '';
   await updateCalloutVisibility(
-    entitiesId.opportunity.discussionCalloutId,
+    entitiesId.subsubspace.discussionCalloutId,
     CalloutVisibility.Published
   );
 };
 
-export const assignUsersToOpportunityAsMembers = async () => {
+export const assignUsersToSubsubspaceAsMembers = async () => {
   const usersToAssign: string[] = [
-    users.opportunityAdmin.id,
-    users.opportunityMember.id,
+    users.subsubspaceAdmin.id,
+    users.subsubspaceMember.id,
   ];
   for (const user of usersToAssign) {
     await assignRoleToUser(
       user,
-      entitiesId.opportunity.roleSetId,
+      entitiesId.subsubspace.roleSetId,
       CommunityRoleType.Member
     );
   }
 };
 
-export const assignUsersToOpportunity = async () => {
-  await assignUsersToOpportunityAsMembers();
+export const assignUsersToSubsubspace = async () => {
+  await assignUsersToSubsubspaceAsMembers();
   await assignRoleToUser(
-    users.opportunityAdmin.id,
-    entitiesId.opportunity.roleSetId,
+    users.subsubspaceAdmin.id,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Admin
   );
 };
 
-export const createOpportunityWithUsers = async (opportunityName: string) => {
-  await createOpportunityForChallenge(opportunityName);
-  await assignUsersToOpportunity();
+export const createSubsubspaceWithUsers = async (subsubspaceName: string) => {
+  await createSubsubspaceForSubspace(subsubspaceName);
+  await assignUsersToSubsubspace();
 };
 
 export const registerUsersAndAssignToAllEntitiesAsMembers = async (
   spaceMemberEmail: string,
-  challengeMemberEmail: string,
-  opportunityMemberEmail: string
+  subspaceMemberEmail: string,
+  subsubspaceMemberEmail: string
 ) => {
   const createSpaceMember = await createUser({
     firstName: 'space',
@@ -457,19 +457,19 @@ export const registerUsersAndAssignToAllEntitiesAsMembers = async (
     email: spaceMemberEmail,
   });
   const spaceMemberId = createSpaceMember.data?.createUser.id ?? '';
-  const createChallengeMember = await createUser({
+  const createSubspaceMember = await createUser({
     firstName: 'chal',
     lastName: 'mem',
-    email: challengeMemberEmail,
+    email: subspaceMemberEmail,
   });
-  const challengeMemberId = createChallengeMember.data?.createUser.id ?? '';
+  const subspaceMemberId = createSubspaceMember.data?.createUser.id ?? '';
 
-  const createOpportunityMember = await createUser({
+  const createSubsubspaceMember = await createUser({
     firstName: 'opp',
     lastName: 'mem',
-    email: opportunityMemberEmail,
+    email: subsubspaceMemberEmail,
   });
-  const opportunityMemberId = createOpportunityMember.data?.createUser.id ?? '';
+  const subsubspaceMemberId = createSubsubspaceMember.data?.createUser.id ?? '';
 
   // Assign users to Space community
   await assignRoleToUser(
@@ -478,32 +478,32 @@ export const registerUsersAndAssignToAllEntitiesAsMembers = async (
     CommunityRoleType.Member
   );
   await assignRoleToUser(
-    challengeMemberId,
+    subspaceMemberId,
     entitiesId.space.roleSetId,
     CommunityRoleType.Member
   );
   await assignRoleToUser(
-    opportunityMemberId,
+    subsubspaceMemberId,
     entitiesId.space.roleSetId,
     CommunityRoleType.Member
   );
 
-  // Assign users to Challenge community
+  // Assign users to Subspace community
   await assignRoleToUser(
-    opportunityMemberId,
-    entitiesId.challenge.roleSetId,
+    subsubspaceMemberId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Member
   );
   await assignRoleToUser(
-    challengeMemberId,
-    entitiesId.challenge.roleSetId,
+    subspaceMemberId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Member
   );
 
-  // Assign users to Opportunity community
+  // Assign users to Subsubspace community
   await assignRoleToUser(
-    opportunityMemberId,
-    entitiesId.opportunity.roleSetId,
+    subsubspaceMemberId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Member
   );
 };

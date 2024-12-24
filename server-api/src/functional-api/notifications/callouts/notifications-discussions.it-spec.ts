@@ -13,7 +13,7 @@ import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   createOrgAndSpaceWithUsers,
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   registerUsersAndAssignToAllEntitiesAsMembers,
 } from '@utils/data-setup/entities';
 import { PreferenceType } from '@generated/graphql';
@@ -24,15 +24,15 @@ const hostNameId = 'not-disc-org-nameid' + uniqueId;
 const spaceName = 'not-disc-eco-name' + uniqueId;
 const spaceNameId = 'not-disc-eco-nameid' + uniqueId;
 const ecoName = spaceName;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 let preferencesConfig: any[] = [];
 const spaceMemOnly = `spacemem${uniqueId}@alkem.io`;
-const challengeAndSpaceMemOnly = `chalmem${uniqueId}@alkem.io`;
-const opportunityAndChallengeAndSpaceMem = `oppmem${uniqueId}@alkem.io`;
+const subspaceAndSpaceMemOnly = `chalmem${uniqueId}@alkem.io`;
+const subsubspaceAndSubspaceAndSpaceMem = `oppmem${uniqueId}@alkem.io`;
 const spaceDiscussionSubjectText = `${ecoName} - New discussion created: Default title, have a look!`;
 const spaceDiscussionSubjectTextAdmin = `[${ecoName}] New discussion created: Default title`;
-const challengeDiscussionSubjectText = `${challengeName} - New discussion created: Default title, have a look!`;
-const challengeDiscussionSubjectTextAdmin = `[${challengeName}] New discussion created: Default title`;
+const subspaceDiscussionSubjectText = `${subspaceName} - New discussion created: Default title, have a look!`;
+const subspaceDiscussionSubjectTextAdmin = `[${subspaceName}] New discussion created: Default title`;
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
@@ -43,11 +43,11 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await registerUsersAndAssignToAllEntitiesAsMembers(
     spaceMemOnly,
-    challengeAndSpaceMemOnly,
-    opportunityAndChallengeAndSpaceMem
+    subspaceAndSpaceMemOnly,
+    subsubspaceAndSubspaceAndSpaceMem
   );
 
   preferencesConfig = [
@@ -107,20 +107,20 @@ beforeAll(async () => {
     },
 
     {
-      userID: challengeAndSpaceMemOnly,
+      userID: subspaceAndSpaceMemOnly,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: challengeAndSpaceMemOnly,
+      userID: subspaceAndSpaceMemOnly,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
-      userID: opportunityAndChallengeAndSpaceMem,
+      userID: subsubspaceAndSubspaceAndSpaceMem,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: opportunityAndChallengeAndSpaceMem,
+      userID: subsubspaceAndSubspaceAndSpaceMem,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
   ];
@@ -130,9 +130,9 @@ afterAll(async () => {
   for (const config of preferencesConfig)
     await changePreferenceUser(config.userID, config.type, 'false');
   await deleteUser(spaceMemOnly);
-  await deleteUser(challengeAndSpaceMemOnly);
-  await deleteUser(opportunityAndChallengeAndSpaceMem);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteUser(subspaceAndSpaceMemOnly);
+  await deleteUser(subsubspaceAndSubspaceAndSpaceMem);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -203,7 +203,7 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [challengeAndSpaceMemOnly],
+          toAddresses: [subspaceAndSpaceMemOnly],
         }),
       ])
     );
@@ -211,7 +211,7 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [opportunityAndChallengeAndSpaceMem],
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
@@ -264,7 +264,7 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [challengeAndSpaceMemOnly],
+          toAddresses: [subspaceAndSpaceMemOnly],
         }),
       ])
     );
@@ -272,15 +272,15 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [opportunityAndChallengeAndSpaceMem],
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
   });
 
-  test('GA create challenge discussion and send message - GA(1), HA(1), CA(1), CM(4) get notifications', async () => {
+  test('GA create subspace discussion and send message - GA(1), HA(1), CA(1), CM(4) get notifications', async () => {
     // Act
-    const res = await createDiscussion(entitiesId.challenge.communicationId);
+    const res = await createDiscussion(entitiesId.subspace.communicationId);
     entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
 
     await sendMessageToRoom(entitiesId.discussionId, 'test message');
@@ -294,15 +294,15 @@ describe.skip('Notifications - discussions', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: challengeDiscussionSubjectTextAdmin,
+          subject: subspaceDiscussionSubjectTextAdmin,
           toAddresses: [users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
+          subject: subspaceDiscussionSubjectText,
           toAddresses: [users.qaUser.email],
         }),
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
+          subject: subspaceDiscussionSubjectText,
           toAddresses: [users.spaceMember.email],
         }),
       ])
@@ -310,26 +310,26 @@ describe.skip('Notifications - discussions', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
-          toAddresses: [challengeAndSpaceMemOnly],
+          subject: subspaceDiscussionSubjectText,
+          toAddresses: [subspaceAndSpaceMemOnly],
         }),
       ])
     );
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
-          toAddresses: [opportunityAndChallengeAndSpaceMem],
+          subject: subspaceDiscussionSubjectText,
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
   });
 
   // Note: users.globalAdmin.idEmail receives email twice, as it member and admin for the entity. Only ones is asserted as the subject of the mail is the same
-  test('EM create challenge discussion and send message - GA(1), HA(1), CA(1), CM(4), get notifications', async () => {
+  test('EM create subspace discussion and send message - GA(1), HA(1), CA(1), CM(4), get notifications', async () => {
     // Act
     const res = await createDiscussion(
-      entitiesId.challenge.communicationId,
+      entitiesId.subspace.communicationId,
       TestUser.QA_USER
     );
     entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
@@ -344,15 +344,15 @@ describe.skip('Notifications - discussions', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: challengeDiscussionSubjectTextAdmin,
+          subject: subspaceDiscussionSubjectTextAdmin,
           toAddresses: [users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
+          subject: subspaceDiscussionSubjectText,
           toAddresses: [users.qaUser.email],
         }),
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
+          subject: subspaceDiscussionSubjectText,
           toAddresses: [users.spaceMember.email],
         }),
       ])
@@ -360,22 +360,22 @@ describe.skip('Notifications - discussions', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
-          toAddresses: [challengeAndSpaceMemOnly],
+          subject: subspaceDiscussionSubjectText,
+          toAddresses: [subspaceAndSpaceMemOnly],
         }),
       ])
     );
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: challengeDiscussionSubjectText,
-          toAddresses: [opportunityAndChallengeAndSpaceMem],
+          subject: subspaceDiscussionSubjectText,
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
   });
 
-  // ToDo - add discussions notifications tests for opportunity
+  // ToDo - add discussions notifications tests for subsubspace
 
   test('EM create space discussion and send message to space - all roles with notifications disabled', async () => {
     // Arrange

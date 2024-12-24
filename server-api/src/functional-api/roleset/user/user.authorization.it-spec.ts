@@ -13,8 +13,8 @@ import {
   sorted__read_applyToCommunity_invite_addVC,
 } from '@common/constants/privileges';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { removeRoleFromUser } from '../roles-request.params';
@@ -31,8 +31,8 @@ const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;
 const spaceName = 'com-eco-name' + uniqueId;
 const spaceNameId = 'com-eco-nameid' + uniqueId;
-const opportunityName = 'com-opp';
-const challengeName = 'com-chal';
+const subsubspaceName = 'com-opp';
+const subspaceName = 'com-chal';
 
 beforeAll(async () => {
   await createOrgAndSpaceWithUsers(
@@ -46,25 +46,25 @@ beforeAll(async () => {
     privacy: { mode: SpacePrivacyMode.Public },
     membership: { policy: CommunityMembershipPolicy.Applications },
   });
-  await createChallengeWithUsers(challengeName);
-  await updateSpaceSettings(entitiesId.challenge.id, {
+  await createSubspaceWithUsers(subspaceName);
+  await updateSpaceSettings(entitiesId.subspace.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
     privacy: { mode: SpacePrivacyMode.Private },
   });
-  await createOpportunityWithUsers(opportunityName);
-  await updateSpaceSettings(entitiesId.opportunity.id, {
+  await createSubsubspaceWithUsers(subsubspaceName);
+  await updateSpaceSettings(entitiesId.subsubspace.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
     privacy: { mode: SpacePrivacyMode.Private },
   });
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.challenge.roleSetId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Lead
   );
 
@@ -76,8 +76,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -112,7 +112,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     );
   });
 
-  describe('DDT role privilege to assign member to challenge', () => {
+  describe('DDT role privilege to assign member to subspace', () => {
     // Arrange
     test.each`
       user                           | myPrivileges
@@ -125,10 +125,10 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${sorted__read_applyToCommunity_invite_addVC}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${sorted__read_applyToCommunity}
     `(
-      'User: "$user", should have privileges: "$myPrivileges" for challenge journey',
+      'User: "$user", should have privileges: "$myPrivileges" for subspace journey',
       async ({ user, myPrivileges }) => {
         const request = await getRoleSetUserPrivilege(
-          entitiesId.challenge.roleSetId,
+          entitiesId.subspace.roleSetId,
           user
         );
         const result =
@@ -140,7 +140,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     );
   });
 
-  describe('DDT role privilege to assign member to opportunity', () => {
+  describe('DDT role privilege to assign member to subsubspace', () => {
     // Arrange
     test.each`
       user                           | myPrivileges
@@ -153,10 +153,10 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${sorted__read_applyToCommunity}
     `(
-      'User: "$user", should have privileges: "$myPrivileges" for opportunity journey',
+      'User: "$user", should have privileges: "$myPrivileges" for subsubspace journey',
       async ({ user, myPrivileges }) => {
         const request = await getRoleSetUserPrivilege(
-          entitiesId.opportunity.roleSetId,
+          entitiesId.subsubspace.roleSetId,
           user
         );
         const result =

@@ -8,7 +8,7 @@ import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import {
@@ -31,12 +31,12 @@ const spaceName = 'not-app-eco-name' + uniqueId;
 const spaceNameId = 'not-app-eco-nameid' + uniqueId;
 
 const ecoName = spaceName;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 let preferencesConfig: any[] = [];
 
 const subjectAdminSpace = `user &#34;qa user&#34; joined ${ecoName}`;
 const subjectAdminSpaceNon = `user &#34;non space&#34; joined ${ecoName}`;
-const subjectAdminChallenge = `user &#34;non space&#34; joined ${challengeName}`;
+const subjectAdminSubspace = `user &#34;non space&#34; joined ${subspaceName}`;
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
@@ -57,8 +57,8 @@ beforeAll(async () => {
     },
   });
 
-  await createChallengeWithUsers(challengeName);
-  await updateSpaceSettings(entitiesId.challenge.id, {
+  await createSubspaceWithUsers(subspaceName);
+  await updateSpaceSettings(entitiesId.subspace.id, {
     membership: {
       policy: CommunityMembershipPolicy.Open,
     },
@@ -90,11 +90,11 @@ beforeAll(async () => {
       type: PreferenceType.NotificationCommunityNewMember,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityNewMember,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
@@ -105,7 +105,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -154,9 +154,9 @@ describe('Notifications - member join community', () => {
   });
 
   // skip until bug is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/notifications/333
-  test('Non-space member join a Challenge - GA, HA, CA and Joiner receive notifications', async () => {
+  test('Non-space member join a Subspace - GA, HA, CA and Joiner receive notifications', async () => {
     // Act
-    await joinRoleSet(entitiesId.challenge.roleSetId, TestUser.NON_SPACE_MEMBER);
+    await joinRoleSet(entitiesId.subspace.roleSetId, TestUser.NON_SPACE_MEMBER);
 
     await delay(10000);
     const getEmailsData = await getMailsData();
@@ -166,15 +166,15 @@ describe('Notifications - member join community', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: subjectAdminChallenge,
+          subject: subjectAdminSubspace,
           toAddresses: [users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: subjectAdminChallenge,
-          toAddresses: [users.challengeAdmin.email],
+          subject: subjectAdminSubspace,
+          toAddresses: [users.subspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${challengeName} - Welcome to the Community!`,
+          subject: `${subspaceName} - Welcome to the Community!`,
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -223,7 +223,7 @@ describe('Notifications - member join community', () => {
 
     await removeRoleFromUser(
       users.nonSpaceMember.id,
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       CommunityRoleType.Member
     );
 

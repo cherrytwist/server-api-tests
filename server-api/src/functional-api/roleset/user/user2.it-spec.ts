@@ -5,14 +5,14 @@ import {
   deleteSpace,
   getUserRoleSpacesVisibility,
 } from '../../journey/space/space.request.params';
-import { createOpportunity } from '../../journey/opportunity/opportunity.request.params';
+import { createSubsubspace } from '../../journey/subsubspace/subsubspace.request.params';
 import {
-  createChallengeForOrgSpace,
-  createOpportunityForChallenge,
+  createSubspaceForOrgSpace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 
-import { createChallenge } from '@utils/mutations/journeys/challenge';
+import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   assignRoleToUser,
@@ -31,16 +31,16 @@ const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
 const spaceName2 = '222' + uniqueId;
 const spaceNameId2 = '222' + uniqueId;
-const opportunityName = 'urole-opp';
-const challengeName = 'urole-chal';
+const subsubspaceName = 'urole-opp';
+const subspaceName = 'urole-chal';
 const availableRoles = ['member', 'lead'];
 
 beforeAll(async () => {
   await deleteSpace('eco1');
 
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createChallengeForOrgSpace(challengeName);
-  await createOpportunityForChallenge(opportunityName);
+  await createSubspaceForOrgSpace(subspaceName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
@@ -50,13 +50,13 @@ beforeAll(async () => {
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
-    entitiesId.challenge.roleSetId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Member
   );
 
@@ -68,13 +68,13 @@ beforeAll(async () => {
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
-    entitiesId.challenge.roleSetId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 
@@ -85,14 +85,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 describe('User roles', () => {
-  test('user role - assignment to 1 Organization, Space, Challenge, Opportunity', async () => {
+  test('user role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
 
     const res = await getUserRoleSpacesVisibility(
@@ -116,7 +116,7 @@ describe('User roles', () => {
     expect(spacesData?.[0].subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: entitiesId.challenge.nameId,
+          nameID: entitiesId.subspace.nameId,
           roles: expect.arrayContaining(availableRoles),
         }),
       ])
@@ -164,9 +164,9 @@ describe('User roles', () => {
       spaceId = spaceData?.id ?? '';
       spaceRoleSetId = spaceData?.community?.roleSet.id ?? '';
 
-      const chRes = await createChallenge(
-        challengeName + '1',
-        challengeName + '1',
+      const chRes = await createSubspace(
+        subspaceName + '1',
+        subspaceName + '1',
         spaceId,
         TestUser.GLOBAL_ADMIN
       );
@@ -175,9 +175,9 @@ describe('User roles', () => {
       chId = chResData?.id ?? '';
       subspaceRoleSetId = chResData?.community?.roleSet.id ?? '';
 
-      const chRes2 = await createChallenge(
-        challengeName + '2',
-        challengeName + '2',
+      const chRes2 = await createSubspace(
+        subspaceName + '2',
+        subspaceName + '2',
         spaceId,
         TestUser.GLOBAL_ADMIN
       );
@@ -185,9 +185,9 @@ describe('User roles', () => {
       chId2 = chRes2Data?.id ?? '';
       subspaceRoleSetId2 = chRes2Data?.community?.roleSet.id ?? '';
 
-      const oppRes = await createOpportunity(
-        opportunityName + '1',
-        opportunityName + '1',
+      const oppRes = await createSubsubspace(
+        subsubspaceName + '1',
+        subsubspaceName + '1',
         chId
       );
 
@@ -195,9 +195,9 @@ describe('User roles', () => {
       oppId = oppResData?.id ?? '';
       subsubspaceRoleSetId = oppResData?.community?.roleSet.id ?? '';
 
-      const oppRes2 = await createOpportunity(
-        opportunityName + '2',
-        opportunityName + '2',
+      const oppRes2 = await createSubsubspace(
+        subsubspaceName + '2',
+        subsubspaceName + '2',
         chId2
       );
       const oppRes2Data = oppRes2?.data?.createSubspace;
@@ -205,9 +205,9 @@ describe('User roles', () => {
       oppId2 = oppRes2Data?.id ?? '';
       subsubspaceRoleSetId2 = oppRes2Data?.community?.roleSet.id ?? '';
 
-      const oppRes3 = await createOpportunity(
-        opportunityName + '3',
-        opportunityName + '3',
+      const oppRes3 = await createSubsubspace(
+        subsubspaceName + '3',
+        subsubspaceName + '3',
         chId2
       );
 
@@ -299,7 +299,7 @@ describe('User roles', () => {
       await deleteSpace(spaceId);
       await deleteOrganization(orgId);
     });
-    test('user role - assignment to 2 Organizations, Spaces, Challenges, Opportunities', async () => {
+    test('user role - assignment to 2 Organizations, Spaces, Subspaces, Opportunities', async () => {
       // Act
       const res = await getUserRoleSpacesVisibility(
         users.nonSpaceMember.id,
@@ -332,7 +332,7 @@ describe('User roles', () => {
       expect(spaceData1?.subspaces).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            nameID: entitiesId.challenge.nameId,
+            nameID: entitiesId.subspace.nameId,
             roles: expect.arrayContaining(availableRoles),
           }),
         ])
@@ -341,7 +341,7 @@ describe('User roles', () => {
       expect(spaceData2?.subspaces).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            nameID: challengeName + '1',
+            nameID: subspaceName + '1',
             roles: expect.arrayContaining(availableRoles),
           }),
         ])
@@ -350,7 +350,7 @@ describe('User roles', () => {
       expect(spaceData2?.subspaces).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            nameID: challengeName + '2',
+            nameID: subspaceName + '2',
             roles: expect.arrayContaining(availableRoles),
           }),
         ])

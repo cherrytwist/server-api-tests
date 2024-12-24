@@ -9,8 +9,8 @@ import {
 } from './callouts.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { CalloutState, CalloutType } from '@generated/alkemio-schema';
@@ -20,8 +20,8 @@ import { getDataPerSpaceCallout } from './post/post.request.params';
 import { entitiesId } from '../../types/entities-helper';
 import { CalloutVisibility } from '@generated/graphql';
 
-let opportunityName = 'post-opp';
-let challengeName = 'post-chal';
+let subsubspaceName = 'post-opp';
+let subspaceName = 'post-chal';
 let calloutDisplayName = '';
 let calloutId = '';
 
@@ -37,20 +37,20 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubspaceWithUsers(subspaceName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 beforeEach(async () => {
-  challengeName = `testChallenge ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subspaceName = `testSubspace ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   calloutDisplayName = `callout-d-name-${uniqueId}`;
 });
 
@@ -312,7 +312,7 @@ describe('Callouts - AUTH Space', () => {
   });
 });
 
-describe('Callouts - AUTH Challenge', () => {
+describe('Callouts - AUTH Subspace', () => {
   describe('DDT user privileges to create callout', () => {
     afterEach(async () => {
       await deleteCallout(calloutId);
@@ -328,7 +328,7 @@ describe('Callouts - AUTH Challenge', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCollaboration(
-          entitiesId.challenge.collaborationId,
+          entitiesId.subspace.collaborationId,
           { type: CalloutType.Post },
           userRole
         );
@@ -351,7 +351,7 @@ describe('Callouts - AUTH Challenge', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCollaboration(
-          entitiesId.challenge.collaborationId,
+          entitiesId.subspace.collaborationId,
           { type: CalloutType.Post },
           userRole
         );
@@ -376,7 +376,7 @@ describe('Callouts - AUTH Challenge', () => {
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCollaboration(
-          entitiesId.challenge.collaborationId
+          entitiesId.subspace.collaborationId
         );
         calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
@@ -412,7 +412,7 @@ describe('Callouts - AUTH Challenge', () => {
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCollaboration(
-          entitiesId.challenge.collaborationId
+          entitiesId.subspace.collaborationId
         );
         calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
@@ -426,7 +426,7 @@ describe('Callouts - AUTH Challenge', () => {
   });
 });
 
-describe('Callouts - AUTH Opportunity', () => {
+describe('Callouts - AUTH Subsubspace', () => {
   describe('DDT user privileges to create callout', () => {
     afterEach(async () => {
       await deleteCallout(calloutId);
@@ -445,7 +445,7 @@ describe('Callouts - AUTH Opportunity', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCollaboration(
-          entitiesId.opportunity.collaborationId,
+          entitiesId.subsubspace.collaborationId,
           { type: CalloutType.Post },
           userRole
         );
@@ -467,7 +467,7 @@ describe('Callouts - AUTH Opportunity', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCollaboration(
-          entitiesId.opportunity.collaborationId,
+          entitiesId.subsubspace.collaborationId,
           { type: CalloutType.Post },
           userRole
         );
@@ -495,7 +495,7 @@ describe('Callouts - AUTH Opportunity', () => {
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCollaboration(
-          entitiesId.opportunity.collaborationId
+          entitiesId.subsubspace.collaborationId
         );
         calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
@@ -535,7 +535,7 @@ describe('Callouts - AUTH Opportunity', () => {
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCollaboration(
-          entitiesId.opportunity.collaborationId
+          entitiesId.subsubspace.collaborationId
         );
         calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 

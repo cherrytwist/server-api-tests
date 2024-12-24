@@ -2,7 +2,7 @@ import '@utils/array.matcher';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeForOrgSpace,
+  createSubspaceForOrgSpace,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import {
@@ -32,7 +32,7 @@ import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
 import { uniqueId } from '@utils/uniqueId';
 
-let challengeName = 'post-chal';
+let subspaceName = 'post-chal';
 let calloutDisplayName = '';
 let calloutId = '';
 let postNameID = '';
@@ -56,30 +56,30 @@ beforeAll(async () => {
     },
   });
 
-  await createChallengeForOrgSpace(challengeName);
+  await createSubspaceForOrgSpace(subspaceName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 beforeEach(async () => {
-  challengeName = `testChallenge ${uniqueId}`;
+  subspaceName = `testSubspace ${uniqueId}`;
   calloutDisplayName = `callout-d-name-${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
 
-describe('Activity logs - Challenge', () => {
+describe('Activity logs - Subspace', () => {
   afterEach(async () => {
     await deleteCallout(calloutId);
   });
   test('should return empty arrays', async () => {
     // Act
     const res = await getActivityLogOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       5
     );
     const resActivityData = res?.data?.activityLogOnCollaboration;
@@ -90,12 +90,12 @@ describe('Activity logs - Challenge', () => {
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
     const res = await createCalloutOnCollaboration(
-      entitiesId.challenge.collaborationId
+      entitiesId.subspace.collaborationId
     );
     calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       5
     );
     const resActivityData = resActivity?.data?.activityLogOnCollaboration;
@@ -105,17 +105,17 @@ describe('Activity logs - Challenge', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(entitiesId.challenge.roleSetId, TestUser.SPACE_MEMBER);
+    await joinRoleSet(entitiesId.subspace.roleSetId, TestUser.SPACE_MEMBER);
 
     await assignRoleToUser(
       users.spaceAdmin.id,
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       CommunityRoleType.Member
     );
 
     // Act
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       3
     );
     const resActivityData = resActivity?.data?.activityLogOnCollaboration;
@@ -125,7 +125,7 @@ describe('Activity logs - Challenge', () => {
     expect(resActivityData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          collaborationID: entitiesId.challenge.collaborationId,
+          collaborationID: entitiesId.subspace.collaborationId,
           description: `${users.spaceAdmin.id}`,
           triggeredBy: { id: users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
@@ -136,7 +136,7 @@ describe('Activity logs - Challenge', () => {
     expect(resActivityData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          collaborationID: entitiesId.challenge.collaborationId,
+          collaborationID: entitiesId.subspace.collaborationId,
           description: `${users.spaceMember.id}`,
           triggeredBy: { id: users.spaceMember.id },
           type: ActivityEventType.MemberJoined,
@@ -150,7 +150,7 @@ describe('Activity logs - Challenge', () => {
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
     const res = await createCalloutOnCollaboration(
-      entitiesId.challenge.collaborationId
+      entitiesId.subspace.collaborationId
     );
     calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
 
@@ -174,7 +174,7 @@ describe('Activity logs - Challenge', () => {
     messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       {
         framing: {
           profile: {
@@ -204,7 +204,7 @@ describe('Activity logs - Challenge', () => {
     );
 
     const resWhiteboard = await createCalloutOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       {
         framing: {
           profile: {
@@ -230,7 +230,7 @@ describe('Activity logs - Challenge', () => {
 
     // Act
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       7
     );
     const resActivityData = resActivity?.data?.activityLogOnCollaboration;
@@ -239,7 +239,7 @@ describe('Activity logs - Challenge', () => {
     const expextedData = async (description: string, type: string) => {
       return expect.arrayContaining([
         expect.objectContaining({
-          collaborationID: entitiesId.challenge.collaborationId,
+          collaborationID: entitiesId.subspace.collaborationId,
           description,
           triggeredBy: { id: users.globalAdmin.id },
           type,
@@ -295,36 +295,36 @@ describe('Activity logs - Challenge', () => {
 });
 
 // Logs used in the tests below are from the previously executed tests in the file
-describe('Access to Activity logs - Challenge', () => {
+describe('Access to Activity logs - Subspace', () => {
   beforeAll(async () => {
     await assignRoleToUser(
       users.spaceMember.id,
-      entitiesId.challenge.id,
+      entitiesId.subspace.id,
       CommunityRoleType.Admin
     );
   });
 
-  describe('DDT user privileges to Public Challenge activity logs of Private Space', () => {
+  describe('DDT user privileges to Public Subspace activity logs of Private Space', () => {
     beforeAll(async () => {
       await updateSpaceSettings(entitiesId.spaceId, {
         privacy: { mode: SpacePrivacyMode.Private },
       });
-      await updateSpaceSettings(entitiesId.challenge.id, {
+      await updateSpaceSettings(entitiesId.subspace.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
     });
     // Arrange
     test.each`
       userRole                 | message
-      ${TestUser.GLOBAL_ADMIN} | ${entitiesId.challenge.collaborationId}
-      ${TestUser.SPACE_ADMIN}    | ${entitiesId.challenge.collaborationId}
-      ${TestUser.SPACE_MEMBER}   | ${entitiesId.challenge.collaborationId}
+      ${TestUser.GLOBAL_ADMIN} | ${entitiesId.subspace.collaborationId}
+      ${TestUser.SPACE_ADMIN}    | ${entitiesId.subspace.collaborationId}
+      ${TestUser.SPACE_MEMBER}   | ${entitiesId.subspace.collaborationId}
     `(
-      'User: "$userRole" get message: "$message", when intend to access Public Challenge activity logs of a Private space',
+      'User: "$userRole" get message: "$message", when intend to access Public Subspace activity logs of a Private space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
-          entitiesId.challenge.collaborationId,
+          entitiesId.subspace.collaborationId,
           5,
           userRole
         );
@@ -340,11 +340,11 @@ describe('Access to Activity logs - Challenge', () => {
       userRole                   | message
       ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
-      'User: "$userRole" get Error message: "$message", when intend to access Public Challenge activity logs of a Private space',
+      'User: "$userRole" get Error message: "$message", when intend to access Public Subspace activity logs of a Private space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
-          entitiesId.challenge.collaborationId,
+          entitiesId.subspace.collaborationId,
           5,
           userRole
         );
@@ -355,28 +355,28 @@ describe('Access to Activity logs - Challenge', () => {
     );
   });
 
-  describe('DDT user privileges to Public Challenge activity logs of Public Space', () => {
+  describe('DDT user privileges to Public Subspace activity logs of Public Space', () => {
     beforeAll(async () => {
       await updateSpaceSettings(entitiesId.spaceId, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
-      await updateSpaceSettings(entitiesId.challenge.id, {
+      await updateSpaceSettings(entitiesId.subspace.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
     });
     // Arrange
     test.each`
       userRole                   | message
-      ${TestUser.GLOBAL_ADMIN}   | ${entitiesId.challenge.collaborationId}
-      ${TestUser.SPACE_ADMIN}      | ${entitiesId.challenge.collaborationId}
-      ${TestUser.SPACE_MEMBER}     | ${entitiesId.challenge.collaborationId}
-      ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.challenge.collaborationId}
+      ${TestUser.GLOBAL_ADMIN}   | ${entitiesId.subspace.collaborationId}
+      ${TestUser.SPACE_ADMIN}      | ${entitiesId.subspace.collaborationId}
+      ${TestUser.SPACE_MEMBER}     | ${entitiesId.subspace.collaborationId}
+      ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.subspace.collaborationId}
     `(
-      'User: "$userRole" get message: "$message", when intend to access Public Challenge activity logs of a Public space',
+      'User: "$userRole" get message: "$message", when intend to access Public Subspace activity logs of a Public space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
-          entitiesId.challenge.collaborationId,
+          entitiesId.subspace.collaborationId,
           5,
           userRole
         );

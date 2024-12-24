@@ -409,13 +409,13 @@ export const sorted__create_read_update_delete_grant_updateInnovationFlow = [
   ...sorted__create_read_update_delete_grant,
   'UPDATE_INNOVATION_FLOW',
 ].sort();
-export const sorted__create_read_update_delete_grant_updateInnovationFlow_createOpportunity = [
+export const sorted__create_read_update_delete_grant_updateInnovationFlow_createSubsubspace = [
   ...sorted__create_read_update_delete_grant,
   'UPDATE_INNOVATION_FLOW',
   'CREATE_OPPORTUNITY',
 ].sort();
 
-export const sorted__create_read_update_delete_grant_createOpportunity = [
+export const sorted__create_read_update_delete_grant_createSubsubspace = [
   ...sorted__create_read_update_delete_grant,
   'CREATE_OPPORTUNITY',
 ].sort();

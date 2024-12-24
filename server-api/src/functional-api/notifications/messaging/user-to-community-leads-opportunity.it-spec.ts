@@ -8,8 +8,8 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
@@ -33,8 +33,8 @@ const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
-const challengeName = `chName${uniqueId}`;
-const opportunityName = `oppName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
+const subsubspaceName = `oppName${uniqueId}`;
 
 const senders = (communityName: string) => {
   return `You have sent a message to ${communityName} community`;
@@ -67,24 +67,24 @@ beforeAll(async () => {
     contactEmail: 'test-org@alkem.io',
   });
 
-  await createChallengeWithUsers(challengeName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubspaceWithUsers(subspaceName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
-    users.opportunityMember.id,
-    entitiesId.opportunity.roleSetId,
+    users.subsubspaceMember.id,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
-    users.opportunityAdmin.id,
-    entitiesId.opportunity.roleSetId,
+    users.subsubspaceAdmin.id,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 
@@ -95,26 +95,26 @@ beforeAll(async () => {
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
-describe('Notifications - send messages to Private Space, Opportunity Community Leads', () => {
+describe('Notifications - send messages to Private Space, Subsubspace Community Leads', () => {
   beforeEach(async () => {
     await deleteMailSlurperMails();
   });
 
-  test.only('NOT space member sends message to Opportunity community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
+  test.only('NOT space member sends message to Subsubspace community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.opportunity.communityId,
+      entitiesId.subsubspace.communityId,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -128,24 +128,24 @@ describe('Notifications - send messages to Private Space, Opportunity Community 
       expect.arrayContaining([
         expect.objectContaining({
           subject: receivers(users.nonSpaceMember.displayName),
-          toAddresses: [users.opportunityMember.email],
+          toAddresses: [users.subsubspaceMember.email],
         }),
         expect.objectContaining({
           subject: receivers(users.nonSpaceMember.displayName),
-          toAddresses: [users.opportunityAdmin.email],
+          toAddresses: [users.subsubspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: senders(opportunityName),
+          subject: senders(subsubspaceName),
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
     );
   });
 
-  test('Opportunity member send message to Opportunity community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
+  test('Subsubspace member send message to Subsubspace community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.opportunity.communityId,
+      entitiesId.subsubspace.communityId,
       'Test message',
       TestUser.SUBSUBSPACE_MEMBER
     );
@@ -158,39 +158,39 @@ describe('Notifications - send messages to Private Space, Opportunity Community 
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: receivers(users.opportunityMember.displayName),
-          toAddresses: [users.opportunityMember.email],
+          subject: receivers(users.subsubspaceMember.displayName),
+          toAddresses: [users.subsubspaceMember.email],
         }),
         expect.objectContaining({
-          subject: receivers(users.opportunityMember.displayName),
-          toAddresses: [users.opportunityAdmin.email],
+          subject: receivers(users.subsubspaceMember.displayName),
+          toAddresses: [users.subsubspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: senders(opportunityName),
-          toAddresses: [users.opportunityMember.email],
+          subject: senders(subsubspaceName),
+          toAddresses: [users.subsubspaceMember.email],
         }),
       ])
     );
   });
 });
 
-describe('Notifications - send messages to Private Space, Public Challenge, Opportunity with NO Community Leads', () => {
+describe('Notifications - send messages to Private Space, Public Subspace, Subsubspace with NO Community Leads', () => {
   beforeAll(async () => {
     await removeRoleFromUser(
-      users.opportunityMember.id,
-      entitiesId.opportunity.roleSetId,
+      users.subsubspaceMember.id,
+      entitiesId.subsubspace.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromUser(
-      users.opportunityAdmin.id,
-      entitiesId.opportunity.roleSetId,
+      users.subsubspaceAdmin.id,
+      entitiesId.subsubspace.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromOrganization(
       entitiesId.organization.id,
-      entitiesId.opportunity.roleSetId,
+      entitiesId.subsubspace.roleSetId,
       CommunityRoleType.Lead
     );
   });
@@ -199,10 +199,10 @@ describe('Notifications - send messages to Private Space, Public Challenge, Oppo
     await deleteMailSlurperMails();
   });
 
-  test('NOT space member sends message to Challenge community (0 User Leads, 0 Org Lead) - 1 messages sent', async () => {
+  test('NOT space member sends message to Subspace community (0 User Leads, 0 Org Lead) - 1 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.opportunity.communityId,
+      entitiesId.subsubspace.communityId,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -215,7 +215,7 @@ describe('Notifications - send messages to Private Space, Public Challenge, Oppo
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: senders(opportunityName),
+          subject: senders(subsubspaceName),
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])

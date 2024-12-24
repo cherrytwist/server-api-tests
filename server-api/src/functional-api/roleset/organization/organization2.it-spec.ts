@@ -1,8 +1,8 @@
 import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
-  createChallengeForOrgSpace,
-  createOpportunityForChallenge,
+  createSubspaceForOrgSpace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import {
@@ -17,8 +17,8 @@ const organizationName = 'orole-org-name' + uniqueId;
 const hostNameId = 'orole-org-nameid' + uniqueId;
 const spaceName = 'orole-eco-name' + uniqueId;
 const spaceNameId = 'orole-eco-nameid' + uniqueId;
-const opportunityName = 'orole-opp';
-const challengeName = 'orole-chal';
+const subsubspaceName = 'orole-opp';
+const subspaceName = 'orole-chal';
 const spaceRoles = ['lead', 'member'];
 const availableRoles = ['member', 'lead'];
 
@@ -26,8 +26,8 @@ beforeAll(async () => {
   await deleteSpace('eco1');
 
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createChallengeForOrgSpace(challengeName);
-  await createOpportunityForChallenge(opportunityName);
+  await createSubspaceForOrgSpace(subspaceName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
@@ -37,13 +37,13 @@ beforeAll(async () => {
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
-    entitiesId.challenge.roleSetId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Member
   );
 
@@ -55,26 +55,26 @@ beforeAll(async () => {
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
-    entitiesId.challenge.roleSetId,
+    entitiesId.subspace.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
-    entitiesId.opportunity.roleSetId,
+    entitiesId.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 describe('Organization role', () => {
-  test('Organization role - assignment to 1 Organization, Space, Challenge, Opportunity', async () => {
+  test('Organization role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
     const res = await getOrganizationRole(entitiesId.organization.id);
     const spacesData = res?.data?.rolesOrganization.spaces ?? [];
@@ -92,7 +92,7 @@ describe('Organization role', () => {
     expect(spacesData[0].subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: entitiesId.challenge.nameId,
+          nameID: entitiesId.subspace.nameId,
           roles: expect.arrayContaining(availableRoles),
         }),
       ])
@@ -100,7 +100,7 @@ describe('Organization role', () => {
     // expect(spacesData[0].subspaces).toEqual(
     //   expect.arrayContaining([
     //     expect.objectContaining({
-    //       nameID: entitiesId.opportunity.nameId,
+    //       nameID: entitiesId.subsubspace.nameId,
     //       roles: expect.arrayContaining(availableRoles),
     //     }),
     //   ])

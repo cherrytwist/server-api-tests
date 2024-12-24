@@ -10,8 +10,8 @@ import {
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { users } from '@utils/queries/users-data';
@@ -24,8 +24,8 @@ const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
-const challengeName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 
 let preferencesConfigCallout: any[] = [];
 
@@ -62,8 +62,8 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubspaceWithUsers(subspaceName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfigCallout = [
     {
@@ -77,12 +77,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
@@ -92,12 +92,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
@@ -109,8 +109,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -175,21 +175,21 @@ describe('Notifications - post', () => {
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.challengeAdmin.email)
+      await templateResult(spaceCalloutSubjectText, users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.challengeMember.email)
+      await templateResult(spaceCalloutSubjectText, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.opportunityAdmin.email
+        users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.opportunityMember.email
+        users.subsubspaceMember.email
       )
     );
   });
@@ -301,21 +301,21 @@ describe('Notifications - post', () => {
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.challengeAdmin.email)
+      await templateResult(spaceCalloutSubjectText, users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.challengeMember.email)
+      await templateResult(spaceCalloutSubjectText, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.opportunityAdmin.email
+        users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.opportunityMember.email
+        users.subsubspaceMember.email
       )
     );
   });
@@ -387,7 +387,7 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [challengeAndSpaceMemOnly],
+    //       toAddresses: [subspaceAndSpaceMemOnly],
     //     }),
     //   ])
     // );
@@ -395,18 +395,18 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [opportunityAndChallengeAndSpaceMem],
+    //       toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
     //     }),
     //   ])
     // );
     expect(mails[1]).toEqual(7);
   });
 
-  test('HA create PUBLISHED challenge callout type: POST - CM(5) get notifications', async () => {
-    const calloutSubjectText = `${challengeName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+  test('HA create PUBLISHED subspace callout type: POST - CM(5) get notifications', async () => {
+    const calloutSubjectText = `${subspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SPACE_ADMIN
     );
@@ -427,33 +427,33 @@ describe('Notifications - post', () => {
       await templateResult(calloutSubjectText, users.globalAdmin.email)
     );
 
-    // Don't receive as Space Admin is not member of challenge
+    // Don't receive as Space Admin is not member of subspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.spaceAdmin.email)
     );
-    // Don't receive as Space Member is not member of challenge
+    // Don't receive as Space Member is not member of subspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.challengeAdmin.email)
+      await templateResult(calloutSubjectText, users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.challengeMember.email)
+      await templateResult(calloutSubjectText, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.opportunityAdmin.email)
+      await templateResult(calloutSubjectText, users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.opportunityMember.email)
+      await templateResult(calloutSubjectText, users.subsubspaceMember.email)
     );
   });
 
-  test("HA create PUBLISHED challenge callout type: POST with 'sendNotification':'false' - CM(0) get notifications", async () => {
+  test("HA create PUBLISHED subspace callout type: POST with 'sendNotification':'false' - CM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SPACE_ADMIN
     );
@@ -473,11 +473,11 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(0);
   });
 
-  test('OA create PUBLISHED opportunity callout type: POST - OM(4) get notifications', async () => {
-    const calloutSubjectText = `${opportunityName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+  test('OA create PUBLISHED subsubspace callout type: POST - OM(4) get notifications', async () => {
+    const calloutSubjectText = `${subsubspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.opportunity.collaborationId,
+      entitiesId.subsubspace.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -493,41 +493,41 @@ describe('Notifications - post', () => {
 
     expect(mails[1]).toEqual(3);
 
-    // GA - 1 mails as opportunity member; as admin - 0
+    // GA - 1 mails as subsubspace member; as admin - 0
     expect(mails[0]).toEqual(
       await templateResult(calloutSubjectText, users.globalAdmin.email)
     );
 
-    // Don't receive as Space Admin is not member of opportunity
+    // Don't receive as Space Admin is not member of subsubspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.spaceAdmin.email)
     );
-    // Don't receive as Space Member is not member of opportunity
+    // Don't receive as Space Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.spaceMember.email)
     );
 
-    // Don't receive as Challenge Member is not member of opportunity
+    // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.challengeAdmin.email)
+      await templateResult(calloutSubjectText, users.subspaceAdmin.email)
     );
 
-    // Don't receive as Challenge Member is not member of opportunity
+    // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.challengeMember.email)
+      await templateResult(calloutSubjectText, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.opportunityAdmin.email)
+      await templateResult(calloutSubjectText, users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.opportunityMember.email)
+      await templateResult(calloutSubjectText, users.subsubspaceMember.email)
     );
   });
 
-  test("OA create PUBLISHED opportunity callout type: POST with 'sendNotification':'false' - OM(0) get notifications", async () => {
+  test("OA create PUBLISHED subsubspace callout type: POST with 'sendNotification':'false' - OM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.opportunity.collaborationId,
+      entitiesId.subsubspace.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -546,14 +546,14 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(0);
   });
 
-  test('OA create PUBLISHED opportunity callout type: POST - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create PUBLISHED subsubspace callout type: POST - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfigCallout.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
     );
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.opportunity.collaborationId,
+      entitiesId.subsubspace.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );

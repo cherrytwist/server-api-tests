@@ -9,8 +9,8 @@ import {
   createPostOnCallout,
 } from '@functional-api/callout/post/post.request.params';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -24,8 +24,8 @@ const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
-const challengeName = `chName${uniqueId}`;
-const opportunityName = `oppName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
+const subsubspaceName = `oppName${uniqueId}`;
 
 let postCommentsIdSpace = '';
 
@@ -58,8 +58,8 @@ beforeAll(async () => {
     contactEmail: 'test-org@alkem.io',
   });
 
-  await createChallengeWithUsers(challengeName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubspaceWithUsers(subspaceName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   await assignUserAsOrganizationAdmin(
     users.qaUser.id,
@@ -90,8 +90,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -173,10 +173,10 @@ describe('Notifications - Mention Organization', () => {
       );
     });
 
-    test('GA mention Organization in Challenge comments callout - 2 notification to Organization admins are sent', async () => {
+    test('GA mention Organization in Subspace comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.challenge.discussionCalloutCommentsId,
+        entitiesId.subspace.discussionCalloutCommentsId,
         `${mentionedOrganization(
           entitiesId.organization.displayName,
           entitiesId.organization.nameId
@@ -209,11 +209,11 @@ describe('Notifications - Mention Organization', () => {
       );
     });
 
-    test('GA mention Organization in Opportunity comments callout - 2 notification to Organization admins are sent', async () => {
+    test('GA mention Organization in Subsubspace comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
 
       await sendMessageToRoom(
-        entitiesId.opportunity.discussionCalloutCommentsId,
+        entitiesId.subsubspace.discussionCalloutCommentsId,
         `${mentionedOrganization(
           entitiesId.organization.displayName,
           entitiesId.organization.nameId
@@ -302,7 +302,7 @@ describe('Notifications - Mention Organization', () => {
       );
     });
 
-    test('HA mention Organization in Opportunity post (preference disabled) - 2 notification to Organization admins are sent', async () => {
+    test('HA mention Organization in Subsubspace post (preference disabled) - 2 notification to Organization admins are sent', async () => {
       // Arrange
       // preferencesConfig.forEach(
       //   async config =>
@@ -334,7 +334,7 @@ describe('Notifications - Mention Organization', () => {
 
   // ToDo: add timeline comments mentions, when implemented
   describe.skip('Post comment', () => {
-    test('OA mention HM in Opportunity post - 1 notification to HM is sent', async () => {
+    test('OA mention HM in Subsubspace post - 1 notification to HM is sent', async () => {
       expect(1).toEqual(1);
     });
   });

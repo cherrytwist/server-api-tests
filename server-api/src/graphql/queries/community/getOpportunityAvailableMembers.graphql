@@ -1,11 +1,11 @@
-query GetOpportunityAvailableMembers(
+query GetSubsubspaceAvailableMembers(
   $spaceId: UUID_NAMEID!
-  $opportunityId: UUID_NAMEID!
+  $subsubspaceId: UUID_NAMEID!
 ) {
   space(ID: $spaceId) {
     id
     # TODO: use lookup
-    # opportunity(ID: $opportunityId) {
+    # subsubspace(ID: $subsubspaceId) {
     #   community {
     #     id
     #     ...MembersAndLeadsData

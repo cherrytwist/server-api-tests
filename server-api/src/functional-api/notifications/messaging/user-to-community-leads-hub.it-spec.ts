@@ -143,16 +143,16 @@ describe('Notifications - send messages to Private space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(spaceName),
-            toAddresses: [users.challengeMember.email],
+            toAddresses: [users.subspaceMember.email],
           }),
         ])
       );
@@ -216,16 +216,16 @@ describe('Notifications - send messages to Private space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(spaceName),
-            toAddresses: [users.challengeMember.email],
+            toAddresses: [users.subspaceMember.email],
           }),
         ])
       );
@@ -297,16 +297,16 @@ describe('Notifications - messages to Public space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(spaceName),
-            toAddresses: [users.challengeMember.email],
+            toAddresses: [users.subspaceMember.email],
           }),
         ])
       );
@@ -370,16 +370,16 @@ describe('Notifications - messages to Public space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(spaceName),
-            toAddresses: [users.challengeMember.email],
+            toAddresses: [users.subspaceMember.email],
           }),
         ])
       );

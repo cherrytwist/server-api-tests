@@ -12,8 +12,8 @@ import {
 } from '@functional-api/roleset/invitations/invitation.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
@@ -25,8 +25,8 @@ const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;
 const spaceName = 'not-app-eco-name' + uniqueId;
 const spaceNameId = 'not-app-eco-nameid' + uniqueId;
-const opportunityName = 'opportunity-name';
-const challengeName = 'challlenge-name';
+const subsubspaceName = 'subsubspace-name';
+const subspaceName = 'challlenge-name';
 const ecoName = spaceName;
 
 let invitationId = '';
@@ -48,14 +48,14 @@ beforeAll(async () => {
     },
   });
 
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
 
-  await updateSpaceSettings(entitiesId.challenge.id, {
+  await updateSpaceSettings(entitiesId.subspace.id, {
     membership: {
       allowSubspaceAdminsToInviteMembers: true,
     },
   });
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -64,12 +64,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
@@ -86,8 +86,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -150,7 +150,7 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test('non space user receive invitation for SPACE community from challenge admin', async () => {
+  test('non space user receive invitation for SPACE community from subspace admin', async () => {
     // Act
     const invitationData = await inviteContributors(
       entitiesId.space.roleSetId,
@@ -179,10 +179,10 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test('non space user receive invitation for CHALLENGE community from challenge admin', async () => {
+  test('non space user receive invitation for CHALLENGE community from subspace admin', async () => {
     // Act
     const invitationData = await inviteContributors(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       [users.qaUser.id],
       TestUser.SUBSPACE_ADMIN
     );
@@ -201,17 +201,17 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${challengeName}`,
+          subject: `Invitation to join ${subspaceName}`,
           toAddresses: [users.qaUser.email],
         }),
       ])
     );
   });
 
-  test("non space user don't receive invitation for CHALLENGE community from opportunity admin", async () => {
+  test("non space user don't receive invitation for CHALLENGE community from subsubspace admin", async () => {
     // Act
     const invitationData = await inviteContributors(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       [users.qaUser.id],
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -232,10 +232,10 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test('space member receive invitation for CHALLENGE community from opportunity admin', async () => {
+  test('space member receive invitation for CHALLENGE community from subsubspace admin', async () => {
     // Act
     const invitationData = await inviteContributors(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       [users.spaceMember.id],
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -254,17 +254,17 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${challengeName}`,
+          subject: `Invitation to join ${subspaceName}`,
           toAddresses: [users.spaceMember.email],
         }),
       ])
     );
   });
 
-  test('non space user receive invitation for OPPORTUNITY community from opportunity admin', async () => {
+  test('non space user receive invitation for OPPORTUNITY community from subsubspace admin', async () => {
     // Act
     const invitationData = await inviteContributors(
-      entitiesId.opportunity.roleSetId,
+      entitiesId.subsubspace.roleSetId,
       [users.qaUser.id],
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -283,7 +283,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${opportunityName}`,
+          subject: `Invitation to join ${subsubspaceName}`,
           toAddresses: [users.qaUser.email],
         }),
       ])
@@ -317,9 +317,9 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[1]).toEqual(0);
   });
 
-  test("non space user doesn't receive invitation for CHALLENGE community from challenge admin, flag disabled", async () => {
+  test("non space user doesn't receive invitation for CHALLENGE community from subspace admin, flag disabled", async () => {
     // Arrange
-    await updateSpaceSettings(entitiesId.challenge.id, {
+    await updateSpaceSettings(entitiesId.subspace.id, {
       membership: {
         allowSubspaceAdminsToInviteMembers: false,
       },
@@ -327,7 +327,7 @@ describe('Notifications - invitations', () => {
 
     // Act
     const invitationData = await inviteContributors(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       [users.qaUser.displayName],
       TestUser.SUBSPACE_ADMIN
     );

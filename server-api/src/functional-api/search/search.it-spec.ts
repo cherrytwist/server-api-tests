@@ -4,7 +4,7 @@ import '@utils/array.matcher';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '../callout/post/post.request.params';
-import { updateOpportunityLocation } from '../journey/opportunity/opportunity.request.params';
+import { updateSubsubspaceLocation } from '../journey/subsubspace/subsubspace.request.params';
 import {
   searchContributions,
   searchContributor,
@@ -18,8 +18,8 @@ import {
   updateSpacePlatformSettings,
 } from '../journey/space/space.request.params';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { entitiesId } from '../../types/entities-helper';
@@ -35,16 +35,16 @@ let organizationNameText = '';
 let organizationIdTest = '';
 const postNameIdSpace = 'qa-space' + uniqueId;
 let postSpaceId = '';
-let postChallengeId = '';
-let postOpportunityId = '';
-const postNameIdChallenge = 'qa-chal' + uniqueId;
-const postNameIdOpportunity = 'qa-opp' + uniqueId;
+let postSubspaceId = '';
+let postSubsubspaceId = '';
+const postNameIdSubspace = 'qa-chal' + uniqueId;
+const postNameIdSubsubspace = 'qa-opp' + uniqueId;
 const typeFilterAll = [
   'organization',
   'user',
   'space',
-  'challenge',
-  'opportunity',
+  'subspace',
+  'subsubspace',
   'post',
 ];
 const filterOnlyUser = ['user'];
@@ -72,8 +72,8 @@ const organizationName = 'search-org-name' + uniqueId;
 const hostNameId = 'search-org-nameid' + uniqueId;
 const spaceName = 'search-space' + uniqueId;
 const spaceNameId = 'search-space-nameid' + uniqueId;
-const challengeName = 'search-ch-name' + uniqueId;
-const opportunityName = 'search-opp-name' + uniqueId;
+const subspaceName = 'search-ch-name' + uniqueId;
+const subsubspaceName = 'search-opp-name' + uniqueId;
 
 const termAllScored = ['qa', 'qa', 'user'];
 
@@ -84,8 +84,8 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubspaceWithUsers(subspaceName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   organizationNameText = `qa organizationNameText ${uniqueId}`;
 
@@ -109,13 +109,13 @@ beforeAll(async () => {
     TestUser.GLOBAL_ADMIN
   );
   await updateSpaceLocation(
-    entitiesId.challenge.id,
+    entitiesId.subspace.id,
     country,
     city,
     TestUser.GLOBAL_ADMIN
   );
-  await updateOpportunityLocation(
-    entitiesId.opportunity.id,
+  await updateSubsubspaceLocation(
+    entitiesId.subsubspace.id,
     country,
     city,
     TestUser.GLOBAL_ADMIN
@@ -135,26 +135,26 @@ beforeAll(async () => {
   );
   postSpaceId = resSpace.data?.createContributionOnCallout.post?.id ?? '';
 
-  const resChallenge = await createPostOnCallout(
-    entitiesId.challenge.calloutId,
-    { displayName: postNameIdChallenge },
-    postNameIdChallenge
+  const resSubspace = await createPostOnCallout(
+    entitiesId.subspace.calloutId,
+    { displayName: postNameIdSubspace },
+    postNameIdSubspace
   );
-  postChallengeId =
-    resChallenge.data?.createContributionOnCallout.post?.id ?? '';
+  postSubspaceId =
+    resSubspace.data?.createContributionOnCallout.post?.id ?? '';
 
-  const resOpportunity = await createPostOnCallout(
-    entitiesId.opportunity.calloutId,
-    { displayName: postNameIdOpportunity },
-    postNameIdOpportunity
+  const resSubsubspace = await createPostOnCallout(
+    entitiesId.subsubspace.calloutId,
+    { displayName: postNameIdSubsubspace },
+    postNameIdSubsubspace
   );
-  postOpportunityId =
-    resOpportunity.data?.createContributionOnCallout.post?.id ?? '';
+  postSubsubspaceId =
+    resSubsubspace.data?.createContributionOnCallout.post?.id ?? '';
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteSpace(secondSpaceId);
   await deleteOrganization(entitiesId.organization.id);
@@ -221,10 +221,10 @@ describe('Search', () => {
         terms: termWord,
         score: 10,
         type: 'CHALLENGE',
-        challenge: {
-          id: entitiesId.challenge.id,
+        subspace: {
+          id: entitiesId.subspace.id,
           profile: {
-            displayName: challengeName,
+            displayName: subspaceName,
           },
         },
       });
@@ -232,10 +232,10 @@ describe('Search', () => {
         terms: termWord,
         score: 10,
         type: 'OPPORTUNITY',
-        opportunity: {
-          id: entitiesId.opportunity.id,
+        subsubspace: {
+          id: entitiesId.subsubspace.id,
           profile: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
         },
       });
@@ -262,12 +262,12 @@ describe('Search', () => {
             displayName: spaceName,
           },
         },
-        challenge: null,
-        opportunity: null,
+        subspace: null,
+        subsubspace: null,
         callout: {
           id: entitiesId.space.calloutId,
           framing: {
-            profile: { displayName: 'Challenge proposals' },
+            profile: { displayName: 'Subspace proposals' },
           },
         },
         post: {
@@ -287,23 +287,23 @@ describe('Search', () => {
             displayName: spaceName,
           },
         },
-        challenge: {
-          id: entitiesId.challenge.id,
+        subspace: {
+          id: entitiesId.subspace.id,
           profile: {
-            displayName: challengeName,
+            displayName: subspaceName,
           },
         },
-        opportunity: null,
+        subsubspace: null,
         callout: {
-          id: entitiesId.challenge.calloutId,
+          id: entitiesId.subspace.calloutId,
           framing: {
-            profile: { displayName: 'Opportunity proposals' },
+            profile: { displayName: 'Subsubspace proposals' },
           },
         },
         post: {
-          id: postChallengeId,
+          id: postSubspaceId,
           profile: {
-            displayName: postNameIdChallenge,
+            displayName: postNameIdSubspace,
           },
         },
       });
@@ -317,28 +317,28 @@ describe('Search', () => {
             displayName: spaceName,
           },
         },
-        challenge: {
-          id: entitiesId.challenge.id,
+        subspace: {
+          id: entitiesId.subspace.id,
           profile: {
-            displayName: challengeName,
+            displayName: subspaceName,
           },
         },
-        opportunity: {
-          id: entitiesId.opportunity.id,
+        subsubspace: {
+          id: entitiesId.subsubspace.id,
           profile: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
         },
         callout: {
-          id: entitiesId.opportunity.calloutId,
+          id: entitiesId.subsubspace.calloutId,
           framing: {
             profile: { displayName: 'Relevant news, research or use cases 📰' },
           },
         },
         post: {
-          id: postOpportunityId,
+          id: postSubsubspaceId,
           profile: {
-            displayName: postNameIdOpportunity,
+            displayName: postNameIdSubsubspace,
           },
         },
       });
@@ -465,10 +465,10 @@ describe('Search', () => {
       terms: termWord,
       score: 10,
       type: 'CHALLENGE',
-      challenge: {
-        id: entitiesId.challenge.id,
+      subspace: {
+        id: entitiesId.subspace.id,
         profile: {
-          displayName: challengeName,
+          displayName: subspaceName,
         },
       },
     });
@@ -476,10 +476,10 @@ describe('Search', () => {
       terms: termWord,
       score: 10,
       type: 'OPPORTUNITY',
-      opportunity: {
-        id: entitiesId.opportunity.id,
+      subsubspace: {
+        id: entitiesId.subsubspace.id,
         profile: {
-          displayName: opportunityName,
+          displayName: subsubspaceName,
         },
       },
     });
@@ -529,10 +529,10 @@ describe('Search', () => {
       terms: termLocation,
       score: 10,
       type: 'OPPORTUNITY',
-      opportunity: {
-        id: entitiesId.opportunity.id,
+      subsubspace: {
+        id: entitiesId.subsubspace.id,
         profile: {
-          displayName: opportunityName,
+          displayName: subsubspaceName,
         },
       },
     });
@@ -541,10 +541,10 @@ describe('Search', () => {
       terms: termLocation,
       score: 10,
       type: 'CHALLENGE',
-      challenge: {
-        id: entitiesId.challenge.id,
+      subspace: {
+        id: entitiesId.subspace.id,
         profile: {
-          displayName: challengeName,
+          displayName: subspaceName,
         },
       },
     });
@@ -770,10 +770,10 @@ describe('Search', () => {
         terms: termWord,
         score: 10,
         type: 'CHALLENGE',
-        challenge: {
-          id: entitiesId.challenge.id,
+        subspace: {
+          id: entitiesId.subspace.id,
           profile: {
-            displayName: challengeName,
+            displayName: subspaceName,
           },
         },
       });
@@ -781,10 +781,10 @@ describe('Search', () => {
         terms: termWord,
         score: 10,
         type: 'OPPORTUNITY',
-        opportunity: {
-          id: entitiesId.opportunity.id,
+        subsubspace: {
+          id: entitiesId.subsubspace.id,
           profile: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
         },
       });
@@ -820,7 +820,7 @@ describe('Search', () => {
       ${TestUser.SPACE_MEMBER}
       ${TestUser.NON_SPACE_MEMBER}
     `(
-      'User: "$userRole" should not receive Space / Challenge / Opportunity data',
+      'User: "$userRole" should not receive Space / Subspace / Subsubspace data',
       async ({ userRole }) => {
         const responseSearchData = await searchJourney(
           termLocation,
@@ -833,10 +833,10 @@ describe('Search', () => {
           terms: termLocation,
           score: 10,
           type: 'OPPORTUNITY',
-          opportunity: {
-            id: entitiesId.opportunity.id,
+          subsubspace: {
+            id: entitiesId.subsubspace.id,
             profile: {
-              displayName: opportunityName,
+              displayName: subsubspaceName,
             },
           },
         });
@@ -845,10 +845,10 @@ describe('Search', () => {
           terms: termLocation,
           score: 10,
           type: 'CHALLENGE',
-          challenge: {
-            id: entitiesId.challenge.id,
+          subspace: {
+            id: entitiesId.subspace.id,
             profile: {
-              displayName: challengeName,
+              displayName: subspaceName,
             },
           },
         });
@@ -880,7 +880,7 @@ describe('Search', () => {
     });
   });
 
-  describe('Search IN Public Space Private Challenge Data', () => {
+  describe('Search IN Public Space Private Subspace Data', () => {
     beforeAll(async () => {
       await updateSpacePlatformSettings(
         entitiesId.spaceId,
@@ -892,7 +892,7 @@ describe('Search', () => {
         privacy: { mode: SpacePrivacyMode.Public },
       });
 
-      await updateSpaceSettings(entitiesId.challenge.id, {
+      await updateSpaceSettings(entitiesId.subspace.id, {
         privacy: { mode: SpacePrivacyMode.Private },
       });
     });
@@ -907,7 +907,7 @@ describe('Search', () => {
       ${TestUser.SUBSUBSPACE_MEMBER} | ${2}
       ${TestUser.NON_SPACE_MEMBER}     | ${0}
     `(
-      'User: "$userRole" should get "$numberResults" results for Challenge / Opportunity data',
+      'User: "$userRole" should get "$numberResults" results for Subspace / Subsubspace data',
       async ({ userRole, numberResults }) => {
         const responseSearchData = await searchJourney(
           termWord,
@@ -921,7 +921,7 @@ describe('Search', () => {
     );
   });
 
-  describe('Search Public Space Private Challenge Data', () => {
+  describe('Search Public Space Private Subspace Data', () => {
     beforeAll(async () => {
       await updateSpacePlatformSettings(
         entitiesId.spaceId,
@@ -933,7 +933,7 @@ describe('Search', () => {
         privacy: { mode: SpacePrivacyMode.Public },
       });
 
-      await updateSpaceSettings(entitiesId.challenge.id, {
+      await updateSpaceSettings(entitiesId.subspace.id, {
         privacy: { mode: SpacePrivacyMode.Private },
       });
     });
@@ -948,7 +948,7 @@ describe('Search', () => {
       ${TestUser.SUBSUBSPACE_MEMBER} | ${3}
       ${TestUser.NON_SPACE_MEMBER}     | ${1}
     `(
-      'User: "$userRole" should get "$numberResults" results for Space /  Challenge / Opportunity data',
+      'User: "$userRole" should get "$numberResults" results for Space /  Subspace / Subsubspace data',
       async ({ userRole, numberResults }) => {
         const responseSearchData = await searchJourney(
           termWord,
@@ -961,7 +961,7 @@ describe('Search', () => {
     );
   });
 
-  describe('Search Private Space Private Challenge Data', () => {
+  describe('Search Private Space Private Subspace Data', () => {
     beforeAll(async () => {
       await updateSpacePlatformSettings(
         entitiesId.spaceId,
@@ -973,7 +973,7 @@ describe('Search', () => {
         privacy: { mode: SpacePrivacyMode.Private },
       });
 
-      await updateSpaceSettings(entitiesId.challenge.id, {
+      await updateSpaceSettings(entitiesId.subspace.id, {
         privacy: { mode: SpacePrivacyMode.Private },
       });
     });
@@ -988,7 +988,7 @@ describe('Search', () => {
       ${TestUser.SUBSUBSPACE_MEMBER} | ${3}
       ${TestUser.NON_SPACE_MEMBER}     | ${1}
     `(
-      'User: "$userRole" should get "$numberResults" results for Space / Challenge / Opportunity data',
+      'User: "$userRole" should get "$numberResults" results for Space / Subspace / Subsubspace data',
       async ({ userRole, numberResults }) => {
         const responseSearchData = await searchJourney(
           termWord,

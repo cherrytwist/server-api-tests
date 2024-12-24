@@ -50,8 +50,8 @@ interface EntityIds {
     templateSetId: string;
     subspaceCollaborationTemplateId: string;
   };
-  challenge: CommonSpaceIds & ProfileableIds;
-  opportunity: CommonSpaceIds & ProfileableIds;
+  subspace: CommonSpaceIds & ProfileableIds;
+  subsubspace: CommonSpaceIds & ProfileableIds;
 }
 
 export const entitiesId: EntityIds = {
@@ -86,7 +86,7 @@ export const entitiesId: EntityIds = {
     templateSetId: '',
     subspaceCollaborationTemplateId: '',
   },
-  challenge: {
+  subspace: {
     id: '',
     nameId: '',
     profileId: '',
@@ -101,7 +101,7 @@ export const entitiesId: EntityIds = {
     discussionCalloutId: '',
     discussionCalloutCommentsId: '',
   },
-  opportunity: {
+  subsubspace: {
     id: '',
     nameId: '',
     profileId: '',

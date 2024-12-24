@@ -14,8 +14,8 @@ import {
 } from './post-template-testdata';
 import {
   assignUsersToSpaceAndOrg,
-  createChallengeForOrgSpace,
-  createOpportunityForChallenge,
+  createSubspaceForOrgSpace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { PostDataFragment } from '@generated/alkemio-schema';
@@ -32,11 +32,11 @@ import { entitiesId } from '@src/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 
-let opportunityName = 'post-opp';
-let challengeName = 'post-chal';
+let subsubspaceName = 'post-opp';
+let subspaceName = 'post-chal';
 let spacePostId = '';
-let challengePostId = '';
-let opportunityPostId = '';
+let subspacePostId = '';
+let subsubspacePostId = '';
 let postNameID = '';
 let postDisplayName = '';
 const organizationName = 'post-org-name' + uniqueId;
@@ -47,20 +47,20 @@ let postTemplateId = '';
 
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createChallengeForOrgSpace(challengeName);
-  await createOpportunityForChallenge(opportunityName);
+  await createSubspaceForOrgSpace(subspaceName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 beforeEach(async () => {
-  challengeName = `testChallenge ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subspaceName = `testSubspace ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
@@ -160,8 +160,8 @@ describe('Post templates - Utilization in posts', () => {
   describe('Create post on all entities with newly created postTemplate', () => {
     afterAll(async () => {
       await deletePost(spacePostId);
-      await deletePost(challengePostId);
-      await deletePost(opportunityPostId);
+      await deletePost(subspacePostId);
+      await deletePost(subsubspacePostId);
     });
 
     test('Create Post on Space', async () => {
@@ -188,33 +188,33 @@ describe('Post templates - Utilization in posts', () => {
       expect(data).toEqual(postDataCreate);
     });
 
-    test('Create Post on Challenge', async () => {
+    test('Create Post on Subspace', async () => {
       // Act
       const res = await createPostOnCallout(
-        entitiesId.challenge.calloutId,
+        entitiesId.subspace.calloutId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
       const postDataCreate = res.data?.createContributionOnCallout.post;
-      challengePostId = res.data?.createContributionOnCallout.post?.id ?? '';
+      subspacePostId = res.data?.createContributionOnCallout.post?.id ?? '';
 
-      const postsData = await getPostData(challengePostId);
+      const postsData = await getPostData(subspacePostId);
 
       // Assert
       expect(postsData.data?.lookup.post).toEqual(postDataCreate);
     });
 
-    test('Create Post on Opportunity', async () => {
+    test('Create Post on Subsubspace', async () => {
       // Act
       const res = await createPostOnCallout(
-        entitiesId.opportunity.calloutId,
+        entitiesId.subsubspace.calloutId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
       const postDataCreate = res.data?.createContributionOnCallout.post;
-      opportunityPostId = res.data?.createContributionOnCallout.post?.id ?? '';
+      subsubspacePostId = res.data?.createContributionOnCallout.post?.id ?? '';
 
-      const postsData = await getPostData(opportunityPostId);
+      const postsData = await getPostData(subsubspacePostId);
 
       // Assert
       expect(postsData.data?.lookup.post).toEqual(postDataCreate);

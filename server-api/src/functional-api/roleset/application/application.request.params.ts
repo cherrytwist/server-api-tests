@@ -60,14 +60,14 @@ export const getRoleSetInvitationsApplications = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getChallengeApplications = async (
+export const getSubspaceApplications = async (
   spaceId: string,
   subspaceId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.getChallengeApplications(
+    graphqlClient.getSubspaceApplications(
       {
         spaceId,
         subspaceId,

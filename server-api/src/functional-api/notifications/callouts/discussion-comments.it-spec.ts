@@ -5,8 +5,8 @@ import { deleteSpace } from '@functional-api/journey/space/space.request.params'
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
-  createOpportunityWithUsers,
+  createSubspaceWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -19,8 +19,8 @@ const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
-const challengeName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 let preferencesConfig: any[] = [];
 const postSubjectTextMember = `${spaceName} - New comment received on Callout \u0026#34;Space Post Callout\u0026#34;, have a look!`;
 
@@ -36,7 +36,7 @@ const expectedDataSpace = async (toAddresses: any[]) => {
 const expectedDataChal = async (toAddresses: any[]) => {
   return expect.arrayContaining([
     expect.objectContaining({
-      subject: `${challengeName} - New comment received on Callout \u0026#34;Challenge Post Callout\u0026#34;, have a look!`,
+      subject: `${subspaceName} - New comment received on Callout \u0026#34;Subspace Post Callout\u0026#34;, have a look!`,
       toAddresses,
     }),
   ]);
@@ -45,7 +45,7 @@ const expectedDataChal = async (toAddresses: any[]) => {
 const expectedDataOpp = async (toAddresses: any[]) => {
   return expect.arrayContaining([
     expect.objectContaining({
-      subject: `${opportunityName} - New comment received on Callout \u0026#34;Opportunity Post Callout\u0026#34;, have a look!`,
+      subject: `${subsubspaceName} - New comment received on Callout \u0026#34;Subsubspace Post Callout\u0026#34;, have a look!`,
       toAddresses,
     }),
   ]);
@@ -60,8 +60,8 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubspaceWithUsers(subspaceName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -75,17 +75,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.opportunityMember.id,
-      type: PreferenceType.NotificationDiscussionCommentCreated,
-    },
-
-    {
-      userID: users.spaceAdmin.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
@@ -95,20 +90,25 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeAdmin.id,
+      userID: users.spaceAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subspaceAdmin.id,
+      type: PreferenceType.NotificationDiscussionCommentCreated,
+    },
+
+    {
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
   ];
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -152,16 +152,16 @@ describe('Notifications - callout comments', () => {
       await expectedDataSpace([users.spaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.challengeAdmin.email])
+      await expectedDataSpace([users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.challengeMember.email])
+      await expectedDataSpace([users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.opportunityAdmin.email])
+      await expectedDataSpace([users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.opportunityMember.email])
+      await expectedDataSpace([users.subsubspaceMember.email])
     );
   });
 
@@ -186,23 +186,23 @@ describe('Notifications - callout comments', () => {
       await expectedDataSpace([users.spaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.challengeAdmin.email])
+      await expectedDataSpace([users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.challengeMember.email])
+      await expectedDataSpace([users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.opportunityAdmin.email])
+      await expectedDataSpace([users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.opportunityMember.email])
+      await expectedDataSpace([users.subsubspaceMember.email])
     );
   });
 
-  test('HA create challenge callout comment - HM(5),  get notifications', async () => {
+  test('HA create subspace callout comment - HM(5),  get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.challenge.discussionCalloutCommentsId,
+      entitiesId.subspace.discussionCalloutCommentsId,
       'comment on discussion callout',
       TestUser.SPACE_ADMIN
     );
@@ -223,23 +223,23 @@ describe('Notifications - callout comments', () => {
       await expectedDataChal([users.spaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.challengeAdmin.email])
+      await expectedDataChal([users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.challengeMember.email])
+      await expectedDataChal([users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.opportunityAdmin.email])
+      await expectedDataChal([users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.opportunityMember.email])
+      await expectedDataChal([users.subsubspaceMember.email])
     );
   });
 
-  test('OM create opportunity callout comment - HM(3), get notifications', async () => {
+  test('OM create subsubspace callout comment - HM(3), get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.opportunity.discussionCalloutCommentsId,
+      entitiesId.subsubspace.discussionCalloutCommentsId,
       'comment on discussion callout',
       TestUser.SUBSUBSPACE_MEMBER
     );
@@ -257,30 +257,30 @@ describe('Notifications - callout comments', () => {
     expect(mails[0]).not.toEqual(
       await expectedDataOpp([users.spaceMember.email])
     );
-    // Challenge admin does not reacive email
+    // Subspace admin does not reacive email
     expect(mails[0]).not.toEqual(
-      await expectedDataOpp([users.challengeAdmin.email])
+      await expectedDataOpp([users.subspaceAdmin.email])
     );
-    // Challenge member does not reacive email
+    // Subspace member does not reacive email
     expect(mails[0]).not.toEqual(
-      await expectedDataOpp([users.challengeMember.email])
+      await expectedDataOpp([users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataOpp([users.opportunityAdmin.email])
+      await expectedDataOpp([users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataOpp([users.opportunityMember.email])
+      await expectedDataOpp([users.subsubspaceMember.email])
     );
   });
 
-  test('OA create opportunity callout comment - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create subsubspace callout comment - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
     );
     // Act
     await sendMessageToRoom(
-      entitiesId.opportunity.discussionCalloutCommentsId,
+      entitiesId.subsubspace.discussionCalloutCommentsId,
       'comment on discussion callout',
       TestUser.SUBSUBSPACE_ADMIN
     );

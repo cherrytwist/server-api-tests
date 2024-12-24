@@ -1,6 +1,6 @@
-# query OpportunityCallout($opportunityId: UUID!, $calloutId: UUID_NAMEID!) {
+# query SubsubspaceCallout($subsubspaceId: UUID!, $calloutId: UUID_NAMEID!) {
 #   lookup {
-#     opportunity(ID: $opportunityId) {
+#     subsubspace(ID: $subsubspaceId) {
 #       id
 #       collaboration {
 #         callouts(IDs: [$calloutId]) {
