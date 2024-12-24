@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { TestUser } from '@alkemio/tests-lib';
 import { getUserToken } from './get-user-token';
-import { userData } from './graphql-hardcoded-query';
 
 const SERVER_URL = process.env.ALKEMIO_SERVER_URL || 'not set';
 
@@ -45,7 +44,7 @@ export const createUserNewRegistration = async (
 ) => {
   const requestParams = {
     operationName: null,
-    query: `mutation createUserNewRegistration { createUserNewRegistration { ${userData}}}`,
+    query: `mutation createUserNewRegistration { createUserNewRegistration { id }}`,
     variables: {
       userData: {
         firstName,
