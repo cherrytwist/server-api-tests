@@ -97,9 +97,13 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.7.2"
   },
-  "husky": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "engines": {
-    "node": ">=16.15.0",
-    "npm": ">=8.5.5"
+    "node": ">=20.9.0",
+    "npm": ">=10"
   }
 }
