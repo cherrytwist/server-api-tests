@@ -41,7 +41,8 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
 

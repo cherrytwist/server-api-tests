@@ -1,6 +1,7 @@
 /* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import {
   getPlatformDiscussionsDataById,
   createDiscussion,

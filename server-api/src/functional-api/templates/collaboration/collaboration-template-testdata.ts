@@ -7,7 +7,8 @@ import {
   TagsetReservedName,
   CreateCollaborationInput,
 } from '@generated/graphql';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 export const lifecycleDefaultDefinition: InnovationFlowState[] = [
   {

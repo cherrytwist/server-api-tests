@@ -32,7 +32,8 @@ import {
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 import { PlatformRole } from '@generated/graphql';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
 
 const spaceName = `space-name-${uniqueId}`;

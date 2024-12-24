@@ -9,11 +9,12 @@ import { TestUser } from '@alkemio/tests-lib';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { uniqueId } from '@utils/uniqueId';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { users } from '@utils/queries/users-data';
 import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
+import { UniqueIDGenerator } from '@utils/uniqueId';
 
+const uniqueId = UniqueIDGenerator.getID();
 const organizationName = 'h-pref-org-name' + uniqueId;
 const hostNameId = 'h-pref-org-nameid' + uniqueId;
 const spaceName = 'h-pref-eco-name' + uniqueId;
@@ -55,8 +56,8 @@ afterAll(async () => {
   await deleteOrganization(entitiesId.organization.id);
 });
 
-describe('Organization preferences', () => {
-  describe('DDT user WITH privileges to update organization preferences', () => {
+describe('Organization settings', () => {
+  describe('DDT user WITH privileges to update organization settings', () => {
     // Arrange
     test.each`
       userRole                 | message
@@ -85,7 +86,7 @@ describe('Organization preferences', () => {
     );
   });
 
-  describe('DDT user WITHOUT privileges to update organization preferences', () => {
+  describe('DDT user WITHOUT privileges to update organization settings', () => {
     // Arrange
     test.each`
       userRole                   | message
@@ -114,7 +115,7 @@ describe('Organization preferences', () => {
     afterEach(async () => {
       await deleteUser(userId);
     });
-    test("don't assign new user to organization,domain preference enabled", async () => {
+    test("don't assign new user to organization,domain setting enabled", async () => {
       // Arrange
       await updateOrganizationSettings(entitiesId.organization.id, {
         membership: {
@@ -143,7 +144,7 @@ describe('Organization preferences', () => {
       );
     });
 
-    test("don't assign new user to organization, domain preference disabled", async () => {
+    test("don't assign new user to organization, domain setting disabled", async () => {
       // Arrange
       await updateOrganizationSettings(entitiesId.organization.id, {
         membership: {
@@ -172,7 +173,7 @@ describe('Organization preferences', () => {
       );
     });
 
-    test("don't assign new user with different domain to organization,domain preference enabled", async () => {
+    test("don't assign new user with different domain to organization,domain setting enabled", async () => {
       // Arrange
       await updateOrganizationSettings(entitiesId.organization.id, {
         membership: {
@@ -219,7 +220,7 @@ describe('Organization preferences', () => {
     afterEach(async () => {
       await deleteUser(userId);
     });
-    test('assign new user to organization,domain preference enabled', async () => {
+    test('assign new user to organization,domain setting enabled', async () => {
       // Arrange
       await updateOrganizationSettings(entitiesId.organization.id, {
         membership: {
@@ -248,7 +249,7 @@ describe('Organization preferences', () => {
       );
     });
 
-    test("don't assign new user to organization, domain preference disabled", async () => {
+    test("don't assign new user to organization, domain setting disabled", async () => {
       // Arrange
       await updateOrganizationSettings(entitiesId.organization.id, {
         membership: {
@@ -277,7 +278,7 @@ describe('Organization preferences', () => {
       );
     });
 
-    test("don't assign new user with different domain to organization,domain preference enabled", async () => {
+    test("don't assign new user with different domain to organization,domain setting enabled", async () => {
       // Arrange
       await updateOrganizationSettings(entitiesId.organization.id, {
         membership: {

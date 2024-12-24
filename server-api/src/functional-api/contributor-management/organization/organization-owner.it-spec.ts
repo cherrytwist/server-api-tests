@@ -5,7 +5,8 @@ import {
 } from '../organization/organization.request.params';
 import { users } from '@utils/queries/users-data';
 import { assignUserAsOrganizationOwner, removeUserAsOrganizationOwner } from './organization-authorization-mutation';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let organizationId = '';
 const credentialsType = 'ORGANIZATION_OWNER';

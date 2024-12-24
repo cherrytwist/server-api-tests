@@ -10,7 +10,8 @@ import {
   sendMessageToRoom,
   removeMessageOnRoom,
 } from '../communication.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let platformDiscussionId = '';
 let discussionId = '';

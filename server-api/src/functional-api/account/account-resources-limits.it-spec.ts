@@ -6,7 +6,8 @@ import {
   getSpaceData,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let localSpaceId = '';
 let localSpaceIdn = '';

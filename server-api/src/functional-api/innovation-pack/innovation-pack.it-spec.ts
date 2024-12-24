@@ -1,5 +1,6 @@
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { createInnovationPack } from './innovation_pack.request.params';
 import {
   whiteboardTemplateValues1,

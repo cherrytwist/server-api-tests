@@ -1,6 +1,8 @@
 import { registerInKratosOrFail, verifyInKratosOrFail } from './kratos';
 import { registerInAlkemioOrFail } from './register-in-alkemio-or-fail';
-import { uniqueId } from './uniqueId';
+import { UniqueIDGenerator } from './uniqueId';
+
+const uniqueId = UniqueIDGenerator.getID();
 
 const email = process.env.USER_EMAIL || `default${uniqueId}@alkem.io`;
 const firstName = process.env.USER_FIRST_NAME || 'fn';

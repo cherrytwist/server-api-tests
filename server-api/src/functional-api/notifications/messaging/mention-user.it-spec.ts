@@ -2,7 +2,8 @@
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';

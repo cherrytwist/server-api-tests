@@ -13,10 +13,10 @@ import {
   updateSpaceContext,
 } from '../space/space.request.params';
 import { entitiesId } from '@src/types/entities-helper';
-// import { uniqueId } from '@utils/uniqueId';
-
 import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+
+const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = '';
 let subsubspaceNameId = '';

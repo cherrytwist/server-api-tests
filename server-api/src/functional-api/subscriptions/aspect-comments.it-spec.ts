@@ -1,5 +1,6 @@
 import { SubscriptionClient } from '@utils/subscriptions';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionRooms } from './subscrition-queries';

@@ -25,7 +25,8 @@ import {
 import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;

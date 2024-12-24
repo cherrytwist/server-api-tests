@@ -7,7 +7,8 @@ import {
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { SpaceVisibility } from '@generated/graphql';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let spaceId = '';
 let organizationId = '';

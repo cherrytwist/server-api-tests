@@ -1,5 +1,6 @@
 /* eslint-disable quotes */
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
 import {
   deleteDocument,

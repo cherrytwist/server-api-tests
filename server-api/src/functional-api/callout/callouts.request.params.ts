@@ -6,7 +6,8 @@ import {
   CalloutType,
   CalloutVisibility,
 } from '@generated/alkemio-schema';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 export const defaultPostTemplate = {
   postTemplate: {

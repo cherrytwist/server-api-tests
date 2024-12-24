@@ -32,7 +32,8 @@ import {
 } from '@generated/alkemio-schema';
 import { entitiesId } from '@src/types/entities-helper';
 
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 const organizationName = 'space-org-name' + uniqueId;
 const hostNameId = 'space-org-nameid' + uniqueId;

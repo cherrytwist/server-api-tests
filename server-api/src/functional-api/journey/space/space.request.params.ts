@@ -2,7 +2,8 @@ import { GraphQLClient } from 'graphql-request';
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { CommunityMembershipPolicy, SpacePrivacyMode, SpaceVisibility } from '@generated/graphql';
 
 export const spaceName = `testEcoName${uniqueId}`;

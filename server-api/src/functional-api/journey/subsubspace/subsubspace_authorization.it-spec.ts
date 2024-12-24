@@ -14,7 +14,8 @@ import {
   assignRoleToUserExtendedData,
   removeRoleFromUserExtendedData,
 } from '../../roleset/roles-request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 const credentialsType = 'SPACE_ADMIN';
 const subsubspaceName = `op-dname${uniqueId}`;

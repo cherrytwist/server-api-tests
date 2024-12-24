@@ -1,10 +1,10 @@
-export const uniqueId = Math.random()
+export const uniqueId2 = Math.random()
   .toString(12)
   .slice(-6);
 
-export class UniqueID {
+export class UniqueIDGenerator {
 
-  private getID(): string {
+  public static getID(): string {
     return Math.random()
       .toString(12)
       .slice(-6);

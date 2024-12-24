@@ -30,7 +30,8 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
 

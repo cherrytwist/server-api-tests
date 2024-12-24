@@ -1,4 +1,5 @@
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { createInnovationPack } from './innovation_pack.request.params';
 import { whiteboardTemplateValues1 } from './whiteboard-values-fixed';
 import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';

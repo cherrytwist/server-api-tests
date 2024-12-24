@@ -17,7 +17,8 @@ import { sendMessageToRoom } from '@functional-api/communications/communication.
 import { entitiesId, getMailsData } from '../../../types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { PreferenceType } from '@generated/graphql';
 
 const organizationName = 'urole-org-name' + uniqueId;
