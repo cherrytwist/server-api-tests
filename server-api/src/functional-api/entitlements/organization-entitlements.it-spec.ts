@@ -95,7 +95,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     // Act
     const response = await getOrganazationEntitlementsQuery(
       orgId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     const accountData = response.data?.organization?.account;
 
@@ -122,7 +122,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     // Act
     const response = await getOrganazationEntitlementsQuery(
       orgId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     // Assert
@@ -160,7 +160,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         spaceName,
         spaceName,
         orgAccountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.space.id ?? '';
 
@@ -168,7 +168,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         vcName,
         orgAccountId,
         spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       vcId = vcData?.data?.createVirtualContributor?.id ?? '';
 
@@ -176,14 +176,14 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         packName,
         packName,
         orgAccountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';
 
       // Act
       const response = await getOrganazationEntitlementsQuery(
         orgId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const accountData = response.data?.organization?.account;
 

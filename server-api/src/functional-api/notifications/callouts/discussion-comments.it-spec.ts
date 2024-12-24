@@ -171,7 +171,7 @@ describe('Notifications - callout comments', () => {
     await sendMessageToRoom(
       entitiesId.space.discussionCalloutCommentsId,
       'comment on discussion callout',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -204,7 +204,7 @@ describe('Notifications - callout comments', () => {
     await sendMessageToRoom(
       entitiesId.challenge.discussionCalloutCommentsId,
       'comment on discussion callout',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -241,7 +241,7 @@ describe('Notifications - callout comments', () => {
     await sendMessageToRoom(
       entitiesId.opportunity.discussionCalloutCommentsId,
       'comment on discussion callout',
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
 
     await delay(6000);
@@ -282,7 +282,7 @@ describe('Notifications - callout comments', () => {
     await sendMessageToRoom(
       entitiesId.opportunity.discussionCalloutCommentsId,
       'comment on discussion callout',
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
 
     // Assert

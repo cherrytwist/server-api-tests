@@ -65,17 +65,17 @@ describe('Functional tests - licenses updates', () => {
         spaceName,
         spaceName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.createSpace.id ?? '';
       const responseBeforePlus = await getMyEntitlementsQuery(
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Act
       await assignLicensePlanToSpace(spaceId, licensePlanIdSpacePlus);
       const responseAfterPlus = await getMyEntitlementsQuery(
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       await revokeLicensePlanFromSpace(
@@ -84,7 +84,7 @@ describe('Functional tests - licenses updates', () => {
         TestUser.GLOBAL_ADMIN
       );
       const responseAfterRevokePlus = await getMyEntitlementsQuery(
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert

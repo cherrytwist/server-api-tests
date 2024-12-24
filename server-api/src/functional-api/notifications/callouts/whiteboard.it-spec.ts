@@ -249,7 +249,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionSpaceCalloutId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';
@@ -297,7 +297,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionChallengeCalloutId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';
@@ -354,7 +354,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionOpportunityCalloutId,
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';
@@ -416,7 +416,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionOpportunityCalloutId,
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';

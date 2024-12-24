@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../utils/delay';
+import { delay } from '../../../../../lib/src/utils/delay';
 import { TestUser } from '@common/enum/test.user';
 import {
   deleteSpace,
@@ -112,7 +112,7 @@ describe('Notifications - send messages to Private Space, Public Challenge Commu
     await sendMessageToCommunityLeads(
       entitiesId.challenge.communityId,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -143,7 +143,7 @@ describe('Notifications - send messages to Private Space, Public Challenge Commu
     await sendMessageToCommunityLeads(
       entitiesId.challenge.communityId,
       'Test message',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     await delay(3000);
 
@@ -188,7 +188,7 @@ describe('Notifications - send messages to Private Space, Private Challenge Comm
     await sendMessageToCommunityLeads(
       entitiesId.challenge.communityId,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -219,7 +219,7 @@ describe('Notifications - send messages to Private Space, Private Challenge Comm
     await sendMessageToCommunityLeads(
       entitiesId.challenge.communityId,
       'Test message',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     await delay(3000);
 
@@ -282,7 +282,7 @@ describe('Notifications - send messages to Private Space, Public Challenge NO Co
     await sendMessageToCommunityLeads(
       entitiesId.challenge.communityId,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 

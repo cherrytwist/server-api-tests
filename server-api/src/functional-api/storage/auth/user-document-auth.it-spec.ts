@@ -68,7 +68,7 @@ describe('User - documents', () => {
     test.each`
       userRole                   | privileges
       ${undefined}               | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
       ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
     `(
@@ -85,7 +85,7 @@ describe('User - documents', () => {
     test.each`
       userRole                   | privileges                                                                                 | parentEntityType
       ${undefined}               | ${undefined}                                                                               | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                                                | ${'USER'}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
       ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
@@ -133,7 +133,7 @@ describe('User - documents', () => {
     test.each`
       userRole                   | privileges
       ${undefined}               | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
       ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
     `(
@@ -150,7 +150,7 @@ describe('User - documents', () => {
     test.each`
       userRole                   | privileges                                                                                 | parentEntityType
       ${undefined}               | ${undefined}                                                                               | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                                                | ${'USER'}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
       ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
@@ -202,7 +202,7 @@ describe('User - documents', () => {
     test.each`
       userRole                   | privileges
       ${undefined}               | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
       ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
     `(
@@ -219,7 +219,7 @@ describe('User - documents', () => {
     test.each`
       userRole                   | privileges                                                                                  | parentEntityType
       ${undefined}               | ${undefined}                                                                                | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                                                 | ${'USER'}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                 | ${'USER'}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin}  | ${'USER'}
       ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                      | ${'USER'}
     `(

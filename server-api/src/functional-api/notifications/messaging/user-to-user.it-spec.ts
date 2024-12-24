@@ -46,7 +46,7 @@ describe('Notifications - user to user messages', () => {
     await sendMessageToUser(
       [users.globalAdmin.id],
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -74,7 +74,7 @@ describe('Notifications - user to user messages', () => {
     await sendMessageToUser(
       [users.globalAdmin.id, users.qaUser.id],
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -112,7 +112,7 @@ describe('Notifications - user to user messages', () => {
     await sendMessageToUser(
       [users.globalAdmin.id, users.qaUser.id],
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -149,7 +149,7 @@ describe('Notifications - user to user messages', () => {
     await sendMessageToUser(
       [users.globalAdmin.id],
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -183,7 +183,7 @@ describe('Notifications - user to user messages', () => {
     await sendMessageToUser(
       [users.globalAdmin.id],
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 

@@ -89,13 +89,13 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     test.each`
       user                           | myPrivileges
       ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.GLOBAL_HUBS_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.HUB_ADMIN}          | ${sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC}
-      ${TestUser.HUB_MEMBER}         | ${sorted__read_applyToCommunity}
-      ${TestUser.CHALLENGE_ADMIN}    | ${sorted__read_applyToCommunity_invite_addVC}
-      ${TestUser.CHALLENGE_MEMBER}   | ${sorted__read_applyToCommunity}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${sorted__read_applyToCommunity}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${sorted__read_applyToCommunity}
+      ${TestUser.GLOBAL_LICENSE_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC}
+      ${TestUser.SPACE_MEMBER}         | ${sorted__read_applyToCommunity}
+      ${TestUser.SUBSPACE_ADMIN}    | ${sorted__read_applyToCommunity_invite_addVC}
+      ${TestUser.SUBSPACE_MEMBER}   | ${sorted__read_applyToCommunity}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${sorted__read_applyToCommunity}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${sorted__read_applyToCommunity}
     `(
       'User: "$user", should have privileges: "$myPrivileges" for space journey',
       async ({ user, myPrivileges }) => {
@@ -117,13 +117,13 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     test.each`
       user                           | myPrivileges
       ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.GLOBAL_HUBS_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.HUB_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.HUB_MEMBER}         | ${['COMMUNITY_APPLY']}
-      ${TestUser.CHALLENGE_ADMIN}    | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.CHALLENGE_MEMBER}   | ${sorted__read_applyToCommunity}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${sorted__read_applyToCommunity_invite_addVC}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${sorted__read_applyToCommunity}
+      ${TestUser.GLOBAL_LICENSE_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SPACE_MEMBER}         | ${['COMMUNITY_APPLY']}
+      ${TestUser.SUBSPACE_ADMIN}    | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SUBSPACE_MEMBER}   | ${sorted__read_applyToCommunity}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${sorted__read_applyToCommunity_invite_addVC}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${sorted__read_applyToCommunity}
     `(
       'User: "$user", should have privileges: "$myPrivileges" for challenge journey',
       async ({ user, myPrivileges }) => {
@@ -145,13 +145,13 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     test.each`
       user                           | myPrivileges
       ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.GLOBAL_HUBS_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.HUB_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.HUB_MEMBER}         | ${['COMMUNITY_APPLY']}
-      ${TestUser.CHALLENGE_ADMIN}    | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.CHALLENGE_MEMBER}   | ${['COMMUNITY_APPLY']}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${sorted__read_applyToCommunity}
+      ${TestUser.GLOBAL_LICENSE_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SPACE_MEMBER}         | ${['COMMUNITY_APPLY']}
+      ${TestUser.SUBSPACE_ADMIN}    | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SUBSPACE_MEMBER}   | ${['COMMUNITY_APPLY']}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${sorted__read_applyToCommunity}
     `(
       'User: "$user", should have privileges: "$myPrivileges" for opportunity journey',
       async ({ user, myPrivileges }) => {

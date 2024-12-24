@@ -81,7 +81,7 @@ describe('Update user', () => {
         location: { country: 'test country', city: 'test city' },
         description: 'test description',
       },
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const usersData = await getUsersData(
       users.spaceAdmin.id,

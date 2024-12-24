@@ -87,11 +87,11 @@ describe('Organization - documents', () => {
     test.each`
       userRole                    | privileges
       ${undefined}                | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}  | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}
+      ${TestUser.SPACE_ADMIN}       | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SUBSPACE_ADMIN} | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SPACE_MEMBER}      | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile visual document',
       async ({ userRole, privileges }) => {
@@ -109,11 +109,11 @@ describe('Organization - documents', () => {
     test.each`
       userRole                    | privileges                                                                           | parentEntityType
       ${undefined}                | ${['READ']}                                                                          | ${'ORGANIZATION'}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.NON_SPACE_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
       ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin}              | ${'ORGANIZATION'}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.SPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.SUBSPACE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.SPACE_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile storage bucket',
       async ({
@@ -159,11 +159,11 @@ describe('Organization - documents', () => {
     test.each`
       userRole                    | privileges
       ${undefined}                | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}  | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}
+      ${TestUser.SPACE_ADMIN}       | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SUBSPACE_ADMIN} | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SPACE_MEMBER}      | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization reference document',
       async ({ userRole, privileges }) => {
@@ -181,11 +181,11 @@ describe('Organization - documents', () => {
     test.each`
       userRole                    | privileges                                                                           | parentEntityType
       ${undefined}                | ${['READ']}                                                                          | ${'ORGANIZATION'}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.NON_SPACE_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
       ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin}              | ${'ORGANIZATION'}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.SPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.SUBSPACE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.SPACE_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization profile reference storage bucket',
       async ({
@@ -236,11 +236,11 @@ describe('Organization - documents', () => {
     test.each`
       userRole                    | privileges
       ${undefined}                | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}  | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_platformAdmin}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}
+      ${TestUser.SPACE_ADMIN}       | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SUBSPACE_ADMIN} | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SPACE_MEMBER}      | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization description visual document',
       async ({ userRole, privileges }) => {
@@ -258,11 +258,11 @@ describe('Organization - documents', () => {
     test.each`
       userRole                    | privileges                                                                           | parentEntityType
       ${undefined}                | ${['READ']}                                                                          | ${'ORGANIZATION'}
-      ${TestUser.NON_HUB_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.NON_SPACE_MEMBER}  | ${['READ']}                                                                          | ${'ORGANIZATION'}
       ${TestUser.GLOBAL_ADMIN}    | ${sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin}              | ${'ORGANIZATION'}
-      ${TestUser.HUB_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
-      ${TestUser.CHALLENGE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
-      ${TestUser.HUB_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
+      ${TestUser.SPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.SUBSPACE_ADMIN} | ${sorted__create_read_update_delete_grant_fileUp_fileDel}                            | ${'ORGANIZATION'}
+      ${TestUser.SPACE_MEMBER}      | ${['READ']}                                                                          | ${'ORGANIZATION'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to organization description (storageBucket) document',
       async ({

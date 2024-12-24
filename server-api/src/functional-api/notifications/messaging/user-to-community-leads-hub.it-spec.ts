@@ -1,6 +1,6 @@
 
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../utils/delay';
+import { delay } from '../../../../../lib/src/utils/delay';
 import { TestUser } from '@common/enum/test.user';
 import {
   deleteSpace,
@@ -100,7 +100,7 @@ describe('Notifications - send messages to Private space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       await delay(3000);
@@ -132,7 +132,7 @@ describe('Notifications - send messages to Private space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       await delay(3000);
 
@@ -174,7 +174,7 @@ describe('Notifications - send messages to Private space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       await delay(3000);
 
@@ -205,7 +205,7 @@ describe('Notifications - send messages to Private space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       await delay(3000);
 
@@ -255,7 +255,7 @@ describe('Notifications - messages to Public space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       await delay(3000);
 
@@ -286,7 +286,7 @@ describe('Notifications - messages to Public space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       await delay(3000);
 
@@ -328,7 +328,7 @@ describe('Notifications - messages to Public space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       await delay(3000);
 
@@ -359,7 +359,7 @@ describe('Notifications - messages to Public space hosts', () => {
       await sendMessageToCommunityLeads(
         entitiesId.space.communityId,
         'Test message',
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       await delay(3000);
 
@@ -416,7 +416,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
     await sendMessageToCommunityLeads(
       entitiesId.space.communityId,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 

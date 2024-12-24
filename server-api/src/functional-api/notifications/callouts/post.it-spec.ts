@@ -258,7 +258,7 @@ describe('Notifications - post', () => {
       entitiesId.space.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     spacePostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -314,7 +314,7 @@ describe('Notifications - post', () => {
       entitiesId.challenge.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     challengePostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -371,7 +371,7 @@ describe('Notifications - post', () => {
       entitiesId.opportunity.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     opportunityPostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -447,7 +447,7 @@ describe('Notifications - post', () => {
       entitiesId.opportunity.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     opportunityPostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';

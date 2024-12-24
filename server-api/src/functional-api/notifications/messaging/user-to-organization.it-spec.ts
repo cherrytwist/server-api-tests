@@ -82,7 +82,7 @@ describe('Notifications - user to organization messages', () => {
     await sendMessageToOrganization(
       entitiesId.organization.id,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -123,7 +123,7 @@ describe('Notifications - user to organization messages', () => {
     await sendMessageToOrganization(
       entitiesId.organization.id,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -166,7 +166,7 @@ describe('Notifications - user to organization messages', () => {
     await sendMessageToOrganization(
       entitiesId.organization.id,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 

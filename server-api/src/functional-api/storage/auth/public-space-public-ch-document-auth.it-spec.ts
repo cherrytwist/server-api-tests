@@ -125,12 +125,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_MEMBER}       | ${['READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant}
-      ${TestUser.CHALLENGE_MEMBER} | ${['READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SPACE_MEMBER}       | ${['READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SUBSPACE_MEMBER} | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge profile visual document',
       async ({ userRole, privileges }) => {
@@ -149,12 +149,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                | parentEntityType
       ${undefined}                 | ${['READ']}                                               | ${'CHALLENGE'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                               | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_MEMBER}       | ${['READ']}                                               | ${'CHALLENGE'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_MEMBER}       | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge profile storage bucket',
       async ({
@@ -200,12 +200,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_MEMBER}       | ${['READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant}
-      ${TestUser.CHALLENGE_MEMBER} | ${['READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SPACE_MEMBER}       | ${['READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SUBSPACE_MEMBER} | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge profile reference document',
       async ({ userRole, privileges }) => {
@@ -224,12 +224,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                   | privileges                                                | parentEntityType
       ${undefined}               | ${['READ']}                                               | ${'CHALLENGE'}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_MEMBER}     | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_MEMBER}     | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'CHALLENGE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge profile storage bucket',
       async ({
@@ -281,12 +281,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant}
-      ${TestUser.HUB_MEMBER}       | ${['READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant}
-      ${TestUser.CHALLENGE_MEMBER} | ${['READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SPACE_MEMBER}       | ${['READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant}
+      ${TestUser.SUBSPACE_MEMBER} | ${['READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space context (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -305,12 +305,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                | parentEntityType
       ${undefined}                 | ${['READ']}                                               | ${'CHALLENGE'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                               | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.HUB_MEMBER}       | ${['READ']}                                               | ${'CHALLENGE'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_MEMBER}       | ${['READ']}                                               | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space context storage bucket',
       async ({
@@ -366,12 +366,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -391,12 +391,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                           | parentEntityType
       ${undefined}                 | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout storage bucket',
       async ({
@@ -455,12 +455,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -481,12 +481,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                           | parentEntityType
       ${undefined}                 | ${['READ']}                                                          | ${'POST'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                          | ${'POST'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                          | ${'POST'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge post collection callout storage bucket',
       async ({
@@ -554,12 +554,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -579,12 +579,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                           | parentEntityType
       ${undefined}                 | ${['READ']}                                                          | ${'POST'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                          | ${'POST'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                          | ${'POST'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space post collection callout storage bucket',
       async ({
@@ -651,12 +651,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge visual for whiteboard of call for whiteboards callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -677,12 +677,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                                         | parentEntityType
       ${undefined}                 | ${['READ']}                                                                        | ${'WHITEBOARD'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                                        | ${'WHITEBOARD'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                                        | ${'WHITEBOARD'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge whiteboard collection callout storage bucket',
       async ({
@@ -745,12 +745,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -767,12 +767,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                           | parentEntityType
       ${undefined}                 | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge link collection callout storage bucket',
       async ({
@@ -827,12 +827,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -848,12 +848,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                           | parentEntityType
       ${undefined}                 | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                          | ${'CALLOUT_FRAMING'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to challenge space link collection callout storage bucket',
       async ({
@@ -908,12 +908,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge visual for whiteboard callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -929,12 +929,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                                         | parentEntityType
       ${undefined}                 | ${['READ']}                                                                        | ${'WHITEBOARD'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                                        | ${'WHITEBOARD'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                                        | ${'WHITEBOARD'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge whiteboard callout storage bucket',
       async ({
@@ -990,12 +990,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${['READ']}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'READ']}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'READ']}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge visual for whiteboardRt callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -1011,12 +1011,12 @@ describe('Public Space - Public Challenge - visual on profile', () => {
     test.each`
       userRole                     | privileges                                                                         | parentEntityType
       ${undefined}                 | ${['READ']}                                                                        | ${'WHITEBOARD'}
-      ${TestUser.NON_HUB_MEMBER}   | ${['READ']}                                                                        | ${'WHITEBOARD'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${['READ']}                                                                        | ${'WHITEBOARD'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
-      ${TestUser.HUB_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.HUB_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.CHALLENGE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}        | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SPACE_MEMBER}       | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space challenge whiteboardRt callout storage bucket',
       async ({

@@ -164,7 +164,7 @@ describe('Notifications - invitations', () => {
       entitiesId.challenge.roleSetId,
       emailExternalUser,
       message,
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     const invitationInfo = invitationData?.data?.inviteUserToPlatformAndRoleSet;

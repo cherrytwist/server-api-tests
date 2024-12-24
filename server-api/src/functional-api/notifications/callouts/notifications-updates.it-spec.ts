@@ -211,7 +211,7 @@ describe.skip('Notifications - updates', () => {
     await sendMessageToRoom(
       entitiesId.space.updatesId,
       'EA space update ',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     // Assert
@@ -257,7 +257,7 @@ describe.skip('Notifications - updates', () => {
     await sendMessageToRoom(
       entitiesId.challenge.updatesId,
       'CA challenge update ',
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     // Assert
@@ -306,7 +306,7 @@ describe.skip('Notifications - updates', () => {
     await sendMessageToRoom(
       entitiesId.opportunity.updatesId,
       'OA opportunity update ',
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
 
     // Assert
@@ -366,7 +366,7 @@ describe.skip('Notifications - updates', () => {
     await sendMessageToRoom(
       entitiesId.opportunity.updatesId,
       'OA opportunity update 2',
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
 
     // Assert

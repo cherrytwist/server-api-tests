@@ -83,7 +83,7 @@ describe('Posts - Create', () => {
       entitiesId.space.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
     const postDataCreate =
       resPostonSpace.data?.createContributionOnCallout.post;
@@ -93,7 +93,7 @@ describe('Posts - Create', () => {
     const postsData = await getDataPerSpaceCallout(
       entitiesId.spaceId,
       entitiesId.space.calloutId,
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
     const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
       c => c.post && c.post.id === spacePostId
@@ -126,7 +126,7 @@ describe('Posts - Create', () => {
       entitiesId.space.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     // Assert
@@ -141,7 +141,7 @@ describe('Posts - Create', () => {
       entitiesId.challenge.calloutId,
       { displayName: postDisplayName },
       postNameID + 'ch',
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     const postDataCreate =
@@ -149,7 +149,7 @@ describe('Posts - Create', () => {
     challengePostId =
       resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
 
-    const post = await getPostData(challengePostId, TestUser.CHALLENGE_ADMIN);
+    const post = await getPostData(challengePostId, TestUser.SUBSPACE_ADMIN);
 
     // Assert
     expect(post.data?.lookup.post).toEqual(postDataCreate);
@@ -196,7 +196,7 @@ describe('Posts - Update', () => {
       spacePostId,
       postNameID,
       { profileData: { displayName: postDisplayName + 'HM update' } },
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
 
     // Assert
@@ -209,7 +209,7 @@ describe('Posts - Update', () => {
       spacePostId,
       postNameID,
       { profileData: { displayName: postDisplayName + 'Non-HM update' } },
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     // Act
@@ -222,7 +222,7 @@ describe('Posts - Update', () => {
       spacePostId,
       postNameID,
       { profileData: { displayName: postDisplayName + 'HA update' } },
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const postDataUpdate = resPostonSpace.data?.updatePost;
 
@@ -230,7 +230,7 @@ describe('Posts - Update', () => {
     const postsData = await getDataPerSpaceCallout(
       entitiesId.spaceId,
       entitiesId.space.calloutId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
       c => c.post && c.post.id === postDataUpdate?.id
@@ -269,7 +269,7 @@ test('HM should update post created on space callout from HM', async () => {
     entitiesId.space.calloutId,
     { displayName: postDisplayName + 'HM' },
     postNameID,
-    TestUser.HUB_MEMBER
+    TestUser.SPACE_MEMBER
   );
   const spacePostIdEM =
     resPostonSpaceEM.data?.createContributionOnCallout.post?.id ?? 'ß';
@@ -280,7 +280,7 @@ test('HM should update post created on space callout from HM', async () => {
     postNameID,
     { profileData: { displayName: postDisplayName + 'HM update' } },
 
-    TestUser.HUB_MEMBER
+    TestUser.SPACE_MEMBER
   );
 
   const postDataUpdate = resPostonSpace.data?.updatePost;
@@ -289,7 +289,7 @@ test('HM should update post created on space callout from HM', async () => {
   const postsData = await getDataPerSpaceCallout(
     entitiesId.spaceId,
     entitiesId.space.calloutId,
-    TestUser.HUB_MEMBER
+    TestUser.SPACE_MEMBER
   );
   const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
     c => c.post && c.post.id === spacePostIdEM
@@ -314,7 +314,7 @@ describe('Posts - Delete', () => {
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    const responseRemove = await deletePost(spacePostId, TestUser.HUB_MEMBER);
+    const responseRemove = await deletePost(spacePostId, TestUser.SPACE_MEMBER);
 
     const postsData = await postDataPerSpaceCallout(
       entitiesId.spaceId,
@@ -335,14 +335,14 @@ describe('Posts - Delete', () => {
       entitiesId.space.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
 
     spacePostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(spacePostId, TestUser.HUB_MEMBER);
+    await deletePost(spacePostId, TestUser.SPACE_MEMBER);
     const postsData = await postDataPerSpaceCallout(
       entitiesId.spaceId,
       entitiesId.space.calloutId
@@ -358,7 +358,7 @@ describe('Posts - Delete', () => {
       entitiesId.space.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
     spacePostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -379,7 +379,7 @@ describe('Posts - Delete', () => {
       entitiesId.space.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
 
     spacePostId =
@@ -388,7 +388,7 @@ describe('Posts - Delete', () => {
     // Act
     const responseRemove = await deletePost(
       spacePostId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     const postsData = await postDataPerSpaceCallout(
@@ -412,7 +412,7 @@ describe('Posts - Delete', () => {
       resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(challengePostId, TestUser.CHALLENGE_ADMIN);
+    await deletePost(challengePostId, TestUser.SUBSPACE_ADMIN);
     const data = await getPostData(challengePostId);
 
     // Assert
@@ -427,14 +427,14 @@ describe('Posts - Delete', () => {
       entitiesId.challenge.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch',
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     challengePostId =
       resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(challengePostId, TestUser.HUB_ADMIN);
+    await deletePost(challengePostId, TestUser.SPACE_ADMIN);
     const data = await getPostData(challengePostId);
 
     // Assert
@@ -449,13 +449,13 @@ describe('Posts - Delete', () => {
       entitiesId.opportunity.calloutId,
       { displayName: postDisplayName + 'opm' },
       postNameID + 'opm',
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     opportunityPostId =
       resPostonOpportunity.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(opportunityPostId, TestUser.CHALLENGE_ADMIN);
+    await deletePost(opportunityPostId, TestUser.SUBSPACE_ADMIN);
     const data = await getPostData(opportunityPostId);
 
     // Assert
@@ -470,7 +470,7 @@ describe('Posts - Delete', () => {
       entitiesId.challenge.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch',
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     challengePostId =
@@ -479,7 +479,7 @@ describe('Posts - Delete', () => {
     // Act
     const responseRemove = await deletePost(
       challengePostId,
-      TestUser.CHALLENGE_MEMBER
+      TestUser.SUBSPACE_MEMBER
     );
 
     const dataPost = await getPostData(challengePostId);
@@ -498,13 +498,13 @@ describe('Posts - Delete', () => {
       entitiesId.opportunity.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     opportunityPostId =
       resPostonOpportunity.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(opportunityPostId, TestUser.OPPORTUNITY_MEMBER);
+    await deletePost(opportunityPostId, TestUser.SUBSUBSPACE_MEMBER);
     const data = await getPostData(opportunityPostId);
 
     // Assert
@@ -582,7 +582,7 @@ describe('Posts - Messages', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdChallenge,
         'test message on challenge post',
-        TestUser.CHALLENGE_ADMIN
+        TestUser.SUBSPACE_ADMIN
       );
       msessageId = messageRes?.data?.sendMessageToRoom.id;
       const postsData = await getPostData(challengePostId);
@@ -606,7 +606,7 @@ describe('Posts - Messages', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
         'test message',
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       msessageId = messageRes?.data?.sendMessageToRoom.id;
       const postsData = await getPostData(spacePostId);
@@ -630,7 +630,7 @@ describe('Posts - Messages', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
         'test message',
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert
@@ -683,7 +683,7 @@ describe('Posts - Messages', () => {
         entitiesId.space.calloutId,
         { displayName: `em-asp-d-space-mess-${uniqueId}` },
         `em-asp-n-spa-mess-${uniqueId}`,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       spacePostId =
         resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -710,7 +710,7 @@ describe('Posts - Messages', () => {
       const removeMessageRes = await removeMessageOnRoom(
         postCommentsIdSpace,
         msessageId,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
 
       // Assert
@@ -724,7 +724,7 @@ describe('Posts - Messages', () => {
       const removeMessageRes = await removeMessageOnRoom(
         postCommentsIdSpace,
         msessageId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert
@@ -750,7 +750,7 @@ describe('Posts - Messages', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
         'test message',
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
 
       msessageId = messageRes?.data?.sendMessageToRoom.id;
@@ -760,7 +760,7 @@ describe('Posts - Messages', () => {
       await removeMessageOnRoom(
         postCommentsIdSpace,
         msessageId,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       const postsData = await getPostData(spacePostId);
 
@@ -797,7 +797,7 @@ describe('Posts - References', () => {
     const createRef = await createReferenceOnProfile(
       postProfileId,
       refname,
-      TestUser.HUB_MEMBER
+      TestUser.SPACE_MEMBER
     );
 
     // Act
@@ -811,7 +811,7 @@ describe('Posts - References', () => {
     const createRef = await createReferenceOnProfile(
       postProfileId,
       refname,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     // Act
@@ -826,7 +826,7 @@ describe('Posts - References', () => {
       const createRef = await createReferenceOnProfile(
         postProfileId,
         refname,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       refId = createRef?.data?.createReferenceOnProfile.id ?? '';
 
@@ -844,7 +844,7 @@ describe('Posts - References', () => {
 
     test('HA should remove reference from post created EA', async () => {
       // Arrange
-      await deleteReferenceOnProfile(refId, TestUser.HUB_ADMIN);
+      await deleteReferenceOnProfile(refId, TestUser.SPACE_ADMIN);
 
       // Act
       const postsData = await getPostData(spacePostId);

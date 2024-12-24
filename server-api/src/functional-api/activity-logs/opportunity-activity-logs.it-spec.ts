@@ -321,8 +321,8 @@ describe('Access to Activity logs - Opportunity', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${entitiesId.opportunity.collaborationId}
-      ${TestUser.HUB_ADMIN}    | ${entitiesId.opportunity.collaborationId}
-      ${TestUser.HUB_MEMBER}   | ${entitiesId.opportunity.collaborationId}
+      ${TestUser.SPACE_ADMIN}    | ${entitiesId.opportunity.collaborationId}
+      ${TestUser.SPACE_MEMBER}   | ${entitiesId.opportunity.collaborationId}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Opportunity activity logs of a Private space',
       async ({ userRole, message }) => {
@@ -342,7 +342,7 @@ describe('Access to Activity logs - Opportunity', () => {
 
     test.each`
       userRole                   | message
-      ${TestUser.NON_HUB_MEMBER} | ${'Authorization'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
       'User: "$userRole" get Error message: "$message", when intend to access Public Opportunity activity logs of a Private space',
       async ({ userRole, message }) => {
@@ -376,9 +376,9 @@ describe('Access to Activity logs - Opportunity', () => {
     test.each`
       userRole                   | message
       ${TestUser.GLOBAL_ADMIN}   | ${entitiesId.opportunity.collaborationId}
-      ${TestUser.HUB_ADMIN}      | ${entitiesId.opportunity.collaborationId}
-      ${TestUser.HUB_MEMBER}     | ${entitiesId.opportunity.collaborationId}
-      ${TestUser.NON_HUB_MEMBER} | ${entitiesId.opportunity.collaborationId}
+      ${TestUser.SPACE_ADMIN}      | ${entitiesId.opportunity.collaborationId}
+      ${TestUser.SPACE_MEMBER}     | ${entitiesId.opportunity.collaborationId}
+      ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.opportunity.collaborationId}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Opportunity activity logs of a Public space',
       async ({ userRole, message }) => {

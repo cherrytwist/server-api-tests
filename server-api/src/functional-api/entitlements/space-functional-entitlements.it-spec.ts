@@ -66,7 +66,7 @@ describe('Functional tests - Space', () => {
     afterAll(async () => {
       const spaceData = await getAccountMainEntities(
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const spaces = spaceData.data?.account?.spaces;
       for (const space of spaces || []) {
@@ -89,14 +89,14 @@ describe('Functional tests - Space', () => {
       'User: VC campaign has license $availableEntitlements to creates a space with name: $spaceName',
       async ({ spaceName, availableEntitlements, error }) => {
         // Arrange
-        const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+        const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
 
         // Act
         const createSpace = await createSpaceBasicData(
           spaceName,
           spaceName,
           users.nonSpaceMember.accountId,
-          TestUser.NON_HUB_MEMBER
+          TestUser.NON_SPACE_MEMBER
         );
         spaceId = createSpace.data?.createSpace.id ?? '';
 
@@ -110,14 +110,14 @@ describe('Functional tests - Space', () => {
     // Test is dependant on the above test
     test('Create a space over the license limit', async () => {
       // Arrange
-      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+      const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
 
       // Act
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.createSpace.id ?? '';
 
@@ -134,24 +134,24 @@ describe('Functional tests - Space', () => {
     test('Create a space after third over the license limit was removed', async () => {
       // Arrange
       const responseBefore = await getMyEntitlementsQuery(
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       const response = await getAccountMainEntities(
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const spaceId0 = response.data?.account?.spaces?.[0].id ?? '';
       // Act
       const a = await deleteSpace(spaceId0, TestUser.GLOBAL_ADMIN);
       const responseAfter = await getMyEntitlementsQuery(
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.createSpace.id ?? '';
 

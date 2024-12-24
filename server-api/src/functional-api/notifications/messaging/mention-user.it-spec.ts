@@ -142,7 +142,7 @@ describe('Notifications - Mention User', () => {
           users.nonSpaceMember.displayName,
           users.nonSpaceMember.nameId
         )} comment on discussion callout`,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       await delay(3000);
 
@@ -171,7 +171,7 @@ describe('Notifications - Mention User', () => {
           users.spaceAdmin.displayName,
           users.spaceAdmin.nameId
         )}  comment on discussion callout`,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       await delay(3000);
 
@@ -201,7 +201,7 @@ describe('Notifications - Mention User', () => {
           users.spaceMember.displayName,
           users.spaceMember.nameId
         )} comment on discussion callout`,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       await delay(3000);
 
@@ -284,7 +284,7 @@ describe('Notifications - Mention User', () => {
         entitiesId.challenge.calloutId,
         { displayName: postDisplayName },
         postNameID,
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       postCommentsIdChallenge =
         resPostonChallenge.data?.createContributionOnCallout.post?.comments
@@ -294,7 +294,7 @@ describe('Notifications - Mention User', () => {
         entitiesId.opportunity.calloutId,
         { displayName: postDisplayName },
         postNameID,
-        TestUser.OPPORTUNITY_MEMBER
+        TestUser.SUBSUBSPACE_MEMBER
       );
       postCommentsIdOpportunity =
         resPostonOpp.data?.createContributionOnCallout.post?.comments.id ?? '';
@@ -311,7 +311,7 @@ describe('Notifications - Mention User', () => {
           users.spaceMember.displayName,
           users.spaceMember.nameId
         )} comment on discussion callout`,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       await delay(3000);
 
@@ -337,7 +337,7 @@ describe('Notifications - Mention User', () => {
           users.spaceMember.displayName,
           users.spaceMember.nameId
         )} comment on discussion callout`,
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       await delay(3000);
 
@@ -363,7 +363,7 @@ describe('Notifications - Mention User', () => {
           users.spaceMember.displayName,
           users.spaceMember.nameId
         )} comment on discussion callout`,
-        TestUser.OPPORTUNITY_MEMBER
+        TestUser.SUBSUBSPACE_MEMBER
       );
 
       await delay(3000);
@@ -396,7 +396,7 @@ describe('Notifications - Mention User', () => {
           users.spaceMember.displayName,
           users.spaceMember.nameId
         )} comment on discussion callout`,
-        TestUser.OPPORTUNITY_MEMBER
+        TestUser.SUBSUBSPACE_MEMBER
       );
 
       await delay(3000);

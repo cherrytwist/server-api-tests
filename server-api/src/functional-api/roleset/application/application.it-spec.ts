@@ -81,10 +81,10 @@ describe('Application', () => {
     // Act
     applicationData = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
-    const userAppsData = await meQuery(TestUser.GLOBAL_COMMUNITY_ADMIN);
+    const userAppsData = await meQuery(TestUser.GLOBAL_SUPPORT_ADMIN);
 
     const getApp = userAppsData?.data?.me?.communityApplications;
 
@@ -111,7 +111,7 @@ describe('Application', () => {
     // Arrange
     applicationData = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
 
@@ -123,11 +123,11 @@ describe('Application', () => {
     // Creates application second time
     applicationData = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
 
-    const userAppsData = await meQuery(TestUser.GLOBAL_COMMUNITY_ADMIN);
+    const userAppsData = await meQuery(TestUser.GLOBAL_SUPPORT_ADMIN);
     const getApp = userAppsData?.data?.me?.communityApplications;
 
     // Assert
@@ -155,13 +155,13 @@ describe('Application', () => {
     // Act
     const applicationDataOne = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId =
       applicationDataOne?.data?.applyForEntryRoleOnRoleSet?.id ?? 'undefined';
     const applicationDataTwo = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
     // Assert
@@ -320,7 +320,7 @@ describe('Application-flows', () => {
 
     applicationData = await createApplication(
       entitiesId.challenge.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
     const createAppData = applicationData.data?.applyForEntryRoleOnRoleSet;
@@ -336,12 +336,12 @@ describe('Application-flows', () => {
     // Create challenge application
     applicationData = await createApplication(
       entitiesId.challenge.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
     challengeApplicationId = createAppData?.id;
 
-    const userAppsData = await meQuery(TestUser.GLOBAL_COMMUNITY_ADMIN);
+    const userAppsData = await meQuery(TestUser.GLOBAL_SUPPORT_ADMIN);
 
     const membershipData = userAppsData?.data?.me?.communityApplications;
     const challengeAppOb = [
@@ -372,7 +372,7 @@ describe('Application-flows', () => {
     // Create challenge application
     applicationData = await createApplication(
       entitiesId.challenge.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
     challengeApplicationId = createAppData?.id;
@@ -383,7 +383,7 @@ describe('Application-flows', () => {
     // Update space application state
     await eventOnRoleSetApplication(applicationId, 'REJECT');
 
-    const userAppsDataAfter = await meQuery(TestUser.GLOBAL_COMMUNITY_ADMIN);
+    const userAppsDataAfter = await meQuery(TestUser.GLOBAL_SUPPORT_ADMIN);
     const membershipDataAfter =
       userAppsDataAfter?.data?.me?.communityApplications;
 
@@ -409,7 +409,7 @@ describe('Application-flows', () => {
     // Create + approve space application
     const spaceApplicationData = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
     if (spaceApplicationData?.data?.applyForEntryRoleOnRoleSet) {
@@ -430,7 +430,7 @@ describe('Application-flows', () => {
     // Create challenge application
     const subspaceApplicationData = await createApplication(
       entitiesId.challenge.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
     challengeApplicationId = 'NotRetrieved';
@@ -469,7 +469,7 @@ describe('Application-flows', () => {
     // Create challenge application
     applicationData = await createApplication(
       entitiesId.challenge.roleSetId,
-      TestUser.GLOBAL_COMMUNITY_ADMIN
+      TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
     challengeApplicationId = createAppData?.id;

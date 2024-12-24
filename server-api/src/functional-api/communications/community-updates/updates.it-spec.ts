@@ -68,7 +68,7 @@ describe('Communities', () => {
 
       const spaceDataReaderMember = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
 
       const getMessageReaderMember =
@@ -77,7 +77,7 @@ describe('Communities', () => {
       await delay(600);
       const spaceDataReader = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert
@@ -121,7 +121,7 @@ describe('Communities', () => {
 
       const spaceDataReaderMember = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       const getMessageReaderMember =
         spaceDataReaderMember?.data?.space?.community?.communication?.updates
@@ -129,7 +129,7 @@ describe('Communities', () => {
 
       const spaceDataReaderNotMemberIn = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const spaceDataReaderNotMember =
         spaceDataReaderNotMemberIn?.data?.space?.community?.communication

@@ -148,7 +148,7 @@ describe('Virtual Contributor', () => {
 
     const invitationsDataCommunity = await getRoleSetInvitationsApplications(
       entitiesId.space.roleSetId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     // Assert

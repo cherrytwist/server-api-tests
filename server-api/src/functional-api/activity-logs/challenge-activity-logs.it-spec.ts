@@ -105,7 +105,7 @@ describe('Activity logs - Challenge', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(entitiesId.challenge.roleSetId, TestUser.HUB_MEMBER);
+    await joinRoleSet(entitiesId.challenge.roleSetId, TestUser.SPACE_MEMBER);
 
     await assignRoleToUser(
       users.spaceAdmin.id,
@@ -317,8 +317,8 @@ describe('Access to Activity logs - Challenge', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${entitiesId.challenge.collaborationId}
-      ${TestUser.HUB_ADMIN}    | ${entitiesId.challenge.collaborationId}
-      ${TestUser.HUB_MEMBER}   | ${entitiesId.challenge.collaborationId}
+      ${TestUser.SPACE_ADMIN}    | ${entitiesId.challenge.collaborationId}
+      ${TestUser.SPACE_MEMBER}   | ${entitiesId.challenge.collaborationId}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Challenge activity logs of a Private space',
       async ({ userRole, message }) => {
@@ -338,7 +338,7 @@ describe('Access to Activity logs - Challenge', () => {
 
     test.each`
       userRole                   | message
-      ${TestUser.NON_HUB_MEMBER} | ${'Authorization'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
       'User: "$userRole" get Error message: "$message", when intend to access Public Challenge activity logs of a Private space',
       async ({ userRole, message }) => {
@@ -368,9 +368,9 @@ describe('Access to Activity logs - Challenge', () => {
     test.each`
       userRole                   | message
       ${TestUser.GLOBAL_ADMIN}   | ${entitiesId.challenge.collaborationId}
-      ${TestUser.HUB_ADMIN}      | ${entitiesId.challenge.collaborationId}
-      ${TestUser.HUB_MEMBER}     | ${entitiesId.challenge.collaborationId}
-      ${TestUser.NON_HUB_MEMBER} | ${entitiesId.challenge.collaborationId}
+      ${TestUser.SPACE_ADMIN}      | ${entitiesId.challenge.collaborationId}
+      ${TestUser.SPACE_MEMBER}     | ${entitiesId.challenge.collaborationId}
+      ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.challenge.collaborationId}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Challenge activity logs of a Public space',
       async ({ userRole, message }) => {

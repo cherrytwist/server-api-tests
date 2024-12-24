@@ -142,7 +142,7 @@ describe('Opportunity Admin', () => {
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
-      TestUser.CHALLENGE_MEMBER
+      TestUser.SUBSPACE_MEMBER
     );
 
     // Assert
@@ -169,7 +169,7 @@ describe('Opportunity Admin', () => {
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
-      TestUser.CHALLENGE_MEMBER
+      TestUser.SUBSPACE_MEMBER
     );
 
     // Assert

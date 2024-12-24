@@ -44,7 +44,7 @@ describe('Functional tests - Innovation Pack', () => {
   afterEach(async () => {
     const spaceData = await getAccountMainEntities(
       users.nonSpaceMember.accountId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     const packs = spaceData.data?.account?.innovationPacks;
     for (const pack of packs || []) {
@@ -87,14 +87,14 @@ describe('Functional tests - Innovation Pack', () => {
       'User: VC campaign has license $availableEntitlements to creates an innovation pack with name: $packName',
       async ({ packName, availableEntitlements, error }) => {
         // Arrange
-        const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+        const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
 
         // Act
         const createPack = await createInnovationPack(
           packName,
           packName,
           users.nonSpaceMember.accountId,
-          TestUser.NON_HUB_MEMBER
+          TestUser.NON_SPACE_MEMBER
         );
         packId = createPack?.data?.createInnovationPack?.id ?? '';
 
@@ -115,17 +115,17 @@ describe('Functional tests - Innovation Pack', () => {
           `setup-pack-${i}-${uniqueId}`,
           `setup-pack-${i}-${uniqueId}`,
           users.nonSpaceMember.accountId,
-          TestUser.NON_HUB_MEMBER
+          TestUser.NON_SPACE_MEMBER
         );
       }
-      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+      const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
 
       // Act
       const createPack = await createInnovationPack(
         `excess-pack-${uniqueId}`,
         `excess-pack-${uniqueId}`,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert
