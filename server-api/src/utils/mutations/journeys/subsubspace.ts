@@ -5,20 +5,19 @@ import { TestUser } from '@alkemio/tests-lib';
 
 import { uniqueId } from '@utils/uniqueId';
 
-export const createChallenge = async (
-  challengeName: string,
-  challengeNameId: string,
+export const createSubsubspace = async (
+  opportunityName: string,
+  opportunityNameId: string,
   parentId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN,
-  innovationFlowTemplateID?: string
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.CreateSubspace(
       {
-        subspaceData: challengeVariablesData(
-          challengeName,
-          challengeNameId,
+        subspaceData: opportunityVariablesData(
+          opportunityName,
+          opportunityNameId,
           parentId,
         ),
       },
@@ -30,14 +29,14 @@ export const createChallenge = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const challengeVariablesData = (
+export const opportunityVariablesData = (
   displayName: string,
   nameId: string,
-  spaceId: string,
+  subspaceId: string,
 ) => {
   const variables = {
+    spaceID: subspaceId,
     nameID: nameId,
-    spaceID: spaceId,
     profileData: {
       displayName,
       tagline: 'test tagline' + uniqueId,

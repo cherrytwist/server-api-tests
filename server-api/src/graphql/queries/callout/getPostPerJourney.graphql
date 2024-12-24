@@ -1,6 +1,6 @@
 query GetPostPerJourney(
   $spaceId: UUID_NAMEID!
-  # $challengeId: UUID_NAMEID!
+  # $subspaceId: UUID_NAMEID!
   # $opportunityId: UUID_NAMEID!
 ) {
   space(ID: $spaceId) {
@@ -11,7 +11,7 @@ query GetPostPerJourney(
         }
       }
     }
-    # challenge(ID: $challengeId) {
+    # subspace(ID: $subspaceId) {
     #   id
     #   nameID
     #   collaboration {

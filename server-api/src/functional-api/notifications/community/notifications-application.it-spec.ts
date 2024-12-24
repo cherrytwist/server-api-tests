@@ -11,7 +11,7 @@ import {
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 
@@ -31,7 +31,7 @@ const spaceName = 'not-app-eco-name' + uniqueId;
 const spaceNameId = 'not-app-eco-nameid' + uniqueId;
 
 const ecoName = spaceName;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 let preferencesConfig: any[] = [];
 
 beforeAll(async () => {
@@ -43,7 +43,7 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await updateSpaceSettings(entitiesId.spaceId, {
     membership: { policy: CommunityMembershipPolicy.Applications },
   });
@@ -74,18 +74,18 @@ beforeAll(async () => {
       type: PreferenceType.NotificationApplicationReceived,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationApplicationReceived,
     },
   ];
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -150,7 +150,7 @@ describe('Notifications - applications', () => {
     );
   });
 
-  test('receive notification for non space user application to challenge- GA, EA, CA and Applicant', async () => {
+  test('receive notification for non space user application to subspace- GA, EA, CA and Applicant', async () => {
     // Arrange
     await assignRoleToUser(
       users.nonSpaceMember.id,
@@ -158,14 +158,14 @@ describe('Notifications - applications', () => {
       CommunityRoleType.Member
     );
 
-    await updateSpaceSettings(entitiesId.challenge.id, {
+    await updateSpaceSettings(entitiesId.subspace.id, {
       membership: {
         policy: CommunityMembershipPolicy.Applications,
       },
     });
 
     // Act
-    await createApplication(entitiesId.challenge.roleSetId);
+    await createApplication(entitiesId.subspace.roleSetId);
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -175,15 +175,15 @@ describe('Notifications - applications', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `${challengeName}: Application from non`,
+          subject: `${subspaceName}: Application from non`,
           toAddresses: [users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${challengeName}: Application from non`,
-          toAddresses: [users.challengeAdmin.email],
+          subject: `${subspaceName}: Application from non`,
+          toAddresses: [users.subspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${challengeName} - Your Application to join was received!`,
+          subject: `${subspaceName} - Your Application to join was received!`,
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -201,7 +201,7 @@ describe('Notifications - applications', () => {
     await deleteApplication(entitiesId.space.applicationId);
 
     // Act
-    await createApplication(entitiesId.challenge.roleSetId);
+    await createApplication(entitiesId.subspace.roleSetId);
 
     await delay(1500);
     const getEmailsData = await getMailsData();

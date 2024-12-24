@@ -12,7 +12,7 @@ import {
 } from '@functional-api/roleset/invitations/invitation.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
@@ -27,7 +27,7 @@ const hostNameId = 'not-app-org-nameid' + uniqueId;
 const spaceName = 'not-app-eco-name' + uniqueId;
 const spaceNameId = 'not-app-eco-nameid' + uniqueId;
 const opportunityName = 'opportunity-name';
-const challengeName = 'challlenge-name';
+const subspaceName = 'challlenge-name';
 const ecoName = spaceName;
 
 let invitationId = '';
@@ -49,9 +49,9 @@ beforeAll(async () => {
     },
   });
 
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
 
-  await updateSpaceSettings(entitiesId.challenge.id, {
+  await updateSpaceSettings(entitiesId.subspace.id, {
     membership: {
       allowSubspaceAdminsToInviteMembers: true,
     },
@@ -66,12 +66,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
@@ -155,13 +155,13 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test.only('challenge admin (sender) and external user receive notifications', async () => {
+  test.only('subspace admin (sender) and external user receive notifications', async () => {
     // Act
     const emailExternalUser = `external${uniqueId}@alkem.io`;
     const message = 'Hello, feel free to join our community!';
 
     const invitationData = await inviteExternalUser(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       emailExternalUser,
       message,
       TestUser.SUBSPACE_ADMIN
@@ -178,7 +178,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${challengeName}`,
+          subject: `Invitation to join ${subspaceName}`,
           toAddresses: [emailExternalUser],
         }),
       ])
@@ -186,8 +186,8 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${challengeName}`,
-          toAddresses: [users.challengeAdmin.email],
+          subject: `Invitation to join ${subspaceName}`,
+          toAddresses: [users.subspaceAdmin.email],
         }),
       ])
     );

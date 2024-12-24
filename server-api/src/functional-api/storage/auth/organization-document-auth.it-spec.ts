@@ -42,7 +42,7 @@ beforeAll(async () => {
   );
 
   await assignUserAsOrganizationAdmin(
-    users.challengeAdmin.id,
+    users.subspaceAdmin.id,
     entitiesId.organization.id
   );
 

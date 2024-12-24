@@ -97,7 +97,7 @@ describe('Limits on account resources creation', () => {
         const createSpace = await createSpaceBasicData(
           spaceName,
           spaceName,
-          users.opportunityAdmin.accountId,
+          users.subsubspaceAdmin.accountId,
           TestUser.SUBSPACE_ADMIN
         );
         localSpaceId = createSpace.data?.createSpace.id ?? '';

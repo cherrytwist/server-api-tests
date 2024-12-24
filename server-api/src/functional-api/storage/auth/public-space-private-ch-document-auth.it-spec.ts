@@ -12,7 +12,7 @@ import {
 import path from 'path';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
@@ -58,7 +58,7 @@ const organizationName = 'org-name' + uniqueId;
 const hostNameId = 'org-nameid' + uniqueId;
 const spaceName = 'lifec-eco-name' + uniqueId;
 const spaceNameId = 'lifec-eco-nameid' + uniqueId;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 let refId = '';
 let documentId = '';
 
@@ -70,7 +70,7 @@ beforeAll(async () => {
     spaceNameId
   );
 
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
 
   await updateSpacePlatformSettings(
     entitiesId.spaceId,
@@ -82,7 +82,7 @@ beforeAll(async () => {
     privacy: { mode: SpacePrivacyMode.Public },
   });
 
-  await updateSpaceSettings(entitiesId.challenge.id, {
+  await updateSpaceSettings(entitiesId.subspace.id, {
     privacy: { mode: SpacePrivacyMode.Private },
     collaboration: {
       inheritMembershipRights: true,
@@ -92,19 +92,19 @@ beforeAll(async () => {
   });
 });
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
-describe('Public Space - Private Challenge - visual on profile', () => {
+describe('Public Space - Private Subspace - visual on profile', () => {
   describe('Access to Space Profile visual', () => {
     afterAll(async () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
       const visualData = await lookupProfileVisuals(
-        entitiesId.challenge.profileId
+        entitiesId.subspace.profileId
       );
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
@@ -113,7 +113,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.challenge.profileId,
+        entitiesId.subspace.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -132,10 +132,10 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER} | ${['READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge profile visual document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace profile visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.challenge.profileId,
+          entitiesId.subspace.profileId,
           userRole
         );
 
@@ -157,14 +157,14 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_MEMBER} | ${['READ']}                                               | ${'CHALLENGE'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge profile storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace profile storage bucket',
       async ({
         userRole,
         privileges,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.challenge.profileId,
+          entitiesId.subspace.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -182,7 +182,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        entitiesId.challenge.profileId
+        entitiesId.subspace.profileId
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
       await uploadFileOnRef(
@@ -191,7 +191,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.challenge.profileId,
+        entitiesId.subspace.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -209,10 +209,10 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER} | ${['READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge profile reference document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace profile reference document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.challenge.profileId,
+          entitiesId.subspace.profileId,
           userRole
         );
 
@@ -234,14 +234,14 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'CHALLENGE'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge profile storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace profile storage bucket',
       async ({
         userRole,
         privileges,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.challenge.profileId,
+          entitiesId.subspace.profileId,
           userRole
         );
 
@@ -260,7 +260,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        entitiesId.challenge.profileId,
+        entitiesId.subspace.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -273,7 +273,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.challenge.profileId,
+        entitiesId.subspace.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -295,7 +295,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space context (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.challenge.profileId,
+          entitiesId.subspace.profileId,
           userRole
         );
 
@@ -324,7 +324,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.challenge.profileId,
+          entitiesId.subspace.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -343,7 +343,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const linkCallout = await createLinkCollectionCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'link11',
         'Link collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -429,7 +429,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'post11',
         'Post collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -469,7 +469,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge visual for post of call for post  callout (storageBucket) document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await calloutPostCardStorageConfig(
           postCardId,
@@ -495,7 +495,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge post collection callout storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace post collection callout storage bucket',
       async ({
         userRole,
         privileges,
@@ -527,7 +527,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const calloutData = await createPostCollectionCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'post12',
         'Post collection Callout12',
         TestUser.GLOBAL_ADMIN
@@ -626,7 +626,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createWhiteboardCollectionCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'whiteboard11',
         'Whiteboard collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -667,7 +667,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge visual for whiteboard of call for whiteboards callout (storageBucket) document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace visual for whiteboard of call for whiteboards callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await calloutWhiteboardStorageConfig(
           whiteboardCardId,
@@ -693,7 +693,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge whiteboard collection callout storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace whiteboard collection callout storage bucket',
       async ({
         userRole,
         privileges,
@@ -724,7 +724,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'post3',
         'Post collection Callout3',
         TestUser.GLOBAL_ADMIN
@@ -762,7 +762,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge visual for post of call for post  callout (storageBucket) document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await calloutStorageConfig(calloutId, userRole);
 
@@ -784,7 +784,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge link collection callout storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace link collection callout storage bucket',
       async ({
         userRole,
         privileges,
@@ -808,7 +808,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'post4',
         'Post collection Callout4',
         TestUser.GLOBAL_ADMIN
@@ -845,7 +845,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge visual for post of call for post  callout (storageBucket) document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await calloutStorageConfig(calloutId, userRole);
         const data =
@@ -866,7 +866,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to challenge space link collection callout storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to subspace space link collection callout storage bucket',
       async ({
         userRole,
         privileges,
@@ -890,7 +890,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'whiteboard1',
         'Whiteboard Callout1',
         TestUser.GLOBAL_ADMIN
@@ -927,7 +927,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge visual for whiteboard callout (storageBucket) document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace visual for whiteboard callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await whiteboardCalloutStorageConfig(calloutId, userRole);
         const data =
@@ -948,7 +948,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge whiteboard callout storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace whiteboard callout storage bucket',
       async ({
         userRole,
         privileges,
@@ -973,7 +973,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.challenge.collaborationId,
+        entitiesId.subspace.collaborationId,
         'whiteboard2',
         'Whiteboard Callout2',
         TestUser.GLOBAL_ADMIN
@@ -1010,7 +1010,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'READ']}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge visual for whiteboardRt callout (storageBucket) document',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace visual for whiteboardRt callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await whiteboardCalloutStorageConfig(calloutId, userRole);
         const data =
@@ -1031,7 +1031,7 @@ describe('Public Space - Private Challenge - visual on profile', () => {
       ${TestUser.SUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SUBSPACE_MEMBER} | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
-      'User: "$userRole" has this privileges: "$privileges" to space challenge whiteboardRt callout storage bucket',
+      'User: "$userRole" has this privileges: "$privileges" to space subspace whiteboardRt callout storage bucket',
       async ({
         userRole,
         privileges,

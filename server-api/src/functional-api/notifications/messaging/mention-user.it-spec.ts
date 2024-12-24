@@ -11,17 +11,17 @@ import { changePreferenceUser } from '@functional-api/contributor-management/use
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers, createChallengeWithUsers, createOpportunityWithUsers } from '../../../utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers, createSubspaceWithUsers, createOpportunityWithUsers } from '../../../utils/data-setup/entities';
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 const opportunityName = `oppName${uniqueId}`;
 
 let postCommentsIdSpace = '';
-let postCommentsIdChallenge = '';
+let postCommentsIdSubspace = '';
 let postCommentsIdOpportunity = '';
 
 const receivers = (senderDisplayName: string) => {
@@ -46,7 +46,7 @@ beforeAll(async () => {
     spaceNameId
   );
 
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await createOpportunityWithUsers(opportunityName);
 
   await changePreferenceUser(
@@ -65,11 +65,11 @@ beforeAll(async () => {
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
@@ -77,11 +77,11 @@ beforeAll(async () => {
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
@@ -97,8 +97,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -211,10 +211,10 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[1]).toEqual(0);
     });
 
-    test('GA mention HM in Challenge comments callout - 1 notification to HM is sent', async () => {
+    test('GA mention HM in Subspace comments callout - 1 notification to HM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.challenge.discussionCalloutCommentsId,
+        entitiesId.subspace.discussionCalloutCommentsId,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -241,7 +241,7 @@ describe('Notifications - Mention User', () => {
       // Act
 
       await sendMessageToRoom(
-        entitiesId.opportunity.discussionCalloutCommentsId,
+        entitiesId.subsubspace.discussionCalloutCommentsId,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -280,18 +280,18 @@ describe('Notifications - Mention User', () => {
         resPostonSpace.data?.createContributionOnCallout.post?.comments.id ??
         '';
 
-      const resPostonChallenge = await createPostOnCallout(
-        entitiesId.challenge.calloutId,
+      const resPostonSubspace = await createPostOnCallout(
+        entitiesId.subspace.calloutId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSPACE_MEMBER
       );
-      postCommentsIdChallenge =
-        resPostonChallenge.data?.createContributionOnCallout.post?.comments
+      postCommentsIdSubspace =
+        resPostonSubspace.data?.createContributionOnCallout.post?.comments
           .id ?? '';
 
       const resPostonOpp = await createPostOnCallout(
-        entitiesId.opportunity.calloutId,
+        entitiesId.subsubspace.calloutId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSUBSPACE_MEMBER
@@ -329,10 +329,10 @@ describe('Notifications - Mention User', () => {
       );
     });
 
-    test('CA mention HM in Challenge post - 1 notification to HM is sent', async () => {
+    test('CA mention HM in Subspace post - 1 notification to HM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        postCommentsIdChallenge,
+        postCommentsIdSubspace,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -348,7 +348,7 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.challengeMember.displayName),
+            subject: receivers(users.subspaceMember.displayName),
             toAddresses: [users.spaceMember.email],
           }),
         ])
@@ -375,7 +375,7 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.opportunityMember.displayName),
+            subject: receivers(users.subsubspaceMember.displayName),
             toAddresses: [users.spaceMember.email],
           }),
         ])

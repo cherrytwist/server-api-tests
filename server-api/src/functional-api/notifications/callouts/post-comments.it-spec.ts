@@ -9,7 +9,7 @@ import {
 } from '@functional-api/callout/post/post.request.params';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
@@ -26,14 +26,14 @@ const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 const opportunityName = `opName${uniqueId}`;
 let spacePostId = '';
-let challengePostId = '';
+let subspacePostId = '';
 let opportunityPostId = '';
 let postDisplayName = '';
 let postCommentsIdSpace = '';
-let postCommentsIdChallenge = '';
+let postCommentsIdSubspace = '';
 let postCommentsIdOpportunity = '';
 let messageId = '';
 let preferencesPostConfig: any[] = [];
@@ -48,7 +48,7 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await createOpportunityWithUsers(opportunityName);
 
   preferencesPostConfig = [
@@ -71,20 +71,20 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
@@ -97,19 +97,19 @@ beforeAll(async () => {
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
@@ -132,11 +132,11 @@ beforeAll(async () => {
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
@@ -144,11 +144,11 @@ beforeAll(async () => {
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
@@ -159,8 +159,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -344,29 +344,29 @@ describe('Notifications - post comments', () => {
     });
   });
 
-  describe('CM create post on challenge  ', () => {
+  describe('CM create post on subspace  ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.challenge.calloutId,
+        entitiesId.subspace.calloutId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSPACE_MEMBER
       );
-      challengePostId =
+      subspacePostId =
         resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
-      postCommentsIdChallenge =
+      postCommentsIdSubspace =
         resPostonSpace.data?.createContributionOnCallout.post?.comments.id ??
         '';
     });
 
     afterAll(async () => {
-      await deletePost(challengePostId);
+      await deletePost(subspacePostId);
     });
     test('CM create comment - CM(1) get notifications', async () => {
       // Act
       const messageRes = await sendMessageToRoom(
-        postCommentsIdChallenge,
-        'test message on challenge post',
+        postCommentsIdSubspace,
+        'test message on subspace post',
         TestUser.SUBSPACE_MEMBER
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
@@ -378,11 +378,11 @@ describe('Notifications - post comments', () => {
     });
 
     test('CA create comment - CM(1) get notifications', async () => {
-      const challengePostSubjectText = `${challengeName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
+      const subspacePostSubjectText = `${subspaceName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
       // Act
       const messageRes = await sendMessageToRoom(
-        postCommentsIdChallenge,
-        'test message on challenge post',
+        postCommentsIdSubspace,
+        'test message on subspace post',
         TestUser.SUBSPACE_ADMIN
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
@@ -393,8 +393,8 @@ describe('Notifications - post comments', () => {
       expect(mails[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: challengePostSubjectText,
-            toAddresses: [users.challengeMember.email],
+            subject: subspacePostSubjectText,
+            toAddresses: [users.subspaceMember.email],
           }),
         ])
       );
@@ -406,7 +406,7 @@ describe('Notifications - post comments', () => {
   describe('OM create post on opportunity  ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.opportunity.calloutId,
+        entitiesId.subsubspace.calloutId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSUBSPACE_MEMBER
@@ -453,7 +453,7 @@ describe('Notifications - post comments', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: opportunityPostSubjectText,
-            toAddresses: [users.opportunityMember.email],
+            toAddresses: [users.subsubspaceMember.email],
           }),
         ])
       );
@@ -469,7 +469,7 @@ describe('Notifications - post comments', () => {
     );
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.opportunity.calloutId,
+      entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SUBSUBSPACE_ADMIN

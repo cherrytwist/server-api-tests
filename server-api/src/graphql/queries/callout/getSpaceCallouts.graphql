@@ -1,9 +1,9 @@
 # query Callouts(
 #   $spaceNameId: UUID_NAMEID!
 #   $includeSpace: Boolean = false
-#   $includeChallenge: Boolean = false
+#   $includeSubspace: Boolean = false
 #   $includeOpportunity: Boolean = false
-#   $challengeNameId: UUID_NAMEID = "mockid"
+#   $subspaceNameId: UUID_NAMEID = "mockid"
 #   $opportunityNameId: UUID_NAMEID = "mockid"
 #   $groups: [String!]
 #   $calloutIds: [UUID_NAMEID!]
@@ -18,10 +18,10 @@
 #       }
 #       __typename
 #     }
-#     challenge(ID: $challengeNameId) @include(if: $includeChallenge) {
+#     subspace(ID: $subspaceNameId) @include(if: $includeSubspace) {
 #       id
 #       nameID
-#       ... on Challenge @skip(if: $includeOpportunity) {
+#       ... on Subspace @skip(if: $includeOpportunity) {
 #         collaboration {
 #           ...CollaborationWithCallouts
 #           __typename

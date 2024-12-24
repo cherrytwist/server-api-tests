@@ -9,7 +9,7 @@ import {
   createPostOnCallout,
 } from '@functional-api/callout/post/post.request.params';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
@@ -24,7 +24,7 @@ const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 const opportunityName = `oppName${uniqueId}`;
 
 let postCommentsIdSpace = '';
@@ -58,7 +58,7 @@ beforeAll(async () => {
     contactEmail: 'test-org@alkem.io',
   });
 
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await createOpportunityWithUsers(opportunityName);
 
   await assignUserAsOrganizationAdmin(
@@ -90,8 +90,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -173,10 +173,10 @@ describe('Notifications - Mention Organization', () => {
       );
     });
 
-    test('GA mention Organization in Challenge comments callout - 2 notification to Organization admins are sent', async () => {
+    test('GA mention Organization in Subspace comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.challenge.discussionCalloutCommentsId,
+        entitiesId.subspace.discussionCalloutCommentsId,
         `${mentionedOrganization(
           entitiesId.organization.displayName,
           entitiesId.organization.nameId
@@ -213,7 +213,7 @@ describe('Notifications - Mention Organization', () => {
       // Act
 
       await sendMessageToRoom(
-        entitiesId.opportunity.discussionCalloutCommentsId,
+        entitiesId.subsubspace.discussionCalloutCommentsId,
         `${mentionedOrganization(
           entitiesId.organization.displayName,
           entitiesId.organization.nameId

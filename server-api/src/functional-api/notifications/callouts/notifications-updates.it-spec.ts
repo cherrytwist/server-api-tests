@@ -5,7 +5,7 @@ import { deleteSpace } from '@functional-api/journey/space/space.request.params'
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
@@ -20,7 +20,7 @@ const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const ecoName = spaceName;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 const opportunityName = `opName${uniqueId}`;
 let preferencesConfig: any[] = [];
 
@@ -57,7 +57,7 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await createOpportunityWithUsers(opportunityName);
 
   preferencesConfig = [
@@ -78,19 +78,19 @@ beforeAll(async () => {
       type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
@@ -102,27 +102,27 @@ beforeAll(async () => {
       type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationUpdates,
     },
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationUpdateSentAdmin,
     },
   ];
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -193,16 +193,16 @@ describe.skip('Notifications - updates', () => {
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.challengeAdmin.email)
+      await templatedAsMemberResult(ecoName, users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.challengeMember.email)
+      await templatedAsMemberResult(ecoName, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.opportunityAdmin.email)
+      await templatedAsMemberResult(ecoName, users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.opportunityMember.email)
+      await templatedAsMemberResult(ecoName, users.subsubspaceMember.email)
     );
   });
 
@@ -239,24 +239,24 @@ describe.skip('Notifications - updates', () => {
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.challengeAdmin.email)
+      await templatedAsMemberResult(ecoName, users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.challengeMember.email)
+      await templatedAsMemberResult(ecoName, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.opportunityAdmin.email)
+      await templatedAsMemberResult(ecoName, users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, users.opportunityMember.email)
+      await templatedAsMemberResult(ecoName, users.subsubspaceMember.email)
     );
   });
 
-  test('CA create challenge update - GA(1), HA (1), CA(1), CM(3),  get notifications', async () => {
+  test('CA create subspace update - GA(1), HA (1), CA(1), CM(3),  get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.challenge.updatesId,
-      'CA challenge update ',
+      entitiesId.subspace.updatesId,
+      'CA subspace update ',
       TestUser.SUBSPACE_ADMIN
     );
 
@@ -267,36 +267,36 @@ describe.skip('Notifications - updates', () => {
     expect(mails[1]).toEqual(7);
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(challengeName, users.globalAdmin.email)
+      await templatedAsAdminResult(subspaceName, users.globalAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(challengeName, users.spaceAdmin.email)
+      await templatedAsAdminResult(subspaceName, users.spaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(challengeName, users.globalAdmin.email)
+      await templatedAsMemberResult(subspaceName, users.globalAdmin.email)
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(challengeName, users.spaceAdmin.email)
+      await templatedAsMemberResult(subspaceName, users.spaceAdmin.email)
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(challengeName, users.spaceMember.email)
+      await templatedAsMemberResult(subspaceName, users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(challengeName, users.challengeAdmin.email)
+      await templatedAsMemberResult(subspaceName, users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(challengeName, users.challengeMember.email)
+      await templatedAsMemberResult(subspaceName, users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(challengeName, users.opportunityAdmin.email)
+      await templatedAsMemberResult(subspaceName, users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
       await templatedAsMemberResult(
-        challengeName,
-        users.opportunityMember.email
+        subspaceName,
+        users.subsubspaceMember.email
       )
     );
   });
@@ -304,7 +304,7 @@ describe.skip('Notifications - updates', () => {
   test('OA create opportunity update - GA(1), HA(1), CA(1), OA(1), OM(1), get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.opportunity.updatesId,
+      entitiesId.subsubspace.updatesId,
       'OA opportunity update ',
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -334,25 +334,25 @@ describe.skip('Notifications - updates', () => {
     );
 
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(opportunityName, users.challengeAdmin.email)
+      await templatedAsMemberResult(opportunityName, users.subspaceAdmin.email)
     );
     expect(mails[0]).not.toEqual(
       await templatedAsMemberResult(
         opportunityName,
-        users.challengeMember.email
+        users.subspaceMember.email
       )
     );
 
     expect(mails[0]).toEqual(
       await templatedAsMemberResult(
         opportunityName,
-        users.opportunityAdmin.email
+        users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templatedAsMemberResult(
         opportunityName,
-        users.opportunityMember.email
+        users.subsubspaceMember.email
       )
     );
   });
@@ -364,7 +364,7 @@ describe.skip('Notifications - updates', () => {
     );
     // Act
     await sendMessageToRoom(
-      entitiesId.opportunity.updatesId,
+      entitiesId.subsubspace.updatesId,
       'OA opportunity update 2',
       TestUser.SUBSUBSPACE_ADMIN
     );

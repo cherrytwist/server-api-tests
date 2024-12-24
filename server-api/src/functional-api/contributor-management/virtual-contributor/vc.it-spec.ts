@@ -20,7 +20,7 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import { createChallenge } from '@utils/mutations/journeys/challenge';
+import { createSubspace } from '@utils/mutations/journeys/subspace';
 import {
   assignLicensePlanToAccount,
   getLicensePlanByName,
@@ -89,7 +89,7 @@ beforeAll(async () => {
   vcSpaceId = vcSpaceData?.id ?? '';
   vcSpaceAccountId = vcSpaceData?.account?.id ?? '';
 
-  const responseVCL1 = await createChallenge(l1NameVC, l1NameIdVC, vcSpaceId);
+  const responseVCL1 = await createSubspace(l1NameVC, l1NameIdVC, vcSpaceId);
 
   const vcL1Data = responseVCL1?.data?.createSubspace;
   l1VCId = vcL1Data?.id ?? '';

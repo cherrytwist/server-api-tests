@@ -7,7 +7,7 @@ export const opportunityNameId = `oppNaId${uniqueId}`;
 export const createOpportunity = async (
   opportunityName: string,
   opportunityNameId: string,
-  challengeID: string,
+  subspaceID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -15,7 +15,7 @@ export const createOpportunity = async (
     graphqlClient.CreateSubspace(
       {
         subspaceData: {
-          spaceID: challengeID,
+          spaceID: subspaceID,
           nameID: opportunityNameId,
           profileData: {
             displayName: opportunityName,

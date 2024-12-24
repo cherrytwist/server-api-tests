@@ -1,9 +1,9 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../journey/space/space.request.params';
-import { subscriptionChallengeCreated } from './subscrition-queries';
+import { subscriptionSubspaceCreated } from './subscrition-queries';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
-import { createChallenge } from '@utils/mutations/journeys/challenge';
+import { createSubspace } from '@utils/mutations/journeys/subspace';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
@@ -13,10 +13,10 @@ const organizationName = 'com-sub-org-n' + uniqueId;
 const hostNameId = 'com-sub-org-nd' + uniqueId;
 const spaceName = 'com-sub-eco-n' + uniqueId;
 const spaceNameId = 'com-sub-eco-nd' + uniqueId;
-const challengeDisplayName1 = 'ch1-display-name' + uniqueId;
-const challengeDisplayName2 = 'ch2-display-name' + uniqueId;
-let challengeIdOne = '';
-let challengeIdTwo = '';
+const subspaceDisplayName1 = 'ch1-display-name' + uniqueId;
+const subspaceDisplayName2 = 'ch2-display-name' + uniqueId;
+let subspaceIdOne = '';
+let subspaceIdTwo = '';
 
 let subscription1: SubscriptionClient;
 let subscription2: SubscriptionClient;
@@ -39,15 +39,15 @@ afterAll(async () => {
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
-describe('Create challenge subscription', () => {
+describe('Create subspace subscription', () => {
   beforeAll(async () => {
     subscription1 = new SubscriptionClient();
     subscription2 = new SubscriptionClient();
     subscription3 = new SubscriptionClient();
 
     const utilizedQuery = {
-      operationName: 'ChallengeCreated',
-      query: subscriptionChallengeCreated,
+      operationName: 'SubspaceCreated',
+      query: subscriptionSubspaceCreated,
       variables: { spaceID: entitiesId.spaceId },
     };
 
@@ -63,55 +63,55 @@ describe('Create challenge subscription', () => {
   });
 
   afterEach(async () => {
-    await deleteSpace(challengeIdOne);
-    await deleteSpace(challengeIdTwo);
+    await deleteSpace(subspaceIdOne);
+    await deleteSpace(subspaceIdTwo);
   });
 
-  it('receive newly created challenges', async () => {
-    // Create challenge
-    const resOne = await createChallenge(
-      challengeDisplayName1,
-      challengeDisplayName1,
+  it('receive newly created subspaces', async () => {
+    // Create subspace
+    const resOne = await createSubspace(
+      subspaceDisplayName1,
+      subspaceDisplayName1,
       entitiesId.spaceId
     );
-    challengeIdOne = resOne?.data?.createSubspace.id ?? '';
+    subspaceIdOne = resOne?.data?.createSubspace.id ?? '';
 
-    const resTwo = await createChallenge(
-      challengeDisplayName2,
-      challengeDisplayName2,
+    const resTwo = await createSubspace(
+      subspaceDisplayName2,
+      subspaceDisplayName2,
       entitiesId.spaceId,
       TestUser.SPACE_ADMIN
     );
-    challengeIdTwo = resTwo?.data?.createSubspace.id ?? '';
+    subspaceIdTwo = resTwo?.data?.createSubspace.id ?? '';
 
     await delay(500);
 
     const expectedData = expect.arrayContaining([
       expect.objectContaining({
-        challengeCreated: {
+        subspaceCreated: {
           spaceID: entitiesId.spaceId,
-          challenge: { profile: { displayName: challengeDisplayName1 } },
+          subspace: { profile: { displayName: subspaceDisplayName1 } },
         },
       }),
       expect.objectContaining({
-        challengeCreated: {
+        subspaceCreated: {
           spaceID: entitiesId.spaceId,
-          challenge: { profile: { displayName: challengeDisplayName2 } },
+          subspace: { profile: { displayName: subspaceDisplayName2 } },
         },
       }),
     ]);
 
-    // assert number of created challenges
+    // assert number of created subspaces
     expect(subscription1.getMessages().length).toBe(2);
     expect(subscription2.getMessages().length).toBe(2);
     expect(subscription3.getMessages().length).toBe(2);
 
     // assert the latest is from the correct mutation and mutation result
-    expect(subscription1.getLatest()).toHaveProperty('challengeCreated');
-    expect(subscription2.getLatest()).toHaveProperty('challengeCreated');
-    expect(subscription3.getLatest()).toHaveProperty('challengeCreated');
+    expect(subscription1.getLatest()).toHaveProperty('subspaceCreated');
+    expect(subscription2.getLatest()).toHaveProperty('subspaceCreated');
+    expect(subscription3.getLatest()).toHaveProperty('subspaceCreated');
 
-    // assert all newly created challenges are displayed to subscribers
+    // assert all newly created subspaces are displayed to subscribers
     expect(subscription1.getMessages()).toEqual(expectedData);
     expect(subscription2.getMessages()).toEqual(expectedData);
     expect(subscription3.getMessages()).toEqual(expectedData);

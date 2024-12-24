@@ -12,7 +12,7 @@ import { deleteSpace } from '@functional-api/journey/space/space.request.params'
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
@@ -30,14 +30,14 @@ import { uniqueId } from '@utils/uniqueId';
 import { delay } from '@alkemio/tests-lib';
 
 let opportunityName = 'post-opp';
-let challengeName = 'post-chal';
+let subspaceName = 'post-chal';
 let spacePostId = '';
-let challengePostId = '';
+let subspacePostId = '';
 let opportunityPostId = '';
 let postNameID = '';
 let postDisplayName = '';
 let postCommentsIdSpace = '';
-let postCommentsIdChallenge = '';
+let postCommentsIdSubspace = '';
 let msessageId = '';
 const spaceCalloutId = '';
 
@@ -53,19 +53,19 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await createOpportunityWithUsers(opportunityName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 beforeEach(async () => {
-  challengeName = `testChallenge ${uniqueId}`;
+  subspaceName = `testSubspace ${uniqueId}`;
   opportunityName = `opportunityName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
@@ -74,7 +74,7 @@ beforeEach(async () => {
 describe('Posts - Create', () => {
   afterEach(async () => {
     await deletePost(spacePostId);
-    await deletePost(challengePostId);
+    await deletePost(subspacePostId);
     await deletePost(opportunityPostId);
   });
   test('HM should create post on space callout', async () => {
@@ -135,21 +135,21 @@ describe('Posts - Create', () => {
     );
   });
 
-  test('ChA should create post on challenge callout', async () => {
+  test('ChA should create post on subspace callout', async () => {
     // Act
-    const resPostonChallenge = await createPostOnCallout(
-      entitiesId.challenge.calloutId,
+    const resPostonSubspace = await createPostOnCallout(
+      entitiesId.subspace.calloutId,
       { displayName: postDisplayName },
       postNameID + 'ch',
       TestUser.SUBSPACE_ADMIN
     );
 
     const postDataCreate =
-      resPostonChallenge.data?.createContributionOnCallout.post;
-    challengePostId =
-      resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
+      resPostonSubspace.data?.createContributionOnCallout.post;
+    subspacePostId =
+      resPostonSubspace.data?.createContributionOnCallout.post?.id ?? '';
 
-    const post = await getPostData(challengePostId, TestUser.SUBSPACE_ADMIN);
+    const post = await getPostData(subspacePostId, TestUser.SUBSPACE_ADMIN);
 
     // Assert
     expect(post.data?.lookup.post).toEqual(postDataCreate);
@@ -158,7 +158,7 @@ describe('Posts - Create', () => {
   test('GA should create post on opportunity callout', async () => {
     // Act
     const resPostonOpportunity = await createPostOnCallout(
-      entitiesId.opportunity.calloutId,
+      entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName },
       postNameID + 'op'
     );
@@ -401,52 +401,52 @@ describe('Posts - Delete', () => {
     await deletePost(spacePostId);
   });
 
-  test('ChA should delete post created on challenge callout from GA', async () => {
+  test('ChA should delete post created on subspace callout from GA', async () => {
     // Arrange
-    const resPostonChallenge = await createPostOnCallout(
-      entitiesId.challenge.calloutId,
+    const resPostonSubspace = await createPostOnCallout(
+      entitiesId.subspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch'
     );
-    challengePostId =
-      resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
+    subspacePostId =
+      resPostonSubspace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(challengePostId, TestUser.SUBSPACE_ADMIN);
-    const data = await getPostData(challengePostId);
+    await deletePost(subspacePostId, TestUser.SUBSPACE_ADMIN);
+    const data = await getPostData(subspacePostId);
 
     // Assert
     expect(data.error?.errors[0].message).toEqual(
-      `Not able to locate post with the specified ID: ${challengePostId}`
+      `Not able to locate post with the specified ID: ${subspacePostId}`
     );
   });
 
-  test('HA should delete post created on challenge callout from ChA', async () => {
+  test('HA should delete post created on subspace callout from ChA', async () => {
     // Arrange
-    const resPostonChallenge = await createPostOnCallout(
-      entitiesId.challenge.calloutId,
+    const resPostonSubspace = await createPostOnCallout(
+      entitiesId.subspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch',
       TestUser.SUBSPACE_ADMIN
     );
 
-    challengePostId =
-      resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
+    subspacePostId =
+      resPostonSubspace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(challengePostId, TestUser.SPACE_ADMIN);
-    const data = await getPostData(challengePostId);
+    await deletePost(subspacePostId, TestUser.SPACE_ADMIN);
+    const data = await getPostData(subspacePostId);
 
     // Assert
     expect(data.error?.errors[0].message).toEqual(
-      `Not able to locate post with the specified ID: ${challengePostId}`
+      `Not able to locate post with the specified ID: ${subspacePostId}`
     );
   });
 
   test('ChA should delete post created on opportunity callout from OM', async () => {
     // Act
     const resPostonOpportunity = await createPostOnCallout(
-      entitiesId.opportunity.calloutId,
+      entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName + 'opm' },
       postNameID + 'opm',
       TestUser.SUBSUBSPACE_MEMBER
@@ -464,38 +464,38 @@ describe('Posts - Delete', () => {
     );
   });
 
-  test('ChM should not delete post created on challenge callout from ChA', async () => {
+  test('ChM should not delete post created on subspace callout from ChA', async () => {
     // Arrange
-    const resPostonChallenge = await createPostOnCallout(
-      entitiesId.challenge.calloutId,
+    const resPostonSubspace = await createPostOnCallout(
+      entitiesId.subspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch',
       TestUser.SUBSPACE_ADMIN
     );
 
-    challengePostId =
-      resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
+    subspacePostId =
+      resPostonSubspace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
     const responseRemove = await deletePost(
-      challengePostId,
+      subspacePostId,
       TestUser.SUBSPACE_MEMBER
     );
 
-    const dataPost = await getPostData(challengePostId);
+    const dataPost = await getPostData(subspacePostId);
 
     // // Assert
     expect(responseRemove?.error?.errors[0].message).toContain(
       `Authorization: unable to grant 'delete' privilege: delete post: ${dataPost?.data?.lookup?.post?.id}`
     );
-    expect(dataPost?.data?.lookup?.post?.id).toEqual(challengePostId);
-    await deletePost(challengePostId);
+    expect(dataPost?.data?.lookup?.post?.id).toEqual(subspacePostId);
+    await deletePost(subspacePostId);
   });
 
   test('OM should delete own post on opportunity callout', async () => {
     // Act
     const resPostonOpportunity = await createPostOnCallout(
-      entitiesId.opportunity.calloutId,
+      entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
       TestUser.SUBSUBSPACE_MEMBER
@@ -516,7 +516,7 @@ describe('Posts - Delete', () => {
   test('GA should delete own post on opportunity callout', async () => {
     // Act
     const resPostonOpportunity = await createPostOnCallout(
-      entitiesId.opportunity.calloutId,
+      entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
       TestUser.GLOBAL_ADMIN
@@ -550,22 +550,22 @@ describe('Posts - Messages', () => {
         resPostonSpace.data?.createContributionOnCallout.post?.comments.id ??
         '';
 
-      const resPostonChallenge = await createPostOnCallout(
-        entitiesId.challenge.calloutId,
+      const resPostonSubspace = await createPostOnCallout(
+        entitiesId.subspace.calloutId,
         { displayName: `asp-nchal-mess-${uniqueId}` },
         `asp-dchal-mess-${uniqueId}`
       );
 
-      challengePostId =
-        resPostonChallenge.data?.createContributionOnCallout.post?.id ?? '';
-      postCommentsIdChallenge =
-        resPostonChallenge.data?.createContributionOnCallout.post?.comments
+      subspacePostId =
+        resPostonSubspace.data?.createContributionOnCallout.post?.id ?? '';
+      postCommentsIdSubspace =
+        resPostonSubspace.data?.createContributionOnCallout.post?.comments
           .id ?? '';
     });
 
     afterAll(async () => {
       await deletePost(spacePostId);
-      await deletePost(challengePostId);
+      await deletePost(subspacePostId);
     });
 
     afterEach(async () => {
@@ -577,25 +577,25 @@ describe('Posts - Messages', () => {
       );
     });
 
-    test('ChA should send comment on post created on challenge callout from GA', async () => {
+    test('ChA should send comment on post created on subspace callout from GA', async () => {
       // Arrange
       const messageRes = await sendMessageToRoom(
-        postCommentsIdChallenge,
-        'test message on challenge post',
+        postCommentsIdSubspace,
+        'test message on subspace post',
         TestUser.SUBSPACE_ADMIN
       );
       msessageId = messageRes?.data?.sendMessageToRoom.id;
-      const postsData = await getPostData(challengePostId);
+      const postsData = await getPostData(subspacePostId);
 
       // Assert
       expect(postsData.data?.lookup.post?.comments).toEqual({
-        id: postCommentsIdChallenge,
+        id: postCommentsIdSubspace,
         messagesCount: 1,
         messages: [
           {
             id: msessageId,
-            message: 'test message on challenge post',
-            sender: { id: users.challengeAdmin.id },
+            message: 'test message on subspace post',
+            sender: { id: users.subspaceAdmin.id },
           },
         ],
       });

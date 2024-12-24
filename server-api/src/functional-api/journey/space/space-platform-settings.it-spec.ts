@@ -20,9 +20,9 @@ import {
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
   sorted__create_read_update_delete_grant_createSubspace_platformAdmin,
 } from '@common/constants/privileges';
-import { deleteSubspace } from '../opportunity/opportunity.request.params';
+import { deleteSubspace } from '../subsubspace/subsubspace.request.params';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
@@ -39,7 +39,7 @@ const hostNameId = 'space-org-nameid' + uniqueId;
 const spaceName = 'space-name' + uniqueId;
 const spaceNameId = 'space-nameid' + uniqueId;
 const opportunityName = 'space-opp';
-const challengeName = 'space-chal';
+const subspaceName = 'space-chal';
 let organizationIdTwo = '';
 let orgAccountIdTwo = '';
 
@@ -56,13 +56,13 @@ describe('Update space platform settings', () => {
     await updateSpaceSettings(entitiesId.spaceId, {
       privacy: { mode: SpacePrivacyMode.Private },
     });
-    await createChallengeWithUsers(challengeName);
+    await createSubspaceWithUsers(subspaceName);
     await createOpportunityWithUsers(opportunityName);
   });
 
   afterAll(async () => {
-    await deleteSubspace(entitiesId.opportunity.id);
-    await deleteSpace(entitiesId.challenge.id);
+    await deleteSubspace(entitiesId.subsubspace.id);
+    await deleteSpace(entitiesId.subspace.id);
     await deleteSpace(entitiesId.spaceId);
     await deleteOrganization(entitiesId.organization.id);
     await deleteOrganization(organizationIdTwo);
@@ -196,13 +196,13 @@ describe('Update space platform settings', () => {
     });
 
     test.each`
-      user                               | email                         | communicationMyPrivileges                                                                  | challengesCount | opportunitiesCount
+      user                               | email                         | communicationMyPrivileges                                                                  | subspacesCount | opportunitiesCount
       ${TestUser.GLOBAL_ADMIN}           | ${'admin@alkem.io'}           | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}            | ${1}
       ${TestUser.GLOBAL_LICENSE_ADMIN}      | ${'global.spaces@alkem.io'}   | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}            | ${1}
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${'community.admin@alkem.io'} | ${readPrivilege}                                                                           | ${1}            | ${1}
     `(
       'User role: "$user", have access to public archived Space',
-      async ({ user, email, communicationMyPrivileges, challengesCount }) => {
+      async ({ user, email, communicationMyPrivileges, subspacesCount }) => {
         // Arrange
         const getuserRoleSpaceDataBeforeArchive = await getUserRoleSpacesVisibility(
           email,
@@ -246,7 +246,7 @@ describe('Update space platform settings', () => {
         // Assert
         //expect(dataBeforeVisibilityChange).toEqual(dataAfterVisibilityChange);
         expect(data?.[0].visibility).toEqual(SpaceVisibility.Archived);
-        expect(data?.[0].subspaces).toHaveLength(challengesCount);
+        expect(data?.[0].subspaces).toHaveLength(subspacesCount);
         expect(data?.[0].authorization?.myPrivileges?.sort()).toEqual(
           communicationMyPrivileges
         );
@@ -272,7 +272,7 @@ describe('Update space platform settings', () => {
     });
 
     test.each`
-      user                       | email                      | communicationMyPrivileges | challengesCount | opportunitiesCount
+      user                       | email                      | communicationMyPrivileges | subspacesCount | opportunitiesCount
       ${TestUser.SPACE_ADMIN}      | ${'space.admin@alkem.io'}  | ${[]}                     | ${null}         | ${null}
       ${TestUser.SPACE_MEMBER}     | ${'space.member@alkem.io'} | ${[]}                     | ${null}         | ${null}
       ${TestUser.NON_SPACE_MEMBER} | ${'non.space@alkem.io'}    | ${[]}                     | ${null}         | ${null}

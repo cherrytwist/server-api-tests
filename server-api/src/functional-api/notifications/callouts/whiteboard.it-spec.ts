@@ -9,7 +9,7 @@ import {
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOpportunityWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
@@ -29,13 +29,13 @@ const organizationName = 'not-up-org-name' + uniqueId;
 const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
-const challengeName = `chName${uniqueId}`;
+const subspaceName = `chName${uniqueId}`;
 const opportunityName = `opName${uniqueId}`;
 let spaceWhiteboardId = '';
 let preferencesConfig: any[] = [];
 let whiteboardCollectionSpaceCalloutId = '';
 
-let whiteboardCollectionChallengeCalloutId = '';
+let whiteboardCollectionSubspaceCalloutId = '';
 
 let whiteboardCollectionOpportunityCalloutId = '';
 
@@ -57,7 +57,7 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
   await createOpportunityWithUsers(opportunityName);
   const resSpace = await createWhiteboardCalloutOnCollaboration(
     entitiesId.space.collaborationId,
@@ -80,12 +80,12 @@ beforeAll(async () => {
     CalloutVisibility.Published
   );
 
-  const resChallenge = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.challenge.collaborationId,
+  const resSubspace = await createWhiteboardCalloutOnCollaboration(
+    entitiesId.subspace.collaborationId,
     {
       framing: {
         profile: {
-          displayName: 'whiteboard callout challenge',
+          displayName: 'whiteboard callout subspace',
           description: '',
         },
       },
@@ -93,16 +93,16 @@ beforeAll(async () => {
     },
     TestUser.GLOBAL_ADMIN
   );
-  whiteboardCollectionChallengeCalloutId =
-    resChallenge?.data?.createCalloutOnCollaboration.id ?? '';
+  whiteboardCollectionSubspaceCalloutId =
+    resSubspace?.data?.createCalloutOnCollaboration.id ?? '';
 
   await updateCalloutVisibility(
-    whiteboardCollectionChallengeCalloutId,
+    whiteboardCollectionSubspaceCalloutId,
     CalloutVisibility.Published
   );
 
   const resOpportunity = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.opportunity.collaborationId,
+    entitiesId.subsubspace.collaborationId,
     {
       framing: {
         profile: {
@@ -135,12 +135,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeMember.id,
+      userID: users.subspaceMember.id,
       type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
-      userID: users.opportunityMember.id,
+      userID: users.subsubspaceMember.id,
       type: PreferenceType.NotificationWhiteboardCreated,
     },
 
@@ -150,12 +150,12 @@ beforeAll(async () => {
     },
 
     {
-      userID: users.challengeAdmin.id,
+      userID: users.subspaceAdmin.id,
       type: PreferenceType.NotificationWhiteboardCreated,
     },
 
     {
-      userID: users.opportunityAdmin.id,
+      userID: users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationWhiteboardCreated,
     },
 
@@ -167,8 +167,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -227,16 +227,16 @@ describe('Notifications - whiteboard', () => {
     );
 
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceMember.email])
     );
 
     await deleteWhiteboard(spaceWhiteboardId);
@@ -278,25 +278,25 @@ describe('Notifications - whiteboard', () => {
     );
 
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceMember.email])
     );
   });
 
-  test('HA create challenge whiteboard - GA(1), HA (1), CA(1), CM(3),  get notifications', async () => {
-    const subjectTextAdmin = `${challengeName}: New Whiteboard created by space`;
-    const subjectTextMember = `${challengeName}: New Whiteboard created by space, have a look!`;
+  test('HA create subspace whiteboard - GA(1), HA (1), CA(1), CM(3),  get notifications', async () => {
+    const subjectTextAdmin = `${subspaceName}: New Whiteboard created by space`;
+    const subjectTextMember = `${subspaceName}: New Whiteboard created by space, have a look!`;
     // Act
     const res = await createWhiteboardOnCallout(
-      whiteboardCollectionChallengeCalloutId,
+      whiteboardCollectionSubspaceCalloutId,
       TestUser.SPACE_ADMIN
     );
     spaceWhiteboardId =
@@ -331,20 +331,20 @@ describe('Notifications - whiteboard', () => {
     );
 
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextAdmin, [users.challengeAdmin.email])
+      await expectedDataFunc(subjectTextAdmin, [users.subspaceAdmin.email])
     );
 
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceMember.email])
     );
   });
 
@@ -386,25 +386,25 @@ describe('Notifications - whiteboard', () => {
       await expectedDataFunc(subjectTextMember, [users.spaceMember.email])
     );
 
-    // Challenge admin does not reacive email as admin message
+    // Subspace admin does not reacive email as admin message
     expect(mails[0]).not.toEqual(
-      await expectedDataFunc(subjectTextAdmin, [users.challengeAdmin.email])
+      await expectedDataFunc(subjectTextAdmin, [users.subspaceAdmin.email])
     );
 
-    // Challenge member does not reacive email
+    // Subspace member does not reacive email
     expect(mails[0]).not.toEqual(
-      await expectedDataFunc(subjectTextMember, [users.challengeMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subspaceMember.email])
     );
 
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextAdmin, [users.opportunityAdmin.email])
+      await expectedDataFunc(subjectTextAdmin, [users.subsubspaceAdmin.email])
     );
 
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityAdmin.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataFunc(subjectTextMember, [users.opportunityMember.email])
+      await expectedDataFunc(subjectTextMember, [users.subsubspaceMember.email])
     );
   });
 

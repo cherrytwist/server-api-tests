@@ -4,7 +4,7 @@ import { entitiesId } from '../../../types/entities-helper';
 import { uniqueId } from '@utils/uniqueId';
 import {
   createOrgAndSpaceWithUsers,
-  createChallengeForOrgSpace,
+  createSubspaceForOrgSpace,
 } from '../../../utils/data-setup/entities';
 import {
   createTemplateFromCollaboration,
@@ -28,11 +28,11 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeForOrgSpace(subspaceName);
+  await createSubspaceForOrgSpace(subspaceName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -50,7 +50,7 @@ describe('Subspace templates - CRUD', () => {
     );
 
     const res = await createTemplateFromCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       entitiesId.space.templateSetId,
       'Subspace Template 1'
     );
@@ -81,7 +81,7 @@ describe('Subspace templates - CRUD', () => {
       entitiesId.spaceId
     );
     const res = await createTemplateFromCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       entitiesId.space.templateSetId,
       'Subspace Template 2'
     );
@@ -103,7 +103,7 @@ describe('Subspace templates - CRUD', () => {
   test('Update subspace template', async () => {
     // Arrange
     const res = await createTemplateFromCollaboration(
-      entitiesId.challenge.collaborationId,
+      entitiesId.subspace.collaborationId,
       entitiesId.space.templateSetId,
       'Subspace Template 3'
     );

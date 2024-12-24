@@ -1,4 +1,4 @@
-query getChallengeApplications(
+query getSubspaceApplications(
   $spaceId: UUID_NAMEID!
   $subspaceId: UUID_NAMEID!
 ) {

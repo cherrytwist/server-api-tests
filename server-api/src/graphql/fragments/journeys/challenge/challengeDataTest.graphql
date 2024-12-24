@@ -1,4 +1,4 @@
-# fragment ChallengeData on Subspace {
+# fragment SubspaceData on Subspace {
 #   id
 #   nameID
 #   profile {

@@ -1,13 +1,12 @@
-import { entitiesId } from '@src/types/entities-helper';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { TestUser } from '@alkemio/tests-lib';
 
 import { uniqueId } from '@utils/uniqueId';
 
-export const createOpportunity = async (
-  opportunityName: string,
-  opportunityNameId: string,
+export const createSubspace = async (
+  subspaceName: string,
+  subspaceNameId: string,
   parentId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN,
 ) => {
@@ -15,9 +14,9 @@ export const createOpportunity = async (
   const callback = (authToken: string | undefined) =>
     graphqlClient.CreateSubspace(
       {
-        subspaceData: opportunityVariablesData(
-          opportunityName,
-          opportunityNameId,
+        subspaceData: subspaceVariablesData(
+          subspaceName,
+          subspaceNameId,
           parentId,
         ),
       },
@@ -29,14 +28,14 @@ export const createOpportunity = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const opportunityVariablesData = (
+export const subspaceVariablesData = (
   displayName: string,
   nameId: string,
-  challengeId: string,
+  spaceId: string,
 ) => {
   const variables = {
-    spaceID: challengeId,
     nameID: nameId,
+    spaceID: spaceId,
     profileData: {
       displayName,
       tagline: 'test tagline' + uniqueId,

@@ -1,10 +1,10 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../journey/space/space.request.params';
-import { createOpportunity } from '@utils/mutations/journeys/opportunity';
+import { createSubsubspace } from '@utils/mutations/journeys/subsubspace';
 import { subscriptionOpportunityCreated } from './subscrition-queries';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { entitiesId } from '../../types/entities-helper';
@@ -16,7 +16,7 @@ const organizationName = 'com-sub-org-n' + uniqueId;
 const hostNameId = 'com-sub-org-nd' + uniqueId;
 const spaceName = 'com-sub-eco-n' + uniqueId;
 const spaceNameId = 'com-sub-eco-nd' + uniqueId;
-const challengeName = 'ch1-display-name' + uniqueId;
+const subspaceName = 'ch1-display-name' + uniqueId;
 
 const opportunityDisplayName1 = 'opp1-disp-name' + uniqueId;
 const opportunityDisplayName2 = 'opp2-disp-name' + uniqueId;
@@ -35,7 +35,7 @@ beforeAll(async () => {
     spaceNameId
   );
 
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
 });
 
 afterAll(async () => {
@@ -43,7 +43,7 @@ afterAll(async () => {
   subscription2.terminate();
   subscription3.terminate();
 
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -56,7 +56,7 @@ describe('Create opportunity subscription', () => {
     const utilizedQuery = {
       operationName: 'OpportunityCreated',
       query: subscriptionOpportunityCreated,
-      variables: { challengeID: entitiesId.challenge.id },
+      variables: { subspaceID: entitiesId.subspace.id },
     };
 
     await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
@@ -77,17 +77,17 @@ describe('Create opportunity subscription', () => {
 
   it('receive newly created opportunities', async () => {
     // Create opportunity
-    const resOne = await createOpportunity(
+    const resOne = await createSubsubspace(
       opportunityDisplayName1,
       opportunityDisplayName1,
-      entitiesId.challenge.id
+      entitiesId.subspace.id
     );
     opportunityIdOne = resOne?.data?.createSubspace.id ?? '';
 
-    const resTwo = await createOpportunity(
+    const resTwo = await createSubsubspace(
       opportunityDisplayName2,
       opportunityDisplayName2,
-      entitiesId.challenge.id,
+      entitiesId.subspace.id,
       TestUser.SPACE_ADMIN
     );
     opportunityIdTwo = resTwo?.data?.createSubspace.id ?? '';

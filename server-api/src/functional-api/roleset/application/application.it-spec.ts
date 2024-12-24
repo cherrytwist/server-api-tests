@@ -11,7 +11,7 @@ import {
 } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeForOrgSpace,
+  createSubspaceForOrgSpace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 
@@ -33,9 +33,9 @@ import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 
 let applicationId: string;
-let challengeApplicationId = '';
+let subspaceApplicationId = '';
 let applicationData: any;
-const challengeName = `testChallenge ${uniqueId}`;
+const subspaceName = `testSubspace ${uniqueId}`;
 let roleSetPendingMemberships: any;
 const isMember = '';
 const organizationName = 'appl-org-name' + uniqueId;
@@ -46,7 +46,7 @@ const spaceNameId = 'appl-eco-nameid' + uniqueId;
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
 
-  await createChallengeForOrgSpace(challengeName);
+  await createSubspaceForOrgSpace(subspaceName);
   await updateSpaceSettings(entitiesId.spaceId, {
     privacy: {
       mode: SpacePrivacyMode.Public,
@@ -58,7 +58,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -210,19 +210,19 @@ describe('Application', () => {
     applicationId = '';
   });
 
-  // Bug - user challenge application can be approved, when he/she is not member of the parent community
+  // Bug - user subspace application can be approved, when he/she is not member of the parent community
   // https://app.zenspace.com/workspaces/alkemio-5ecb98b262ebd9f4aec4194c/issues/alkem-io/client-web/1148
-  test.skip('should throw error for APPROVING challenge application, when user is not space member', async () => {
+  test.skip('should throw error for APPROVING subspace application, when user is not space member', async () => {
     // Arrange
-    // Create challenge application
-    applicationData = await createApplication(entitiesId.challenge.roleSetId);
+    // Create subspace application
+    applicationData = await createApplication(entitiesId.subspace.roleSetId);
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
-    challengeApplicationId = createAppData?.id;
+    subspaceApplicationId = createAppData?.id;
 
     // Act
-    // Approve challenge application
+    // Approve subspace application
     const event = await eventOnRoleSetApplication(
-      challengeApplicationId,
+      subspaceApplicationId,
       'APPROVE'
     );
 
@@ -299,32 +299,32 @@ describe('Application-flows', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       users.globalCommunityAdmin.id,
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       CommunityRoleType.Member
     );
-    if (challengeApplicationId.length === 36) {
-      await deleteApplication(challengeApplicationId);
+    if (subspaceApplicationId.length === 36) {
+      await deleteApplication(subspaceApplicationId);
     }
     if (applicationId.length === 36) {
       await deleteApplication(applicationId);
     }
   });
 
-  test('should create application on challenge', async () => {
+  test('should create application on subspace', async () => {
     // Act
-    await updateSpaceSettings(entitiesId.challenge.id, {
+    await updateSpaceSettings(entitiesId.subspace.id, {
       membership: {
         policy: CommunityMembershipPolicy.Applications,
       },
     });
 
     applicationData = await createApplication(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
     const createAppData = applicationData.data?.applyForEntryRoleOnRoleSet;
-    challengeApplicationId = createAppData?.id;
+    subspaceApplicationId = createAppData?.id;
 
     // Assert
     expect(applicationData.status).toBe(200);
@@ -333,27 +333,27 @@ describe('Application-flows', () => {
 
   test('should return correct membershipUser applications', async () => {
     // Act
-    // Create challenge application
+    // Create subspace application
     applicationData = await createApplication(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
-    challengeApplicationId = createAppData?.id;
+    subspaceApplicationId = createAppData?.id;
 
     const userAppsData = await meQuery(TestUser.GLOBAL_SUPPORT_ADMIN);
 
     const membershipData = userAppsData?.data?.me?.communityApplications;
-    const challengeAppOb = [
+    const subspaceAppOb = [
       expect.objectContaining({
         application: expect.objectContaining({
-          id: challengeApplicationId,
+          id: subspaceApplicationId,
           state: 'new',
           isFinalized: false,
           nextEvents: ['APPROVE', 'REJECT'],
         }),
         spacePendingMembershipInfo: expect.objectContaining({
-          id: entitiesId.challenge.id,
+          id: entitiesId.subspace.id,
         }),
       }),
     ];
@@ -363,22 +363,22 @@ describe('Application-flows', () => {
 
     // Assert
     expect(filteredMembershipData).toEqual(
-      expect.arrayContaining(challengeAppOb)
+      expect.arrayContaining(subspaceAppOb)
     );
   });
 
   test('should return updated membershipUser applications', async () => {
     // Act
-    // Create challenge application
+    // Create subspace application
     applicationData = await createApplication(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
-    challengeApplicationId = createAppData?.id;
+    subspaceApplicationId = createAppData?.id;
 
-    // Remove challenge application
-    await deleteApplication(challengeApplicationId);
+    // Remove subspace application
+    await deleteApplication(subspaceApplicationId);
 
     // Update space application state
     await eventOnRoleSetApplication(applicationId, 'REJECT');
@@ -387,21 +387,21 @@ describe('Application-flows', () => {
     const membershipDataAfter =
       userAppsDataAfter?.data?.me?.communityApplications;
 
-    const challengeAppOb = [
+    const subspaceAppOb = [
       {
         application: {
-          id: challengeApplicationId,
+          id: subspaceApplicationId,
           state: 'new',
         },
-        spacePendingMembershipInfo: { id: entitiesId.challenge.id },
+        spacePendingMembershipInfo: { id: entitiesId.subspace.id },
       },
     ];
 
     // Assert
-    expect(membershipDataAfter).not.toContain(challengeAppOb);
+    expect(membershipDataAfter).not.toContain(subspaceAppOb);
 
-    // Unset the challengeApplicationId so that afterEach does not try to delete it again
-    challengeApplicationId = '';
+    // Unset the subspaceApplicationId so that afterEach does not try to delete it again
+    subspaceApplicationId = '';
   });
 
   test('should approve subspace application, when space application is APPROVED and applications are allowed', async () => {
@@ -418,7 +418,7 @@ describe('Application-flows', () => {
       await eventOnRoleSetApplication(applicationId, 'APPROVE');
     }
 
-    await updateSpaceSettings(entitiesId.challenge.id, {
+    await updateSpaceSettings(entitiesId.subspace.id, {
       privacy: {
         mode: SpacePrivacyMode.Public,
       },
@@ -427,35 +427,35 @@ describe('Application-flows', () => {
       },
     });
 
-    // Create challenge application
+    // Create subspace application
     const subspaceApplicationData = await createApplication(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
-    challengeApplicationId = 'NotRetrieved';
+    subspaceApplicationId = 'NotRetrieved';
     if (subspaceApplicationData?.data?.applyForEntryRoleOnRoleSet) {
-      challengeApplicationId =
+      subspaceApplicationId =
         subspaceApplicationData?.data?.applyForEntryRoleOnRoleSet?.id;
     }
-    expect(challengeApplicationId.length).toEqual(36);
-    if (challengeApplicationId.length !== 36) {
-      throw new Error('Challenge application failed to create');
+    expect(subspaceApplicationId.length).toEqual(36);
+    if (subspaceApplicationId.length !== 36) {
+      throw new Error('Subspace application failed to create');
     }
 
     // Act
-    // Approve challenge application
-    const challengeApplicationEventResponse = await eventOnRoleSetApplication(
-      challengeApplicationId,
+    // Approve subspace application
+    const subspaceApplicationEventResponse = await eventOnRoleSetApplication(
+      subspaceApplicationId,
       'APPROVE'
     );
 
-    const challengeApplication =
-      challengeApplicationEventResponse?.data?.eventOnApplication;
+    const subspaceApplication =
+      subspaceApplicationEventResponse?.data?.eventOnApplication;
 
     // Assert
-    expect(challengeApplicationEventResponse.status).toBe(200);
-    expect(challengeApplication?.state).toContain('approved');
+    expect(subspaceApplicationEventResponse.status).toBe(200);
+    expect(subspaceApplication?.state).toContain('approved');
     expect(isMember).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -465,24 +465,24 @@ describe('Application-flows', () => {
     );
   });
 
-  test('should be able to remove challenge application, when space application is removed', async () => {
-    // Create challenge application
+  test('should be able to remove subspace application, when space application is removed', async () => {
+    // Create subspace application
     applicationData = await createApplication(
-      entitiesId.challenge.roleSetId,
+      entitiesId.subspace.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
-    challengeApplicationId = createAppData?.id;
+    subspaceApplicationId = createAppData?.id;
 
     // Remove Space application
     if (applicationId && applicationId.length === 36) {
       await deleteApplication(applicationId);
     }
     // Act
-    // Remove challenge application
-    await deleteApplication(challengeApplicationId);
+    // Remove subspace application
+    await deleteApplication(subspaceApplicationId);
     roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-      entitiesId.challenge.roleSetId
+      entitiesId.subspace.roleSetId
     );
     const applications =
       roleSetPendingMemberships?.data?.lookup.roleSet.applications;
@@ -497,8 +497,8 @@ describe('Application-flows', () => {
       ])
     );
 
-    // Unset the challengeApplicationId so that afterEach does not try to delete it again
+    // Unset the subspaceApplicationId so that afterEach does not try to delete it again
     applicationId = '';
-    challengeApplicationId = '';
+    subspaceApplicationId = '';
   });
 });

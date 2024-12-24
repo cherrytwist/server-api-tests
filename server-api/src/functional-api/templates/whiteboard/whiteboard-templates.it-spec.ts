@@ -2,8 +2,8 @@ import '@utils/array.matcher';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { uniqueId } from '@utils/uniqueId';
 import {
-  createChallengeForOrgSpace,
-  createOpportunityForChallenge,
+  createSubspaceForOrgSpace,
+  createOpportunityForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
@@ -16,7 +16,7 @@ import {
 import { deleteTemplate } from '../template.request.params';
 
 let opportunityName = 'post-opp';
-let challengeName = 'post-chal';
+let subspaceName = 'post-chal';
 let postNameID = '';
 let postDisplayName = '';
 const organizationName = 'post-org-name' + uniqueId;
@@ -27,19 +27,19 @@ let templateId = '';
 
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createChallengeForOrgSpace(challengeName);
-  await createOpportunityForChallenge(opportunityName);
+  await createSubspaceForOrgSpace(subspaceName);
+  await createOpportunityForSubspace(opportunityName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.opportunity.id);
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subsubspace.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
 
 beforeEach(async () => {
-  challengeName = `testChallenge ${uniqueId}`;
+  subspaceName = `testSubspace ${uniqueId}`;
   opportunityName = `opportunityName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;

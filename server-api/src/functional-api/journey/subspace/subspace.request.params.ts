@@ -3,7 +3,7 @@ import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { uniqueId } from '@utils/uniqueId';
 
-export const challengeNameId = `chalNaId${uniqueId}`;
+export const subspaceNameId = `chalNaId${uniqueId}`;
 
 export const getSubspaceData = async (
   spaceId: string,
@@ -41,8 +41,8 @@ export const getSubspacesData = async (spaceId: string) => {
 };
 
 export const createSubspace = async (
-  challengeName: string,
-  challengeNameId: string,
+  subspaceName: string,
+  subspaceNameId: string,
   parentId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
@@ -50,9 +50,9 @@ export const createSubspace = async (
   const callback = (authToken: string | undefined) =>
     graphqlClient.CreateSubspace(
       {
-        subspaceData: challengeVariablesData(
-          challengeName,
-          challengeNameId,
+        subspaceData: subspaceVariablesData(
+          subspaceName,
+          subspaceNameId,
           parentId
         ),
       },
@@ -64,7 +64,7 @@ export const createSubspace = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const challengeVariablesData = (
+export const subspaceVariablesData = (
   displayName: string,
   nameId: string,
   spaceId: string

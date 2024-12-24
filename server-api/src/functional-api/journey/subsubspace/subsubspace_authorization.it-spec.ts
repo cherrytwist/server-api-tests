@@ -1,10 +1,10 @@
 import '@utils/array.matcher';
-import { createSubspace } from '../challenge/challenge.request.params';
+import { createSubspace } from '../subspace/subspace.request.params';
 import { deleteSpace } from '../space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createChallengeWithUsers,
+  createSubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { CommunityRoleType } from '@generated/alkemio-schema';
@@ -21,7 +21,7 @@ const opportunityName = `op-dname${uniqueId}`;
 const opportunityNameId = `op-nameid${uniqueId}`;
 let opportunityId = '';
 let opportunityRoleSetId = '';
-const challengeName = `opp-auth-nam-ch-${uniqueId}`;
+const subspaceName = `opp-auth-nam-ch-${uniqueId}`;
 const organizationName = 'opp-auth-org-name' + uniqueId;
 const hostNameId = 'opp-auth-org-nameid' + uniqueId;
 const spaceName = 'opp-auth-eco-name' + uniqueId;
@@ -34,17 +34,17 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await createChallengeWithUsers(challengeName);
+  await createSubspaceWithUsers(subspaceName);
 });
 
 beforeEach(async () => {
-  const responseCreateOpportunityOnChallenge = await createSubspace(
+  const responseCreateOpportunityOnSubspace = await createSubspace(
     opportunityName,
     opportunityNameId,
-    entitiesId.challenge.id
+    entitiesId.subspace.id
   );
 
-  const oppData = responseCreateOpportunityOnChallenge?.data?.createSubspace;
+  const oppData = responseCreateOpportunityOnSubspace?.data?.createSubspace;
 
   opportunityId = oppData?.id ?? '';
   opportunityRoleSetId = oppData?.community?.roleSet.id ?? '';
@@ -55,7 +55,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.challenge.id);
+  await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
 });
@@ -64,7 +64,7 @@ describe('Opportunity Admin', () => {
   test('should create opportunity admin', async () => {
     // Act
     const res = await assignRoleToUserExtendedData(
-      users.challengeMember.id,
+      users.subspaceMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
@@ -85,7 +85,7 @@ describe('Opportunity Admin', () => {
     const responseOppTwo = await createSubspace(
       `oppdname-${uniqueId}`,
       `oppnameid-${uniqueId}`,
-      entitiesId.challenge.id
+      entitiesId.subspace.id
     );
     const oppDataTwo = responseOppTwo?.data?.createSubspace;
     const opportunityIdTwo = oppDataTwo?.id ?? '';
@@ -93,13 +93,13 @@ describe('Opportunity Admin', () => {
 
     // Act
     const resOne = await assignRoleToUserExtendedData(
-      users.challengeMember.id,
+      users.subspaceMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
     const resTwo = await assignRoleToUserExtendedData(
-      users.opportunityMember.id,
+      users.subsubspaceMember.id,
       opportunityRoleSetId2,
       CommunityRoleType.Admin
     );
@@ -127,19 +127,19 @@ describe('Opportunity Admin', () => {
   test('should be able one opportunity admin to remove another admin from opportunity', async () => {
     // Arrange
     await assignRoleToUserExtendedData(
-      users.challengeMember.id,
+      users.subspaceMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
     await assignRoleToUserExtendedData(
-      users.opportunityMember.email,
+      users.subsubspaceMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
     const res = await removeRoleFromUserExtendedData(
-      users.opportunityMember.email,
+      users.subsubspaceMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
       TestUser.SUBSPACE_MEMBER
@@ -159,14 +159,14 @@ describe('Opportunity Admin', () => {
   test('should remove the only admin of an opportunity', async () => {
     // Arrange
     await assignRoleToUserExtendedData(
-      users.challengeMember.id,
+      users.subspaceMember.id,
       opportunityRoleSetId,
       CommunityRoleType.Admin
     );
 
     // Act
     const res = await removeRoleFromUserExtendedData(
-      users.opportunityMember.email,
+      users.subsubspaceMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
       TestUser.SUBSPACE_MEMBER

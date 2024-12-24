@@ -23,10 +23,10 @@ interface Users {
   globalSpacesAdmin: UserData;
   spaceAdmin: UserData;
   spaceMember: UserData;
-  challengeAdmin: UserData;
-  challengeMember: UserData;
-  opportunityAdmin: UserData;
-  opportunityMember: UserData;
+  subspaceAdmin: UserData;
+  subspaceMember: UserData;
+  subsubspaceAdmin: UserData;
+  subsubspaceMember: UserData;
   qaUser: UserData;
   notificationsAdmin: UserData;
   nonSpaceMember: UserData;
@@ -45,14 +45,14 @@ const createUserData = (email: string): UserData => ({
 
 export const usersSetEmail: UserData[] = [
   createUserData('admin@alkem.io'),
-  createUserData('community.admin@alkem.io'),
+  createUserData('global.support@alkem.io'),
   createUserData('global.spaces@alkem.io'),
   createUserData('space.admin@alkem.io'),
   createUserData('space.member@alkem.io'),
-  createUserData('challenge.admin@alkem.io'),
-  createUserData('challenge.member@alkem.io'),
-  createUserData('opportunity.admin@alkem.io'),
-  createUserData('opportunity.member@alkem.io'),
+  createUserData('subspace.admin@alkem.io'),
+  createUserData('subspace.member@alkem.io'),
+  createUserData('subsubspace.admin@alkem.io'),
+  createUserData('subsubspace.member@alkem.io'),
   createUserData('qa.user@alkem.io'),
   createUserData('notifications@alkem.io'),
   createUserData('non.space@alkem.io'),
@@ -65,10 +65,10 @@ export const users: Users = {
   globalSpacesAdmin: usersSetEmail[2],
   spaceAdmin: usersSetEmail[3],
   spaceMember: usersSetEmail[4],
-  challengeAdmin: usersSetEmail[5],
-  challengeMember: usersSetEmail[6],
-  opportunityAdmin: usersSetEmail[7],
-  opportunityMember: usersSetEmail[8],
+  subspaceAdmin: usersSetEmail[5],
+  subspaceMember: usersSetEmail[6],
+  subsubspaceAdmin: usersSetEmail[7],
+  subsubspaceMember: usersSetEmail[8],
   qaUser: usersSetEmail[9],
   notificationsAdmin: usersSetEmail[10],
   nonSpaceMember: usersSetEmail[11],

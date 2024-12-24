@@ -41,7 +41,7 @@ export const getUserCommunityPrivilege = async (
 //   return graphqlErrorWrapper(callback, role);
 // };
 
-// export const getUserCommunityPrivilegeToChallenge = async (
+// export const getUserCommunityPrivilegeToSubspace = async (
 //   spaceId: string,
 //   subspaceId: string,
 //   includeDetails: boolean,
@@ -49,7 +49,7 @@ export const getUserCommunityPrivilege = async (
 // ) => {
 //   const graphqlClient = getGraphqlClient();
 //   const callback = (authToken: string | undefined) =>
-//     graphqlClient.CommunityUserPrivilegesToChallenge(
+//     graphqlClient.CommunityUserPrivilegesToSubspace(
 //       {
 //         spaceId,
 //         subspaceId,
