@@ -133,7 +133,7 @@ describe('Notifications - post', () => {
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationCalloutPublished,
       'false'
     );

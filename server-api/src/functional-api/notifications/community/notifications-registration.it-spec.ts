@@ -43,12 +43,12 @@ describe('Notifications - User registration', () => {
       'true'
     );
     await changePreferenceUser(
-      users.globalSpacesAdmin.id,
+      users.globalLicenseAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'true'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'true'
     );
@@ -84,7 +84,7 @@ describe('Notifications - User registration', () => {
 
         expect.objectContaining({
           subject: `New user registration on Alkemio: ${userName}`,
-          toAddresses: [users.globalSpacesAdmin.email],
+          toAddresses: [users.globalLicenseAdmin.email],
         }),
 
         expect.objectContaining({
@@ -102,12 +102,12 @@ describe('Notifications - User registration', () => {
       'false'
     );
     await changePreferenceUser(
-      users.globalSpacesAdmin.id,
+      users.globalLicenseAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'false'
     );

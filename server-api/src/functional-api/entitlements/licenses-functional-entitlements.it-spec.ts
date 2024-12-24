@@ -12,7 +12,6 @@
  */
 
 import { TestUser } from '@alkemio/tests-lib';
-import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@utils/mutations/authorization-platform-mutation';
 import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
@@ -32,6 +31,10 @@ import {
 
 import { uniqueId } from '@utils/uniqueId';
 import { PlatformRole } from '@generated/graphql';
+import {
+  assignPlatformRoleToUser,
+  removePlatformRoleFromUser,
+} from '@functional-api/platform/authorization-platform-mutation';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
@@ -56,9 +59,8 @@ describe('Functional tests - licenses updates', () => {
     test('Add License Plus to space', async () => {
       // Arrange
 
-      const getLicensePlanSpacePlus = await getLicensePlanByName(
-        'SPACE_LICENSE_PLUS'
-      );
+      const getLicensePlanSpacePlus =
+        await getLicensePlanByName('SPACE_LICENSE_PLUS');
       const licensePlanIdSpacePlus = getLicensePlanSpacePlus[0].id;
 
       const createSpace = await createSpaceBasicData(

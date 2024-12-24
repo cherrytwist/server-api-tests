@@ -101,7 +101,7 @@ describe('Notifications - invitations', () => {
     );
 
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );

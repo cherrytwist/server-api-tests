@@ -142,12 +142,12 @@ describe.skip('Notifications - updates', () => {
     );
 
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunicationUpdates,
       'false'
     );
     await changePreferenceUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunicationUpdateSentAdmin,
       'false'
     );

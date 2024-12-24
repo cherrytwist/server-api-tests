@@ -166,7 +166,7 @@ describe('Application', () => {
 
     // Assert
     expect(applicationDataTwo.error?.errors[0].message).toContain(
-      `Application not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.globalCommunityAdmin.id} on RoleSet: ${entitiesId.space.roleSetId}.`
+      `Application not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.globalSupportAdmin.id} on RoleSet: ${entitiesId.space.roleSetId}.`
     );
   });
 
@@ -290,7 +290,7 @@ describe('Application', () => {
 describe('Application-flows', () => {
   beforeAll(async () => {
     await assignRoleToUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       entitiesId.space.roleSetId,
       CommunityRoleType.Member
     );
@@ -298,7 +298,7 @@ describe('Application-flows', () => {
 
   afterEach(async () => {
     await removeRoleFromUser(
-      users.globalCommunityAdmin.id,
+      users.globalSupportAdmin.id,
       entitiesId.subspace.roleSetId,
       CommunityRoleType.Member
     );
@@ -459,7 +459,7 @@ describe('Application-flows', () => {
     expect(isMember).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: users.globalCommunityAdmin.id,
+          id: users.globalSupportAdmin.id,
         }),
       ])
     );
@@ -492,7 +492,7 @@ describe('Application-flows', () => {
     expect(isMember).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: users.globalCommunityAdmin.id,
+          id: users.globalSupportAdmin.id,
         }),
       ])
     );
