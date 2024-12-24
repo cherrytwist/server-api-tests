@@ -65,7 +65,7 @@ describe('Organization settings', () => {
       ${TestUser.SPACE_ADMIN}    | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
       ${TestUser.SPACE_MEMBER}   | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
     `(
-      'User: "$userRole" get message: "$message", when intend to update organization preference ',
+      'User: "$userRole" get message: "$message", when intend to update organization settings ',
       async ({ userRole, message }) => {
         // Act
         const res = await updateOrganizationSettings(
@@ -77,6 +77,8 @@ describe('Organization settings', () => {
           },
           userRole
         );
+
+        console.log(res);
 
         // Assert
         expect(
@@ -90,9 +92,9 @@ describe('Organization settings', () => {
     // Arrange
     test.each`
       userRole                   | message
-      ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'update' privilege: organization preference update:"}
+      ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'update' privilege: organization settings update:"}
     `(
-      'User: "$userRole" get message: "$message", when intend to update organization preference ',
+      'User: "$userRole" get message: "$message", when intend to update organization settings ',
       async ({ userRole, message }) => {
         // Act
         const res = await updateOrganizationSettings(

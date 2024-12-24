@@ -37,21 +37,31 @@ export const graphqlErrorWrapper = async <TData>(
     return await fn(authToken);
   } catch (error) {
     const err = error as ErrorType;
-    const badErrors = err.response.errors.filter(
-      e => e.extensions.code !== 'BAD_USER_INPUT'
-    );
-    if (badErrors.length > 0) {
-      console.error(badErrors);
+    if (!err.response || !err.response.errors) {
+      console.error(err);
       console.error(`Unable to complete call '${fn}'`);
+      return {
+        error: {
+          errors: [{ message: 'Unable to complete call', code: 'UNKNOWN' }],
+        },
+      };
+    } else {
+      const badErrors = err.response.errors.filter(
+        e => e.extensions.code !== 'BAD_USER_INPUT'
+      );
+      if (badErrors.length > 0) {
+        console.error(badErrors);
+        console.error(`Unable to complete call '${fn}'`);
+      }
+      return {
+        error: {
+          errors: err.response.errors.map(error => ({
+            ...error,
+            message: error.message,
+            code: error.extensions.code,
+          })),
+        },
+      };
     }
-    return {
-      error: {
-        errors: err.response.errors.map(error => ({
-          ...error,
-          message: error.message,
-          code: error.extensions.code,
-        })),
-      },
-    };
   }
 };
