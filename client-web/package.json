@@ -1,11 +1,11 @@
 {
-  "name": "@alkemio/test-suites",
+  "name": "@alkemio/test-suite-client-web",
   "version": "0.1.0",
-  "description": "Alkemio system level API / integration tests",
-  "author": "Cherrytwist Foundation",
+  "description": "Alkemio web client test suite.",
+  "author": "Alkemio Holding",
   "private": false,
   "license": "EUPL-1.2",
-  "main": "src/main.ts",
+  "main": "src/setupTests.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alkemio/test-suites.git"
@@ -74,10 +74,9 @@
     "@src": "./src"
   },
   "husky": {
-
   },
   "engines": {
-    "node": ">=16.15.0",
-    "npm": ">=8.5.5"
+    "node": ">=20.9.0",
+    "npm": ">=10"
   }
 }

@@ -1,15 +1,20 @@
 {
-  "name": "@alkemio/test-suites",
+  "name": "@alkemio/test-suite-server-api",
   "version": "0.3.0",
-  "description": "Alkemio system level API / integration tests",
+  "description": "Alkemio API quality assurance test suite.",
   "author": "Alkemio Holding",
   "private": false,
   "license": "EUPL-1.2",
-  "main": "src/main.ts",
+  "main": "src/setupTests.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alkemio/test-suites.git"
   },
+  "eslintIgnore": [
+    "src/generated/graphql.tsx",
+    "**/node_modules/**",
+    "**/build**"
+  ],
   "scripts": {
     "ts:watch": "tsc --noEmit --watch",
     "prebuild": "rimraf dist",
@@ -98,9 +103,7 @@
     "typescript": "~5.7.2"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+
   },
   "engines": {
     "node": ">=20.9.0",
