@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { sendMessageReplyToRoom } from './reply.request.params';
 import { addReaction } from '../reactions/reactions.request.params';
 import {
@@ -109,7 +109,7 @@ describe('Reply - Discussion messages', () => {
       messageId,
       discussionCommentsId,
       'test reply',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const replyInfo1 = replyData1?.data?.sendMessageReplyToRoom;
     replyId = replyInfo1?.id;
@@ -126,7 +126,7 @@ describe('Reply - Discussion messages', () => {
       messageId,
       discussionCommentsId,
       'test reply',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const replyInfo2 = replyData?.data?.sendMessageReplyToRoom;
     replyId = replyInfo2?.id;
@@ -135,7 +135,7 @@ describe('Reply - Discussion messages', () => {
     const resDelete = await removeMessageOnRoom(
       discussionCommentsId,
       messageId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     // Assert
@@ -155,7 +155,7 @@ describe('Reply - Discussion messages', () => {
       messageId,
       discussionCommentsId,
       'test reply',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     const replyInfo = replyData?.data?.sendMessageReplyToRoom;
     replyId = replyInfo?.id;
@@ -164,7 +164,7 @@ describe('Reply - Discussion messages', () => {
     const resDelete = await removeMessageOnRoom(
       discussionCommentsId,
       messageId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     // Assert
@@ -183,7 +183,7 @@ describe('Reply - Discussion messages', () => {
       messageId,
       discussionCommentsId,
       'test reply',
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     const replyInfo1 = replyData1?.data?.sendMessageReplyToRoom;
     const replyId1 = replyInfo1?.id;
@@ -192,7 +192,7 @@ describe('Reply - Discussion messages', () => {
       messageId,
       discussionCommentsId,
       'test reply',
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     const replyInfo2 = replyData2?.data?.sendMessageReplyToRoom;
     replyId = replyInfo2?.id;
@@ -227,7 +227,7 @@ describe('Reply - Discussion messages', () => {
       messageId,
       discussionCommentsId,
       'test reply',
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
     const replyInfo = replyData?.data?.sendMessageReplyToRoom;
     const replyId = replyInfo?.id;
@@ -236,21 +236,21 @@ describe('Reply - Discussion messages', () => {
       discussionCommentsId,
       replyId,
       '👏',
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     await addReaction(
       discussionCommentsId,
       replyId,
       '👏',
-      TestUser.CHALLENGE_MEMBER
+      TestUser.SUBSPACE_MEMBER
     );
 
     // Act
     await removeMessageOnRoom(
       discussionCommentsId,
       replyId,
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
 
     const discussionMessageData = await getPlatformDiscussionsDataById(

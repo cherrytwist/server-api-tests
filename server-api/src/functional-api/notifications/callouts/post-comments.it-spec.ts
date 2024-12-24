@@ -1,8 +1,8 @@
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import {
   createPostOnCallout,
   deletePost,
@@ -265,7 +265,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
         'test message on space post',
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -291,7 +291,7 @@ describe('Notifications - post comments', () => {
         entitiesId.space.calloutId,
         { displayName: postDisplayName },
         postNameID,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       spacePostId =
         resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -308,7 +308,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
         'test message on space post',
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -324,7 +324,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
         'test message on space post',
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -350,7 +350,7 @@ describe('Notifications - post comments', () => {
         entitiesId.challenge.calloutId,
         { displayName: postDisplayName },
         postNameID,
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       challengePostId =
         resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -367,7 +367,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdChallenge,
         'test message on challenge post',
-        TestUser.CHALLENGE_MEMBER
+        TestUser.SUBSPACE_MEMBER
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -383,7 +383,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdChallenge,
         'test message on challenge post',
-        TestUser.CHALLENGE_ADMIN
+        TestUser.SUBSPACE_ADMIN
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -409,7 +409,7 @@ describe('Notifications - post comments', () => {
         entitiesId.opportunity.calloutId,
         { displayName: postDisplayName },
         postNameID,
-        TestUser.OPPORTUNITY_MEMBER
+        TestUser.SUBSUBSPACE_MEMBER
       );
       opportunityPostId =
         resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -426,7 +426,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdOpportunity,
         'test message on opportunity post',
-        TestUser.OPPORTUNITY_MEMBER
+        TestUser.SUBSUBSPACE_MEMBER
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -442,7 +442,7 @@ describe('Notifications - post comments', () => {
       const messageRes = await sendMessageToRoom(
         postCommentsIdOpportunity,
         'test message on opportunity post',
-        TestUser.CHALLENGE_ADMIN
+        TestUser.SUBSPACE_ADMIN
       );
       messageId = messageRes?.data?.sendMessageToRoom.id ?? '';
 
@@ -472,7 +472,7 @@ describe('Notifications - post comments', () => {
       entitiesId.opportunity.calloutId,
       { displayName: postDisplayName },
       postNameID,
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     opportunityPostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
@@ -481,7 +481,7 @@ describe('Notifications - post comments', () => {
     await sendMessageToRoom(
       postCommentsIdOpportunity,
       'test message on opportunity post',
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
 
     // Assert

@@ -8,7 +8,7 @@ import { users } from '@utils/queries/users-data';
 import { getMailsData } from '@src/types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 
 let userName = '';
 let userId = '';

@@ -19,7 +19,7 @@
  * - Attempting to create a virtual contributor over the license limit and verifying the entitlements.
  *
  */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -46,7 +46,7 @@ describe('Functional tests - VC', () => {
   afterEach(async () => {
     const spaceData = await getAccountMainEntities(
       users.nonSpaceMember.accountId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     const vcs = spaceData.data?.account?.virtualContributors;
     for (const vc of vcs || []) {
@@ -96,13 +96,13 @@ describe('Functional tests - VC', () => {
       'User: VC campaign has license $availableEntitlements to creates a vc with name: $vcName',
       async ({ vcName, availableEntitlements, error }) => {
         // Arrange
-        const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+        const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
 
         const createSpace = await createSpaceBasicData(
           vcName,
           vcName,
           users.nonSpaceMember.accountId,
-          TestUser.NON_HUB_MEMBER
+          TestUser.NON_SPACE_MEMBER
         );
 
         const spaceId = createSpace.data?.createSpace.id ?? '';
@@ -112,7 +112,7 @@ describe('Functional tests - VC', () => {
           vcName,
           users.nonSpaceMember.accountId,
           spaceId,
-          TestUser.NON_HUB_MEMBER
+          TestUser.NON_SPACE_MEMBER
         );
         vcId = createVc?.data?.createVirtualContributor?.id ?? '';
 
@@ -130,7 +130,7 @@ describe('Functional tests - VC', () => {
         spaceName,
         spaceName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       const spaceId = createSpace.data?.createSpace.id ?? '';
@@ -142,17 +142,17 @@ describe('Functional tests - VC', () => {
           tempVcName,
           users.nonSpaceMember.accountId,
           spaceId,
-          TestUser.NON_HUB_MEMBER
+          TestUser.NON_SPACE_MEMBER
         );
       }
-      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+      const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
 
       // // Act
       const createVc = await createVirtualContributorOnAccount(
         vcName,
         users.nonSpaceMember.accountId,
         spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert

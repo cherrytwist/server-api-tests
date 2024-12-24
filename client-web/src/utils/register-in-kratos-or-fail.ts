@@ -1,6 +1,6 @@
 
 import { Configuration, IdentityApi, FrontendApi } from '@ory/kratos-client';
-import { kratosDomain } from '@test/common/constants/kratos';
+import { kratosDomain } from '@common/constants/kratos';
 
 /***
  * Registration Flow on v0.8.0-alpha3

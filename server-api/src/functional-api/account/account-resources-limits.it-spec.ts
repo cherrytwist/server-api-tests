@@ -1,5 +1,5 @@
 import '@utils/array.matcher';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createSpaceBasicData,
   deleteSpace,
@@ -68,7 +68,7 @@ describe('Limits on account resources creation', () => {
           spaceName,
           spaceName,
           users.betaTester.accountId,
-          TestUser.BETA_TESTER
+          TestUser.GLOBAL_BETA_TESTER
         );
         localSpaceId = createSpace.data?.createSpace.id ?? '';
 
@@ -98,7 +98,7 @@ describe('Limits on account resources creation', () => {
           spaceName,
           spaceName,
           users.opportunityAdmin.accountId,
-          TestUser.CHALLENGE_ADMIN
+          TestUser.SUBSPACE_ADMIN
         );
         localSpaceId = createSpace.data?.createSpace.id ?? '';
         localSpaceId = localSpaceIdn;

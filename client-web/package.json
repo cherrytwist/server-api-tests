@@ -1,11 +1,11 @@
 {
-  "name": "@alkemio/test-suites",
+  "name": "@alkemio/test-suite-client-web",
   "version": "0.1.0",
-  "description": "Alkemio system level API / integration tests",
-  "author": "Cherrytwist Foundation",
+  "description": "Alkemio web client test suite.",
+  "author": "Alkemio Holding",
   "private": false,
   "license": "EUPL-1.2",
-  "main": "src/main.ts",
+  "main": "src/setupTests.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alkemio/test-suites.git"
@@ -30,12 +30,14 @@
   },
   "dependencies": {
     "@alkemio/client-lib": "^0.32.0",
+    "@alkemio/tests-lib": "^0.1.1",
     "@ory/kratos-client": "^1.2.1",
     "axios": "^1.7.9",
     "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
     "graphql-type-json": "^0.3.2",
     "graphql-upload": "^17.0.0",
+    "supertest": "^7.0.0",
     "graphql-ws": "^5.8.2"
   },
   "devDependencies": {
@@ -53,6 +55,7 @@
     "@types/module-alias": "^2.0.0",
     "@types/node": "^20.13.1",
     "@types/puppeteer": "^5.4.4",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "8.18.1",
     "@typescript-eslint/parser": "8.18.1",
     "coveralls": "^3.1.0",
@@ -74,10 +77,9 @@
     "@src": "./src"
   },
   "husky": {
-
   },
   "engines": {
-    "node": ">=16.15.0",
-    "npm": ">=8.5.5"
+    "node": ">=20.9.0",
+    "npm": ">=10"
   }
 }

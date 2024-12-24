@@ -11,13 +11,11 @@ query GetProfileDocuments($profileID: UUID!) {
           url
         }
         authorization {
-          anonymousReadAccess
           myPrivileges
         }
         documents {
           id
           authorization {
-            anonymousReadAccess
             myPrivileges
           }
           displayName
@@ -32,7 +30,6 @@ query GetProfileDocuments($profileID: UUID!) {
         name
         uri
         authorization {
-          anonymousReadAccess
           myPrivileges
         }
       }

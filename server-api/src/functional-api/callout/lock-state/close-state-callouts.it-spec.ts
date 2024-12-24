@@ -11,7 +11,7 @@ import {
   createPostOnCallout,
   getDataPerSpaceCallout,
 } from '../post/post.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
@@ -197,12 +197,12 @@ describe('Callout - Close State - User Privileges Posts', () => {
       // Arrange
       test.each`
         userRole                       | message          | entity
-        ${TestUser.HUB_ADMIN}          | ${'sendComment'} | ${'space'}
-        ${TestUser.HUB_MEMBER}         | ${'sendComment'} | ${'space'}
-        ${TestUser.CHALLENGE_ADMIN}    | ${'sendComment'} | ${'challenge'}
-        ${TestUser.CHALLENGE_MEMBER}   | ${'sendComment'} | ${'challenge'}
-        ${TestUser.OPPORTUNITY_ADMIN}  | ${'sendComment'} | ${'opportunity'}
-        ${TestUser.OPPORTUNITY_MEMBER} | ${'sendComment'} | ${'opportunity'}
+        ${TestUser.SPACE_ADMIN}          | ${'sendComment'} | ${'space'}
+        ${TestUser.SPACE_MEMBER}         | ${'sendComment'} | ${'space'}
+        ${TestUser.SUBSPACE_ADMIN}    | ${'sendComment'} | ${'challenge'}
+        ${TestUser.SUBSPACE_MEMBER}   | ${'sendComment'} | ${'challenge'}
+        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'sendComment'} | ${'opportunity'}
+        ${TestUser.SUBSUBSPACE_MEMBER} | ${'sendComment'} | ${'opportunity'}
       `(
         'User: "$userRole" can send message to closed "$entity" callout post',
         async ({ userRole, message, entity }) => {
@@ -228,9 +228,9 @@ describe('Callout - Close State - User Privileges Posts', () => {
 
       test.each`
         userRole                   | message                                                                            | entity
-        ${TestUser.NON_HUB_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'space'}
-        ${TestUser.NON_HUB_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'challenge'}
-        ${TestUser.NON_HUB_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'opportunity'}
+        ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'space'}
+        ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'challenge'}
+        ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'opportunity'}
       `(
         'User: "$userRole" cannot send message to closed "$entity" callout post',
         async ({ userRole, message, entity }) => {
@@ -261,15 +261,15 @@ describe('Callout - Close State - User Privileges Posts', () => {
       // Arrange
       test.each`
         userRole                       | message                                                                                    | entity
-        ${TestUser.HUB_ADMIN}          | ${'"data":{"createContributionOnCallout"'}                                                 | ${'space'}
-        ${TestUser.HUB_MEMBER}         | ${'"New contributions to a closed Callout with id'}                                        | ${'space'}
-        ${TestUser.NON_HUB_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'space'}
-        ${TestUser.CHALLENGE_ADMIN}    | ${'"data":{"createContributionOnCallout"'}                                                 | ${'challenge'}
-        ${TestUser.CHALLENGE_MEMBER}   | ${'"New contributions to a closed Callout with id'}                                        | ${'challenge'}
-        ${TestUser.NON_HUB_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'challenge'}
-        ${TestUser.OPPORTUNITY_ADMIN}  | ${'"data":{"createContributionOnCallout"'}                                                 | ${'opportunity'}
-        ${TestUser.OPPORTUNITY_MEMBER} | ${'"New contributions to a closed Callout with id'}                                        | ${'opportunity'}
-        ${TestUser.NON_HUB_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'opportunity'}
+        ${TestUser.SPACE_ADMIN}          | ${'"data":{"createContributionOnCallout"'}                                                 | ${'space'}
+        ${TestUser.SPACE_MEMBER}         | ${'"New contributions to a closed Callout with id'}                                        | ${'space'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'space'}
+        ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"createContributionOnCallout"'}                                                 | ${'challenge'}
+        ${TestUser.SUBSPACE_MEMBER}   | ${'"New contributions to a closed Callout with id'}                                        | ${'challenge'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'challenge'}
+        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createContributionOnCallout"'}                                                 | ${'opportunity'}
+        ${TestUser.SUBSUBSPACE_MEMBER} | ${'"New contributions to a closed Callout with id'}                                        | ${'opportunity'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'opportunity'}
       `(
         'User: "$userRole" get error when create post to closed "$entity" callout',
         async ({ userRole, message, entity }) => {
@@ -355,15 +355,15 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       // Arrange
       test.each`
         userRole                       | code                  | entity
-        ${TestUser.HUB_ADMIN}          | ${'CALLOUT_CLOSED'}   | ${'space'}
-        ${TestUser.HUB_MEMBER}         | ${'CALLOUT_CLOSED'}   | ${'space'}
-        ${TestUser.NON_HUB_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'space'}
-        ${TestUser.CHALLENGE_ADMIN}    | ${'CALLOUT_CLOSED'}   | ${'challenge'}
-        ${TestUser.CHALLENGE_MEMBER}   | ${'CALLOUT_CLOSED'}   | ${'challenge'}
-        ${TestUser.NON_HUB_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'challenge'}
-        ${TestUser.OPPORTUNITY_ADMIN}  | ${'CALLOUT_CLOSED'}   | ${'opportunity'}
-        ${TestUser.OPPORTUNITY_MEMBER} | ${'CALLOUT_CLOSED'}   | ${'opportunity'}
-        ${TestUser.NON_HUB_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'opportunity'}
+        ${TestUser.SPACE_ADMIN}          | ${'CALLOUT_CLOSED'}   | ${'space'}
+        ${TestUser.SPACE_MEMBER}         | ${'CALLOUT_CLOSED'}   | ${'space'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'space'}
+        ${TestUser.SUBSPACE_ADMIN}    | ${'CALLOUT_CLOSED'}   | ${'challenge'}
+        ${TestUser.SUBSPACE_MEMBER}   | ${'CALLOUT_CLOSED'}   | ${'challenge'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'challenge'}
+        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'CALLOUT_CLOSED'}   | ${'opportunity'}
+        ${TestUser.SUBSUBSPACE_MEMBER} | ${'CALLOUT_CLOSED'}   | ${'opportunity'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'opportunity'}
       `(
         'User: "$userRole" get error when send code to closed "$entity" callout',
         async ({ userRole, code, entity }) => {

@@ -1,7 +1,7 @@
 import { entitiesId } from '@src/types/entities-helper';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 
 import { uniqueId } from '@utils/uniqueId';
 

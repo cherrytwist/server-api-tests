@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
@@ -236,7 +236,7 @@ describe('Notifications - post', () => {
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -247,7 +247,7 @@ describe('Notifications - post', () => {
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Draft,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(1500);
@@ -258,7 +258,7 @@ describe('Notifications - post', () => {
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -275,14 +275,14 @@ describe('Notifications - post', () => {
       entitiesId.space.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -328,14 +328,14 @@ describe('Notifications - post', () => {
       entitiesId.space.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -408,14 +408,14 @@ describe('Notifications - post', () => {
     const res = await createCalloutOnCollaboration(
       entitiesId.challenge.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     await delay(6000);
@@ -455,14 +455,14 @@ describe('Notifications - post', () => {
     const res = await createCalloutOnCollaboration(
       entitiesId.challenge.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.HUB_ADMIN,
+      TestUser.SPACE_ADMIN,
       false
     );
 
@@ -479,13 +479,13 @@ describe('Notifications - post', () => {
     const res = await createCalloutOnCollaboration(
       entitiesId.opportunity.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
 
     await delay(6000);
@@ -529,13 +529,13 @@ describe('Notifications - post', () => {
     const res = await createCalloutOnCollaboration(
       entitiesId.opportunity.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.OPPORTUNITY_ADMIN,
+      TestUser.SUBSUBSPACE_ADMIN,
       false
     );
 
@@ -555,14 +555,14 @@ describe('Notifications - post', () => {
     const res = await createCalloutOnCollaboration(
       entitiesId.opportunity.collaborationId,
       { framing: { profile: { displayName: calloutDisplayName } } },
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
     await updateCalloutVisibility(
       calloutId,
       CalloutVisibility.Published,
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
 
     // Assert

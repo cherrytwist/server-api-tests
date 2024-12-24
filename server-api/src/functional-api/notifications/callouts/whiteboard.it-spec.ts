@@ -1,8 +1,8 @@
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createWhiteboardCalloutOnCollaboration,
@@ -249,7 +249,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionSpaceCalloutId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';
@@ -297,7 +297,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionChallengeCalloutId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';
@@ -354,7 +354,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionOpportunityCalloutId,
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';
@@ -416,7 +416,7 @@ describe('Notifications - whiteboard', () => {
     // Act
     const res = await createWhiteboardOnCallout(
       whiteboardCollectionOpportunityCalloutId,
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     spaceWhiteboardId =
       res?.data?.createContributionOnCallout?.whiteboard?.id ?? '';

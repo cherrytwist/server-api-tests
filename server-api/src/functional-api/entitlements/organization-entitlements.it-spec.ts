@@ -25,7 +25,7 @@
  * - `afterAll`: Deletes the organization.
  * - `afterAll` in 'Account license plus cleanup': Cleans up created resources (Space, Virtual Contributor, Innovation Pack) and revokes the ACCOUNT_LICENSE_PLUS license from the organization account.
  */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   assignLicensePlanToAccount,
@@ -95,7 +95,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     // Act
     const response = await getOrganazationEntitlementsQuery(
       orgId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     const accountData = response.data?.organization?.account;
 
@@ -122,7 +122,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     // Act
     const response = await getOrganazationEntitlementsQuery(
       orgId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     // Assert
@@ -160,7 +160,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         spaceName,
         spaceName,
         orgAccountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.space.id ?? '';
 
@@ -168,7 +168,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         vcName,
         orgAccountId,
         spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       vcId = vcData?.data?.createVirtualContributor?.id ?? '';
 
@@ -176,14 +176,14 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         packName,
         packName,
         orgAccountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';
 
       // Act
       const response = await getOrganazationEntitlementsQuery(
         orgId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const accountData = response.data?.organization?.account;
 

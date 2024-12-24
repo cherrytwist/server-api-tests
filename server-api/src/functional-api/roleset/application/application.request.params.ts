@@ -1,10 +1,10 @@
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 
 export const createApplication = async (
   roleSetID: string,
-  userRole: TestUser = TestUser.NON_HUB_MEMBER
+  userRole: TestUser = TestUser.NON_SPACE_MEMBER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>

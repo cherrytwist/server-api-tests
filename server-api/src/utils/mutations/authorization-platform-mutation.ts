@@ -1,5 +1,5 @@
 import { graphqlRequestAuth } from '../graphql.request';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '../graphqlClient';
 import { graphqlErrorWrapper } from '../graphql.wrapper';
 import { PlatformRole } from '@generated/graphql';

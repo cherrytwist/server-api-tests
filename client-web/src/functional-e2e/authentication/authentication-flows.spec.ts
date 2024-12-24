@@ -25,10 +25,10 @@ import {
   saveButton,
   submitButton,
 } from './common-authentication-page-elements';
-import { delay } from 'src/utils/delay';
 import { deleteMailSlurperMails } from 'src/utils/mailslurper.rest.requests';
 import { uniqueId } from 'src/utils/uniqueId';
 import { deleteUser, getUserData } from '../../duplicate/user.request.params';
+import { delay } from '@alkemio/tests-lib';
 
 const password = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
 const baseUrl = process.env.ALKEMIO_BASE_URL || '';

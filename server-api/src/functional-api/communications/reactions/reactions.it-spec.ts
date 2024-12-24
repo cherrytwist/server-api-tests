@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import {
   getPlatformDiscussionsDataById,
@@ -67,7 +67,7 @@ describe('Reaction - Discussion messages', () => {
     const res = await sendMessageToRoom(
       discussionCommentsId,
       'Test message',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     messageId = res?.data?.sendMessageToRoom.id;
 
@@ -93,7 +93,7 @@ describe('Reaction - Discussion messages', () => {
     const res = await sendMessageToRoom(
       discussionCommentsId,
       'Test message',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     messageId = res?.data?.sendMessageToRoom.id;
 
@@ -130,7 +130,7 @@ describe('Reaction - Discussion messages', () => {
     const res = await sendMessageToRoom(
       discussionCommentsId,
       'Test message',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     messageId = res?.data?.sendMessageToRoom.id;
 
@@ -190,7 +190,7 @@ describe('Reaction - Discussion messages', () => {
     const res = await sendMessageToRoom(
       discussionCommentsId,
       'Test message',
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     messageId = res?.data?.sendMessageToRoom.id;
 
@@ -206,7 +206,7 @@ describe('Reaction - Discussion messages', () => {
     const resRemove = await removeReaction(
       reactionId,
       discussionCommentsId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
 
     const discussionMessageData = await getPlatformDiscussionsDataById(

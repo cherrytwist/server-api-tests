@@ -12,8 +12,8 @@ import {
 import { sendMessageToRoom } from '../communications/communication.params';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { TestUser } from '@common/enum/test.user';
-import { delay } from '@utils/delay';
+import { TestUser } from '@alkemio/tests-lib';
+import { delay } from '@alkemio/tests-lib';
 
 const organizationName = 'com-sub-org-n' + uniqueId;
 const hostNameId = 'com-sub-org-nd' + uniqueId;
@@ -127,8 +127,8 @@ describe('Post comments subscription', () => {
       };
 
       await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
-      await subscription2.subscribe(utilizedQuery, TestUser.HUB_ADMIN);
-      await subscription3.subscribe(utilizedQuery, TestUser.HUB_MEMBER);
+      await subscription2.subscribe(utilizedQuery, TestUser.SPACE_ADMIN);
+      await subscription3.subscribe(utilizedQuery, TestUser.SPACE_MEMBER);
     });
 
     afterAll(async () => {
@@ -149,14 +149,14 @@ describe('Post comments subscription', () => {
       const messageHA = await sendMessageToRoom(
         postCommentsIdSpace,
         messageHAText,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       messageHaId = messageHA?.data?.sendMessageToRoom.id;
 
       const messageHM = await sendMessageToRoom(
         postCommentsIdSpace,
         messageHMText,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       messageHmId = messageHM?.data?.sendMessageToRoom.id;
 
@@ -207,8 +207,8 @@ describe('Post comments subscription', () => {
       };
 
       await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
-      await subscription2.subscribe(utilizedQuery, TestUser.HUB_ADMIN);
-      await subscription3.subscribe(utilizedQuery, TestUser.HUB_MEMBER);
+      await subscription2.subscribe(utilizedQuery, TestUser.SPACE_ADMIN);
+      await subscription3.subscribe(utilizedQuery, TestUser.SPACE_MEMBER);
     });
 
     afterAll(async () => {
@@ -228,14 +228,14 @@ describe('Post comments subscription', () => {
       const messageHA = await sendMessageToRoom(
         postCommentsIdChallenge,
         messageHAText,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       messageHaId = messageHA?.data?.sendMessageToRoom.id;
 
       const messageHM = await sendMessageToRoom(
         postCommentsIdChallenge,
         messageHMText,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       messageHmId = messageHM?.data?.sendMessageToRoom.id;
 
@@ -288,8 +288,8 @@ describe('Post comments subscription', () => {
       };
 
       await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
-      await subscription2.subscribe(utilizedQuery, TestUser.HUB_ADMIN);
-      await subscription3.subscribe(utilizedQuery, TestUser.HUB_MEMBER);
+      await subscription2.subscribe(utilizedQuery, TestUser.SPACE_ADMIN);
+      await subscription3.subscribe(utilizedQuery, TestUser.SPACE_MEMBER);
     });
 
     afterAll(async () => {
@@ -309,14 +309,14 @@ describe('Post comments subscription', () => {
       const messageHA = await sendMessageToRoom(
         postCommentsIdOpportunity,
         messageHAText,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       messageHaId = messageHA?.data?.sendMessageToRoom.id;
 
       const messageHM = await sendMessageToRoom(
         postCommentsIdOpportunity,
         messageHMText,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       messageHmId = messageHM?.data?.sendMessageToRoom.id;
 

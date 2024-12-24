@@ -13,7 +13,7 @@ import {
 } from '@utils/data-setup/entities';
 
 import { createChallenge } from '@utils/mutations/journeys/challenge';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   assignRoleToUser,
   assignUserToOrganization,

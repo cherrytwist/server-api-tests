@@ -1,4 +1,4 @@
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { OrganizationRole } from '@generated/alkemio-schema';
@@ -56,19 +56,6 @@ export const assignUserAsOrganizationOwner = async (
     );
 
   return graphqlErrorWrapper(callback, userRole);
-};
-
-export const setSpaceVisibilityVariableData = (ID: string, state: boolean) => {
-  const variables = {
-    spaceData: {
-      ID,
-      authorizationPolicy: {
-        anonymousReadAccess: state,
-      },
-    },
-  };
-  const responseData = JSON.stringify(variables);
-  return responseData;
 };
 
 export const assignUserAsOrganizationAdmin = async (

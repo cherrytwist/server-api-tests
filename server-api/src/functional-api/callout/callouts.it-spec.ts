@@ -7,7 +7,7 @@ import {
   updateCallout,
   updateCalloutVisibility,
 } from './callouts.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
@@ -208,7 +208,7 @@ describe('Callouts - AUTH Space', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.HUB_ADMIN}    | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_ADMIN}    | ${'"data":{"createCalloutOnCollaboration"'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -230,8 +230,8 @@ describe('Callouts - AUTH Space', () => {
     // Arrange
     test.each`
       userRole                   | message
-      ${TestUser.HUB_MEMBER}     | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER} | ${'errors'}
+      ${TestUser.SPACE_MEMBER}     | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -255,9 +255,9 @@ describe('Callouts - AUTH Space', () => {
     test.each`
       userRole                   | message
       ${TestUser.GLOBAL_ADMIN}   | ${'"data":{"updateCallout"'}
-      ${TestUser.HUB_ADMIN}      | ${'"data":{"updateCallout"'}
-      ${TestUser.HUB_MEMBER}     | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER} | ${'errors'}
+      ${TestUser.SPACE_ADMIN}      | ${'"data":{"updateCallout"'}
+      ${TestUser.SPACE_MEMBER}     | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
@@ -291,9 +291,9 @@ describe('Callouts - AUTH Space', () => {
     test.each`
       userRole                   | message
       ${TestUser.GLOBAL_ADMIN}   | ${'"data":{"deleteCallout"'}
-      ${TestUser.HUB_ADMIN}      | ${'"data":{"deleteCallout"'}
-      ${TestUser.HUB_MEMBER}     | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER} | ${'errors'}
+      ${TestUser.SPACE_ADMIN}      | ${'"data":{"deleteCallout"'}
+      ${TestUser.SPACE_MEMBER}     | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
@@ -320,9 +320,9 @@ describe('Callouts - AUTH Challenge', () => {
     // Arrange
     test.each`
       userRole                     | message
-      ${TestUser.HUB_ADMIN}        | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.CHALLENGE_MEMBER} | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_ADMIN}        | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSPACE_MEMBER} | ${'"data":{"createCalloutOnCollaboration"'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -345,7 +345,7 @@ describe('Callouts - AUTH Challenge', () => {
     // Arrange
     test.each`
       userRole                   | message
-      ${TestUser.NON_HUB_MEMBER} | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -368,10 +368,10 @@ describe('Callouts - AUTH Challenge', () => {
     });
     test.each`
       userRole                     | message
-      ${TestUser.HUB_ADMIN}        | ${'"data":{"updateCallout"'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${'"data":{"updateCallout"'}
-      ${TestUser.CHALLENGE_MEMBER} | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER}   | ${'errors'}
+      ${TestUser.SPACE_ADMIN}        | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSPACE_MEMBER} | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
@@ -404,10 +404,10 @@ describe('Callouts - AUTH Challenge', () => {
     });
     test.each`
       userRole                     | message
-      ${TestUser.HUB_ADMIN}        | ${'"data":{"deleteCallout"'}
-      ${TestUser.CHALLENGE_ADMIN}  | ${'"data":{"deleteCallout"'}
-      ${TestUser.CHALLENGE_MEMBER} | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER}   | ${'errors'}
+      ${TestUser.SPACE_ADMIN}        | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}  | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSPACE_MEMBER} | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
@@ -434,12 +434,12 @@ describe('Callouts - AUTH Opportunity', () => {
     // Arrange
     test.each`
       userRole                       | message
-      ${TestUser.HUB_ADMIN}          | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.CHALLENGE_ADMIN}    | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.HUB_MEMBER}         | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.CHALLENGE_MEMBER}   | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_ADMIN}          | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_MEMBER}         | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSPACE_MEMBER}   | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${'"data":{"createCalloutOnCollaboration"'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -461,7 +461,7 @@ describe('Callouts - AUTH Opportunity', () => {
     // Arrange
     test.each`
       userRole                   | message
-      ${TestUser.NON_HUB_MEMBER} | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -484,13 +484,13 @@ describe('Callouts - AUTH Opportunity', () => {
     });
     test.each`
       userRole                       | message
-      ${TestUser.HUB_ADMIN}          | ${'"data":{"updateCallout"'}
-      ${TestUser.CHALLENGE_ADMIN}    | ${'"data":{"updateCallout"'}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${'"data":{"updateCallout"'}
-      ${TestUser.HUB_MEMBER}         | ${'errors'}
-      ${TestUser.CHALLENGE_MEMBER}   | ${'errors'}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER}     | ${'errors'}
+      ${TestUser.SPACE_ADMIN}          | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"updateCallout"'}
+      ${TestUser.SPACE_MEMBER}         | ${'errors'}
+      ${TestUser.SUBSPACE_MEMBER}   | ${'errors'}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER}     | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
@@ -524,13 +524,13 @@ describe('Callouts - AUTH Opportunity', () => {
     });
     test.each`
       userRole                       | message
-      ${TestUser.HUB_ADMIN}          | ${'"data":{"deleteCallout"'}
-      ${TestUser.CHALLENGE_ADMIN}    | ${'"data":{"deleteCallout"'}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${'"data":{"deleteCallout"'}
-      ${TestUser.HUB_MEMBER}         | ${'errors'}
-      ${TestUser.CHALLENGE_MEMBER}   | ${'errors'}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${'errors'}
-      ${TestUser.NON_HUB_MEMBER}     | ${'errors'}
+      ${TestUser.SPACE_ADMIN}          | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"deleteCallout"'}
+      ${TestUser.SPACE_MEMBER}         | ${'errors'}
+      ${TestUser.SUBSPACE_MEMBER}   | ${'errors'}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER}     | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {

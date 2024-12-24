@@ -30,7 +30,7 @@ import { GetTemplateById } from '@functional-api/templates/template.request.para
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@src/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';
@@ -327,7 +327,7 @@ describe('Post templates - CRUD Authorization', () => {
       test.each`
         userRole
         ${TestUser.GLOBAL_ADMIN}
-        ${TestUser.HUB_ADMIN}
+        ${TestUser.SPACE_ADMIN}
       `(
         'User: "$userRole" get message: "$message", when intend to create space post template ',
         async ({ userRole }) => {
@@ -349,8 +349,8 @@ describe('Post templates - CRUD Authorization', () => {
       // Arrange
       test.each`
         userRole                   | message
-        ${TestUser.HUB_MEMBER}     | ${errorAuthCreatePostTemplate}
-        ${TestUser.NON_HUB_MEMBER} | ${errorAuthCreatePostTemplate}
+        ${TestUser.SPACE_MEMBER}     | ${errorAuthCreatePostTemplate}
+        ${TestUser.NON_SPACE_MEMBER} | ${errorAuthCreatePostTemplate}
       `(
         'User: "$userRole" get message: "$message", when intend to create space post template ',
         async ({ userRole, message }) => {
@@ -388,7 +388,7 @@ describe('Post templates - CRUD Authorization', () => {
       test.each`
         userRole
         ${TestUser.GLOBAL_ADMIN}
-        ${TestUser.HUB_ADMIN}
+        ${TestUser.SPACE_ADMIN}
       `(
         'User: "$userRole" get message: "$message", when intend to update space post template ',
         async ({ userRole }) => {
@@ -410,8 +410,8 @@ describe('Post templates - CRUD Authorization', () => {
 
       test.each`
         userRole                   | message
-        ${TestUser.HUB_MEMBER}     | ${errorAuthUpdatePostTemplate}
-        ${TestUser.NON_HUB_MEMBER} | ${errorAuthUpdatePostTemplate}
+        ${TestUser.SPACE_MEMBER}     | ${errorAuthUpdatePostTemplate}
+        ${TestUser.NON_SPACE_MEMBER} | ${errorAuthUpdatePostTemplate}
       `(
         'User: "$userRole" get message: "$message", when intend to update space post template ',
         async ({ userRole, message }) => {
@@ -442,7 +442,7 @@ describe('Post templates - CRUD Authorization', () => {
       test.each`
         userRole
         ${TestUser.GLOBAL_ADMIN}
-        ${TestUser.HUB_ADMIN}
+        ${TestUser.SPACE_ADMIN}
       `(
         'User: "$userRole" get message: "$message", whe intend to remova space post template ',
         async ({ userRole }) => {
@@ -463,8 +463,8 @@ describe('Post templates - CRUD Authorization', () => {
 
       test.each`
         userRole                   | message
-        ${TestUser.HUB_MEMBER}     | ${errorAuthDeleteTemplate}
-        ${TestUser.NON_HUB_MEMBER} | ${errorAuthDeleteTemplate}
+        ${TestUser.SPACE_MEMBER}     | ${errorAuthDeleteTemplate}
+        ${TestUser.NON_SPACE_MEMBER} | ${errorAuthDeleteTemplate}
       `(
         'User: "$userRole" get message: "$message", whe intend to remova space post template ',
         async ({ userRole, message }) => {

@@ -19,7 +19,7 @@
  * The cleanup steps ensure that any created resources (spaces, virtual contributors, innovation packs) are deleted
  * and the platform roles are removed after the tests are executed.
  */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -64,7 +64,7 @@ describe('Get User Account Authorization and License privileges ', () => {
     );
 
     // Act
-    const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+    const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
     const accountData = response.data?.me.user?.account;
 
     // Assert
@@ -91,7 +91,7 @@ describe('Get User Account Authorization and License privileges ', () => {
     );
 
     // Act
-    const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+    const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
     const accountData = response.data?.me.user?.account;
 
     // Assert
@@ -134,7 +134,7 @@ describe('Get User Account Authorization and License privileges ', () => {
         spaceName,
         spaceName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.space.id ?? '';
 
@@ -142,7 +142,7 @@ describe('Get User Account Authorization and License privileges ', () => {
         vcName,
         users.nonSpaceMember.accountId,
         spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       vcId = vcData?.data?.createVirtualContributor?.id ?? '';
 
@@ -150,12 +150,12 @@ describe('Get User Account Authorization and License privileges ', () => {
         packName,
         packName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';
 
       // Act
-      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+      const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
       const accountData = response.data?.me.user?.account;
 
       // Assert
@@ -187,7 +187,7 @@ describe('Get User Account Authorization and License privileges ', () => {
     );
 
     // Act
-    const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+    const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
     const accountData = response.data?.me.user?.account;
 
     // Assert
@@ -233,7 +233,7 @@ describe('Get User Account Authorization and License privileges ', () => {
         spaceName,
         spaceName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.space.id ?? '';
 
@@ -241,7 +241,7 @@ describe('Get User Account Authorization and License privileges ', () => {
         vcName,
         users.nonSpaceMember.accountId,
         spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       vcId = vcData?.data?.createVirtualContributor?.id ?? '';
 
@@ -249,12 +249,12 @@ describe('Get User Account Authorization and License privileges ', () => {
         packName,
         packName,
         users.nonSpaceMember.accountId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';
 
       // Act
-      const response = await getMyEntitlementsQuery(TestUser.NON_HUB_MEMBER);
+      const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
       const accountData = response.data?.me.user?.account;
 
       // Assert

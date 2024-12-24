@@ -4,8 +4,8 @@ import {
   deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { delay } from '@alkemio/tests-lib';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
@@ -129,7 +129,7 @@ describe('Notifications - member join community', () => {
   // skip until bug is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/notifications/333
   test('Non-space member join a Space - GA, HA and Joiner receive notifications', async () => {
     // Act
-    await joinRoleSet(entitiesId.space.roleSetId, TestUser.NON_HUB_MEMBER);
+    await joinRoleSet(entitiesId.space.roleSetId, TestUser.NON_SPACE_MEMBER);
     await delay(10000);
 
     const getEmailsData = await getMailsData();
@@ -156,7 +156,7 @@ describe('Notifications - member join community', () => {
   // skip until bug is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/notifications/333
   test('Non-space member join a Challenge - GA, HA, CA and Joiner receive notifications', async () => {
     // Act
-    await joinRoleSet(entitiesId.challenge.roleSetId, TestUser.NON_HUB_MEMBER);
+    await joinRoleSet(entitiesId.challenge.roleSetId, TestUser.NON_SPACE_MEMBER);
 
     await delay(10000);
     const getEmailsData = await getMailsData();

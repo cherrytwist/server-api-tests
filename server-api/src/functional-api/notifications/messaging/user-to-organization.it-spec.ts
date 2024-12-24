@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { delay } from '@utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { delay } from '@alkemio/tests-lib';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
@@ -82,7 +82,7 @@ describe('Notifications - user to organization messages', () => {
     await sendMessageToOrganization(
       entitiesId.organization.id,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -123,7 +123,7 @@ describe('Notifications - user to organization messages', () => {
     await sendMessageToOrganization(
       entitiesId.organization.id,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -166,7 +166,7 @@ describe('Notifications - user to organization messages', () => {
     await sendMessageToOrganization(
       entitiesId.organization.id,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 

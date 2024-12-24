@@ -1,5 +1,5 @@
 import { AlkemioClient } from '@alkemio/client-lib';
-import { TestUser } from '@test/common/enums/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 
 export class TokenHelper {
   private users = Object.values(TestUser);

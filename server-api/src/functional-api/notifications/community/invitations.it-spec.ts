@@ -4,13 +4,13 @@ import {
   deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   deleteInvitation,
   inviteContributors,
 } from '@functional-api/roleset/invitations/invitation.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,
@@ -126,7 +126,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.space.roleSetId,
       [users.nonSpaceMember.id],
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -155,7 +155,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.space.roleSetId,
       [users.qaUser.id],
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -184,7 +184,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.challenge.roleSetId,
       [users.qaUser.id],
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -213,7 +213,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.challenge.roleSetId,
       [users.qaUser.id],
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -237,7 +237,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.challenge.roleSetId,
       [users.spaceMember.id],
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -266,7 +266,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.opportunity.roleSetId,
       [users.qaUser.id],
-      TestUser.OPPORTUNITY_ADMIN
+      TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -301,7 +301,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.space.roleSetId,
       [users.nonSpaceMember.id],
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;
@@ -329,7 +329,7 @@ describe('Notifications - invitations', () => {
     const invitationData = await inviteContributors(
       entitiesId.challenge.roleSetId,
       [users.qaUser.displayName],
-      TestUser.CHALLENGE_ADMIN
+      TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
       invitationData?.data?.inviteContributorsForRoleSetMembership;

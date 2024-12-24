@@ -1,5 +1,5 @@
 import { updateUser } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import '@utils/array.matcher';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
@@ -816,9 +816,9 @@ describe('Search', () => {
 
     test.each`
       userRole
-      ${TestUser.HUB_ADMIN}
-      ${TestUser.HUB_MEMBER}
-      ${TestUser.NON_HUB_MEMBER}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
+      ${TestUser.NON_SPACE_MEMBER}
     `(
       'User: "$userRole" should not receive Space / Challenge / Opportunity data',
       async ({ userRole }) => {
@@ -899,13 +899,13 @@ describe('Search', () => {
 
     test.each`
       userRole                       | numberResults
-      ${TestUser.HUB_ADMIN}          | ${2}
-      ${TestUser.HUB_MEMBER}         | ${0}
-      ${TestUser.CHALLENGE_ADMIN}    | ${2}
-      ${TestUser.CHALLENGE_MEMBER}   | ${2}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${2}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${2}
-      ${TestUser.NON_HUB_MEMBER}     | ${0}
+      ${TestUser.SPACE_ADMIN}          | ${2}
+      ${TestUser.SPACE_MEMBER}         | ${0}
+      ${TestUser.SUBSPACE_ADMIN}    | ${2}
+      ${TestUser.SUBSPACE_MEMBER}   | ${2}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${2}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${2}
+      ${TestUser.NON_SPACE_MEMBER}     | ${0}
     `(
       'User: "$userRole" should get "$numberResults" results for Challenge / Opportunity data',
       async ({ userRole, numberResults }) => {
@@ -940,13 +940,13 @@ describe('Search', () => {
 
     test.each`
       userRole                       | numberResults
-      ${TestUser.HUB_ADMIN}          | ${3}
-      ${TestUser.HUB_MEMBER}         | ${1}
-      ${TestUser.CHALLENGE_ADMIN}    | ${3}
-      ${TestUser.CHALLENGE_MEMBER}   | ${3}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${3}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${3}
-      ${TestUser.NON_HUB_MEMBER}     | ${1}
+      ${TestUser.SPACE_ADMIN}          | ${3}
+      ${TestUser.SPACE_MEMBER}         | ${1}
+      ${TestUser.SUBSPACE_ADMIN}    | ${3}
+      ${TestUser.SUBSPACE_MEMBER}   | ${3}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${3}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${3}
+      ${TestUser.NON_SPACE_MEMBER}     | ${1}
     `(
       'User: "$userRole" should get "$numberResults" results for Space /  Challenge / Opportunity data',
       async ({ userRole, numberResults }) => {
@@ -980,13 +980,13 @@ describe('Search', () => {
 
     test.each`
       userRole                       | numberResults
-      ${TestUser.HUB_ADMIN}          | ${3}
-      ${TestUser.HUB_MEMBER}         | ${1}
-      ${TestUser.CHALLENGE_ADMIN}    | ${3}
-      ${TestUser.CHALLENGE_MEMBER}   | ${3}
-      ${TestUser.OPPORTUNITY_ADMIN}  | ${3}
-      ${TestUser.OPPORTUNITY_MEMBER} | ${3}
-      ${TestUser.NON_HUB_MEMBER}     | ${1}
+      ${TestUser.SPACE_ADMIN}          | ${3}
+      ${TestUser.SPACE_MEMBER}         | ${1}
+      ${TestUser.SUBSPACE_ADMIN}    | ${3}
+      ${TestUser.SUBSPACE_MEMBER}   | ${3}
+      ${TestUser.SUBSUBSPACE_ADMIN}  | ${3}
+      ${TestUser.SUBSUBSPACE_MEMBER} | ${3}
+      ${TestUser.NON_SPACE_MEMBER}     | ${1}
     `(
       'User: "$userRole" should get "$numberResults" results for Space / Challenge / Opportunity data',
       async ({ userRole, numberResults }) => {

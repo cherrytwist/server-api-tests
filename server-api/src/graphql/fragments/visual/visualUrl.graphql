@@ -3,7 +3,6 @@ fragment VisualUri on Visual {
   uri
   name
   authorization {
-    anonymousReadAccess
     myPrivileges
   }
 }

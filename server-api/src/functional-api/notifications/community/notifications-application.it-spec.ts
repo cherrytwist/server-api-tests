@@ -8,7 +8,7 @@ import {
   createApplication,
   deleteApplication,
 } from '@functional-api/roleset/application/application.request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,

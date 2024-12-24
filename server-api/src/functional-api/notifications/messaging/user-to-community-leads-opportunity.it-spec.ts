@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { delay } from '../../../../../lib/src/utils/delay';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteSpace,
   updateSpaceSettings,
@@ -116,7 +116,7 @@ describe('Notifications - send messages to Private Space, Opportunity Community 
     await sendMessageToCommunityLeads(
       entitiesId.opportunity.communityId,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 
@@ -147,7 +147,7 @@ describe('Notifications - send messages to Private Space, Opportunity Community 
     await sendMessageToCommunityLeads(
       entitiesId.opportunity.communityId,
       'Test message',
-      TestUser.OPPORTUNITY_MEMBER
+      TestUser.SUBSUBSPACE_MEMBER
     );
     await delay(3000);
 
@@ -204,7 +204,7 @@ describe('Notifications - send messages to Private Space, Public Challenge, Oppo
     await sendMessageToCommunityLeads(
       entitiesId.opportunity.communityId,
       'Test message',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     await delay(3000);
 

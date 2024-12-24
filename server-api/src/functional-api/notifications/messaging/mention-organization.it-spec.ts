@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { delay } from '../../../../../lib/src/utils/delay';
+import { TestUser } from '@alkemio/tests-lib';
 import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
@@ -145,7 +145,7 @@ describe('Notifications - Mention Organization', () => {
           entitiesId.organization.displayName,
           entitiesId.organization.nameId
         )} comment on discussion callout`,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       await delay(3000);
 
@@ -274,7 +274,7 @@ describe('Notifications - Mention Organization', () => {
           entitiesId.organization.displayName,
           entitiesId.organization.nameId
         )} comment on discussion callout`,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
       await delay(3000);
 
@@ -320,7 +320,7 @@ describe('Notifications - Mention Organization', () => {
           entitiesId.organization.displayName,
           entitiesId.organization.nameId
         )} comment on discussion callout`,
-        TestUser.HUB_ADMIN
+        TestUser.SPACE_ADMIN
       );
 
       await delay(3000);

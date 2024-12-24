@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {
@@ -96,7 +96,7 @@ describe('Activity logs - Space', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(entitiesId.space.roleSetId, TestUser.HUB_MEMBER);
+    await joinRoleSet(entitiesId.space.roleSetId, TestUser.SPACE_MEMBER);
 
     await assignRoleToUser(
       users.spaceAdmin.id,
@@ -319,8 +319,8 @@ describe('Access to Activity logs - Space', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${entitiesId.space.collaborationId}
-      ${TestUser.HUB_ADMIN}    | ${entitiesId.space.collaborationId}
-      ${TestUser.HUB_MEMBER}   | ${entitiesId.space.collaborationId}
+      ${TestUser.SPACE_ADMIN}    | ${entitiesId.space.collaborationId}
+      ${TestUser.SPACE_MEMBER}   | ${entitiesId.space.collaborationId}
     `(
       'User: "$userRole" get message: "$message", when intend to access Private space activity logs',
       async ({ userRole, message }) => {
@@ -340,7 +340,7 @@ describe('Access to Activity logs - Space', () => {
 
     test.each`
       userRole                   | message
-      ${TestUser.NON_HUB_MEMBER} | ${'Authorization'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
       'User: "$userRole" get Error message: "$message", when intend to access Private space activity logs',
       async ({ userRole, message }) => {
@@ -369,9 +369,9 @@ describe('Access to Activity logs - Space', () => {
     test.each`
       userRole                   | message
       ${TestUser.GLOBAL_ADMIN}   | ${entitiesId.space.collaborationId}
-      ${TestUser.HUB_ADMIN}      | ${entitiesId.space.collaborationId}
-      ${TestUser.HUB_MEMBER}     | ${entitiesId.space.collaborationId}
-      ${TestUser.NON_HUB_MEMBER} | ${entitiesId.space.collaborationId}
+      ${TestUser.SPACE_ADMIN}      | ${entitiesId.space.collaborationId}
+      ${TestUser.SPACE_MEMBER}     | ${entitiesId.space.collaborationId}
+      ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.space.collaborationId}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public space activity logs',
       async ({ userRole, message }) => {

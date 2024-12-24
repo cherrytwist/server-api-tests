@@ -1,7 +1,7 @@
 import '@utils/array.matcher';
 import { createSubspace } from '../challenge/challenge.request.params';
 import { deleteSpace } from '../space/space.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
@@ -142,7 +142,7 @@ describe('Opportunity Admin', () => {
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
-      TestUser.CHALLENGE_MEMBER
+      TestUser.SUBSPACE_MEMBER
     );
 
     // Assert
@@ -169,7 +169,7 @@ describe('Opportunity Admin', () => {
       users.opportunityMember.email,
       opportunityRoleSetId,
       CommunityRoleType.Admin,
-      TestUser.CHALLENGE_MEMBER
+      TestUser.SUBSPACE_MEMBER
     );
 
     // Assert

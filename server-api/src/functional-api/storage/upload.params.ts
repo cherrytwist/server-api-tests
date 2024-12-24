@@ -1,5 +1,5 @@
 import { AlkemioClient } from '@alkemio/client-lib';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { setAuthHeader } from '@utils/graphql.authorization.header';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';

@@ -23,7 +23,7 @@ import {
   createSpaceAndGetData,
   deleteSpace,
 } from '../journey/space/space.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { getAuthDocument } from '@utils/get.document';
 
 const organizationName = 'org-name' + uniqueId;

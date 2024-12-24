@@ -1,4 +1,4 @@
-import { TestUser } from "@common/enum/test.user";
+import { TestUser } from "@alkemio/tests-lib";
 import { TestUtil } from "@utils/test.util";
 
 export const buildConnectionParams = async (user: TestUser) => {

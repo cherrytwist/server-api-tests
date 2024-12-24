@@ -3,7 +3,6 @@ fragment ProfileStorageConfig on Profile {
   storageBucket {
     id
     authorization {
-      anonymousReadAccess
       myPrivileges
     }
     parentEntity {
@@ -13,7 +12,6 @@ fragment ProfileStorageConfig on Profile {
     documents {
       id
       authorization {
-        anonymousReadAccess
         myPrivileges
       }
     }

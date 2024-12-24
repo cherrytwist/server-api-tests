@@ -1,5 +1,5 @@
 //import * as Dom from 'graphql-request/dist/types.dom';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { getTestUserToken } from './getTestUserToken';
 import Headers from 'graphql-request';
 

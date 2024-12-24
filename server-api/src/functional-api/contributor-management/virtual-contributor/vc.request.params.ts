@@ -1,5 +1,5 @@
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { SearchVisibility } from '@generated/graphql';
 
@@ -7,7 +7,7 @@ export const createVirtualContributorOnAccount = async (
   displayName: string,
   accountID: string,
   bodyOfKnowledgeID: string,
-  userRole: TestUser = TestUser.BETA_TESTER
+  userRole: TestUser = TestUser.GLOBAL_BETA_TESTER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
@@ -35,7 +35,7 @@ export const createVirtualContributorOnAccount = async (
 export const updateVirtualContributor = async (
   ID: string,
   searchVisibility: SearchVisibility.Public,
-  userRole: TestUser = TestUser.BETA_TESTER
+  userRole: TestUser = TestUser.GLOBAL_BETA_TESTER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
@@ -55,7 +55,7 @@ export const updateVirtualContributor = async (
 
 export const deleteVirtualContributorOnAccount = async (
   ID: string,
-  userRole: TestUser = TestUser.BETA_TESTER
+  userRole: TestUser = TestUser.GLOBAL_BETA_TESTER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
@@ -75,7 +75,7 @@ export const deleteVirtualContributorOnAccount = async (
 export const removeVirtualContributorFromRoleSet = async (
   roleSetId: string,
   virtualContributorId: string,
-  userRole: TestUser = TestUser.BETA_TESTER
+  userRole: TestUser = TestUser.GLOBAL_BETA_TESTER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
@@ -93,7 +93,7 @@ export const removeVirtualContributorFromRoleSet = async (
 
 export const queryVCData = async (
   id: string,
-  userRole: TestUser = TestUser.BETA_TESTER
+  userRole: TestUser = TestUser.GLOBAL_BETA_TESTER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>

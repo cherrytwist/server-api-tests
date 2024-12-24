@@ -4,13 +4,13 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { entitiesId } from '@src/types/entities-helper';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import {
   CommunityRoleType,
   SpacePrivacyMode,
@@ -68,7 +68,7 @@ describe('Communities', () => {
 
       const spaceDataReaderMember = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
 
       const getMessageReaderMember =
@@ -77,7 +77,7 @@ describe('Communities', () => {
       await delay(600);
       const spaceDataReader = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
 
       // Assert
@@ -121,7 +121,7 @@ describe('Communities', () => {
 
       const spaceDataReaderMember = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.HUB_MEMBER
+        TestUser.SPACE_MEMBER
       );
       const getMessageReaderMember =
         spaceDataReaderMember?.data?.space?.community?.communication?.updates
@@ -129,7 +129,7 @@ describe('Communities', () => {
 
       const spaceDataReaderNotMemberIn = await getSpaceData(
         entitiesId.spaceId,
-        TestUser.NON_HUB_MEMBER
+        TestUser.NON_SPACE_MEMBER
       );
       const spaceDataReaderNotMember =
         spaceDataReaderNotMemberIn?.data?.space?.community?.communication

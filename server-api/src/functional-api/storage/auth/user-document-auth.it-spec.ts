@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
   getProfileDocuments,
@@ -66,46 +66,39 @@ describe('User - documents', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges                                                           | anonymousReadAccess
-      ${undefined}               | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                          | ${true}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin} | ${true}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}                     | ${true}
+      userRole                   | privileges
+      ${undefined}               | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
+      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile visual document',
-      async ({ userRole, privileges, anonymousReadAccess }) => {
+      async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(dataAuthorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
       }
     );
 
     test.each`
-      userRole                   | privileges                                                                                 | anonymousReadAccess | parentEntityType
-      ${undefined}               | ${undefined}                                                                               | ${undefined}        | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                                                | ${true}             | ${'USER'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${true}             | ${'USER'}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${true}             | ${'USER'}
+      userRole                   | privileges                                                                                 | parentEntityType
+      ${undefined}               | ${undefined}                                                                               | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
+      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
+      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile storage bucket',
       async ({
         userRole,
         privileges,
-        anonymousReadAccess,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(data?.authorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
         expect(data?.parentEntity?.type).toEqual(parentEntityType);
       }
     );
@@ -138,46 +131,39 @@ describe('User - documents', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges                                                           | anonymousReadAccess
-      ${undefined}               | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                          | ${true}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin} | ${true}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}                     | ${true}
+      userRole                   | privileges
+      ${undefined}               | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
+      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user reference document',
-      async ({ userRole, privileges, anonymousReadAccess }) => {
+      async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(dataAuthorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
       }
     );
 
     test.each`
-      userRole                   | privileges                                                                                 | anonymousReadAccess | parentEntityType
-      ${undefined}               | ${undefined}                                                                               | ${undefined}        | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                                                | ${true}             | ${'USER'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${true}             | ${'USER'}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${true}             | ${'USER'}
+      userRole                   | privileges                                                                                 | parentEntityType
+      ${undefined}               | ${undefined}                                                                               | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
+      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
+      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile reference storage bucket',
       async ({
         userRole,
         privileges,
-        anonymousReadAccess,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(data?.authorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
         expect(data?.parentEntity?.type).toEqual(parentEntityType);
       }
     );
@@ -214,46 +200,39 @@ describe('User - documents', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges                                                           | anonymousReadAccess
-      ${undefined}               | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                          | ${true}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin} | ${true}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}                     | ${true}
+      userRole                   | privileges
+      ${undefined}               | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
+      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description visual document',
-      async ({ userRole, privileges, anonymousReadAccess }) => {
+      async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
         expect(dataAuthorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(dataAuthorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
       }
     );
 
     test.each`
-      userRole                   | privileges                                                                                 | anonymousReadAccess | parentEntityType
-      ${undefined}               | ${undefined}                                                                               | ${undefined}        | ${undefined}
-      ${TestUser.NON_HUB_MEMBER} | ${['READ']}                                                                                | ${true}             | ${'USER'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${true}             | ${'USER'}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${true}             | ${'USER'}
+      userRole                   | privileges                                                                                  | parentEntityType
+      ${undefined}               | ${undefined}                                                                                | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                 | ${'USER'}
+      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin}  | ${'USER'}
+      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                      | ${'USER'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description (storageBucket) document',
       async ({
         userRole,
         privileges,
-        anonymousReadAccess,
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
-        expect(data?.authorization?.anonymousReadAccess).toEqual(
-          anonymousReadAccess
-        );
         expect(data?.parentEntity?.type).toEqual(parentEntityType);
       }
     );

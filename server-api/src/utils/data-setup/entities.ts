@@ -9,8 +9,8 @@ import {
   CalloutVisibility,
   CommunityRoleType,
 } from '@generated/alkemio-schema';
-import { TestUser } from '@common/enum/test.user';
-import { delay } from '../delay';
+import { TestUser } from '@alkemio/tests-lib';
+import { delay } from '../../../../lib/src/utils/delay';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@src/types/entities-helper';
 import {

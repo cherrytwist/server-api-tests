@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { TestUtil } from './test.util';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 
 const environment = process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found';
 

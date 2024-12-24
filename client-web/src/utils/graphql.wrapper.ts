@@ -1,6 +1,6 @@
-import { TestUser } from '@test/common/enums/test.user';
 import Headers from 'graphql-request';
 import { getTestUserToken } from './getTestUserToken';
+import { TestUser } from '@alkemio/tests-lib';
 
 export type ErrorType = {
   response: {

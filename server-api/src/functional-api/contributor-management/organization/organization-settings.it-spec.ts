@@ -5,7 +5,7 @@ import {
   updateOrganization,
 } from './organization.request.params';
 import { updateOrganizationSettings } from './organization.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
@@ -61,8 +61,8 @@ describe('Organization preferences', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.HUB_ADMIN}    | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.HUB_MEMBER}   | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
+      ${TestUser.SPACE_ADMIN}    | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
+      ${TestUser.SPACE_MEMBER}   | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
     `(
       'User: "$userRole" get message: "$message", when intend to update organization preference ',
       async ({ userRole, message }) => {
@@ -89,7 +89,7 @@ describe('Organization preferences', () => {
     // Arrange
     test.each`
       userRole                   | message
-      ${TestUser.NON_HUB_MEMBER} | ${"Authorization: unable to grant 'update' privilege: organization preference update:"}
+      ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'update' privilege: organization preference update:"}
     `(
       'User: "$userRole" get message: "$message", when intend to update organization preference ',
       async ({ userRole, message }) => {

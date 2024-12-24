@@ -32,7 +32,7 @@ import { deleteUser } from '../../contributor-management/user/user.request.param
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 
@@ -139,7 +139,7 @@ describe('Invitations', () => {
     }
     expect(invitationIdTwo.length).toEqual(36);
 
-    const userAppsData = await meQuery(TestUser.NON_HUB_MEMBER);
+    const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
     const membershipData = userAppsData?.data?.me;
 
     // Assert
@@ -304,10 +304,10 @@ describe('Invitations-flows', () => {
     await eventOnRoleSetInvitation(
       invitationId,
       'ACCEPT',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
-    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_HUB_MEMBER);
+    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_SPACE_MEMBER);
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -334,16 +334,16 @@ describe('Invitations-flows', () => {
     await eventOnRoleSetInvitation(
       invitationId,
       'REJECT',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
     await eventOnRoleSetInvitation(
       invitationId,
       'ARCHIVE',
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
 
-    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_HUB_MEMBER);
+    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_SPACE_MEMBER);
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -382,7 +382,7 @@ describe('Invitations-flows', () => {
     // Arrange
     const res = await createApplication(
       entitiesId.space.roleSetId,
-      TestUser.NON_HUB_MEMBER
+      TestUser.NON_SPACE_MEMBER
     );
     let applicationId = 'applicationIdNotRetrieved';
     if (res?.data?.applyForEntryRoleOnRoleSet) {
@@ -412,7 +412,7 @@ describe('Invitations-flows', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    const userDataOrig = await meQuery(TestUser.NON_HUB_MEMBER);
+    const userDataOrig = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const membershipDataOrig = userDataOrig?.data?.me;
     const invitationsCount =
@@ -430,7 +430,7 @@ describe('Invitations-flows', () => {
 
     // Act
     const res = await createApplication(entitiesId.space.roleSetId);
-    const userAppsData = await meQuery(TestUser.NON_HUB_MEMBER);
+    const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const membershipData = userAppsData?.data?.me;
 
@@ -466,10 +466,10 @@ describe('Invitations - Authorization', () => {
     // Arrange
     test.each`
       user                          | text
-      ${TestUser.NON_HUB_MEMBER}    | ${accepted}
+      ${TestUser.NON_SPACE_MEMBER}    | ${accepted}
       ${TestUser.GLOBAL_ADMIN}      | ${invited}
-      ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
-      ${TestUser.HUB_ADMIN}         | ${invited}
+      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${invited}
+      ${TestUser.SPACE_ADMIN}         | ${invited}
     `(
       'User: "$user", should get: "$text" to update invitation of another user',
       async ({ user, text }) => {
@@ -500,7 +500,7 @@ describe('Invitations - Authorization', () => {
 
     test.each`
       user                   | text
-      ${TestUser.HUB_MEMBER} | ${authErrorUpdateInvitationMessage}
+      ${TestUser.SPACE_MEMBER} | ${authErrorUpdateInvitationMessage}
       ${TestUser.QA_USER}    | ${authErrorUpdateInvitationMessage}
     `(
       'User: "$user", should get Error: "$text" to update invitation of another user',
@@ -534,8 +534,8 @@ describe('Invitations - Authorization', () => {
     test.each`
       user                          | state
       ${TestUser.GLOBAL_ADMIN}      | ${invited}
-      ${TestUser.GLOBAL_HUBS_ADMIN} | ${invited}
-      ${TestUser.HUB_ADMIN}         | ${invited}
+      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${invited}
+      ${TestUser.SPACE_ADMIN}         | ${invited}
     `(
       'User: "$user", should get: "$text" to create invitation to another user',
       async ({ user, state }) => {
@@ -565,10 +565,10 @@ describe('Invitations - Authorization', () => {
     //
     test.each`
       user                               | text
-      ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${authErrorCreateInvitationMessage}
-      ${TestUser.HUB_MEMBER}             | ${authErrorCreateInvitationMessage}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${authErrorCreateInvitationMessage}
+      ${TestUser.SPACE_MEMBER}             | ${authErrorCreateInvitationMessage}
       ${TestUser.QA_USER}                | ${authErrorCreateInvitationMessage}
-      ${TestUser.NON_HUB_MEMBER}         | ${authErrorCreateInvitationMessage}
+      ${TestUser.NON_SPACE_MEMBER}         | ${authErrorCreateInvitationMessage}
     `(
       'User: "$user", should get: "$text" to create invitation to another user',
       async ({ user, text }) => {
