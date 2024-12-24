@@ -13,7 +13,7 @@ import {
 import { TestUser } from '@alkemio/tests-lib';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 
@@ -26,7 +26,7 @@ const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;
 const spaceName = 'not-app-eco-name' + uniqueId;
 const spaceNameId = 'not-app-eco-nameid' + uniqueId;
-const opportunityName = 'opportunity-name';
+const subsubspaceName = 'subsubspace-name';
 const subspaceName = 'challlenge-name';
 const ecoName = spaceName;
 
@@ -57,7 +57,7 @@ beforeAll(async () => {
     },
   });
 
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {

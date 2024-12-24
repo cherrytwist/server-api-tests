@@ -4,7 +4,7 @@ import '@utils/array.matcher';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '../callout/post/post.request.params';
-import { updateOpportunityLocation } from '../journey/subsubspace/subsubspace.request.params';
+import { updateSubsubspaceLocation } from '../journey/subsubspace/subsubspace.request.params';
 import {
   searchContributions,
   searchContributor,
@@ -19,7 +19,7 @@ import {
 } from '../journey/space/space.request.params';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { entitiesId } from '../../types/entities-helper';
@@ -36,15 +36,15 @@ let organizationIdTest = '';
 const postNameIdSpace = 'qa-space' + uniqueId;
 let postSpaceId = '';
 let postSubspaceId = '';
-let postOpportunityId = '';
+let postSubsubspaceId = '';
 const postNameIdSubspace = 'qa-chal' + uniqueId;
-const postNameIdOpportunity = 'qa-opp' + uniqueId;
+const postNameIdSubsubspace = 'qa-opp' + uniqueId;
 const typeFilterAll = [
   'organization',
   'user',
   'space',
   'subspace',
-  'opportunity',
+  'subsubspace',
   'post',
 ];
 const filterOnlyUser = ['user'];
@@ -73,7 +73,7 @@ const hostNameId = 'search-org-nameid' + uniqueId;
 const spaceName = 'search-space' + uniqueId;
 const spaceNameId = 'search-space-nameid' + uniqueId;
 const subspaceName = 'search-ch-name' + uniqueId;
-const opportunityName = 'search-opp-name' + uniqueId;
+const subsubspaceName = 'search-opp-name' + uniqueId;
 
 const termAllScored = ['qa', 'qa', 'user'];
 
@@ -85,7 +85,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   organizationNameText = `qa organizationNameText ${uniqueId}`;
 
@@ -114,7 +114,7 @@ beforeAll(async () => {
     city,
     TestUser.GLOBAL_ADMIN
   );
-  await updateOpportunityLocation(
+  await updateSubsubspaceLocation(
     entitiesId.subsubspace.id,
     country,
     city,
@@ -143,13 +143,13 @@ beforeAll(async () => {
   postSubspaceId =
     resSubspace.data?.createContributionOnCallout.post?.id ?? '';
 
-  const resOpportunity = await createPostOnCallout(
+  const resSubsubspace = await createPostOnCallout(
     entitiesId.subsubspace.calloutId,
-    { displayName: postNameIdOpportunity },
-    postNameIdOpportunity
+    { displayName: postNameIdSubsubspace },
+    postNameIdSubsubspace
   );
-  postOpportunityId =
-    resOpportunity.data?.createContributionOnCallout.post?.id ?? '';
+  postSubsubspaceId =
+    resSubsubspace.data?.createContributionOnCallout.post?.id ?? '';
 });
 
 afterAll(async () => {
@@ -232,10 +232,10 @@ describe('Search', () => {
         terms: termWord,
         score: 10,
         type: 'OPPORTUNITY',
-        opportunity: {
+        subsubspace: {
           id: entitiesId.subsubspace.id,
           profile: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
         },
       });
@@ -263,7 +263,7 @@ describe('Search', () => {
           },
         },
         subspace: null,
-        opportunity: null,
+        subsubspace: null,
         callout: {
           id: entitiesId.space.calloutId,
           framing: {
@@ -293,11 +293,11 @@ describe('Search', () => {
             displayName: subspaceName,
           },
         },
-        opportunity: null,
+        subsubspace: null,
         callout: {
           id: entitiesId.subspace.calloutId,
           framing: {
-            profile: { displayName: 'Opportunity proposals' },
+            profile: { displayName: 'Subsubspace proposals' },
           },
         },
         post: {
@@ -323,10 +323,10 @@ describe('Search', () => {
             displayName: subspaceName,
           },
         },
-        opportunity: {
+        subsubspace: {
           id: entitiesId.subsubspace.id,
           profile: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
         },
         callout: {
@@ -336,9 +336,9 @@ describe('Search', () => {
           },
         },
         post: {
-          id: postOpportunityId,
+          id: postSubsubspaceId,
           profile: {
-            displayName: postNameIdOpportunity,
+            displayName: postNameIdSubsubspace,
           },
         },
       });
@@ -476,10 +476,10 @@ describe('Search', () => {
       terms: termWord,
       score: 10,
       type: 'OPPORTUNITY',
-      opportunity: {
+      subsubspace: {
         id: entitiesId.subsubspace.id,
         profile: {
-          displayName: opportunityName,
+          displayName: subsubspaceName,
         },
       },
     });
@@ -529,10 +529,10 @@ describe('Search', () => {
       terms: termLocation,
       score: 10,
       type: 'OPPORTUNITY',
-      opportunity: {
+      subsubspace: {
         id: entitiesId.subsubspace.id,
         profile: {
-          displayName: opportunityName,
+          displayName: subsubspaceName,
         },
       },
     });
@@ -781,10 +781,10 @@ describe('Search', () => {
         terms: termWord,
         score: 10,
         type: 'OPPORTUNITY',
-        opportunity: {
+        subsubspace: {
           id: entitiesId.subsubspace.id,
           profile: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
         },
       });
@@ -820,7 +820,7 @@ describe('Search', () => {
       ${TestUser.SPACE_MEMBER}
       ${TestUser.NON_SPACE_MEMBER}
     `(
-      'User: "$userRole" should not receive Space / Subspace / Opportunity data',
+      'User: "$userRole" should not receive Space / Subspace / Subsubspace data',
       async ({ userRole }) => {
         const responseSearchData = await searchJourney(
           termLocation,
@@ -833,10 +833,10 @@ describe('Search', () => {
           terms: termLocation,
           score: 10,
           type: 'OPPORTUNITY',
-          opportunity: {
+          subsubspace: {
             id: entitiesId.subsubspace.id,
             profile: {
-              displayName: opportunityName,
+              displayName: subsubspaceName,
             },
           },
         });
@@ -907,7 +907,7 @@ describe('Search', () => {
       ${TestUser.SUBSUBSPACE_MEMBER} | ${2}
       ${TestUser.NON_SPACE_MEMBER}     | ${0}
     `(
-      'User: "$userRole" should get "$numberResults" results for Subspace / Opportunity data',
+      'User: "$userRole" should get "$numberResults" results for Subspace / Subsubspace data',
       async ({ userRole, numberResults }) => {
         const responseSearchData = await searchJourney(
           termWord,
@@ -948,7 +948,7 @@ describe('Search', () => {
       ${TestUser.SUBSUBSPACE_MEMBER} | ${3}
       ${TestUser.NON_SPACE_MEMBER}     | ${1}
     `(
-      'User: "$userRole" should get "$numberResults" results for Space /  Subspace / Opportunity data',
+      'User: "$userRole" should get "$numberResults" results for Space /  Subspace / Subsubspace data',
       async ({ userRole, numberResults }) => {
         const responseSearchData = await searchJourney(
           termWord,
@@ -988,7 +988,7 @@ describe('Search', () => {
       ${TestUser.SUBSUBSPACE_MEMBER} | ${3}
       ${TestUser.NON_SPACE_MEMBER}     | ${1}
     `(
-      'User: "$userRole" should get "$numberResults" results for Space / Subspace / Opportunity data',
+      'User: "$userRole" should get "$numberResults" results for Space / Subspace / Subsubspace data',
       async ({ userRole, numberResults }) => {
         const responseSearchData = await searchJourney(
           termWord,

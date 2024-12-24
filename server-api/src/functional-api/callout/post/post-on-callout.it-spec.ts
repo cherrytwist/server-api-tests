@@ -13,7 +13,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import {
@@ -29,11 +29,11 @@ import { entitiesId } from '@src/types/entities-helper';
 import { uniqueId } from '@utils/uniqueId';
 import { delay } from '@alkemio/tests-lib';
 
-let opportunityName = 'post-opp';
+let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';
 let spacePostId = '';
 let subspacePostId = '';
-let opportunityPostId = '';
+let subsubspacePostId = '';
 let postNameID = '';
 let postDisplayName = '';
 let postCommentsIdSpace = '';
@@ -54,7 +54,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -66,7 +66,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
   subspaceName = `testSubspace ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
@@ -75,7 +75,7 @@ describe('Posts - Create', () => {
   afterEach(async () => {
     await deletePost(spacePostId);
     await deletePost(subspacePostId);
-    await deletePost(opportunityPostId);
+    await deletePost(subsubspacePostId);
   });
   test('HM should create post on space callout', async () => {
     // Act
@@ -155,20 +155,20 @@ describe('Posts - Create', () => {
     expect(post.data?.lookup.post).toEqual(postDataCreate);
   });
 
-  test('GA should create post on opportunity callout', async () => {
+  test('GA should create post on subsubspace callout', async () => {
     // Act
-    const resPostonOpportunity = await createPostOnCallout(
+    const resPostonSubsubspace = await createPostOnCallout(
       entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName },
       postNameID + 'op'
     );
 
     const postDataCreate =
-      resPostonOpportunity.data?.createContributionOnCallout.post;
-    opportunityPostId =
-      resPostonOpportunity.data?.createContributionOnCallout.post?.id ?? '';
+      resPostonSubsubspace.data?.createContributionOnCallout.post;
+    subsubspacePostId =
+      resPostonSubsubspace.data?.createContributionOnCallout.post?.id ?? '';
 
-    const post = await getPostData(opportunityPostId, TestUser.GLOBAL_ADMIN);
+    const post = await getPostData(subsubspacePostId, TestUser.GLOBAL_ADMIN);
 
     // Assert
     expect(post.data?.lookup.post).toEqual(postDataCreate);
@@ -443,24 +443,24 @@ describe('Posts - Delete', () => {
     );
   });
 
-  test('ChA should delete post created on opportunity callout from OM', async () => {
+  test('ChA should delete post created on subsubspace callout from OM', async () => {
     // Act
-    const resPostonOpportunity = await createPostOnCallout(
+    const resPostonSubsubspace = await createPostOnCallout(
       entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName + 'opm' },
       postNameID + 'opm',
       TestUser.SUBSUBSPACE_MEMBER
     );
-    opportunityPostId =
-      resPostonOpportunity.data?.createContributionOnCallout.post?.id ?? '';
+    subsubspacePostId =
+      resPostonSubsubspace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(opportunityPostId, TestUser.SUBSPACE_ADMIN);
-    const data = await getPostData(opportunityPostId);
+    await deletePost(subsubspacePostId, TestUser.SUBSPACE_ADMIN);
+    const data = await getPostData(subsubspacePostId);
 
     // Assert
     expect(data.error?.errors[0].message).toEqual(
-      `Not able to locate post with the specified ID: ${opportunityPostId}`
+      `Not able to locate post with the specified ID: ${subsubspacePostId}`
     );
   });
 
@@ -492,45 +492,45 @@ describe('Posts - Delete', () => {
     await deletePost(subspacePostId);
   });
 
-  test('OM should delete own post on opportunity callout', async () => {
+  test('OM should delete own post on subsubspace callout', async () => {
     // Act
-    const resPostonOpportunity = await createPostOnCallout(
+    const resPostonSubsubspace = await createPostOnCallout(
       entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
       TestUser.SUBSUBSPACE_MEMBER
     );
-    opportunityPostId =
-      resPostonOpportunity.data?.createContributionOnCallout.post?.id ?? '';
+    subsubspacePostId =
+      resPostonSubsubspace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(opportunityPostId, TestUser.SUBSUBSPACE_MEMBER);
-    const data = await getPostData(opportunityPostId);
+    await deletePost(subsubspacePostId, TestUser.SUBSUBSPACE_MEMBER);
+    const data = await getPostData(subsubspacePostId);
 
     // Assert
     expect(data.error?.errors[0].message).toEqual(
-      `Not able to locate post with the specified ID: ${opportunityPostId}`
+      `Not able to locate post with the specified ID: ${subsubspacePostId}`
     );
   });
 
-  test('GA should delete own post on opportunity callout', async () => {
+  test('GA should delete own post on subsubspace callout', async () => {
     // Act
-    const resPostonOpportunity = await createPostOnCallout(
+    const resPostonSubsubspace = await createPostOnCallout(
       entitiesId.subsubspace.calloutId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
       TestUser.GLOBAL_ADMIN
     );
-    opportunityPostId =
-      resPostonOpportunity.data?.createContributionOnCallout.post?.id ?? '';
+    subsubspacePostId =
+      resPostonSubsubspace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Act
-    await deletePost(opportunityPostId, TestUser.GLOBAL_ADMIN);
-    const data = await getPostData(opportunityPostId);
+    await deletePost(subsubspacePostId, TestUser.GLOBAL_ADMIN);
+    const data = await getPostData(subsubspacePostId);
 
     // Assert
     expect(data.error?.errors[0].message).toEqual(
-      `Not able to locate post with the specified ID: ${opportunityPostId}`
+      `Not able to locate post with the specified ID: ${subsubspacePostId}`
     );
   });
 });

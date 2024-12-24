@@ -10,7 +10,7 @@ import {
 import { users } from '@utils/queries/users-data';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { entitiesId, getMailsData } from '@src/types/entities-helper';
@@ -23,10 +23,10 @@ const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 let spacePostId = '';
 let subspacePostId = '';
-let opportunityPostId = '';
+let subsubspacePostId = '';
 let postDisplayName = '';
 let preferencesConfig: any[] = [];
 
@@ -58,7 +58,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -191,7 +191,7 @@ describe('Notifications - post', () => {
   afterEach(async () => {
     await deletePost(spacePostId);
     await deletePost(subspacePostId);
-    await deletePost(opportunityPostId);
+    await deletePost(subsubspacePostId);
   });
 
   //ToDo: fix test
@@ -363,9 +363,9 @@ describe('Notifications - post', () => {
     );
   });
 
-  test('OM create opportunity post - HA(2), CA(1), OA(2), OM(4), get notifications', async () => {
-    const postSubjectAdmin = `${opportunityName}: New Post created by opportunity`;
-    const postSubjectMember = `${opportunityName}: New Post created by opportunity, have a look!`;
+  test('OM create subsubspace post - HA(2), CA(1), OA(2), OM(4), get notifications', async () => {
+    const postSubjectAdmin = `${subsubspaceName}: New Post created by subsubspace`;
+    const postSubjectMember = `${subsubspaceName}: New Post created by subsubspace, have a look!`;
     // Act
     const resPostonSpace = await createPostOnCallout(
       entitiesId.subsubspace.calloutId,
@@ -373,7 +373,7 @@ describe('Notifications - post', () => {
       postNameID,
       TestUser.SUBSUBSPACE_MEMBER
     );
-    opportunityPostId =
+    subsubspacePostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
 
     await delay(6000);
@@ -437,7 +437,7 @@ describe('Notifications - post', () => {
     );
   });
 
-  test('OA create opportunity post - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create subsubspace post - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
@@ -449,7 +449,7 @@ describe('Notifications - post', () => {
       postNameID,
       TestUser.SUBSUBSPACE_ADMIN
     );
-    opportunityPostId =
+    subsubspacePostId =
       resPostonSpace.data?.createContributionOnCallout.post?.id ?? '';
 
     // Assert

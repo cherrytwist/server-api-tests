@@ -15,7 +15,7 @@ import {
 import {
   assignUsersToSpaceAndOrg,
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { PostDataFragment } from '@generated/alkemio-schema';
@@ -32,11 +32,11 @@ import { entitiesId } from '@src/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 
-let opportunityName = 'post-opp';
+let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';
 let spacePostId = '';
 let subspacePostId = '';
-let opportunityPostId = '';
+let subsubspacePostId = '';
 let postNameID = '';
 let postDisplayName = '';
 const organizationName = 'post-org-name' + uniqueId;
@@ -48,7 +48,7 @@ let postTemplateId = '';
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -60,7 +60,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
   subspaceName = `testSubspace ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
@@ -161,7 +161,7 @@ describe('Post templates - Utilization in posts', () => {
     afterAll(async () => {
       await deletePost(spacePostId);
       await deletePost(subspacePostId);
-      await deletePost(opportunityPostId);
+      await deletePost(subsubspacePostId);
     });
 
     test('Create Post on Space', async () => {
@@ -204,7 +204,7 @@ describe('Post templates - Utilization in posts', () => {
       expect(postsData.data?.lookup.post).toEqual(postDataCreate);
     });
 
-    test('Create Post on Opportunity', async () => {
+    test('Create Post on Subsubspace', async () => {
       // Act
       const res = await createPostOnCallout(
         entitiesId.subsubspace.calloutId,
@@ -212,9 +212,9 @@ describe('Post templates - Utilization in posts', () => {
         `new-temp-n-id-${uniqueId}`
       );
       const postDataCreate = res.data?.createContributionOnCallout.post;
-      opportunityPostId = res.data?.createContributionOnCallout.post?.id ?? '';
+      subsubspacePostId = res.data?.createContributionOnCallout.post?.id ?? '';
 
-      const postsData = await getPostData(opportunityPostId);
+      const postsData = await getPostData(subsubspacePostId);
 
       // Assert
       expect(postsData.data?.lookup.post).toEqual(postDataCreate);

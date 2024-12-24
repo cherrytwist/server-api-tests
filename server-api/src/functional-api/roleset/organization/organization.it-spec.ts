@@ -2,7 +2,7 @@ import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import {
@@ -18,13 +18,13 @@ const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;
 const spaceName = 'com-eco-name' + uniqueId;
 const spaceNameId = 'com-eco-nameid' + uniqueId;
-const opportunityName = 'com-opp';
+const subsubspaceName = 'com-opp';
 const subspaceName = 'com-chal';
 
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -117,7 +117,7 @@ describe('Assign / Remove organization to community', () => {
         ])
       );
     });
-    test('Assign organization as member to opportunity', async () => {
+    test('Assign organization as member to subsubspace', async () => {
       // Act
       await assignRoleToOrganization(
         entitiesId.organization.id,
@@ -188,7 +188,7 @@ describe('Assign / Remove organization to community', () => {
         ])
       );
     });
-    test('Assign organization as lead to opportunity', async () => {
+    test('Assign organization as lead to subsubspace', async () => {
       // Act
       await assignRoleToOrganization(
         entitiesId.organization.id,
@@ -249,7 +249,7 @@ describe('Assign / Remove organization to community', () => {
         CommunityRoleType.Lead
       );
     });
-    test('Remove organization as member from opportunity', async () => {
+    test('Remove organization as member from subsubspace', async () => {
       // Act
       await removeRoleFromOrganization(
         entitiesId.organization.id,
@@ -298,7 +298,7 @@ describe('Assign / Remove organization to community', () => {
       expect(data).toHaveLength(0);
     });
 
-    test('Remove organization as lead from opportunity', async () => {
+    test('Remove organization as lead from subsubspace', async () => {
       // Act
       await removeRoleFromOrganization(
         entitiesId.organization.id,

@@ -5,10 +5,10 @@ import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import {
   assignUsersToSubspaceAsMembers,
-  assignUsersToOpportunityAsMembers,
+  assignUsersToSubsubspaceAsMembers,
   assignUsersToSpaceAndOrgAsMembers,
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import {
@@ -23,7 +23,7 @@ const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;
 const spaceName = 'com-eco-name' + uniqueId;
 const spaceNameId = 'com-eco-nameid' + uniqueId;
-const opportunityName = 'com-opp';
+const subsubspaceName = 'com-opp';
 const subspaceName = 'com-chal';
 
 beforeAll(async () => {
@@ -34,7 +34,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   await removeRoleFromUser(
     users.globalAdmin.id,
@@ -188,7 +188,7 @@ describe('Assign / Remove users to community', () => {
         );
       });
 
-      test('Does not have any effect in Opportunity', async () => {
+      test('Does not have any effect in Subsubspace', async () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
@@ -262,7 +262,7 @@ describe('Assign / Remove users to community', () => {
         );
       });
 
-      test('Successfully assigned to Opportunity', async () => {
+      test('Successfully assigned to Subsubspace', async () => {
         // Act
         await assignRoleToUser(
           users.spaceMember.id,
@@ -336,7 +336,7 @@ describe('Assign / Remove users to community', () => {
         );
       });
 
-      test('Does not have any effect in Opportunity', async () => {
+      test('Does not have any effect in Subsubspace', async () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
@@ -367,7 +367,7 @@ describe('Assign different users as lead to same community', () => {
   beforeAll(async () => {
     await assignUsersToSpaceAndOrgAsMembers();
     await assignUsersToSubspaceAsMembers();
-    await assignUsersToOpportunityAsMembers();
+    await assignUsersToSubsubspaceAsMembers();
 
     await assignRoleToUser(
       users.qaUser.id,
@@ -551,7 +551,7 @@ describe('Assign different users as lead to same community', () => {
     );
   });
 
-  test('Should assign second user as Opportunity lead', async () => {
+  test('Should assign second user as Subsubspace lead', async () => {
     // Act
     const res = await assignRoleToUser(
       users.subsubspaceMember.id,

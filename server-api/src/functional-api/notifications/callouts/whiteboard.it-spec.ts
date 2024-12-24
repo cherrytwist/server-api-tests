@@ -10,7 +10,7 @@ import {
 } from '@functional-api/callout/callouts.request.params';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
@@ -30,14 +30,14 @@ const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 let spaceWhiteboardId = '';
 let preferencesConfig: any[] = [];
 let whiteboardCollectionSpaceCalloutId = '';
 
 let whiteboardCollectionSubspaceCalloutId = '';
 
-let whiteboardCollectionOpportunityCalloutId = '';
+let whiteboardCollectionSubsubspaceCalloutId = '';
 
 const expectedDataFunc = async (subject: string, toAddresses: any[]) => {
   return expect.arrayContaining([
@@ -58,7 +58,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
   const resSpace = await createWhiteboardCalloutOnCollaboration(
     entitiesId.space.collaborationId,
     {
@@ -101,12 +101,12 @@ beforeAll(async () => {
     CalloutVisibility.Published
   );
 
-  const resOpportunity = await createWhiteboardCalloutOnCollaboration(
+  const resSubsubspace = await createWhiteboardCalloutOnCollaboration(
     entitiesId.subsubspace.collaborationId,
     {
       framing: {
         profile: {
-          displayName: 'whiteboard callout opportunity',
+          displayName: 'whiteboard callout subsubspace',
           description: 'test',
         },
       },
@@ -114,11 +114,11 @@ beforeAll(async () => {
     },
     TestUser.GLOBAL_ADMIN
   );
-  whiteboardCollectionOpportunityCalloutId =
-    resOpportunity?.data?.createCalloutOnCollaboration.id ?? '';
+  whiteboardCollectionSubsubspaceCalloutId =
+    resSubsubspace?.data?.createCalloutOnCollaboration.id ?? '';
 
   await updateCalloutVisibility(
-    whiteboardCollectionOpportunityCalloutId,
+    whiteboardCollectionSubsubspaceCalloutId,
     CalloutVisibility.Published
   );
   await deleteMailSlurperMails();
@@ -348,12 +348,12 @@ describe('Notifications - whiteboard', () => {
     );
   });
 
-  test('OM create opportunity whiteboard - HA(2), CA(1), OA(2), OM(4), get notifications', async () => {
-    const subjectTextAdmin = `${opportunityName}: New Whiteboard created by opportunity`;
-    const subjectTextMember = `${opportunityName}: New Whiteboard created by opportunity, have a look!`;
+  test('OM create subsubspace whiteboard - HA(2), CA(1), OA(2), OM(4), get notifications', async () => {
+    const subjectTextAdmin = `${subsubspaceName}: New Whiteboard created by subsubspace`;
+    const subjectTextMember = `${subsubspaceName}: New Whiteboard created by subsubspace, have a look!`;
     // Act
     const res = await createWhiteboardOnCallout(
-      whiteboardCollectionOpportunityCalloutId,
+      whiteboardCollectionSubsubspaceCalloutId,
       TestUser.SUBSUBSPACE_MEMBER
     );
     spaceWhiteboardId =
@@ -408,14 +408,14 @@ describe('Notifications - whiteboard', () => {
     );
   });
 
-  test('OA create opportunity whiteboard - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create subsubspace whiteboard - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
     );
     // Act
     const res = await createWhiteboardOnCallout(
-      whiteboardCollectionOpportunityCalloutId,
+      whiteboardCollectionSubsubspaceCalloutId,
       TestUser.SUBSUBSPACE_ADMIN
     );
     spaceWhiteboardId =

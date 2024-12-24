@@ -2,11 +2,11 @@ import { uniqueId } from '@utils/uniqueId';
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-export const opportunityNameId = `oppNaId${uniqueId}`;
+export const subsubspaceNameId = `oppNaId${uniqueId}`;
 
-export const createOpportunity = async (
-  opportunityName: string,
-  opportunityNameId: string,
+export const createSubsubspace = async (
+  subsubspaceName: string,
+  subsubspaceNameId: string,
   subspaceID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
@@ -16,9 +16,9 @@ export const createOpportunity = async (
       {
         subspaceData: {
           spaceID: subspaceID,
-          nameID: opportunityNameId,
+          nameID: subsubspaceNameId,
           profileData: {
-            displayName: opportunityName,
+            displayName: subsubspaceName,
           },
           collaborationData: {
             addTutorialCallouts: true,
@@ -33,15 +33,15 @@ export const createOpportunity = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const updateOpportunity = async (
-  opportunityId: string,
+export const updateSubsubspace = async (
+  subsubspaceId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.updateSpace(
       {
-        spaceData: opportunityVariablesData(opportunityId),
+        spaceData: subsubspaceVariablesData(subsubspaceId),
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -51,9 +51,9 @@ export const updateOpportunity = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const opportunityVariablesData = (opportunityId: string) => {
+export const subsubspaceVariablesData = (subsubspaceId: string) => {
   const variables = {
-    ID: opportunityId,
+    ID: subsubspaceId,
     profileData: {
       displayName: 'Updated displayName',
       tagline: 'updated tagline' + uniqueId,
@@ -86,15 +86,15 @@ export const deleteSubspace = async (subspaceId: string) => {
   return graphqlErrorWrapper(callback, TestUser.GLOBAL_ADMIN);
 };
 
-export const getOpportunityData = async (
-  opportunityId: string,
+export const getSubsubspaceData = async (
+  subsubspaceId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.GetSpaceData(
       {
-        spaceId: opportunityId,
+        spaceId: subsubspaceId,
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -104,8 +104,8 @@ export const getOpportunityData = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const updateOpportunityLocation = async (
-  opportunityId: string,
+export const updateSubsubspaceLocation = async (
+  subsubspaceId: string,
   country?: string,
   city?: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
@@ -115,7 +115,7 @@ export const updateOpportunityLocation = async (
     graphqlClient.updateSpace(
       {
         spaceData: {
-          ID: opportunityId,
+          ID: subsubspaceId,
           profileData: { location: { country, city } },
         },
       },

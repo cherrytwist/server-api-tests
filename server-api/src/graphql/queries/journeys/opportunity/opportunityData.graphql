@@ -1,7 +1,7 @@
-# query opportunityData($opportunityId: UUID!) {
+# query subsubspaceData($subsubspaceId: UUID!) {
 #   lookup {
-#     opportunity(ID: $opportunityId) {
-#       ...OpportunityData
+#     subsubspace(ID: $subsubspaceId) {
+#       ...SubsubspaceData
 #     }
 #   }
 # }

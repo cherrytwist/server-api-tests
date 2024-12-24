@@ -13,7 +13,7 @@ import {
 import { TestUser } from '@alkemio/tests-lib';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
@@ -25,7 +25,7 @@ const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;
 const spaceName = 'not-app-eco-name' + uniqueId;
 const spaceNameId = 'not-app-eco-nameid' + uniqueId;
-const opportunityName = 'opportunity-name';
+const subsubspaceName = 'subsubspace-name';
 const subspaceName = 'challlenge-name';
 const ecoName = spaceName;
 
@@ -55,7 +55,7 @@ beforeAll(async () => {
       allowSubspaceAdminsToInviteMembers: true,
     },
   });
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -208,7 +208,7 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test("non space user don't receive invitation for CHALLENGE community from opportunity admin", async () => {
+  test("non space user don't receive invitation for CHALLENGE community from subsubspace admin", async () => {
     // Act
     const invitationData = await inviteContributors(
       entitiesId.subspace.roleSetId,
@@ -232,7 +232,7 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test('space member receive invitation for CHALLENGE community from opportunity admin', async () => {
+  test('space member receive invitation for CHALLENGE community from subsubspace admin', async () => {
     // Act
     const invitationData = await inviteContributors(
       entitiesId.subspace.roleSetId,
@@ -261,7 +261,7 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test('non space user receive invitation for OPPORTUNITY community from opportunity admin', async () => {
+  test('non space user receive invitation for OPPORTUNITY community from subsubspace admin', async () => {
     // Act
     const invitationData = await inviteContributors(
       entitiesId.subsubspace.roleSetId,
@@ -283,7 +283,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${opportunityName}`,
+          subject: `Invitation to join ${subsubspaceName}`,
           toAddresses: [users.qaUser.email],
         }),
       ])

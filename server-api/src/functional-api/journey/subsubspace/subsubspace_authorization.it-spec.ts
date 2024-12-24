@@ -17,10 +17,10 @@ import {
 import { uniqueId } from '@utils/uniqueId';
 
 const credentialsType = 'SPACE_ADMIN';
-const opportunityName = `op-dname${uniqueId}`;
-const opportunityNameId = `op-nameid${uniqueId}`;
-let opportunityId = '';
-let opportunityRoleSetId = '';
+const subsubspaceName = `op-dname${uniqueId}`;
+const subsubspaceNameId = `op-nameid${uniqueId}`;
+let subsubspaceId = '';
+let subsubspaceRoleSetId = '';
 const subspaceName = `opp-auth-nam-ch-${uniqueId}`;
 const organizationName = 'opp-auth-org-name' + uniqueId;
 const hostNameId = 'opp-auth-org-nameid' + uniqueId;
@@ -38,20 +38,20 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  const responseCreateOpportunityOnSubspace = await createSubspace(
-    opportunityName,
-    opportunityNameId,
+  const responseCreateSubsubspaceOnSubspace = await createSubspace(
+    subsubspaceName,
+    subsubspaceNameId,
     entitiesId.subspace.id
   );
 
-  const oppData = responseCreateOpportunityOnSubspace?.data?.createSubspace;
+  const oppData = responseCreateSubsubspaceOnSubspace?.data?.createSubspace;
 
-  opportunityId = oppData?.id ?? '';
-  opportunityRoleSetId = oppData?.community?.roleSet.id ?? '';
+  subsubspaceId = oppData?.id ?? '';
+  subsubspaceRoleSetId = oppData?.community?.roleSet.id ?? '';
 });
 
 afterEach(async () => {
-  await deleteSpace(opportunityId);
+  await deleteSpace(subsubspaceId);
 });
 
 afterAll(async () => {
@@ -60,12 +60,12 @@ afterAll(async () => {
   await deleteOrganization(entitiesId.organization.id);
 });
 
-describe('Opportunity Admin', () => {
-  test('should create opportunity admin', async () => {
+describe('Subsubspace Admin', () => {
+  test('should create subsubspace admin', async () => {
     // Act
     const res = await assignRoleToUserExtendedData(
       users.subspaceMember.id,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
@@ -73,7 +73,7 @@ describe('Opportunity Admin', () => {
     expect(res?.data?.assignRoleToUser?.agent?.credentials).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          resourceID: opportunityId,
+          resourceID: subsubspaceId,
           type: credentialsType,
         }),
       ])
@@ -88,19 +88,19 @@ describe('Opportunity Admin', () => {
       entitiesId.subspace.id
     );
     const oppDataTwo = responseOppTwo?.data?.createSubspace;
-    const opportunityIdTwo = oppDataTwo?.id ?? '';
-    const opportunityRoleSetId2 = oppDataTwo?.community?.roleSet.id ?? '';
+    const subsubspaceIdTwo = oppDataTwo?.id ?? '';
+    const subsubspaceRoleSetId2 = oppDataTwo?.community?.roleSet.id ?? '';
 
     // Act
     const resOne = await assignRoleToUserExtendedData(
       users.subspaceMember.id,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     const resTwo = await assignRoleToUserExtendedData(
       users.subsubspaceMember.id,
-      opportunityRoleSetId2,
+      subsubspaceRoleSetId2,
       CommunityRoleType.Admin
     );
 
@@ -108,7 +108,7 @@ describe('Opportunity Admin', () => {
     expect(resOne?.data?.assignRoleToUser?.agent?.credentials).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          resourceID: opportunityId,
+          resourceID: subsubspaceId,
           type: credentialsType,
         }),
       ])
@@ -116,31 +116,31 @@ describe('Opportunity Admin', () => {
     expect(resTwo?.data?.assignRoleToUser?.agent?.credentials).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          resourceID: opportunityIdTwo,
+          resourceID: subsubspaceIdTwo,
           type: credentialsType,
         }),
       ])
     );
-    await deleteSpace(opportunityIdTwo);
+    await deleteSpace(subsubspaceIdTwo);
   });
 
-  test('should be able one opportunity admin to remove another admin from opportunity', async () => {
+  test('should be able one subsubspace admin to remove another admin from subsubspace', async () => {
     // Arrange
     await assignRoleToUserExtendedData(
       users.subspaceMember.id,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     await assignRoleToUserExtendedData(
       users.subsubspaceMember.email,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     const res = await removeRoleFromUserExtendedData(
       users.subsubspaceMember.email,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin,
       TestUser.SUBSPACE_MEMBER
     );
@@ -149,25 +149,25 @@ describe('Opportunity Admin', () => {
     expect(res?.data?.removeRoleFromUser?.agent?.credentials).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          resourceID: opportunityId,
+          resourceID: subsubspaceId,
           type: credentialsType,
         }),
       ])
     );
   });
 
-  test('should remove the only admin of an opportunity', async () => {
+  test('should remove the only admin of an subsubspace', async () => {
     // Arrange
     await assignRoleToUserExtendedData(
       users.subspaceMember.id,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     // Act
     const res = await removeRoleFromUserExtendedData(
       users.subsubspaceMember.email,
-      opportunityRoleSetId,
+      subsubspaceRoleSetId,
       CommunityRoleType.Admin,
       TestUser.SUBSPACE_MEMBER
     );
@@ -176,7 +176,7 @@ describe('Opportunity Admin', () => {
     expect(res?.data?.removeRoleFromUser?.agent?.credentials).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          resourceID: opportunityId,
+          resourceID: subsubspaceId,
           type: credentialsType,
         }),
       ])

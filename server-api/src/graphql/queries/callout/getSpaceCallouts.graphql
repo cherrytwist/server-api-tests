@@ -2,9 +2,9 @@
 #   $spaceNameId: UUID_NAMEID!
 #   $includeSpace: Boolean = false
 #   $includeSubspace: Boolean = false
-#   $includeOpportunity: Boolean = false
+#   $includeSubsubspace: Boolean = false
 #   $subspaceNameId: UUID_NAMEID = "mockid"
-#   $opportunityNameId: UUID_NAMEID = "mockid"
+#   $subsubspaceNameId: UUID_NAMEID = "mockid"
 #   $groups: [String!]
 #   $calloutIds: [UUID_NAMEID!]
 # ) {
@@ -21,7 +21,7 @@
 #     subspace(ID: $subspaceNameId) @include(if: $includeSubspace) {
 #       id
 #       nameID
-#       ... on Subspace @skip(if: $includeOpportunity) {
+#       ... on Subspace @skip(if: $includeSubsubspace) {
 #         collaboration {
 #           ...CollaborationWithCallouts
 #           __typename
@@ -29,7 +29,7 @@
 #         __typename
 #       }
 #       __typename
-#       opportunity(ID: $opportunityNameId) @include(if: $includeOpportunity) {
+#       subsubspace(ID: $subsubspaceNameId) @include(if: $includeSubsubspace) {
 #         id
 #         nameID
 #         collaboration {

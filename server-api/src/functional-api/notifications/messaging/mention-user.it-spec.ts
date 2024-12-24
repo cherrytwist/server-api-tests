@@ -11,18 +11,18 @@ import { changePreferenceUser } from '@functional-api/contributor-management/use
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers, createSubspaceWithUsers, createOpportunityWithUsers } from '../../../utils/data-setup/entities';
+import { createOrgAndSpaceWithUsers, createSubspaceWithUsers, createSubsubspaceWithUsers } from '../../../utils/data-setup/entities';
 
 const organizationName = 'urole-org-name' + uniqueId;
 const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `oppName${uniqueId}`;
+const subsubspaceName = `oppName${uniqueId}`;
 
 let postCommentsIdSpace = '';
 let postCommentsIdSubspace = '';
-let postCommentsIdOpportunity = '';
+let postCommentsIdSubsubspace = '';
 
 const receivers = (senderDisplayName: string) => {
   return `${senderDisplayName} mentioned you in a comment on Alkemio`;
@@ -47,7 +47,7 @@ beforeAll(async () => {
   );
 
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   await changePreferenceUser(
     users.globalAdmin.id,
@@ -237,7 +237,7 @@ describe('Notifications - Mention User', () => {
       );
     });
 
-    test('GA mention HM in Opportunity comments callout - 1 notification to HM is sent', async () => {
+    test('GA mention HM in Subsubspace comments callout - 1 notification to HM is sent', async () => {
       // Act
 
       await sendMessageToRoom(
@@ -296,7 +296,7 @@ describe('Notifications - Mention User', () => {
         postNameID,
         TestUser.SUBSUBSPACE_MEMBER
       );
-      postCommentsIdOpportunity =
+      postCommentsIdSubsubspace =
         resPostonOpp.data?.createContributionOnCallout.post?.comments.id ?? '';
 
       await delay(3000);
@@ -355,10 +355,10 @@ describe('Notifications - Mention User', () => {
       );
     });
 
-    test('OA mention HM in Opportunity post - 1 notification to HM is sent', async () => {
+    test('OA mention HM in Subsubspace post - 1 notification to HM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        postCommentsIdOpportunity,
+        postCommentsIdSubsubspace,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -382,7 +382,7 @@ describe('Notifications - Mention User', () => {
       );
     });
 
-    test('OA mention HM in Opportunity post (preference disabled) - 0 notification to HM is sent', async () => {
+    test('OA mention HM in Subsubspace post (preference disabled) - 0 notification to HM is sent', async () => {
       // Arrange
       preferencesConfig.forEach(
         async config =>
@@ -391,7 +391,7 @@ describe('Notifications - Mention User', () => {
 
       // Act
       await sendMessageToRoom(
-        postCommentsIdOpportunity,
+        postCommentsIdSubsubspace,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -410,7 +410,7 @@ describe('Notifications - Mention User', () => {
 
   // ToDo: add timeline comments mentions, when implemented
   describe.skip('Post comment', () => {
-    test('OA mention HM in Opportunity post - 1 notification to HM is sent', async () => {
+    test('OA mention HM in Subsubspace post - 1 notification to HM is sent', async () => {
       expect(1).toEqual(1);
     });
   });

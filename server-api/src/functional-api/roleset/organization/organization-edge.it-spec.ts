@@ -4,7 +4,7 @@ import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import {
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 
@@ -20,7 +20,7 @@ const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;
 const spaceName = 'com-eco-name' + uniqueId;
 const spaceNameId = 'com-eco-nameid' + uniqueId;
-const opportunityName = 'com-opp';
+const subsubspaceName = 'com-opp';
 const subspaceName = 'com-chal';
 let newOrgId = '';
 const newOrgNameId = 'ha' + organizationName;
@@ -34,7 +34,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   const res = await createOrganization(newOrgName, newOrgNameId);
   newOrgId = res.data?.createOrganization?.id ?? '';
@@ -175,7 +175,7 @@ describe('Assign / Remove organization to community', () => {
           ])
         );
       });
-      test('Error is thrown for Opportunity', async () => {
+      test('Error is thrown for Subsubspace', async () => {
         // Act
         const res = await assignRoleToOrganization(
           entitiesId.organization.id,
@@ -252,7 +252,7 @@ describe('Assign / Remove organization to community', () => {
           ])
         );
       });
-      test('Successfully assigned to Opportunity', async () => {
+      test('Successfully assigned to Subsubspace', async () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,
@@ -331,7 +331,7 @@ describe('Assign / Remove organization to community', () => {
           ])
         );
       });
-      test('Error is thrown for Opportunity', async () => {
+      test('Error is thrown for Subsubspace', async () => {
         // Act
         const res = await assignRoleToOrganization(
           entitiesId.organization.id,
@@ -439,7 +439,7 @@ describe('Assign / Remove organization to community', () => {
         // Assert
         expect(data).toHaveLength(2);
       });
-      test('Two organizations assinged to Opportunity', async () => {
+      test('Two organizations assinged to Subsubspace', async () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,

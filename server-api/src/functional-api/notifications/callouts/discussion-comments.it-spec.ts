@@ -6,7 +6,7 @@ import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -20,7 +20,7 @@ const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 let preferencesConfig: any[] = [];
 const postSubjectTextMember = `${spaceName} - New comment received on Callout \u0026#34;Space Post Callout\u0026#34;, have a look!`;
 
@@ -45,7 +45,7 @@ const expectedDataChal = async (toAddresses: any[]) => {
 const expectedDataOpp = async (toAddresses: any[]) => {
   return expect.arrayContaining([
     expect.objectContaining({
-      subject: `${opportunityName} - New comment received on Callout \u0026#34;Opportunity Post Callout\u0026#34;, have a look!`,
+      subject: `${subsubspaceName} - New comment received on Callout \u0026#34;Subsubspace Post Callout\u0026#34;, have a look!`,
       toAddresses,
     }),
   ]);
@@ -61,7 +61,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -236,7 +236,7 @@ describe('Notifications - callout comments', () => {
     );
   });
 
-  test('OM create opportunity callout comment - HM(3), get notifications', async () => {
+  test('OM create subsubspace callout comment - HM(3), get notifications', async () => {
     // Act
     await sendMessageToRoom(
       entitiesId.subsubspace.discussionCalloutCommentsId,
@@ -273,7 +273,7 @@ describe('Notifications - callout comments', () => {
     );
   });
 
-  test('OA create opportunity callout comment - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create subsubspace callout comment - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')

@@ -14,10 +14,10 @@ import {
 import { TestUser } from '@alkemio/tests-lib';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
   getDefaultSubspaceCalloutByNameId,
-  getDefaultOpportunityCalloutByNameId,
+  getDefaultSubsubspaceCalloutByNameId,
   getDefaultSpaceCalloutByNameId,
 } from '@utils/data-setup/entities';
 import {
@@ -29,7 +29,7 @@ import { sendMessageToRoom } from '@functional-api/communications/communication.
 import { entitiesId } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 
-let opportunityName = 'post-opp';
+let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';
 let calloutId = '';
 let postNameID = '';
@@ -43,7 +43,7 @@ const getIdentifier = (
   entity: string,
   spaceCalloutId: string,
   subspaceCalloutId: string,
-  opportunityCalloutId: string
+  subsubspaceCalloutId: string
 ) => {
   let id = '';
   if (entity === 'space') {
@@ -53,7 +53,7 @@ const getIdentifier = (
     id = subspaceCalloutId;
     return id;
   } else {
-    id = opportunityCalloutId;
+    id = subsubspaceCalloutId;
     return id;
   }
 };
@@ -65,7 +65,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -77,7 +77,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
   subspaceName = `testSubspace ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
 });
 
@@ -140,10 +140,10 @@ describe('Callouts - Close State', () => {
 describe('Callout - Close State - User Privileges Posts', () => {
   let spaceCalloutId = '';
   let subspaceCalloutId = '';
-  let opportunityCalloutId = '';
+  let subsubspaceCalloutId = '';
   let postCommentsIdSpace = '';
   let postCommentsIdSubspace = '';
-  let postCommentsIdOpportunity = '';
+  let postCommentsIdSubsubspace = '';
 
   beforeAll(async () => {
     const preconditions = async (calloutId: string) => {
@@ -177,17 +177,17 @@ describe('Callout - Close State - User Privileges Posts', () => {
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSubspace = await preconditions(subspaceCalloutId);
 
-    const opportunityCallout = await getDefaultOpportunityCalloutByNameId(
+    const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
       entitiesId.spaceId,
       entitiesId.subsubspace.id,
       entitiesId.subsubspace.calloutId
     );
-    opportunityCalloutId = opportunityCallout?.id ?? '';
-    postCommentsIdOpportunity = await preconditions(opportunityCalloutId);
+    subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
+    postCommentsIdSubsubspace = await preconditions(subsubspaceCalloutId);
   });
 
   afterAll(async () => {
-    await deleteCallout(opportunityCalloutId);
+    await deleteCallout(subsubspaceCalloutId);
     await deleteCallout(subspaceCalloutId);
     await deleteCallout(spaceCalloutId);
   });
@@ -201,8 +201,8 @@ describe('Callout - Close State - User Privileges Posts', () => {
         ${TestUser.SPACE_MEMBER}         | ${'sendComment'} | ${'space'}
         ${TestUser.SUBSPACE_ADMIN}    | ${'sendComment'} | ${'subspace'}
         ${TestUser.SUBSPACE_MEMBER}   | ${'sendComment'} | ${'subspace'}
-        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'sendComment'} | ${'opportunity'}
-        ${TestUser.SUBSUBSPACE_MEMBER} | ${'sendComment'} | ${'opportunity'}
+        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'sendComment'} | ${'subsubspace'}
+        ${TestUser.SUBSUBSPACE_MEMBER} | ${'sendComment'} | ${'subsubspace'}
       `(
         'User: "$userRole" can send message to closed "$entity" callout post',
         async ({ userRole, message, entity }) => {
@@ -210,7 +210,7 @@ describe('Callout - Close State - User Privileges Posts', () => {
             entity,
             postCommentsIdSpace,
             postCommentsIdSubspace,
-            postCommentsIdOpportunity
+            postCommentsIdSubsubspace
           );
 
           const messageRes = await sendMessageToRoom(
@@ -230,7 +230,7 @@ describe('Callout - Close State - User Privileges Posts', () => {
         userRole                   | message                                                                            | entity
         ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'space'}
         ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'subspace'}
-        ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'opportunity'}
+        ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'subsubspace'}
       `(
         'User: "$userRole" cannot send message to closed "$entity" callout post',
         async ({ userRole, message, entity }) => {
@@ -238,7 +238,7 @@ describe('Callout - Close State - User Privileges Posts', () => {
             entity,
             postCommentsIdSpace,
             postCommentsIdSubspace,
-            postCommentsIdOpportunity
+            postCommentsIdSubsubspace
           );
 
           const messageRes = await sendMessageToRoom(
@@ -267,9 +267,9 @@ describe('Callout - Close State - User Privileges Posts', () => {
         ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"createContributionOnCallout"'}                                                 | ${'subspace'}
         ${TestUser.SUBSPACE_MEMBER}   | ${'"New contributions to a closed Callout with id'}                                        | ${'subspace'}
         ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'subspace'}
-        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createContributionOnCallout"'}                                                 | ${'opportunity'}
-        ${TestUser.SUBSUBSPACE_MEMBER} | ${'"New contributions to a closed Callout with id'}                                        | ${'opportunity'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'opportunity'}
+        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createContributionOnCallout"'}                                                 | ${'subsubspace'}
+        ${TestUser.SUBSUBSPACE_MEMBER} | ${'"New contributions to a closed Callout with id'}                                        | ${'subsubspace'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'subsubspace'}
       `(
         'User: "$userRole" get error when create post to closed "$entity" callout',
         async ({ userRole, message, entity }) => {
@@ -277,7 +277,7 @@ describe('Callout - Close State - User Privileges Posts', () => {
             entity,
             spaceCalloutId,
             subspaceCalloutId,
-            opportunityCalloutId
+            subsubspaceCalloutId
           );
 
           const res = await createPostOnCallout(
@@ -300,10 +300,10 @@ describe('Callout - Close State - User Privileges Posts', () => {
 describe('Callout - Close State - User Privileges Discussions', () => {
   let spaceCalloutId = '';
   let subspaceCalloutId = '';
-  let opportunityCalloutId = '';
+  let subsubspaceCalloutId = '';
   let spaceCalloutCommentsId = '';
   let subspaceCalloutCommentsId = '';
-  let opportunityCalloutCommentsId = '';
+  let subsubspaceCalloutCommentsId = '';
 
   beforeAll(async () => {
     const preconditions = async (calloutId: string) => {
@@ -334,18 +334,18 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       subspaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(subspaceCalloutId);
 
-    const opportunityCallout = await getDefaultOpportunityCalloutByNameId(
+    const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
       entitiesId.spaceId,
       entitiesId.subsubspace.id,
       entitiesId.subsubspace.discussionCalloutId
     );
-    opportunityCalloutId = opportunityCallout?.id ?? '';
-    opportunityCalloutCommentsId = opportunityCallout?.comments?.id ?? '';
-    await preconditions(opportunityCalloutId);
+    subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
+    subsubspaceCalloutCommentsId = subsubspaceCallout?.comments?.id ?? '';
+    await preconditions(subsubspaceCalloutId);
   });
 
   afterAll(async () => {
-    await deleteCallout(opportunityCalloutId);
+    await deleteCallout(subsubspaceCalloutId);
     await deleteCallout(subspaceCalloutId);
     await deleteCallout(spaceCalloutId);
   });
@@ -361,9 +361,9 @@ describe('Callout - Close State - User Privileges Discussions', () => {
         ${TestUser.SUBSPACE_ADMIN}    | ${'CALLOUT_CLOSED'}   | ${'subspace'}
         ${TestUser.SUBSPACE_MEMBER}   | ${'CALLOUT_CLOSED'}   | ${'subspace'}
         ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'subspace'}
-        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'CALLOUT_CLOSED'}   | ${'opportunity'}
-        ${TestUser.SUBSUBSPACE_MEMBER} | ${'CALLOUT_CLOSED'}   | ${'opportunity'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'opportunity'}
+        ${TestUser.SUBSUBSPACE_ADMIN}  | ${'CALLOUT_CLOSED'}   | ${'subsubspace'}
+        ${TestUser.SUBSUBSPACE_MEMBER} | ${'CALLOUT_CLOSED'}   | ${'subsubspace'}
+        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'subsubspace'}
       `(
         'User: "$userRole" get error when send code to closed "$entity" callout',
         async ({ userRole, code, entity }) => {
@@ -371,7 +371,7 @@ describe('Callout - Close State - User Privileges Discussions', () => {
             entity,
             spaceCalloutCommentsId,
             subspaceCalloutCommentsId,
-            opportunityCalloutCommentsId
+            subsubspaceCalloutCommentsId
           );
           // Act
           const res = await sendMessageToRoom(

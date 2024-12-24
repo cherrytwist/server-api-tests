@@ -28,7 +28,7 @@ const subspaceName = `chName${uniqueId}`;
 let preferencesConfig: any[] = [];
 const spaceMemOnly = `spacemem${uniqueId}@alkem.io`;
 const subspaceAndSpaceMemOnly = `chalmem${uniqueId}@alkem.io`;
-const opportunityAndSubspaceAndSpaceMem = `oppmem${uniqueId}@alkem.io`;
+const subsubspaceAndSubspaceAndSpaceMem = `oppmem${uniqueId}@alkem.io`;
 const spaceDiscussionSubjectText = `${ecoName} - New discussion created: Default title, have a look!`;
 const spaceDiscussionSubjectTextAdmin = `[${ecoName}] New discussion created: Default title`;
 const subspaceDiscussionSubjectText = `${subspaceName} - New discussion created: Default title, have a look!`;
@@ -47,7 +47,7 @@ beforeAll(async () => {
   await registerUsersAndAssignToAllEntitiesAsMembers(
     spaceMemOnly,
     subspaceAndSpaceMemOnly,
-    opportunityAndSubspaceAndSpaceMem
+    subsubspaceAndSubspaceAndSpaceMem
   );
 
   preferencesConfig = [
@@ -116,11 +116,11 @@ beforeAll(async () => {
     },
 
     {
-      userID: opportunityAndSubspaceAndSpaceMem,
+      userID: subsubspaceAndSubspaceAndSpaceMem,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: opportunityAndSubspaceAndSpaceMem,
+      userID: subsubspaceAndSubspaceAndSpaceMem,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
   ];
@@ -131,7 +131,7 @@ afterAll(async () => {
     await changePreferenceUser(config.userID, config.type, 'false');
   await deleteUser(spaceMemOnly);
   await deleteUser(subspaceAndSpaceMemOnly);
-  await deleteUser(opportunityAndSubspaceAndSpaceMem);
+  await deleteUser(subsubspaceAndSubspaceAndSpaceMem);
   await deleteSpace(entitiesId.subspace.id);
   await deleteSpace(entitiesId.spaceId);
   await deleteOrganization(entitiesId.organization.id);
@@ -211,7 +211,7 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [opportunityAndSubspaceAndSpaceMem],
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
@@ -272,7 +272,7 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [opportunityAndSubspaceAndSpaceMem],
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
@@ -319,7 +319,7 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: subspaceDiscussionSubjectText,
-          toAddresses: [opportunityAndSubspaceAndSpaceMem],
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
@@ -369,13 +369,13 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: subspaceDiscussionSubjectText,
-          toAddresses: [opportunityAndSubspaceAndSpaceMem],
+          toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
         }),
       ])
     );
   });
 
-  // ToDo - add discussions notifications tests for opportunity
+  // ToDo - add discussions notifications tests for subsubspace
 
   test('EM create space discussion and send message to space - all roles with notifications disabled', async () => {
     // Arrange

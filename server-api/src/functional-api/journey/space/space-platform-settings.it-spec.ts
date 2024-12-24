@@ -23,7 +23,7 @@ import {
 import { deleteSubspace } from '../subsubspace/subsubspace.request.params';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import {
@@ -38,7 +38,7 @@ const organizationName = 'space-org-name' + uniqueId;
 const hostNameId = 'space-org-nameid' + uniqueId;
 const spaceName = 'space-name' + uniqueId;
 const spaceNameId = 'space-nameid' + uniqueId;
-const opportunityName = 'space-opp';
+const subsubspaceName = 'space-opp';
 const subspaceName = 'space-chal';
 let organizationIdTwo = '';
 let orgAccountIdTwo = '';
@@ -57,7 +57,7 @@ describe('Update space platform settings', () => {
       privacy: { mode: SpacePrivacyMode.Private },
     });
     await createSubspaceWithUsers(subspaceName);
-    await createOpportunityWithUsers(opportunityName);
+    await createSubsubspaceWithUsers(subsubspaceName);
   });
 
   afterAll(async () => {

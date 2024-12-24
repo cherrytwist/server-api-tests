@@ -6,7 +6,7 @@ import { subscriptionRooms } from './subscrition-queries';
 import { users } from '@utils/queries/users-data';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '../communications/communication.params';
@@ -20,12 +20,12 @@ const hostNameId = 'com-sub-org-nd' + uniqueId;
 const spaceName = 'com-sub-eco-n' + uniqueId;
 const spaceNameId = 'com-sub-eco-nd' + uniqueId;
 const subspaceName = `chname${uniqueId}`;
-const opportunityName = `opname${uniqueId}`;
+const subsubspaceName = `opname${uniqueId}`;
 const postNameID = `asp-name-id-${uniqueId}`;
 const postDisplayName = `post-d-name-${uniqueId}`;
 let postCommentsIdSpace = '';
 let postCommentsIdSubspace = '';
-let postCommentsIdOpportunity = '';
+let postCommentsIdSubsubspace = '';
 
 let messageGaId = '';
 let messageHaId = '';
@@ -90,7 +90,7 @@ beforeAll(async () => {
   );
 
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -264,7 +264,7 @@ describe('Post comments subscription', () => {
     });
   });
 
-  describe('Opportunity comments subscription ', () => {
+  describe('Subsubspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
         entitiesId.subsubspace.calloutId,
@@ -273,7 +273,7 @@ describe('Post comments subscription', () => {
         TestUser.GLOBAL_ADMIN
       );
 
-      postCommentsIdOpportunity =
+      postCommentsIdSubsubspace =
         resPostonSubspace.data?.createContributionOnCallout.post?.comments
           .id ?? '';
 
@@ -284,7 +284,7 @@ describe('Post comments subscription', () => {
       const utilizedQuery = {
         operationName: 'roomEvents',
         query: subscriptionRooms,
-        variables: { roomID: postCommentsIdOpportunity },
+        variables: { roomID: postCommentsIdSubsubspace },
       };
 
       await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
@@ -300,21 +300,21 @@ describe('Post comments subscription', () => {
     it('receives message after new comment is created - 3 sender / 3 receivers', async () => {
       // create comment
       const messageGA = await sendMessageToRoom(
-        postCommentsIdOpportunity,
+        postCommentsIdSubsubspace,
         messageGAText,
         TestUser.GLOBAL_ADMIN
       );
       messageGaId = messageGA?.data?.sendMessageToRoom.id;
 
       const messageHA = await sendMessageToRoom(
-        postCommentsIdOpportunity,
+        postCommentsIdSubsubspace,
         messageHAText,
         TestUser.SPACE_ADMIN
       );
       messageHaId = messageHA?.data?.sendMessageToRoom.id;
 
       const messageHM = await sendMessageToRoom(
-        postCommentsIdOpportunity,
+        postCommentsIdSubsubspace,
         messageHMText,
         TestUser.SPACE_MEMBER
       );

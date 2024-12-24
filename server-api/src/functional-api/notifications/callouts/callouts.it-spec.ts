@@ -11,7 +11,7 @@ import {
 } from '@functional-api/callout/callouts.request.params';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { users } from '@utils/queries/users-data';
@@ -25,7 +25,7 @@ const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 
 let preferencesConfigCallout: any[] = [];
 
@@ -63,7 +63,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfigCallout = [
     {
@@ -395,7 +395,7 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [opportunityAndSubspaceAndSpaceMem],
+    //       toAddresses: [subsubspaceAndSubspaceAndSpaceMem],
     //     }),
     //   ])
     // );
@@ -473,8 +473,8 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(0);
   });
 
-  test('OA create PUBLISHED opportunity callout type: POST - OM(4) get notifications', async () => {
-    const calloutSubjectText = `${opportunityName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+  test('OA create PUBLISHED subsubspace callout type: POST - OM(4) get notifications', async () => {
+    const calloutSubjectText = `${subsubspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
       entitiesId.subsubspace.collaborationId,
@@ -493,26 +493,26 @@ describe('Notifications - post', () => {
 
     expect(mails[1]).toEqual(3);
 
-    // GA - 1 mails as opportunity member; as admin - 0
+    // GA - 1 mails as subsubspace member; as admin - 0
     expect(mails[0]).toEqual(
       await templateResult(calloutSubjectText, users.globalAdmin.email)
     );
 
-    // Don't receive as Space Admin is not member of opportunity
+    // Don't receive as Space Admin is not member of subsubspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.spaceAdmin.email)
     );
-    // Don't receive as Space Member is not member of opportunity
+    // Don't receive as Space Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.spaceMember.email)
     );
 
-    // Don't receive as Subspace Member is not member of opportunity
+    // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.subspaceAdmin.email)
     );
 
-    // Don't receive as Subspace Member is not member of opportunity
+    // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
       await templateResult(calloutSubjectText, users.subspaceMember.email)
     );
@@ -524,7 +524,7 @@ describe('Notifications - post', () => {
     );
   });
 
-  test("OA create PUBLISHED opportunity callout type: POST with 'sendNotification':'false' - OM(0) get notifications", async () => {
+  test("OA create PUBLISHED subsubspace callout type: POST with 'sendNotification':'false' - OM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCollaboration(
       entitiesId.subsubspace.collaborationId,
@@ -546,7 +546,7 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(0);
   });
 
-  test('OA create PUBLISHED opportunity callout type: POST - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create PUBLISHED subsubspace callout type: POST - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfigCallout.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')

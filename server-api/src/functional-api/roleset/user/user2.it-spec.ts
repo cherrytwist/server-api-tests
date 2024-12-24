@@ -5,14 +5,14 @@ import {
   deleteSpace,
   getUserRoleSpacesVisibility,
 } from '../../journey/space/space.request.params';
-import { createOpportunity } from '../../journey/subsubspace/subsubspace.request.params';
+import { createSubsubspace } from '../../journey/subsubspace/subsubspace.request.params';
 import {
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 
-import { createSubspace } from '@utils/mutations/journeys/subspace';
+import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   assignRoleToUser,
@@ -31,7 +31,7 @@ const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
 const spaceName2 = '222' + uniqueId;
 const spaceNameId2 = '222' + uniqueId;
-const opportunityName = 'urole-opp';
+const subsubspaceName = 'urole-opp';
 const subspaceName = 'urole-chal';
 const availableRoles = ['member', 'lead'];
 
@@ -40,7 +40,7 @@ beforeAll(async () => {
 
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
@@ -92,7 +92,7 @@ afterAll(async () => {
 });
 
 describe('User roles', () => {
-  test('user role - assignment to 1 Organization, Space, Subspace, Opportunity', async () => {
+  test('user role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
 
     const res = await getUserRoleSpacesVisibility(
@@ -185,9 +185,9 @@ describe('User roles', () => {
       chId2 = chRes2Data?.id ?? '';
       subspaceRoleSetId2 = chRes2Data?.community?.roleSet.id ?? '';
 
-      const oppRes = await createOpportunity(
-        opportunityName + '1',
-        opportunityName + '1',
+      const oppRes = await createSubsubspace(
+        subsubspaceName + '1',
+        subsubspaceName + '1',
         chId
       );
 
@@ -195,9 +195,9 @@ describe('User roles', () => {
       oppId = oppResData?.id ?? '';
       subsubspaceRoleSetId = oppResData?.community?.roleSet.id ?? '';
 
-      const oppRes2 = await createOpportunity(
-        opportunityName + '2',
-        opportunityName + '2',
+      const oppRes2 = await createSubsubspace(
+        subsubspaceName + '2',
+        subsubspaceName + '2',
         chId2
       );
       const oppRes2Data = oppRes2?.data?.createSubspace;
@@ -205,9 +205,9 @@ describe('User roles', () => {
       oppId2 = oppRes2Data?.id ?? '';
       subsubspaceRoleSetId2 = oppRes2Data?.community?.roleSet.id ?? '';
 
-      const oppRes3 = await createOpportunity(
-        opportunityName + '3',
-        opportunityName + '3',
+      const oppRes3 = await createSubsubspace(
+        subsubspaceName + '3',
+        subsubspaceName + '3',
         chId2
       );
 

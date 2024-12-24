@@ -6,8 +6,8 @@ import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 
 export const createSubsubspace = async (
-  opportunityName: string,
-  opportunityNameId: string,
+  subsubspaceName: string,
+  subsubspaceNameId: string,
   parentId: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN,
 ) => {
@@ -15,9 +15,9 @@ export const createSubsubspace = async (
   const callback = (authToken: string | undefined) =>
     graphqlClient.CreateSubspace(
       {
-        subspaceData: opportunityVariablesData(
-          opportunityName,
-          opportunityNameId,
+        subspaceData: subsubspaceVariablesData(
+          subsubspaceName,
+          subsubspaceNameId,
           parentId,
         ),
       },
@@ -29,7 +29,7 @@ export const createSubsubspace = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const opportunityVariablesData = (
+export const subsubspaceVariablesData = (
   displayName: string,
   nameId: string,
   subspaceId: string,

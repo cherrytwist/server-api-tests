@@ -18,9 +18,9 @@ import { entitiesId } from '@src/types/entities-helper';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { uniqueId } from '@utils/uniqueId';
 
-let opportunityName = '';
-let opportunityNameId = '';
-let opportunityId = '';
+let subsubspaceName = '';
+let subsubspaceNameId = '';
+let subsubspaceId = '';
 let subspaceName = '';
 let subspaceId = '';
 const additionalSubspaceId = '';
@@ -58,7 +58,7 @@ afterAll(async () => {
 });
 
 afterEach(async () => {
-  await deleteSpace(opportunityId);
+  await deleteSpace(subsubspaceId);
   await deleteSpace(additionalSubspaceId);
   await deleteSpace(subspaceId);
 });
@@ -68,8 +68,8 @@ beforeEach(async () => {
     .toString(36)
     .slice(-6);
   subspaceName = `testSubspace ${uniqueTextId}`;
-  opportunityName = `opportunityName ${uniqueTextId}`;
-  opportunityNameId = `opp${uniqueTextId}`;
+  subsubspaceName = `subsubspaceName ${uniqueTextId}`;
+  subsubspaceNameId = `opp${uniqueTextId}`;
   organizationNameTest = `organizationNameTest ${uniqueTextId}`;
   // Create Subspace
   const responseCreateSubspace = await createSubspace(
@@ -94,19 +94,19 @@ describe('Query Subspace data', () => {
     );
   });
 
-  test('should query opportunity through subspace', async () => {
+  test('should query subsubspace through subspace', async () => {
     // Act
-    // Create Opportunity
-    const responseCreateOpportunityOnSubspace = await createSubspace(
-      opportunityName,
-      opportunityNameId,
+    // Create Subsubspace
+    const responseCreateSubsubspaceOnSubspace = await createSubspace(
+      subsubspaceName,
+      subsubspaceNameId,
       subspaceId
     );
 
-    opportunityId =
-      responseCreateOpportunityOnSubspace.data?.createSubspace.id ?? '';
+    subsubspaceId =
+      responseCreateSubsubspaceOnSubspace.data?.createSubspace.id ?? '';
 
-    // Query Opportunity data through Subspace query
+    // Query Subsubspace data through Subspace query
     const responseQueryData = await getSubspaceData(
       entitiesId.spaceId,
       subspaceId
@@ -116,39 +116,39 @@ describe('Query Subspace data', () => {
     expect(responseQueryData.data?.space.subspace?.subspaces).toHaveLength(1);
     expect(
       responseQueryData.data?.space.subspace?.subspaces?.[0].profile.displayName
-    ).toEqual(opportunityName);
+    ).toEqual(subsubspaceName);
     expect(
       responseQueryData.data?.space.subspace?.subspaces?.[0].nameID
-    ).toEqual(opportunityNameId);
+    ).toEqual(subsubspaceNameId);
     expect(responseQueryData.data?.space.subspace?.subspaces?.[0].id).toEqual(
-      opportunityId
+      subsubspaceId
     );
   });
 
-  test('should create opportunity and query the data', async () => {
+  test('should create subsubspace and query the data', async () => {
     // Act
-    // Create Opportunity
-    const responseCreateOpportunityOnSubspace = await createSubspace(
-      opportunityName,
-      opportunityNameId,
+    // Create Subsubspace
+    const responseCreateSubsubspaceOnSubspace = await createSubspace(
+      subsubspaceName,
+      subsubspaceNameId,
       subspaceId
     );
 
-    const createOpportunityData =
-      responseCreateOpportunityOnSubspace.data?.createSubspace;
+    const createSubsubspaceData =
+      responseCreateSubsubspaceOnSubspace.data?.createSubspace;
 
-    opportunityId =
-      responseCreateOpportunityOnSubspace.data?.createSubspace.id ?? '';
+    subsubspaceId =
+      responseCreateSubsubspaceOnSubspace.data?.createSubspace.id ?? '';
 
-    // Query Opportunity data
-    const requestQueryOpportunity = await getSubspaceData(
+    // Query Subsubspace data
+    const requestQuerySubsubspace = await getSubspaceData(
       entitiesId.spaceId,
-      opportunityId
+      subsubspaceId
     );
-    const requestOpportunityData = requestQueryOpportunity.data?.space.subspace;
+    const requestSubsubspaceData = requestQuerySubsubspace.data?.space.subspace;
 
     // Assert
-    expect(createOpportunityData).toEqual(requestOpportunityData);
+    expect(createSubsubspaceData).toEqual(requestSubsubspaceData);
   });
 
   test('should update a subspace', async () => {

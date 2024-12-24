@@ -3,7 +3,7 @@ import { deleteSpace } from '@functional-api/journey/space/space.request.params'
 import { uniqueId } from '@utils/uniqueId';
 import {
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
@@ -15,7 +15,7 @@ import {
 } from './whiteboard-templates.request.params';
 import { deleteTemplate } from '../template.request.params';
 
-let opportunityName = 'post-opp';
+let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';
 let postNameID = '';
 let postDisplayName = '';
@@ -28,7 +28,7 @@ let templateId = '';
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -40,7 +40,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
   subspaceName = `testSubspace ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });

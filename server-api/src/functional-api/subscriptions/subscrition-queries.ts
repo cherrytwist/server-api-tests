@@ -8,7 +8,7 @@ export const subscriptionSubspaceCreated = `subscription SubspaceCreated($spaceI
   }
 }`;
 
-export const subscriptionOpportunityCreated = `subscription SubspaceCreated($subspaceID: UUID!) {\n  subspaceCreated(subspaceID: $subspaceID) {
+export const subscriptionSubsubspaceCreated = `subscription SubspaceCreated($subspaceID: UUID!) {\n  subspaceCreated(subspaceID: $subspaceID) {
   subspace{
     profile {
       displayName

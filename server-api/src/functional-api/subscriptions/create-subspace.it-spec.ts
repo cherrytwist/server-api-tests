@@ -3,7 +3,7 @@ import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionSubspaceCreated } from './subscrition-queries';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
-import { createSubspace } from '@utils/mutations/journeys/subspace';
+import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';

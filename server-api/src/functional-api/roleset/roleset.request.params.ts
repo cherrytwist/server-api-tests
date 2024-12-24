@@ -21,16 +21,16 @@ export const getUserCommunityPrivilege = async (
 };
 
 //   spaceId: string,
-//   opportunityId: string,
+//   subsubspaceId: string,
 //   includeDetails: boolean,
 //   role = TestUser.GLOBAL_ADMIN
 // ) => {
 //   const graphqlClient = getGraphqlClient();
 //   const callback = (authToken: string | undefined) =>
-//     graphqlClient.CommunityUserPrivilegesToOpportunity(
+//     graphqlClient.CommunityUserPrivilegesToSubsubspace(
 //       {
 //         spaceId,
-//         opportunityId,
+//         subsubspaceId,
 //         includeDetails,
 //       },
 //       {

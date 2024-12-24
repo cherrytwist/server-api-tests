@@ -10,7 +10,7 @@ import {
 } from '@functional-api/callout/post/post.request.params';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '../../../utils/data-setup/entities';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -25,7 +25,7 @@ const hostNameId = 'urole-org-nameid' + uniqueId;
 const spaceName = '111' + uniqueId;
 const spaceNameId = '111' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `oppName${uniqueId}`;
+const subsubspaceName = `oppName${uniqueId}`;
 
 let postCommentsIdSpace = '';
 
@@ -59,7 +59,7 @@ beforeAll(async () => {
   });
 
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   await assignUserAsOrganizationAdmin(
     users.qaUser.id,
@@ -209,7 +209,7 @@ describe('Notifications - Mention Organization', () => {
       );
     });
 
-    test('GA mention Organization in Opportunity comments callout - 2 notification to Organization admins are sent', async () => {
+    test('GA mention Organization in Subsubspace comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
 
       await sendMessageToRoom(
@@ -302,7 +302,7 @@ describe('Notifications - Mention Organization', () => {
       );
     });
 
-    test('HA mention Organization in Opportunity post (preference disabled) - 2 notification to Organization admins are sent', async () => {
+    test('HA mention Organization in Subsubspace post (preference disabled) - 2 notification to Organization admins are sent', async () => {
       // Arrange
       // preferencesConfig.forEach(
       //   async config =>
@@ -334,7 +334,7 @@ describe('Notifications - Mention Organization', () => {
 
   // ToDo: add timeline comments mentions, when implemented
   describe.skip('Post comment', () => {
-    test('OA mention HM in Opportunity post - 1 notification to HM is sent', async () => {
+    test('OA mention HM in Subsubspace post - 1 notification to HM is sent', async () => {
       expect(1).toEqual(1);
     });
   });

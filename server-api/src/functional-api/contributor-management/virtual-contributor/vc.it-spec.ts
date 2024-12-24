@@ -20,7 +20,7 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import { createSubspace } from '@utils/mutations/journeys/subspace';
+import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import {
   assignLicensePlanToAccount,
   getLicensePlanByName,

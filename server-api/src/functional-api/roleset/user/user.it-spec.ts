@@ -2,7 +2,7 @@ import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 
@@ -21,13 +21,13 @@ const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;
 const spaceName = 'com-eco-name' + uniqueId;
 const spaceNameId = 'com-eco-nameid' + uniqueId;
-const opportunityName = 'com-opp';
+const subsubspaceName = 'com-opp';
 const subspaceName = 'com-chal';
 
 beforeAll(async () => {
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   await removeRoleFromUser(
     users.globalAdmin.id,
@@ -140,7 +140,7 @@ describe('Assign / Remove users to community', () => {
         ])
       );
     });
-    test('Assign user as member to opportunity', async () => {
+    test('Assign user as member to subsubspace', async () => {
       // Act
       await assignRoleToUser(
         users.nonSpaceMember.id,
@@ -210,7 +210,7 @@ describe('Assign / Remove users to community', () => {
         ])
       );
     });
-    test('Assign user as lead to opportunity', async () => {
+    test('Assign user as lead to subsubspace', async () => {
       // Act
       await assignRoleToUser(
         users.nonSpaceMember.id,
@@ -273,7 +273,7 @@ describe('Assign / Remove users to community', () => {
         CommunityRoleType.Lead
       );
     });
-    test('Remove user as lead from opportunity', async () => {
+    test('Remove user as lead from subsubspace', async () => {
       // Act
       await removeRoleFromUser(
         users.nonSpaceMember.id,
@@ -343,7 +343,7 @@ describe('Assign / Remove users to community', () => {
       );
     });
 
-    test('Remove user as member from opportunity', async () => {
+    test('Remove user as member from subsubspace', async () => {
       // Act
       await removeRoleFromUser(
         users.nonSpaceMember.id,
@@ -537,7 +537,7 @@ describe('Available users', () => {
       );
     });
   });
-  describe('Opportunity available users', () => {
+  describe('Subsubspace available users', () => {
     beforeAll(async () => {
       await assignRoleToUser(
         users.nonSpaceMember.id,

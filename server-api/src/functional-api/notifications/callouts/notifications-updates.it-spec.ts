@@ -6,7 +6,7 @@ import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -21,7 +21,7 @@ const spaceName = 'not-up-eco-name' + uniqueId;
 const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const ecoName = spaceName;
 const subspaceName = `chName${uniqueId}`;
-const opportunityName = `opName${uniqueId}`;
+const subsubspaceName = `opName${uniqueId}`;
 let preferencesConfig: any[] = [];
 
 export const templatedAsAdminResult = async (
@@ -58,7 +58,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -301,11 +301,11 @@ describe.skip('Notifications - updates', () => {
     );
   });
 
-  test('OA create opportunity update - GA(1), HA(1), CA(1), OA(1), OM(1), get notifications', async () => {
+  test('OA create subsubspace update - GA(1), HA(1), CA(1), OA(1), OM(1), get notifications', async () => {
     // Act
     await sendMessageToRoom(
       entitiesId.subsubspace.updatesId,
-      'OA opportunity update ',
+      'OA subsubspace update ',
       TestUser.SUBSUBSPACE_ADMIN
     );
 
@@ -316,48 +316,48 @@ describe.skip('Notifications - updates', () => {
     expect(mails[1]).toEqual(5);
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(opportunityName, users.globalAdmin.email)
+      await templatedAsAdminResult(subsubspaceName, users.globalAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(opportunityName, users.spaceAdmin.email)
+      await templatedAsAdminResult(subsubspaceName, users.spaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(opportunityName, users.globalAdmin.email)
+      await templatedAsMemberResult(subsubspaceName, users.globalAdmin.email)
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(opportunityName, users.spaceAdmin.email)
+      await templatedAsMemberResult(subsubspaceName, users.spaceAdmin.email)
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(opportunityName, users.spaceMember.email)
+      await templatedAsMemberResult(subsubspaceName, users.spaceMember.email)
     );
 
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(opportunityName, users.subspaceAdmin.email)
+      await templatedAsMemberResult(subsubspaceName, users.subspaceAdmin.email)
     );
     expect(mails[0]).not.toEqual(
       await templatedAsMemberResult(
-        opportunityName,
+        subsubspaceName,
         users.subspaceMember.email
       )
     );
 
     expect(mails[0]).toEqual(
       await templatedAsMemberResult(
-        opportunityName,
+        subsubspaceName,
         users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templatedAsMemberResult(
-        opportunityName,
+        subsubspaceName,
         users.subsubspaceMember.email
       )
     );
   });
 
-  test('OA create opportunity update - 0 notifications - all roles with notifications disabled', async () => {
+  test('OA create subsubspace update - 0 notifications - all roles with notifications disabled', async () => {
     preferencesConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
@@ -365,7 +365,7 @@ describe.skip('Notifications - updates', () => {
     // Act
     await sendMessageToRoom(
       entitiesId.subsubspace.updatesId,
-      'OA opportunity update 2',
+      'OA subsubspace update 2',
       TestUser.SUBSUBSPACE_ADMIN
     );
 

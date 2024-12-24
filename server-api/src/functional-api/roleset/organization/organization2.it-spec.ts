@@ -2,7 +2,7 @@ import { uniqueId } from '@utils/uniqueId';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   createSubspaceForOrgSpace,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import {
@@ -17,7 +17,7 @@ const organizationName = 'orole-org-name' + uniqueId;
 const hostNameId = 'orole-org-nameid' + uniqueId;
 const spaceName = 'orole-eco-name' + uniqueId;
 const spaceNameId = 'orole-eco-nameid' + uniqueId;
-const opportunityName = 'orole-opp';
+const subsubspaceName = 'orole-opp';
 const subspaceName = 'orole-chal';
 const spaceRoles = ['lead', 'member'];
 const availableRoles = ['member', 'lead'];
@@ -27,7 +27,7 @@ beforeAll(async () => {
 
   await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
   await createSubspaceForOrgSpace(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 
   await assignRoleToOrganization(
     entitiesId.organization.id,
@@ -74,7 +74,7 @@ afterAll(async () => {
 });
 
 describe('Organization role', () => {
-  test('Organization role - assignment to 1 Organization, Space, Subspace, Opportunity', async () => {
+  test('Organization role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
     const res = await getOrganizationRole(entitiesId.organization.id);
     const spacesData = res?.data?.rolesOrganization.spaces ?? [];
@@ -100,7 +100,7 @@ describe('Organization role', () => {
     // expect(spacesData[0].subspaces).toEqual(
     //   expect.arrayContaining([
     //     expect.objectContaining({
-    //       nameID: entitiesId.opportunity.nameId,
+    //       nameID: entitiesId.subsubspace.nameId,
     //       roles: expect.arrayContaining(availableRoles),
     //     }),
     //   ])

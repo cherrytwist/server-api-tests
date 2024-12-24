@@ -14,7 +14,7 @@ import {
 } from '@common/constants/privileges';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { removeRoleFromUser } from '../roles-request.params';
@@ -31,7 +31,7 @@ const organizationName = 'com-org-name' + uniqueId;
 const hostNameId = 'com-org-nameid' + uniqueId;
 const spaceName = 'com-eco-name' + uniqueId;
 const spaceNameId = 'com-eco-nameid' + uniqueId;
-const opportunityName = 'com-opp';
+const subsubspaceName = 'com-opp';
 const subspaceName = 'com-chal';
 
 beforeAll(async () => {
@@ -51,7 +51,7 @@ beforeAll(async () => {
     membership: { policy: CommunityMembershipPolicy.Applications },
     privacy: { mode: SpacePrivacyMode.Private },
   });
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
   await updateSpaceSettings(entitiesId.subsubspace.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
     privacy: { mode: SpacePrivacyMode.Private },
@@ -140,7 +140,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     );
   });
 
-  describe('DDT role privilege to assign member to opportunity', () => {
+  describe('DDT role privilege to assign member to subsubspace', () => {
     // Arrange
     test.each`
       user                           | myPrivileges
@@ -153,7 +153,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${sorted__read_applyToCommunity}
     `(
-      'User: "$user", should have privileges: "$myPrivileges" for opportunity journey',
+      'User: "$user", should have privileges: "$myPrivileges" for subsubspace journey',
       async ({ user, myPrivileges }) => {
         const request = await getRoleSetUserPrivilege(
           entitiesId.subsubspace.roleSetId,

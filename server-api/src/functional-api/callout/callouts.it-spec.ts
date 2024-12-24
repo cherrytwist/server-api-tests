@@ -10,7 +10,7 @@ import {
 import { TestUser } from '@alkemio/tests-lib';
 import {
   createSubspaceWithUsers,
-  createOpportunityWithUsers,
+  createSubsubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { CalloutState, CalloutType } from '@generated/alkemio-schema';
@@ -20,7 +20,7 @@ import { getDataPerSpaceCallout } from './post/post.request.params';
 import { entitiesId } from '../../types/entities-helper';
 import { CalloutVisibility } from '@generated/graphql';
 
-let opportunityName = 'post-opp';
+let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';
 let calloutDisplayName = '';
 let calloutId = '';
@@ -38,7 +38,7 @@ beforeAll(async () => {
     spaceNameId
   );
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityWithUsers(opportunityName);
+  await createSubsubspaceWithUsers(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -50,7 +50,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
   subspaceName = `testSubspace ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   calloutDisplayName = `callout-d-name-${uniqueId}`;
 });
 
@@ -426,7 +426,7 @@ describe('Callouts - AUTH Subspace', () => {
   });
 });
 
-describe('Callouts - AUTH Opportunity', () => {
+describe('Callouts - AUTH Subsubspace', () => {
   describe('DDT user privileges to create callout', () => {
     afterEach(async () => {
       await deleteCallout(calloutId);

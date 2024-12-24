@@ -3,7 +3,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createSubspaceWithUsers,
-  createOpportunityForSubspace,
+  createSubsubspaceForSubspace,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import {
@@ -33,7 +33,7 @@ import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { uniqueId } from '@utils/uniqueId';
 
-let opportunityName = 'post-opp';
+let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';
 let callDN = '';
 let calloutId = '';
@@ -58,7 +58,7 @@ beforeAll(async () => {
   });
 
   await createSubspaceWithUsers(subspaceName);
-  await createOpportunityForSubspace(opportunityName);
+  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -70,13 +70,13 @@ afterAll(async () => {
 
 beforeEach(async () => {
   subspaceName = `testSubspace ${uniqueId}`;
-  opportunityName = `opportunityName ${uniqueId}`;
+  subsubspaceName = `subsubspaceName ${uniqueId}`;
   callDN = `callout-d-name-${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
 
-describe('Activity logs - Opportunity', () => {
+describe('Activity logs - Subsubspace', () => {
   afterEach(async () => {
     await deleteCallout(calloutId);
   });
@@ -297,7 +297,7 @@ describe('Activity logs - Opportunity', () => {
 });
 
 // Logs used in the tests below are from the previously executed tests in the file
-describe('Access to Activity logs - Opportunity', () => {
+describe('Access to Activity logs - Subsubspace', () => {
   beforeAll(async () => {
     await assignRoleToUser(
       users.spaceMember.id,
@@ -306,7 +306,7 @@ describe('Access to Activity logs - Opportunity', () => {
     );
   });
 
-  describe('DDT user privileges to Public Opportunity activity logs of Private Space', () => {
+  describe('DDT user privileges to Public Subsubspace activity logs of Private Space', () => {
     beforeAll(async () => {
       await updateSpaceSettings(entitiesId.spaceId, {
         privacy: { mode: SpacePrivacyMode.Private },
@@ -324,7 +324,7 @@ describe('Access to Activity logs - Opportunity', () => {
       ${TestUser.SPACE_ADMIN}    | ${entitiesId.subsubspace.collaborationId}
       ${TestUser.SPACE_MEMBER}   | ${entitiesId.subsubspace.collaborationId}
     `(
-      'User: "$userRole" get message: "$message", when intend to access Public Opportunity activity logs of a Private space',
+      'User: "$userRole" get message: "$message", when intend to access Public Subsubspace activity logs of a Private space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
@@ -344,7 +344,7 @@ describe('Access to Activity logs - Opportunity', () => {
       userRole                   | message
       ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
-      'User: "$userRole" get Error message: "$message", when intend to access Public Opportunity activity logs of a Private space',
+      'User: "$userRole" get Error message: "$message", when intend to access Public Subsubspace activity logs of a Private space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
@@ -359,7 +359,7 @@ describe('Access to Activity logs - Opportunity', () => {
     );
   });
 
-  describe('DDT user privileges to Public Opportunity activity logs of Public Space', () => {
+  describe('DDT user privileges to Public Subsubspace activity logs of Public Space', () => {
     beforeAll(async () => {
       await updateSpaceSettings(entitiesId.spaceId, {
         privacy: { mode: SpacePrivacyMode.Public },
@@ -380,7 +380,7 @@ describe('Access to Activity logs - Opportunity', () => {
       ${TestUser.SPACE_MEMBER}     | ${entitiesId.subsubspace.collaborationId}
       ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.subsubspace.collaborationId}
     `(
-      'User: "$userRole" get message: "$message", when intend to access Public Opportunity activity logs of a Public space',
+      'User: "$userRole" get message: "$message", when intend to access Public Subsubspace activity logs of a Public space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
