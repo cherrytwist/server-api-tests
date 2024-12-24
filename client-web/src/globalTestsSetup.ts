@@ -2,9 +2,10 @@
 require('tsconfig-paths/register');
 import { config } from 'dotenv';
 import { UiText } from '@ory/kratos-client';
-import { TestUser } from '@common/enum/test.user';
-import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { TestUser } from '@alkemio/tests-lib';
+import { registerInKratosOrFail } from '@utils/register-in-kratos-or-fail';
+import { verifyInKratosOrFail } from '@utils/verify-in-kratos-or-fail';
 
 config({ path: '.env' });
 

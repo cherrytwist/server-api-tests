@@ -5,7 +5,7 @@ import {
   getRoleSetUserPrivilege,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC,
   sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC,

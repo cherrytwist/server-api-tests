@@ -30,7 +30,7 @@ import { GetTemplateById } from '@functional-api/templates/template.request.para
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '@src/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

@@ -12,7 +12,7 @@ import {
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { entitiesId } from '@src/types/entities-helper';

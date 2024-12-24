@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import {
   getPlatformDiscussionsDataById,

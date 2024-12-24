@@ -1,4 +1,4 @@
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import '@utils/array.matcher';
 import {
   getSpaceData,

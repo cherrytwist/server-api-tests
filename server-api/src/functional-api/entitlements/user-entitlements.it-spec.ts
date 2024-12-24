@@ -19,7 +19,7 @@
  * The cleanup steps ensure that any created resources (spaces, virtual contributors, innovation packs) are deleted
  * and the platform roles are removed after the tests are executed.
  */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,

@@ -11,7 +11,7 @@ import {
   createPostOnCallout,
   getDataPerSpaceCallout,
 } from '../post/post.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,

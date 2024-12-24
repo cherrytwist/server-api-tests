@@ -4,13 +4,13 @@ import {
   deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   deleteExternalInvitation,
   inviteExternalUser,
 } from '@functional-api/roleset/invitations/invitation.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,

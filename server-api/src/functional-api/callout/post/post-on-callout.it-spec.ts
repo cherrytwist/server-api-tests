@@ -9,7 +9,7 @@ import {
 } from './post.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,
@@ -27,7 +27,7 @@ import {
 } from '@functional-api/references/references.request.params';
 import { entitiesId } from '@src/types/entities-helper';
 import { uniqueId } from '@utils/uniqueId';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 
 let opportunityName = 'post-opp';
 let challengeName = 'post-chal';

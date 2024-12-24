@@ -4,8 +4,8 @@ import {
   deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { delay } from '@utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { delay } from '@alkemio/tests-lib';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createChallengeWithUsers,

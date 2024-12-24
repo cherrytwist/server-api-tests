@@ -1,4 +1,4 @@
-import { getSdk } from '@test/core/generated/graphql';
+import { getSdk } from '@src/core/generated/graphql';
 import dotenv from 'dotenv';
 import { GraphQLClient } from 'graphql-request';
 

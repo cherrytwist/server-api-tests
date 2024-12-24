@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../../../lib/src/utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';

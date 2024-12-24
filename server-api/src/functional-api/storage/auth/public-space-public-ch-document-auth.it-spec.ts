@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { uniqueId } from '@utils/uniqueId';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
   getProfileDocuments,

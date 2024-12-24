@@ -1,6 +1,6 @@
 import { registerInKratosOrFail } from '@utils/kratos/register-in-kratos-or-fail';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { uniqueId } from '@utils/uniqueId';

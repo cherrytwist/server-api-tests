@@ -1,10 +1,10 @@
-import { TestUser } from '@test/common/enums/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from 'src/utils/uniqueId';
 import { registerInAlkemioOrFail } from 'src/utils/register-in-alkemio-or-fail';
 import { registerInKratosOrFail } from 'src/utils/register-in-kratos-or-fail';
-import { verifyInKratosOrFail } from '@test/utils/verify-in-kratos-or-fail';
-import { getGraphqlClient } from '@test/utils/graphqlClient';
-import { graphqlErrorWrapper } from '@test/utils/graphql.wrapper';
+import { verifyInKratosOrFail } from '@src/utils/verify-in-kratos-or-fail';
+import { getGraphqlClient } from '@src/utils/graphqlClient';
+import { graphqlErrorWrapper } from '@src/utils/graphql.wrapper';
 
 export const registerVerifiedUser = async (
   email: string,

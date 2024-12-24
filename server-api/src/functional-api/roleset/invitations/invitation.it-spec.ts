@@ -32,7 +32,7 @@ import { deleteUser } from '../../contributor-management/user/user.request.param
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 

@@ -5,7 +5,7 @@ import {
   updateOrganization,
 } from './organization.request.params';
 import { updateOrganizationSettings } from './organization.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';

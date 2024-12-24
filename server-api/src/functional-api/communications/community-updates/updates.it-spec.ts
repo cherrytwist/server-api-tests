@@ -4,13 +4,13 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { entitiesId } from '@src/types/entities-helper';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { delay } from '@utils/delay';
+import { delay } from '@alkemio/tests-lib';
 import {
   CommunityRoleType,
   SpacePrivacyMode,

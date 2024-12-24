@@ -11,7 +11,7 @@
  * the expected values.
  */
 
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@utils/mutations/authorization-platform-mutation';
 import { users } from '@utils/queries/users-data';
 import { getMyEntitlementsQuery } from './entitlements-request.params';

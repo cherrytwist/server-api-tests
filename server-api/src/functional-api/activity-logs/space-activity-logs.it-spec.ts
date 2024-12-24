@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {

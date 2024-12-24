@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { TestUser } from '../common/enums/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { getMails } from './mailslurper.rest.requests';
 
 /**

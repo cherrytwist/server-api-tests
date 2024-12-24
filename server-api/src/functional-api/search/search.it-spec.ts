@@ -1,5 +1,5 @@
 import { updateUser } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import '@utils/array.matcher';
 import { uniqueId } from '@utils/uniqueId';
 import { users } from '@utils/queries/users-data';

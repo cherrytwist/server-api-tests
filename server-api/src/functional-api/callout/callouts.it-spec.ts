@@ -7,7 +7,7 @@ import {
   updateCallout,
   updateCalloutVisibility,
 } from './callouts.request.params';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   createChallengeWithUsers,
   createOpportunityWithUsers,

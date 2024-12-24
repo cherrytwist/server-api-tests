@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { delay } from '@utils/delay';
-import { TestUser } from '@common/enum/test.user';
+import { delay } from '@alkemio/tests-lib';
+import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import { sendMessageToUser } from '@functional-api/communications/communication.params';
 import { getMailsData } from '@src/types/entities-helper';

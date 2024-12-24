@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import { sendMessageReplyToRoom } from './reply.request.params';
 import { addReaction } from '../reactions/reactions.request.params';
 import {

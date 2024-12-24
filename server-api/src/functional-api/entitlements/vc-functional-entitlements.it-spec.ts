@@ -19,7 +19,7 @@
  * - Attempting to create a virtual contributor over the license limit and verifying the entitlements.
  *
  */
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,

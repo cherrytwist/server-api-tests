@@ -2,7 +2,7 @@ import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { TemplateType } from '@generated/alkemio-schema';
 import { whiteboardTemplateValuesEmpty } from './whiteboard-values-empty';
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 
 export const getWhiteboardTemplatesCountByTemplateSetId = async (
   templateSetId: string,

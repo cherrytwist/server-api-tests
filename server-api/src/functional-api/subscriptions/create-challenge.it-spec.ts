@@ -6,8 +6,8 @@ import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { createChallenge } from '@utils/mutations/journeys/challenge';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { TestUser } from '@common/enum/test.user';
-import { delay } from '@utils/delay';
+import { TestUser } from '@alkemio/tests-lib';
+import { delay } from '@alkemio/tests-lib';
 
 const organizationName = 'com-sub-org-n' + uniqueId;
 const hostNameId = 'com-sub-org-nd' + uniqueId;
@@ -52,8 +52,8 @@ describe('Create challenge subscription', () => {
     };
 
     await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
-    await subscription2.subscribe(utilizedQuery, TestUser.HUB_ADMIN);
-    await subscription3.subscribe(utilizedQuery, TestUser.HUB_MEMBER);
+    await subscription2.subscribe(utilizedQuery, TestUser.SPACE_ADMIN);
+    await subscription3.subscribe(utilizedQuery, TestUser.SPACE_MEMBER);
   });
 
   afterAll(async () => {
@@ -80,7 +80,7 @@ describe('Create challenge subscription', () => {
       challengeDisplayName2,
       challengeDisplayName2,
       entitiesId.spaceId,
-      TestUser.HUB_ADMIN
+      TestUser.SPACE_ADMIN
     );
     challengeIdTwo = resTwo?.data?.createSubspace.id ?? '';
 

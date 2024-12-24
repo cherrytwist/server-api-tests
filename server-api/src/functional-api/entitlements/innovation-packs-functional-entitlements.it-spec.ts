@@ -22,7 +22,7 @@
  * - A test to handle the scenario where the innovation pack creation exceeds the license limit.
  */
 
-import { TestUser } from '@common/enum/test.user';
+import { TestUser } from '@alkemio/tests-lib';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
