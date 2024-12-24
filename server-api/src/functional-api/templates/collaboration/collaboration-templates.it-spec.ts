@@ -1,7 +1,8 @@
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import {
   createOrgAndSpaceWithUsers,
   createSubspaceForOrgSpace,

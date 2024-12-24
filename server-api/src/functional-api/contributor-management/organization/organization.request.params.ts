@@ -4,7 +4,8 @@ import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { UpdateOrganizationSettingsEntityInput } from '@generated/graphql';
 
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 export const organizationName = `testorghost${uniqueId}`;
 export const hostNameId = `testorghost${uniqueId}`;
 

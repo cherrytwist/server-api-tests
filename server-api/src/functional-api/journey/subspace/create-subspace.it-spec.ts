@@ -8,7 +8,8 @@ import {
   getSubspaceData,
   getSubspacesData,
 } from './subspace.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let subspaceName = '';
 let subspaceId = '';

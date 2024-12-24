@@ -2,7 +2,8 @@ import {
   createUser,
   deleteUser,
 } from '@functional-api/contributor-management/user/user.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { users } from '@utils/queries/users-data';
 import { getMailsData } from '@src/types/entities-helper';

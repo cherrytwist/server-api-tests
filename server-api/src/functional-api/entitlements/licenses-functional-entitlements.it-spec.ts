@@ -29,7 +29,8 @@ import {
   accountVCCampaignLicenses1SpaceVCPack,
 } from './entitlements-data';
 
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
 import {
   assignPlatformRoleToUser,

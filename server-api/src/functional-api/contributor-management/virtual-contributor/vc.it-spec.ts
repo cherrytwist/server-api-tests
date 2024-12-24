@@ -33,7 +33,8 @@ import { getRoleSetInvitationsApplications } from '../../roleset/application/app
 import { deleteOrganization } from '../organization/organization.request.params';
 import { createUser, deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let invitationId = '';
 let invitationData: any;

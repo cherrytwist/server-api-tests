@@ -12,7 +12,8 @@ import {
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = '';
 let subsubspaceNameId = '';

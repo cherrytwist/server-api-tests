@@ -1,4 +1,5 @@
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import {
   createOrganization,
   deleteOrganization,

@@ -4,7 +4,8 @@ import { deleteOrganization } from '@functional-api/contributor-management/organ
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import { entitiesId } from '@src/types/entities-helper';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let subspaceName = '';
 let subspaceId = '';

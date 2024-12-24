@@ -1,4 +1,4 @@
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import {
   deleteSpace,
@@ -22,6 +22,7 @@ import { entitiesId, getMailsData } from '@src/types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 
+const uniqueId = UniqueIDGenerator.getID();
 const organizationName = 'not-app-org-name' + uniqueId;
 const hostNameId = 'not-app-org-nameid' + uniqueId;
 const spaceName = 'not-app-eco-name' + uniqueId;
@@ -32,6 +33,7 @@ const ecoName = spaceName;
 
 let invitationId = '';
 let preferencesConfig: any[] = [];
+
 
 beforeAll(async () => {
   await deleteMailSlurperMails();

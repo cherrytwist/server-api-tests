@@ -31,7 +31,8 @@ import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/white
 import { assignRoleToUser } from '../roleset/roles-request.params';
 import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = 'post-opp';
 let subspaceName = 'post-chal';

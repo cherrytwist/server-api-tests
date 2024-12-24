@@ -1,5 +1,6 @@
 import '@utils/array.matcher';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import {
   createCalloutOnCollaboration,
   deleteCallout,

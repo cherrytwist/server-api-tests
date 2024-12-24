@@ -5,7 +5,8 @@ import {
   updatePostTemplate,
 } from './post-template.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import {
   errorAuthCreatePostTemplate,
   errorAuthDeleteTemplate,

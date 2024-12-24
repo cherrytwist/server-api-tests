@@ -1,6 +1,7 @@
 import '@utils/array.matcher';
 import { createUser, deleteUser, getUserData } from './user.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
 let userId: string;

@@ -1,5 +1,6 @@
 import { SubscriptionClient } from '@utils/subscriptions';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionSubspaceCreated } from './subscrition-queries';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';

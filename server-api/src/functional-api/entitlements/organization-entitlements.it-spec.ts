@@ -56,7 +56,8 @@ import {
 } from '@functional-api/contributor-management/organization/organization.request.params';
 
 
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 
 let spaceId = '';

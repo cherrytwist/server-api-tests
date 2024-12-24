@@ -1,6 +1,7 @@
 import '@utils/array.matcher';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import {
   createSubspaceForOrgSpace,
   createSubsubspaceForSubspace,

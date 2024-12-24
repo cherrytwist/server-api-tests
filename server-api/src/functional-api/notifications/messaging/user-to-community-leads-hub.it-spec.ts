@@ -16,7 +16,8 @@ import {
 } from '@functional-api/roleset/roles-request.params';
 
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { CommunityRoleType, PreferenceType, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';

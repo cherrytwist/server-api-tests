@@ -2,7 +2,8 @@ import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { TestUser } from '@alkemio/tests-lib';
 
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 export const createSubspace = async (
   subspaceName: string,

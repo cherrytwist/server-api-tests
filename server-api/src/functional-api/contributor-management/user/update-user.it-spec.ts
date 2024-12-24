@@ -8,7 +8,8 @@ import {
 } from './user.request.params';
 import '@utils/array.matcher';
 import { users } from '@utils/queries/users-data';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
 let userFirstName = '';

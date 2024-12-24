@@ -28,7 +28,8 @@ import {
 import { entitiesId } from '../../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
-import { uniqueId } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@utils/uniqueId';
+const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 
