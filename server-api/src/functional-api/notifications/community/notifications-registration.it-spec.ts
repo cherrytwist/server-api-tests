@@ -2,7 +2,7 @@ import {
   createUser,
   deleteUser,
 } from '@functional-api/contributor-management/user/user.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { users } from '@utils/queries/users-data';

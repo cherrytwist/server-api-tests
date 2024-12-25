@@ -14,7 +14,7 @@ import {
 } from '../space/space.request.params';
 import { entitiesId } from '@src/types/entities-helper';
 import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 
 const uniqueId = UniqueIDGenerator.getID();
 

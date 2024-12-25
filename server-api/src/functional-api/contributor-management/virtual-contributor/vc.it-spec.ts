@@ -33,7 +33,7 @@ import { getRoleSetInvitationsApplications } from '../../roleset/application/app
 import { deleteOrganization } from '../organization/organization.request.params';
 import { createUser, deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let invitationId = '';

@@ -33,7 +33,7 @@ import { deleteOrganization } from '@functional-api/contributor-management/organ
 import { entitiesId } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 

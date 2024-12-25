@@ -12,7 +12,7 @@ import {
   createOrgAndSpace,
 } from '@utils/data-setup/entities';
 import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = '';

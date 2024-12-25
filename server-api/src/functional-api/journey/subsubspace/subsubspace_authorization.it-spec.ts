@@ -14,7 +14,7 @@ import {
   assignRoleToUserExtendedData,
   removeRoleFromUserExtendedData,
 } from '../../roleset/roles-request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 const credentialsType = 'SPACE_ADMIN';

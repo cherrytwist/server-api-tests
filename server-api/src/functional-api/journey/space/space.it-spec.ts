@@ -7,7 +7,7 @@ import {
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { SpaceVisibility } from '@generated/graphql';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let spaceId = '';

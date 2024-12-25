@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import {
   createSubspaceForOrgSpace,

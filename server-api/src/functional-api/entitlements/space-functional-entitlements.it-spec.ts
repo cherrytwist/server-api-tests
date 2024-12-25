@@ -33,7 +33,7 @@ import {
   deleteSpace,
 } from '@functional-api/journey/space/space.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
 import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';

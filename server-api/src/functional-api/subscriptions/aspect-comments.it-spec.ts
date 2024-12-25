@@ -1,5 +1,5 @@
 import { SubscriptionClient } from '@utils/subscriptions';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { deleteSpace } from '../journey/space/space.request.params';

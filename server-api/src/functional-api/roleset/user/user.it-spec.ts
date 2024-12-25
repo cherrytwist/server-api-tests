@@ -1,4 +1,4 @@
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {

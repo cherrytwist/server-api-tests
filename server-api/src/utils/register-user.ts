@@ -1,6 +1,6 @@
 import { registerInKratosOrFail, verifyInKratosOrFail } from './kratos';
 import { registerInAlkemioOrFail } from './register-in-alkemio-or-fail';
-import { UniqueIDGenerator } from './uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 
 const uniqueId = UniqueIDGenerator.getID();
 

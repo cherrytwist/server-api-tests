@@ -6,7 +6,7 @@ import {
   getSpaceData,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let localSpaceId = '';

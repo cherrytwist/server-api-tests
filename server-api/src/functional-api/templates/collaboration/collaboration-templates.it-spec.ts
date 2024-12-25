@@ -1,7 +1,7 @@
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { entitiesId } from '../../../types/entities-helper';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import {
   createOrgAndSpaceWithUsers,

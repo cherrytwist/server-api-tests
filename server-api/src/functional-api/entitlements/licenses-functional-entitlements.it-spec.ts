@@ -29,7 +29,7 @@ import {
   accountVCCampaignLicenses1SpaceVCPack,
 } from './entitlements-data';
 
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
 import {

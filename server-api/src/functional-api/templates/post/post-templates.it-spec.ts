@@ -5,7 +5,7 @@ import {
   updatePostTemplate,
 } from './post-template.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import {
   errorAuthCreatePostTemplate,

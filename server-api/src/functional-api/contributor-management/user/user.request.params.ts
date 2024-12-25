@@ -3,7 +3,7 @@ import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { PreferenceType } from '@generated/graphql';
 import { UpdateUserSettingsEntityInput } from '@generated/alkemio-schema';

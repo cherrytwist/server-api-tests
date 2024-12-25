@@ -10,7 +10,7 @@ import {
   createApplication,
   getRoleSetInvitationsApplications,
 } from '@functional-api/roleset/application/application.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { createOrgAndSpace } from '@utils/data-setup/entities';
 import { entitiesId } from '../../../types/entities-helper';
