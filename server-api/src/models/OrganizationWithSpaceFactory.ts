@@ -15,9 +15,9 @@ import { CalloutType, CommunityRoleType } from '@generated/graphql';
 import { CalloutVisibility } from '@generated/alkemio-schema';
 import { SpaceModel } from './types/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
-import { createSubsubspace } from '@functional-api/journey/subsubspace/subsubspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { users } from '@utils/queries/users-data';
+import { createUser } from '@functional-api/contributor-management/user/user.request.params';
 
 export class OrganizationWithSpaceModelFactory {
   public static async createOrganizationWithSpace(): Promise<OrganizationWithSpaceModel> {
@@ -34,6 +34,12 @@ export class OrganizationWithSpaceModelFactory {
       spaceName,
       spaceNameId
     )
+    return model;
+  }
+
+  public static async createOrganizationWithSpaceAndUsers(): Promise<OrganizationWithSpaceModel> {
+    const model = await this.createOrganizationWithSpace();
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(model.space.community.roleSetId);
     return model;
   }
 
@@ -136,6 +142,12 @@ export class OrganizationWithSpaceModelFactory {
     );
 
     return model;
+  }
+
+  public static async createSubspaceWithUsers(parentSpaceID: string, subspaceName: string, targetModel: SpaceModel): Promise<SpaceModel> {
+    const spaceModel = await this.createSubspace(parentSpaceID, subspaceName, targetModel);
+    await this.assignUsersToRoles(spaceModel.community.roleSetId);
+    return spaceModel;
   }
 
   public static async createSubspace(parentSpaceID: string, subspaceName: string, targetModel: SpaceModel): Promise<SpaceModel> {
@@ -293,7 +305,8 @@ export class OrganizationWithSpaceModelFactory {
       id: '',
       community: {
         id: '',
-        roleSetId: ''
+        roleSetId: '',
+        applicationId: '',
       },
       profile: {
         id: '',
@@ -315,4 +328,67 @@ export class OrganizationWithSpaceModelFactory {
       nameId: '',
     }
   }
+  public static async registerUsersAndAssignToAllEntitiesAsMembers(
+    orgSpaceModel: OrganizationWithSpaceModel,
+    spaceMemberEmail: string,
+    subspaceMemberEmail: string,
+    subsubspaceMemberEmail: string
+  ): Promise<void> {
+    const createSpaceMember = await createUser({
+      firstName: 'space',
+      lastName: 'mem',
+      email: spaceMemberEmail,
+    });
+    const spaceMemberId = createSpaceMember.data?.createUser.id ?? '';
+    const createSubspaceMember = await createUser({
+      firstName: 'chal',
+      lastName: 'mem',
+      email: subspaceMemberEmail,
+    });
+    const subspaceMemberId = createSubspaceMember.data?.createUser.id ?? '';
+
+    const createSubsubspaceMember = await createUser({
+      firstName: 'opp',
+      lastName: 'mem',
+      email: subsubspaceMemberEmail,
+    });
+    const subsubspaceMemberId = createSubsubspaceMember.data?.createUser.id ?? '';
+
+    // Assign users to Space community
+    await assignRoleToUser(
+      spaceMemberId,
+      orgSpaceModel.space.community.roleSetId,
+      CommunityRoleType.Member
+    );
+    await assignRoleToUser(
+      subspaceMemberId,
+      orgSpaceModel.space.community.roleSetId,
+      CommunityRoleType.Member
+    );
+    await assignRoleToUser(
+      subsubspaceMemberId,
+      orgSpaceModel.space.community.roleSetId,
+      CommunityRoleType.Member
+    );
+
+    // Assign users to Subspace community
+    await assignRoleToUser(
+      subsubspaceMemberId,
+      orgSpaceModel.subspace.community.roleSetId,
+      CommunityRoleType.Member
+    );
+    await assignRoleToUser(
+      subspaceMemberId,
+      orgSpaceModel.subspace.community.roleSetId,
+      CommunityRoleType.Member
+    );
+
+    // Assign users to Subsubspace community
+    await assignRoleToUser(
+      subsubspaceMemberId,
+      orgSpaceModel.subsubspace.community.roleSetId,
+      CommunityRoleType.Member
+    );
+  };
+
 }

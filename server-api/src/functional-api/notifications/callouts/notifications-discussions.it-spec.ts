@@ -1,4 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
@@ -10,20 +10,14 @@ import {
   createDiscussion,
   sendMessageToRoom,
 } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import {
-  createOrgAndSpaceWithUsers,
-  createSubspaceWithUsers,
-  registerUsersAndAssignToAllEntitiesAsMembers,
-} from '@utils/data-setup/entities';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'not-disc-org-name' + uniqueId;
-const hostNameId = 'not-disc-org-nameid' + uniqueId;
 const spaceName = 'not-disc-eco-name' + uniqueId;
-const spaceNameId = 'not-disc-eco-nameid' + uniqueId;
 const ecoName = spaceName;
 const subspaceName = `chName${uniqueId}`;
 let preferencesConfig: any[] = [];
@@ -35,17 +29,22 @@ const spaceDiscussionSubjectTextAdmin = `[${ecoName}] New discussion created: De
 const subspaceDiscussionSubjectText = `${subspaceName} - New discussion created: Default title, have a look!`;
 const subspaceDiscussionSubjectTextAdmin = `[${subspaceName}] New discussion created: Default title`;
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-discussions-subspace',
+    baseScenario.subspace
   );
-  await createSubspaceWithUsers(subspaceName);
-  await registerUsersAndAssignToAllEntitiesAsMembers(
+
+  await OrganizationWithSpaceModelFactory.registerUsersAndAssignToAllEntitiesAsMembers(
+    baseScenario,
     spaceMemOnly,
     subspaceAndSpaceMemOnly,
     subsubspaceAndSubspaceAndSpaceMem
@@ -133,9 +132,9 @@ afterAll(async () => {
   await deleteUser(spaceMemOnly);
   await deleteUser(subspaceAndSpaceMemOnly);
   await deleteUser(subsubspaceAndSubspaceAndSpaceMem);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 // skipping the tests as they need to be updated
@@ -162,10 +161,11 @@ describe.skip('Notifications - discussions', () => {
 
   test('GA create space discussion and send message - GA(1), HA(1), HM(6) get notifications', async () => {
     // Act
-    const res = await createDiscussion(entitiesId.space.communicationId);
-    entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
+    const res = await createDiscussion(baseScenario.space.communication.id);
+    // TODO: may not be the right usage
+    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(entitiesId.discussionId, 'test message');
+    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -221,12 +221,12 @@ describe.skip('Notifications - discussions', () => {
   test('EM create space discussion and send message - GA(1), HA(1), HM(6) get notifications', async () => {
     // Act
     const res = await createDiscussion(
-      entitiesId.space.communicationId,
+      baseScenario.space.communication.id,
       TestUser.QA_USER
     );
-    entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(entitiesId.discussionId, 'test message');
+    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -281,10 +281,10 @@ describe.skip('Notifications - discussions', () => {
 
   test('GA create subspace discussion and send message - GA(1), HA(1), CA(1), CM(4) get notifications', async () => {
     // Act
-    const res = await createDiscussion(entitiesId.subspace.communicationId);
-    entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
+    const res = await createDiscussion(baseScenario.subspace.communication.id);
+    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(entitiesId.discussionId, 'test message');
+    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -330,12 +330,12 @@ describe.skip('Notifications - discussions', () => {
   test('EM create subspace discussion and send message - GA(1), HA(1), CA(1), CM(4), get notifications', async () => {
     // Act
     const res = await createDiscussion(
-      entitiesId.subspace.communicationId,
+      baseScenario.subspace.communication.id,
       TestUser.QA_USER
     );
-    entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(entitiesId.discussionId, 'test message');
+    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -387,12 +387,12 @@ describe.skip('Notifications - discussions', () => {
     );
 
     const res = await createDiscussion(
-      entitiesId.space.communicationId,
+      baseScenario.space.communication.id,
       TestUser.QA_USER
     );
-    entitiesId.discussionId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(entitiesId.discussionId, 'test message');
+    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
 
     // Act
     await delay(1500);

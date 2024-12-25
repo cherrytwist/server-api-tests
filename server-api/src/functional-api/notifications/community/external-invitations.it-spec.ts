@@ -1,4 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import {
   deleteSpace,
@@ -11,55 +11,49 @@ import {
   inviteExternalUser,
 } from '@functional-api/roleset/invitations/invitation.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
-
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 const uniqueId = UniqueIDGenerator.getID();
-const organizationName = 'not-app-org-name' + uniqueId;
-const hostNameId = 'not-app-org-nameid' + uniqueId;
-const spaceName = 'not-app-eco-name' + uniqueId;
-const spaceNameId = 'not-app-eco-nameid' + uniqueId;
-const subsubspaceName = 'subsubspace-name';
-const subspaceName = 'challlenge-name';
-const ecoName = spaceName;
 
 let invitationId = '';
 let preferencesConfig: any[] = [];
 
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-externalInvitation-subspace',
+    baseScenario.subspace
   );
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.subspace.id,
+    'notification-externalInvitation-subsubspace',
+    baseScenario.subsubspace
+  );
+
+  await updateSpaceSettings(baseScenario.space.id, {
     membership: {
       allowSubspaceAdminsToInviteMembers: true,
     },
   });
 
-  await createSubspaceWithUsers(subspaceName);
-
-  await updateSpaceSettings(entitiesId.subspace.id, {
+  await updateSpaceSettings(baseScenario.subspace.id, {
     membership: {
       allowSubspaceAdminsToInviteMembers: true,
     },
   });
-
-  await createSubsubspaceWithUsers(subsubspaceName);
 
   preferencesConfig = [
     {
@@ -90,8 +84,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Notifications - invitations', () => {
@@ -125,7 +119,7 @@ describe('Notifications - invitations', () => {
     const message = 'Hello, feel free to join our community!';
 
     const invitationData = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       emailExternalUser,
       message,
       TestUser.GLOBAL_ADMIN
@@ -142,7 +136,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${ecoName}`,
+          subject: `Invitation to join ${baseScenario.space.profile.displayName}`,
           toAddresses: [emailExternalUser],
         }),
       ])
@@ -150,7 +144,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${ecoName}`,
+          subject: `Invitation to join ${baseScenario.space.profile.displayName}`,
           toAddresses: [users.globalAdmin.email],
         }),
       ])
@@ -163,7 +157,7 @@ describe('Notifications - invitations', () => {
     const message = 'Hello, feel free to join our community!';
 
     const invitationData = await inviteExternalUser(
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       emailExternalUser,
       message,
       TestUser.SUBSPACE_ADMIN
@@ -180,7 +174,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${subspaceName}`,
+          subject: `Invitation to join ${baseScenario.subspace.profile.displayName}`,
           toAddresses: [emailExternalUser],
         }),
       ])
@@ -188,7 +182,7 @@ describe('Notifications - invitations', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `Invitation to join ${subspaceName}`,
+          subject: `Invitation to join ${baseScenario.subspace.profile.displayName}`,
           toAddresses: [users.subspaceAdmin.email],
         }),
       ])

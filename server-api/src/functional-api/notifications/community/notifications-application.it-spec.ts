@@ -1,5 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import {
   deleteSpace,
@@ -11,41 +10,35 @@ import {
 } from '@functional-api/roleset/application/application.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
-
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
 } from '@generated/alkemio-schema';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'not-app-org-name' + uniqueId;
-const hostNameId = 'not-app-org-nameid' + uniqueId;
-const spaceName = 'not-app-eco-name' + uniqueId;
-const spaceNameId = 'not-app-eco-nameid' + uniqueId;
-
-const ecoName = spaceName;
-const subspaceName = `chName${uniqueId}`;
 let preferencesConfig: any[] = [];
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-application-subspace',
+    baseScenario.subspace
   );
-  await createSubspaceWithUsers(subspaceName);
-  await updateSpaceSettings(entitiesId.spaceId, {
+
+  await updateSpaceSettings(baseScenario.space.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
   });
 
@@ -86,9 +79,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Notifications - applications', () => {
@@ -123,9 +116,9 @@ describe('Notifications - applications', () => {
 
   test('receive notification for non space user application to space- GA, EA and Applicant', async () => {
     // Act
-    const applicatioData = await createApplication(entitiesId.space.roleSetId);
+    const applicatioData = await createApplication(baseScenario.space.community.roleSetId);
 
-    entitiesId.space.applicationId =
+    baseScenario.space.community.applicationId =
       applicatioData?.data?.applyForEntryRoleOnRoleSet?.id ?? '';
 
     await delay(6000);
@@ -136,15 +129,15 @@ describe('Notifications - applications', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `${ecoName}: Application from non`,
+          subject: `${baseScenario.space.profile.displayName}: Application from non`,
           toAddresses: [users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${ecoName}: Application from non`,
+          subject: `${baseScenario.space.profile.displayName}: Application from non`,
           toAddresses: [users.spaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${ecoName} - Your Application to join was received!`,
+          subject: `${baseScenario.space.profile.displayName} - Your Application to join was received!`,
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -155,18 +148,18 @@ describe('Notifications - applications', () => {
     // Arrange
     await assignRoleToUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
 
-    await updateSpaceSettings(entitiesId.subspace.id, {
+    await updateSpaceSettings(baseScenario.subspace.id, {
       membership: {
         policy: CommunityMembershipPolicy.Applications,
       },
     });
 
     // Act
-    await createApplication(entitiesId.subspace.roleSetId);
+    await createApplication(baseScenario.subspace.community.roleSetId);
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -176,15 +169,15 @@ describe('Notifications - applications', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `${subspaceName}: Application from non`,
+          subject: `${baseScenario.subspace.profile.displayName}: Application from non`,
           toAddresses: [users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${subspaceName}: Application from non`,
+          subject: `${baseScenario.subspace.profile.displayName}: Application from non`,
           toAddresses: [users.subspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${subspaceName} - Your Application to join was received!`,
+          subject: `${baseScenario.subspace.profile.displayName} - Your Application to join was received!`,
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -199,10 +192,10 @@ describe('Notifications - applications', () => {
         await changePreferenceUser(config.userID, config.type, 'false')
     );
 
-    await deleteApplication(entitiesId.space.applicationId);
+    await deleteApplication(baseScenario.space.community.applicationId);
 
     // Act
-    await createApplication(entitiesId.subspace.roleSetId);
+    await createApplication(baseScenario.subspace.community.roleSetId);
 
     await delay(1500);
     const getEmailsData = await getMailsData();

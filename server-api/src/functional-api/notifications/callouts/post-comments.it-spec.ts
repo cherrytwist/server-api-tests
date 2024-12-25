@@ -1,5 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
@@ -9,24 +8,21 @@ import {
   deletePost,
 } from '@functional-api/callout/post/post.request.params';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
+
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
 } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'not-up-org-name' + uniqueId;
-const hostNameId = 'not-up-org-nameid' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
+
 const spaceName = 'not-up-eco-name' + uniqueId;
-const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
 const subsubspaceName = `opName${uniqueId}`;
 let spacePostId = '';
@@ -40,17 +36,25 @@ let messageId = '';
 let preferencesPostConfig: any[] = [];
 let preferencesPostCommentsConfig: any[] = [];
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+    baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.space.id,
+      'notification-updates-subspace',
+      baseScenario.subspace
+    );
+
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.subspace.id,
+      'notification-updates-subsubspace',
+      baseScenario.subsubspace
+    );
 
   preferencesPostConfig = [
     {
@@ -160,10 +164,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Notifications - post comments', () => {
@@ -231,7 +235,7 @@ describe('Notifications - post comments', () => {
   describe('GA create post on space  ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.space.calloutId,
+        baseScenario.space.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.GLOBAL_ADMIN
@@ -289,7 +293,7 @@ describe('Notifications - post comments', () => {
   describe('HM create post on space  ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.space.calloutId,
+        baseScenario.space.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SPACE_MEMBER
@@ -348,7 +352,7 @@ describe('Notifications - post comments', () => {
   describe('CM create post on subspace  ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.subspace.calloutId,
+        baseScenario.subspace.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSPACE_MEMBER
@@ -407,7 +411,7 @@ describe('Notifications - post comments', () => {
   describe('OM create post on subsubspace  ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.subsubspace.calloutId,
+        baseScenario.subsubspace.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSUBSPACE_MEMBER
@@ -470,7 +474,7 @@ describe('Notifications - post comments', () => {
     );
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.subsubspace.calloutId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SUBSUBSPACE_ADMIN

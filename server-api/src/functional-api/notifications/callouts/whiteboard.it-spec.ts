@@ -1,5 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
@@ -9,11 +8,6 @@ import {
   createWhiteboardCalloutOnCollaboration,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { deleteWhiteboard } from '@functional-api/callout/whiteboard/whiteboard-callout.params.request';
 
@@ -22,14 +16,15 @@ import {
   CalloutVisibility,
   PreferenceType,
 } from '@generated/alkemio-schema';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'not-up-org-name' + uniqueId;
-const hostNameId = 'not-up-org-nameid' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
+
 const spaceName = 'not-up-eco-name' + uniqueId;
-const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
 const subsubspaceName = `opName${uniqueId}`;
 let spaceWhiteboardId = '';
@@ -49,19 +44,28 @@ const expectedDataFunc = async (subject: string, toAddresses: any[]) => {
   ]);
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-whiteboard-subspace',
+    baseScenario.subspace
   );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.subspace.id,
+    'notification-whiteboard-subsubspace',
+    baseScenario.subsubspace
+  );
+
   const resSpace = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.space.collaborationId,
+    baseScenario.space.collaboration.id,
     {
       framing: {
         profile: {
@@ -82,7 +86,7 @@ beforeAll(async () => {
   );
 
   const resSubspace = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.subspace.collaborationId,
+    baseScenario.subspace.collaboration.id,
     {
       framing: {
         profile: {
@@ -103,7 +107,7 @@ beforeAll(async () => {
   );
 
   const resSubsubspace = await createWhiteboardCalloutOnCollaboration(
-    entitiesId.subsubspace.collaborationId,
+    baseScenario.subsubspace.collaboration.id,
     {
       framing: {
         profile: {
@@ -168,10 +172,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Notifications - whiteboard', () => {

@@ -7,35 +7,23 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '../../../utils/data-setup/entities';
+
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
-import {
-  entitiesId,
-  getMailsData,
-} from '../../../types/entities-helper';
+import { getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,
   assignRoleToOrganization,
   removeRoleFromOrganization,
 } from '@functional-api/roleset/roles-request.params';
-
-import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import {
+  deleteOrganization,
+  updateOrganization,
+} from '@functional-api/contributor-management/organization/organization.request.params';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
-
-const organizationName = 'urole-org-name' + uniqueId;
-const hostNameId = 'urole-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `oppName${uniqueId}`;
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 const senders = (communityName: string) => {
   return `You have sent a message to ${communityName} community`;
@@ -45,67 +33,74 @@ const receivers = (senderDisplayName: string) => {
   return `${senderDisplayName} sent a message to your community`;
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-orgMention-subspace',
+    baseScenario.subspace
   );
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.subspace.id,
+    'notification-orgMention-subsubspace',
+    baseScenario.subsubspace
+  );
+
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
       mode: SpacePrivacyMode.Private,
     },
   });
 
-  await updateOrganization(entitiesId.organization.id, {
+  await updateOrganization(baseScenario.organization.id, {
     legalEntityName: 'legalEntityName',
     domain: 'domain',
     website: 'https://website.org',
     contactEmail: 'test-org@alkem.io',
   });
 
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
-
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.subsubspaceMember.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.subsubspaceAdmin.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignUserAsOrganizationAdmin(
     users.spaceAdmin.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 describe('Notifications - send messages to Private Space, Subsubspace Community Leads', () => {
   beforeEach(async () => {
@@ -115,7 +110,7 @@ describe('Notifications - send messages to Private Space, Subsubspace Community 
   test.only('NOT space member sends message to Subsubspace community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.subsubspace.communityId,
+      baseScenario.subsubspace.community.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -136,7 +131,7 @@ describe('Notifications - send messages to Private Space, Subsubspace Community 
           toAddresses: [users.subsubspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: senders(subsubspaceName),
+          subject: senders(baseScenario.subsubspace.profile.displayName),
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -146,7 +141,7 @@ describe('Notifications - send messages to Private Space, Subsubspace Community 
   test('Subsubspace member send message to Subsubspace community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.subsubspace.communityId,
+      baseScenario.subsubspace.community.id,
       'Test message',
       TestUser.SUBSUBSPACE_MEMBER
     );
@@ -167,7 +162,7 @@ describe('Notifications - send messages to Private Space, Subsubspace Community 
           toAddresses: [users.subsubspaceAdmin.email],
         }),
         expect.objectContaining({
-          subject: senders(subsubspaceName),
+          subject: senders(baseScenario.subsubspace.profile.displayName),
           toAddresses: [users.subsubspaceMember.email],
         }),
       ])
@@ -179,19 +174,19 @@ describe('Notifications - send messages to Private Space, Public Subspace, Subsu
   beforeAll(async () => {
     await removeRoleFromUser(
       users.subsubspaceMember.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromUser(
       users.subsubspaceAdmin.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromOrganization(
-      entitiesId.organization.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.organization.id,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
   });
@@ -203,7 +198,7 @@ describe('Notifications - send messages to Private Space, Public Subspace, Subsu
   test('NOT space member sends message to Subspace community (0 User Leads, 0 Org Lead) - 1 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.subsubspace.communityId,
+      baseScenario.subsubspace.community.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -216,7 +211,7 @@ describe('Notifications - send messages to Private Space, Public Subspace, Subsu
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: senders(subsubspaceName),
+          subject: senders(baseScenario.subsubspace.profile.displayName),
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])

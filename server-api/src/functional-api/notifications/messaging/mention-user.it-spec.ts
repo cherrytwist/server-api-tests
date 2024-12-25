@@ -2,24 +2,19 @@
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { PreferenceType } from '@generated/alkemio-schema';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers, createSubspaceWithUsers, createSubsubspaceWithUsers } from '../../../utils/data-setup/entities';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'urole-org-name' + uniqueId;
-const hostNameId = 'urole-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `oppName${uniqueId}`;
+const uniqueId = UniqueIDGenerator.getID();
 
 let postCommentsIdSpace = '';
 let postCommentsIdSubspace = '';
@@ -37,18 +32,25 @@ const mentionedUser = (userDisplayName: string, userNameId: string) => {
 
 let preferencesConfig: any[] = [];
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-userMention-subspace',
+    baseScenario.subspace
   );
 
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.subspace.id,
+    'notification-userMention-subsubspace',
+    baseScenario.subsubspace
+  );
 
   await changePreferenceUser(
     users.globalAdmin.id,
@@ -98,10 +100,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 describe('Notifications - Mention User', () => {
   beforeEach(async () => {
@@ -112,7 +114,7 @@ describe('Notifications - Mention User', () => {
     test('GA mention HM in Space comments callout - 1 notification to HM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.space.discussionCalloutCommentsId,
+        baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -138,7 +140,7 @@ describe('Notifications - Mention User', () => {
     test('HM mention Non Space member in Space comments callout - 1 notification to NonHM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.space.discussionCalloutCommentsId,
+        baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
           users.nonSpaceMember.displayName,
           users.nonSpaceMember.nameId
@@ -164,7 +166,7 @@ describe('Notifications - Mention User', () => {
     test('HM mention Non Space member and Space Admin in Space comments callout - 2 notification to NonHM and HA is sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.space.discussionCalloutCommentsId,
+        baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
           users.nonSpaceMember.displayName,
           users.nonSpaceMember.nameId
@@ -197,7 +199,7 @@ describe('Notifications - Mention User', () => {
     test('Non Space member mention HM in Space comments callout - 0 notification to HM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.space.discussionCalloutCommentsId,
+        baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -215,7 +217,7 @@ describe('Notifications - Mention User', () => {
     test('GA mention HM in Subspace comments callout - 1 notification to HM is sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.subspace.discussionCalloutCommentsId,
+        baseScenario.subspace.collaboration.calloutPostCommentsId,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -242,7 +244,7 @@ describe('Notifications - Mention User', () => {
       // Act
 
       await sendMessageToRoom(
-        entitiesId.subsubspace.discussionCalloutCommentsId,
+        baseScenario.subsubspace.collaboration.calloutPostCommentsId,
         `${mentionedUser(
           users.spaceMember.displayName,
           users.spaceMember.nameId
@@ -272,7 +274,7 @@ describe('Notifications - Mention User', () => {
       postNameID = `post-name-id-${uniqueId}`;
       const postDisplayName = `post-d-name-${uniqueId}`;
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.space.calloutId,
+        baseScenario.space.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.GLOBAL_ADMIN
@@ -282,7 +284,7 @@ describe('Notifications - Mention User', () => {
         '';
 
       const resPostonSubspace = await createPostOnCallout(
-        entitiesId.subspace.calloutId,
+        baseScenario.subspace.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSPACE_MEMBER
@@ -292,7 +294,7 @@ describe('Notifications - Mention User', () => {
           .id ?? '';
 
       const resPostonOpp = await createPostOnCallout(
-        entitiesId.subsubspace.calloutId,
+        baseScenario.subsubspace.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.SUBSUBSPACE_MEMBER

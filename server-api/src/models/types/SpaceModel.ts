@@ -7,6 +7,7 @@ export type SpaceModel = {
   community: {
     id: string;
     roleSetId: string;
+    applicationId: string;
   },
   collaboration: {
     id: string;

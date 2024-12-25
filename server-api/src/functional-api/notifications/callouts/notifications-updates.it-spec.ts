@@ -1,25 +1,19 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'not-up-org-name' + uniqueId;
-const hostNameId = 'not-up-org-nameid' + uniqueId;
 const spaceName = 'not-up-eco-name' + uniqueId;
-const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const ecoName = spaceName;
 const subspaceName = `chName${uniqueId}`;
 const subsubspaceName = `opName${uniqueId}`;
@@ -49,17 +43,25 @@ const templatedAsMemberResult = async (
   ]);
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'notification-updates-subspace',
+    baseScenario.subspace
   );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.subspace.id,
+    'notification-updates-subsubspace',
+    baseScenario.subsubspace
+  );
 
   preferencesConfig = [
     {
@@ -122,10 +124,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 // Skip tests due to bug: #193
@@ -165,10 +167,7 @@ describe.skip('Notifications - updates', () => {
 
   test('GA create space update - GA(1), HA (1), HM(6) get notifications', async () => {
     // Act
-    await sendMessageToRoom(
-      entitiesId.space.updatesId,
-      'GA space update '
-    );
+    await sendMessageToRoom(baseScenario.space.communication.updatesId, 'GA space update ');
 
     await delay(6000);
     const mails = await getMailsData();
@@ -210,7 +209,7 @@ describe.skip('Notifications - updates', () => {
   test('HA create space update - GA(1), HA (1), HM(6) get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.space.updatesId,
+      baseScenario.space.communication.updatesId,
       'EA space update ',
       TestUser.SPACE_ADMIN
     );
@@ -256,7 +255,7 @@ describe.skip('Notifications - updates', () => {
   test('CA create subspace update - GA(1), HA (1), CA(1), CM(3),  get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.subspace.updatesId,
+      baseScenario.subspace.communication.updatesId,
       'CA subspace update ',
       TestUser.SUBSPACE_ADMIN
     );
@@ -295,17 +294,14 @@ describe.skip('Notifications - updates', () => {
       await templatedAsMemberResult(subspaceName, users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(
-        subspaceName,
-        users.subsubspaceMember.email
-      )
+      await templatedAsMemberResult(subspaceName, users.subsubspaceMember.email)
     );
   });
 
   test('OA create subsubspace update - GA(1), HA(1), CA(1), OA(1), OM(1), get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.subsubspace.updatesId,
+      baseScenario.subsubspace.communication.updatesId,
       'OA subsubspace update ',
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -338,10 +334,7 @@ describe.skip('Notifications - updates', () => {
       await templatedAsMemberResult(subsubspaceName, users.subspaceAdmin.email)
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(
-        subsubspaceName,
-        users.subspaceMember.email
-      )
+      await templatedAsMemberResult(subsubspaceName, users.subspaceMember.email)
     );
 
     expect(mails[0]).toEqual(
@@ -365,7 +358,7 @@ describe.skip('Notifications - updates', () => {
     );
     // Act
     await sendMessageToRoom(
-      entitiesId.subsubspace.updatesId,
+      baseScenario.subsubspace.communication.updatesId,
       'OA subsubspace update 2',
       TestUser.SUBSUBSPACE_ADMIN
     );
