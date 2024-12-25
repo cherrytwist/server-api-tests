@@ -26,8 +26,8 @@ import { sendMessageToRoom } from '../communications/communication.params';
 import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { assignRoleToUser, joinRoleSet } from '../roleset/roles-request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
 ;
 const uniqueId = UniqueIDGenerator.getID();
 

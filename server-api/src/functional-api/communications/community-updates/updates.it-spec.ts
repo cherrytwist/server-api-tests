@@ -17,8 +17,8 @@ import {
   removeMessageOnRoom,
   sendMessageToRoom,
 } from '../communication.params';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 const uniqueId = UniqueIDGenerator.getID();
 

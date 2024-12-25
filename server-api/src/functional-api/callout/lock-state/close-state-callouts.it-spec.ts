@@ -23,8 +23,8 @@ import {
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 

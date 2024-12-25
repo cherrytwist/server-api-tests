@@ -32,8 +32,8 @@ import { deleteOrganization } from '../organization/organization.request.params'
 import { createUser, deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
 ;
 const uniqueId = UniqueIDGenerator.getID();
 

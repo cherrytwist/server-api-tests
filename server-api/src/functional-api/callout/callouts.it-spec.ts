@@ -13,8 +13,8 @@ import { deleteSpace } from '@functional-api/journey/space/space.request.params'
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { getDataPerSpaceCallout } from './post/post.request.params';
 import { CalloutVisibility } from '@generated/graphql';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
 
 const uniqueId = UniqueIDGenerator.getID();
 

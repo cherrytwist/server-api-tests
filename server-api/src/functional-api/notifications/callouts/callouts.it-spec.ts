@@ -16,8 +16,8 @@ import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { CalloutVisibility, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 
 const spaceName = 'not-up-eco-name' + uniqueId;

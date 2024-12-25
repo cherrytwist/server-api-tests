@@ -10,8 +10,8 @@ import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 const uniqueId = UniqueIDGenerator.getID();
 

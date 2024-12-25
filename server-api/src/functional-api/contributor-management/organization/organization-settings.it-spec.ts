@@ -10,8 +10,8 @@ import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
 
 const uniqueId = UniqueIDGenerator.getID();
 const domain = 'alkem.io';

@@ -24,8 +24,8 @@ import { deleteSubspace } from '../subsubspace/subsubspace.request.params';
 
 import { SpacePrivacyMode, SpaceVisibility } from '@generated/alkemio-schema';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
-import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 const uniqueId = UniqueIDGenerator.getID();
 
 const spaceNameId = 'space-nameid' + uniqueId;
