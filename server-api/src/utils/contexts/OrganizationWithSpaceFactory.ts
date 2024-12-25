@@ -11,11 +11,13 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
-import { CalloutType } from '@generated/graphql';
+import { CalloutType, CommunityRoleType } from '@generated/graphql';
 import { CalloutVisibility } from '@generated/alkemio-schema';
 import { SpaceModel } from './types/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { createSubsubspace } from '@functional-api/journey/subsubspace/subsubspace.request.params';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
+import { users } from '@utils/queries/users-data';
 
 export class OrganizationWithSpaceModelFactory {
   public static async createOrganizationWithSpace(): Promise<OrganizationWithSpaceModel> {
@@ -217,6 +219,32 @@ export class OrganizationWithSpaceModelFactory {
       CalloutVisibility.Published
     );
     return targetModel;
+  };
+
+  public static async assignUsersToRoles(roleSetId: string): Promise<void> {
+    await this.assignUsersToMemberRole(roleSetId);
+
+    await assignRoleToUser(
+      users.subspaceAdmin.id,
+      roleSetId,
+      CommunityRoleType.Admin
+    );
+  };
+
+  private static async assignUsersToMemberRole(roleSetId: string): Promise<void> {
+    const usersIdsToAssign: string[] = [
+      users.subspaceAdmin.id,
+      users.subspaceMember.id,
+      users.subsubspaceAdmin.id,
+      users.subsubspaceMember.id,
+    ];
+    for (const userID of usersIdsToAssign) {
+      await assignRoleToUser(
+        userID,
+        roleSetId,
+        CommunityRoleType.Member
+      );
+    }
   };
 
   private static async createSpaceAndGetData(

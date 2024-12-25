@@ -3,18 +3,17 @@ import { createSubspace } from '../subspace/subspace.request.params';
 import { deleteSpace } from '../space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { CommunityRoleType } from '@generated/alkemio-schema';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '@src/types/entities-helper';
+
 import {
   assignRoleToUserExtendedData,
   removeRoleFromUserExtendedData,
 } from '../../roleset/roles-request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 const credentialsType = 'SPACE_ADMIN';
@@ -22,27 +21,21 @@ const subsubspaceName = `op-dname${uniqueId}`;
 const subsubspaceNameId = `op-nameid${uniqueId}`;
 let subsubspaceId = '';
 let subsubspaceRoleSetId = '';
-const subspaceName = `opp-auth-nam-ch-${uniqueId}`;
-const organizationName = 'opp-auth-org-name' + uniqueId;
-const hostNameId = 'opp-auth-org-nameid' + uniqueId;
-const spaceName = 'opp-auth-eco-name' + uniqueId;
-const spaceNameId = 'opp-auth-eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
+  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'post-subspace', baseScenario.subspace);
+  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'post-subsubspace', baseScenario.subsubspace);
+  await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.space.community.roleSetId);
 });
 
 beforeEach(async () => {
   const responseCreateSubsubspaceOnSubspace = await createSubspace(
     subsubspaceName,
     subsubspaceNameId,
-    entitiesId.subspace.id
+    baseScenario.subspace.id
   );
 
   const oppData = responseCreateSubsubspaceOnSubspace?.data?.createSubspace;
@@ -56,9 +49,9 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Subsubspace Admin', () => {
@@ -86,7 +79,7 @@ describe('Subsubspace Admin', () => {
     const responseOppTwo = await createSubspace(
       `oppdname-${uniqueId}`,
       `oppnameid-${uniqueId}`,
-      entitiesId.subspace.id
+      baseScenario.subspace.id
     );
     const oppDataTwo = responseOppTwo?.data?.createSubspace;
     const subsubspaceIdTwo = oppDataTwo?.id ?? '';

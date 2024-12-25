@@ -1,48 +1,42 @@
 import '../../../utils/array.matcher';
 import { deleteSpace } from '../space/space.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { entitiesId } from '@src/types/entities-helper';
 import {
   createSubspace,
   getSubspaceData,
   getSubspacesData,
 } from './subspace.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subspaceName = '';
 let subspaceId = '';
 let additionalSubspaceId = '';
-const organizationName = 'crechal-org-name' + uniqueId;
-const hostNameId = 'crechal-org-nameid' + uniqueId;
-const spaceName = 'crechal-eco-name' + uniqueId;
-const spaceNameId = 'crechal-eco-nameid' + uniqueId;
+
 
 const subspaceData = async (subspaceId: string) => {
   const subspaceData = await getSubspaceData(
-    entitiesId.spaceId,
+    baseScenario.space.id,
     subspaceId
   );
   return subspaceData;
 };
 
 const subspacesList = async () => {
-  return await getSubspacesData(entitiesId.spaceId);
+  return await getSubspacesData(baseScenario.space.id);
 };
 
+let baseScenario: OrganizationWithSpaceModel;
 beforeAll(async () => {
-  await createOrgAndSpace(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 beforeEach(async () => {
@@ -50,7 +44,7 @@ beforeEach(async () => {
   const response = await createSubspace(
     subspaceName + 'xxx',
     `cr-ch-nameid-${uniqueId}`,
-    entitiesId.spaceId
+    baseScenario.space.id
   );
   subspaceId = response.data?.createSubspace.id ?? '';
 });
@@ -65,7 +59,7 @@ describe('Create subspace', () => {
     const response = await createSubspace(
       'subspaceName',
       `${uniqueId}cr`,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
 
     const createSubspaceData = response.data?.createSubspace;
@@ -75,7 +69,7 @@ describe('Create subspace', () => {
     expect(response.status).toBe(200);
     expect(createSubspaceData?.profile.displayName).toEqual('subspaceName');
     expect(createSubspaceData).toEqual(
-      (await getSubspaceData(entitiesId.spaceId, additionalSubspaceId))
+      (await getSubspaceData(baseScenario.space.id, additionalSubspaceId))
         .data?.space.subspace
     );
   });
@@ -101,7 +95,7 @@ describe('Create subspace', () => {
     const response = await createSubspace(
       `${subspaceName}cr23`,
       `${uniqueId}cr23`,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     const subspaceId1 = response.data?.createSubspace.id ?? '';
 
@@ -109,7 +103,7 @@ describe('Create subspace', () => {
       //  spaceId,
       `${subspaceName}cc3`,
       `${uniqueId}cc3`,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     const subspaceId2 = responseSubspaceTwo.data?.createSubspace.id ?? '';
 
@@ -137,7 +131,7 @@ describe('Create subspace', () => {
         const response = await createSubspace(
           subspaceName + 'd',
           nameId + 'd',
-          entitiesId.spaceId
+          baseScenario.space.id
         );
 
         // Assert

@@ -22,13 +22,10 @@ import {
 } from '@common/constants/privileges';
 import { deleteSubspace } from '../subsubspace/subsubspace.request.params';
 
-import {
-  SpacePrivacyMode,
-  SpaceVisibility,
-} from '@generated/alkemio-schema';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { SpacePrivacyMode, SpaceVisibility } from '@generated/alkemio-schema';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
 import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
-;
 const uniqueId = UniqueIDGenerator.getID();
 
 const spaceNameId = 'space-nameid' + uniqueId;
@@ -41,10 +38,18 @@ let baseScenario: OrganizationWithSpaceModel;
 
 describe('Update space platform settings', () => {
   beforeAll(async () => {
-
-      baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-      await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'activity-subspace', baseScenario.subspace);
-      await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'activity-subsubspace', baseScenario.subsubspace);
+    baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+    await OrganizationWithSpaceModelFactory.createSubspace(
+      baseScenario.space.id,
+      'activity-subspace',
+      baseScenario.subspace
+    );
+    await OrganizationWithSpaceModelFactory.createSubspace(
+      baseScenario.subspace.id,
+      'activity-subsubspace',
+      baseScenario.subsubspace
+    );
 
     await updateSpaceSettings(baseScenario.space.id, {
       privacy: { mode: SpacePrivacyMode.Private },
@@ -111,17 +116,20 @@ describe('Update space platform settings', () => {
     describe('DDT role access to private Space', () => {
       // Arrange
       test.each`
-        user                               | spaceMyPrivileges
-        ${TestUser.GLOBAL_ADMIN}           | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_LICENSE_ADMIN}      | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        user                             | spaceMyPrivileges
+        ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
         ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${[]}
-        ${TestUser.SPACE_ADMIN}              | ${sorted__create_read_update_delete_grant_createSubspace}
-        ${TestUser.SPACE_MEMBER}             | ${readPrivilege}
-        ${TestUser.NON_SPACE_MEMBER}         | ${[]}
+        ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_createSubspace}
+        ${TestUser.SPACE_MEMBER}         | ${readPrivilege}
+        ${TestUser.NON_SPACE_MEMBER}     | ${[]}
       `(
         'User: "$user", should have private Space privileges: "$spaceMyPrivileges"',
         async ({ user, spaceMyPrivileges }) => {
-          const request = await getPrivateSpaceData(baseScenario.space.id, user);
+          const request = await getPrivateSpaceData(
+            baseScenario.space.id,
+            user
+          );
           const result = request?.data?.space;
 
           // Assert
@@ -147,17 +155,20 @@ describe('Update space platform settings', () => {
       });
 
       test.each`
-        user                               | spaceMyPrivileges
-        ${TestUser.GLOBAL_ADMIN}           | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_LICENSE_ADMIN}      | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        user                             | spaceMyPrivileges
+        ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
         ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${readPrivilege}
-        ${TestUser.SPACE_ADMIN}              | ${sorted__create_read_update_delete_grant_createSubspace}
-        ${TestUser.SPACE_MEMBER}             | ${readPrivilege}
-        ${TestUser.NON_SPACE_MEMBER}         | ${readPrivilege}
+        ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_createSubspace}
+        ${TestUser.SPACE_MEMBER}         | ${readPrivilege}
+        ${TestUser.NON_SPACE_MEMBER}     | ${readPrivilege}
       `(
         'User: "$user", should have private Space privileges: "$spaceMyPrivileges"',
         async ({ user, spaceMyPrivileges }) => {
-          const request = await getPrivateSpaceData(baseScenario.space.id, user);
+          const request = await getPrivateSpaceData(
+            baseScenario.space.id,
+            user
+          );
           const result = request?.data?.space;
 
           // Assert
@@ -187,48 +198,43 @@ describe('Update space platform settings', () => {
     });
 
     test.each`
-      user                               | email                         | communicationMyPrivileges                                                                  | subspacesCount | opportunitiesCount
-      ${TestUser.GLOBAL_ADMIN}           | ${'admin@alkem.io'}           | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}            | ${1}
-      ${TestUser.GLOBAL_LICENSE_ADMIN}      | ${'global.spaces@alkem.io'}   | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}            | ${1}
-      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${'community.admin@alkem.io'} | ${readPrivilege}                                                                           | ${1}            | ${1}
+      user                             | email                         | communicationMyPrivileges                                                                  | subspacesCount | opportunitiesCount
+      ${TestUser.GLOBAL_ADMIN}         | ${'admin@alkem.io'}           | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}           | ${1}
+      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${'global.spaces@alkem.io'}   | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}           | ${1}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${'community.admin@alkem.io'} | ${readPrivilege}                                                                           | ${1}           | ${1}
     `(
       'User role: "$user", have access to public archived Space',
       async ({ user, email, communicationMyPrivileges, subspacesCount }) => {
         // Arrange
-        const getuserRoleSpaceDataBeforeArchive = await getUserRoleSpacesVisibility(
-          email,
-          SpaceVisibility.Active
-        );
+        const getuserRoleSpaceDataBeforeArchive =
+          await getUserRoleSpacesVisibility(email, SpaceVisibility.Active);
         const beforeVisibilityChangeAllSpaces =
           getuserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
-        const dataBeforeVisibilityChange = beforeVisibilityChangeAllSpaces?.filter(
-          (obj: { nameID: string }) => {
+        const dataBeforeVisibilityChange =
+          beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
             return obj.nameID.includes(spaceNameId);
-          }
-        );
+          });
         await updateSpacePlatformSettings(
           baseScenario.space.id,
           spaceNameId,
           SpaceVisibility.Archived
         );
 
-        const getUserRoleSpaceDataAfterArchive = await getUserRoleSpacesVisibility(
-          email,
-          SpaceVisibility.Archived
-        );
+        const getUserRoleSpaceDataAfterArchive =
+          await getUserRoleSpacesVisibility(email, SpaceVisibility.Archived);
 
         const afterVisibilityChangeAllSpaces =
           getUserRoleSpaceDataAfterArchive?.data?.rolesUser?.spaces;
-        const dataAfterVisibilityChange = afterVisibilityChangeAllSpaces?.filter(
-          (obj: { nameID: string }) => {
+        const dataAfterVisibilityChange =
+          afterVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
             return obj.nameID.includes(spaceNameId);
-          }
-        );
+          });
 
-        const spaceDataAfterArchive = await getSpacesFilteredByVisibilityWithAccess(
-          baseScenario.space.id,
-          user
-        );
+        const spaceDataAfterArchive =
+          await getSpacesFilteredByVisibilityWithAccess(
+            baseScenario.space.id,
+            user
+          );
         const allSpaces = spaceDataAfterArchive?.data?.spaces;
         const data = allSpaces?.filter((obj: { nameID: string }) => {
           return obj.nameID.includes(spaceNameId);
@@ -263,24 +269,21 @@ describe('Update space platform settings', () => {
     });
 
     test.each`
-      user                       | email                      | communicationMyPrivileges | subspacesCount | opportunitiesCount
-      ${TestUser.SPACE_ADMIN}      | ${'space.admin@alkem.io'}  | ${[]}                     | ${null}         | ${null}
-      ${TestUser.SPACE_MEMBER}     | ${'space.member@alkem.io'} | ${[]}                     | ${null}         | ${null}
-      ${TestUser.NON_SPACE_MEMBER} | ${'non.space@alkem.io'}    | ${[]}                     | ${null}         | ${null}
+      user                         | email                      | communicationMyPrivileges | subspacesCount | opportunitiesCount
+      ${TestUser.SPACE_ADMIN}      | ${'space.admin@alkem.io'}  | ${[]}                     | ${null}        | ${null}
+      ${TestUser.SPACE_MEMBER}     | ${'space.member@alkem.io'} | ${[]}                     | ${null}        | ${null}
+      ${TestUser.NON_SPACE_MEMBER} | ${'non.space@alkem.io'}    | ${[]}                     | ${null}        | ${null}
     `(
       'User role: "$user", have NO access to public archived Space',
       async ({ user, email, communicationMyPrivileges }) => {
-        const getuserRoleSpaceDataBeforeArchive = await getUserRoleSpacesVisibility(
-          email,
-          SpaceVisibility.Active
-        );
+        const getuserRoleSpaceDataBeforeArchive =
+          await getUserRoleSpacesVisibility(email, SpaceVisibility.Active);
         const beforeVisibilityChangeAllSpaces =
           getuserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
-        const dataBeforeVisibilityChange = beforeVisibilityChangeAllSpaces?.filter(
-          (obj: { nameID: string }) => {
+        const dataBeforeVisibilityChange =
+          beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
             return obj.nameID.includes(spaceNameId);
-          }
-        );
+          });
 
         // Act
         await updateSpacePlatformSettings(
@@ -289,23 +292,21 @@ describe('Update space platform settings', () => {
           SpaceVisibility.Archived
         );
 
-        const getUserRoleSpaceDataAfterArchive = await getUserRoleSpacesVisibility(
-          email,
-          SpaceVisibility.Archived
-        );
+        const getUserRoleSpaceDataAfterArchive =
+          await getUserRoleSpacesVisibility(email, SpaceVisibility.Archived);
 
         const afterVisibilityChangeAllSpaces =
           getUserRoleSpaceDataAfterArchive?.data?.rolesUser.spaces;
-        const dataAfterVisibilityChange = afterVisibilityChangeAllSpaces?.filter(
-          (obj: { nameID: string }) => {
+        const dataAfterVisibilityChange =
+          afterVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
             return obj.nameID.includes(spaceNameId);
-          }
-        );
+          });
 
-        const spaceDataAfterArchive = await getSpacesFilteredByVisibilityNoAccess(
-          baseScenario.space.id,
-          user
-        );
+        const spaceDataAfterArchive =
+          await getSpacesFilteredByVisibilityNoAccess(
+            baseScenario.space.id,
+            user
+          );
 
         const allSpaces = spaceDataAfterArchive?.data?.spaces;
         const data = allSpaces?.filter((obj: { nameID: string }) => {

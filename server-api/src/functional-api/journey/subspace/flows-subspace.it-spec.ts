@@ -2,26 +2,25 @@ import { createSubspace, getSubspaceData } from './subspace.request.params';
 import '@utils/array.matcher';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
-import { entitiesId } from '@src/types/entities-helper';
-import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subspaceName = '';
 let subspaceId = '';
 let additionalSubspaceId = '';
-const organizationName = 'flowch-org-name' + uniqueId;
-const hostNameId = 'flowch-org-nameid' + uniqueId;
-const spaceName = 'flowch-sp-name' + uniqueId;
-const spaceNameId = 'flowch-sp-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
+  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 beforeEach(async () => {
@@ -30,7 +29,7 @@ beforeEach(async () => {
   const responseCreateSubspace = await createSubspace(
     subspaceName,
     uniqueId,
-    entitiesId.spaceId
+    baseScenario.space.id
   );
   subspaceId = responseCreateSubspace.data?.createSubspace.id ?? '';
 });
@@ -44,7 +43,7 @@ describe('Flows subspace', () => {
   test.skip('should not result unassigned users to a subspace', async () => {
     // Act
     const responseGroupQuery = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subspaceId
     );
 
@@ -64,7 +63,7 @@ describe('Flows subspace', () => {
     const responseSecondSubspace = await createSubspace(
       subspaceName + subspaceName,
       uniqueId + uniqueId,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     const secondsubspaceName =
       responseSecondSubspace.data?.createSubspace.profile.displayName ?? '';
@@ -96,7 +95,7 @@ describe('Flows subspace', () => {
     const response = await createSubspace(
       subspaceName,
       `${uniqueId}-2`,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     const subspaceData = response.data?.createSubspace;
     additionalSubspaceId = subspaceData?.id ?? '';
@@ -112,7 +111,7 @@ describe('Flows subspace', () => {
     const response = await createSubspace(
       subspaceName + subspaceName,
       uniqueId,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     // Assert
     expect(JSON.stringify(response)).toContain(
