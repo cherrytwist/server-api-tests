@@ -1,25 +1,21 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
+
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
 
-const organizationName = 'not-up-org-name' + uniqueId;
-const hostNameId = 'not-up-org-nameid' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
+
 const spaceName = 'not-up-eco-name' + uniqueId;
-const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
 const subsubspaceName = `opName${uniqueId}`;
 let preferencesConfig: any[] = [];
@@ -52,17 +48,16 @@ const expectedDataOpp = async (toAddresses: any[]) => {
   ]);
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+    baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+    await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'post-subspace', baseScenario.subspace);
+    await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'post-subsubspace', baseScenario.subsubspace);
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subspace.community.roleSetId);
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subsubspace.community.roleSetId);
 
   preferencesConfig = [
     {
@@ -108,10 +103,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Notifications - callout comments', () => {
@@ -136,7 +131,7 @@ describe('Notifications - callout comments', () => {
   test.skip('GA create space callout comment - HM(7) get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.space.discussionCalloutCommentsId,
+      baseScenario.space.collaboration.calloutPostCommentsId,
       'comment on discussion callout',
       TestUser.GLOBAL_ADMIN
     );
@@ -170,7 +165,7 @@ describe('Notifications - callout comments', () => {
   test.skip('HA create space callout comment - HM(7) get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.space.discussionCalloutCommentsId,
+      baseScenario.space.collaboration.calloutPostCommentsId,
       'comment on discussion callout',
       TestUser.SPACE_ADMIN
     );
@@ -203,7 +198,7 @@ describe('Notifications - callout comments', () => {
   test('HA create subspace callout comment - HM(5),  get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.subspace.discussionCalloutCommentsId,
+      baseScenario.subspace.collaboration.calloutPostCommentsId,
       'comment on discussion callout',
       TestUser.SPACE_ADMIN
     );
@@ -240,7 +235,7 @@ describe('Notifications - callout comments', () => {
   test('OM create subsubspace callout comment - HM(3), get notifications', async () => {
     // Act
     await sendMessageToRoom(
-      entitiesId.subsubspace.discussionCalloutCommentsId,
+      baseScenario.subsubspace.collaboration.calloutPostCommentsId,
       'comment on discussion callout',
       TestUser.SUBSUBSPACE_MEMBER
     );
@@ -281,7 +276,7 @@ describe('Notifications - callout comments', () => {
     );
     // Act
     await sendMessageToRoom(
-      entitiesId.subsubspace.discussionCalloutCommentsId,
+      baseScenario.subsubspace.collaboration.calloutPostCommentsId,
       'comment on discussion callout',
       TestUser.SUBSUBSPACE_ADMIN
     );

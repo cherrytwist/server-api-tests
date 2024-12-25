@@ -28,7 +28,8 @@ beforeAll(async () => {
   baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
   await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'post-subspace', baseScenario.subspace);
   await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'post-subsubspace', baseScenario.subsubspace);
-  await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.space.community.roleSetId);
+
+  await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subspace.community.roleSetId);
 });
 
 beforeEach(async () => {
