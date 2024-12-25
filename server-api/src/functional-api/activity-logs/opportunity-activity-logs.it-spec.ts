@@ -39,7 +39,6 @@ let postDisplayName = '';
 let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-
   baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
   await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'activity-subspace', baseScenario.subspace);
   await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'activity-subsubspace', baseScenario.subsubspace);
@@ -101,7 +100,7 @@ describe('Activity logs - Subsubspace', () => {
     // Arrange
     await assignRoleToUser(
       users.subspaceMember.id,
-      baseScenario.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
 

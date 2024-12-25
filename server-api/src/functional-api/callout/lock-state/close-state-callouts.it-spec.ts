@@ -1,7 +1,5 @@
 /* eslint-disable quotes */
 import '@utils/array.matcher';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import {
   deleteCallout,
   createCalloutOnCollaboration,
@@ -14,9 +12,6 @@ import {
 } from '../post/post.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
   getDefaultSubspaceCalloutByNameId,
   getDefaultSubsubspaceCalloutByNameId,
   getDefaultSpaceCalloutByNameId,
@@ -27,18 +22,14 @@ import {
 } from '@generated/alkemio-schema';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+const uniqueId = UniqueIDGenerator.getID();
 
-let subsubspaceName = 'post-opp';
-let subspaceName = 'post-chal';
 let calloutId = '';
 let postNameID = '';
-
-const organizationName = 'callout-org-name' + uniqueId;
-const hostNameId = 'callout-org-nameid' + uniqueId;
-const spaceName = 'callout-eco-name' + uniqueId;
-const spaceNameId = 'callout-eco-nameid' + uniqueId;
 
 const getIdentifier = (
   entity: string,
@@ -58,27 +49,24 @@ const getIdentifier = (
     return id;
   }
 };
+
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+
+  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'callout-subspace', baseScenario.subspace);
+  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'callout-subsubspace', baseScenario.subsubspace);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
-  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
 });
 
@@ -89,7 +77,7 @@ describe('Callouts - Close State', () => {
   test('Close callout that has not been published', async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       {
         framing: { profile: { displayName: 'check' } },
       }
@@ -103,7 +91,7 @@ describe('Callouts - Close State', () => {
     });
 
     const postsData = await getDataPerSpaceCallout(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       calloutId
     );
     const data = postsData.data?.space.collaboration?.callouts?.[0];
@@ -115,7 +103,7 @@ describe('Callouts - Close State', () => {
   test('Close callout that has been published', async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId
+      baseScenario.space.collaboration.id
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
@@ -127,7 +115,7 @@ describe('Callouts - Close State', () => {
       },
     });
     const postsData = await getDataPerSpaceCallout(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       calloutId
     );
     const data = postsData.data?.space.collaboration?.callouts?.[0];
@@ -164,24 +152,24 @@ describe('Callout - Close State - User Privileges Posts', () => {
     };
 
     const spaceCallout = await getDefaultSpaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.space.calloutId
+      baseScenario.space.id,
+      baseScenario.space.collaboration.calloutPostId
     );
     spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSpace = await preconditions(spaceCalloutId);
 
     const subspaceCallout = await getDefaultSubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subspace.id,
-      entitiesId.subspace.calloutId
+      baseScenario.space.id,
+      baseScenario.subspace.id,
+      baseScenario.subspace.collaboration.calloutPostId
     );
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSubspace = await preconditions(subspaceCalloutId);
 
     const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subsubspace.id,
-      entitiesId.subsubspace.calloutId
+      baseScenario.space.id,
+      baseScenario.subsubspace.id,
+      baseScenario.subsubspace.collaboration.calloutPostId
     );
     subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
     postCommentsIdSubsubspace = await preconditions(subsubspaceCalloutId);
@@ -316,8 +304,8 @@ describe('Callout - Close State - User Privileges Discussions', () => {
     };
 
     const spaceCallout = await getDefaultSpaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.space.discussionCalloutId
+      baseScenario.space.id,
+      baseScenario.space.collaboration.calloutPostCommentsId
     );
 
     spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
@@ -326,9 +314,9 @@ describe('Callout - Close State - User Privileges Discussions', () => {
     await preconditions(spaceCalloutId);
 
     const subspaceCallout = await getDefaultSubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subspace.id,
-      entitiesId.subspace.discussionCalloutId
+      baseScenario.space.id,
+      baseScenario.subspace.id,
+      baseScenario.subspace.collaboration.calloutPostCommentsId
     );
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     subspaceCalloutCommentsId =
@@ -336,9 +324,9 @@ describe('Callout - Close State - User Privileges Discussions', () => {
     await preconditions(subspaceCalloutId);
 
     const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subsubspace.id,
-      entitiesId.subsubspace.discussionCalloutId
+      baseScenario.space.id,
+      baseScenario.subsubspace.id,
+      baseScenario.subsubspace.collaboration.calloutPostCommentsId
     );
     subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
     subsubspaceCalloutCommentsId = subsubspaceCallout?.comments?.id ?? '';

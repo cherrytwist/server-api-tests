@@ -4,7 +4,10 @@ export type SpaceModel = {
   id: string;
   nameId: string;
   profile: ProfileModel;
-  communityId: string;
+  community: {
+    id: string;
+    roleSetId: string;
+  },
   collaboration: {
     id: string;
     calloutPostCollectionId: string;
@@ -12,8 +15,10 @@ export type SpaceModel = {
     calloutPostId: string;
     calloutPostCommentsId: string;
   },
-  roleSetId: string;
   contextId: string;
-  updatesId: string;
-  communicationId: string;
+  communication: {
+    id: string;
+    messageId: string;
+    updatesId: string;
+  };
 };

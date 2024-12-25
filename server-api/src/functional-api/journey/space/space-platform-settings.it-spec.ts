@@ -21,51 +21,41 @@ import {
   sorted__create_read_update_delete_grant_createSubspace_platformAdmin,
 } from '@common/constants/privileges';
 import { deleteSubspace } from '../subsubspace/subsubspace.request.params';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
+
 import {
   SpacePrivacyMode,
   SpaceVisibility,
 } from '@generated/alkemio-schema';
-import { entitiesId } from '@src/types/entities-helper';
-
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModelFactory } from '@utils/contexts/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@utils/contexts/types/OrganizationWithSpaceModel';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
-const organizationName = 'space-org-name' + uniqueId;
-const hostNameId = 'space-org-nameid' + uniqueId;
-const spaceName = 'space-name' + uniqueId;
 const spaceNameId = 'space-nameid' + uniqueId;
-const subsubspaceName = 'space-opp';
-const subspaceName = 'space-chal';
 let organizationIdTwo = '';
 let orgAccountIdTwo = '';
 
 const organizationNameTwo = 'org2' + uniqueId;
 
+let baseScenario: OrganizationWithSpaceModel;
+
 describe('Update space platform settings', () => {
   beforeAll(async () => {
-    await createOrgAndSpaceWithUsers(
-      organizationName,
-      hostNameId,
-      spaceName,
-      spaceNameId
-    );
-    await updateSpaceSettings(entitiesId.spaceId, {
+
+      baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+      await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'activity-subspace', baseScenario.subspace);
+      await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'activity-subsubspace', baseScenario.subsubspace);
+
+    await updateSpaceSettings(baseScenario.space.id, {
       privacy: { mode: SpacePrivacyMode.Private },
     });
-    await createSubspaceWithUsers(subspaceName);
-    await createSubsubspaceWithUsers(subsubspaceName);
   });
 
   afterAll(async () => {
-    await deleteSubspace(entitiesId.subsubspace.id);
-    await deleteSpace(entitiesId.subspace.id);
-    await deleteSpace(entitiesId.spaceId);
-    await deleteOrganization(entitiesId.organization.id);
+    await deleteSubspace(baseScenario.subsubspace.id);
+    await deleteSpace(baseScenario.subspace.id);
+    await deleteSpace(baseScenario.space.id);
+    await deleteOrganization(baseScenario.organization.id);
     await deleteOrganization(organizationIdTwo);
   });
 
@@ -82,7 +72,7 @@ describe('Update space platform settings', () => {
 
     afterAll(async () => {
       await updateSpacePlatformSettings(
-        entitiesId.spaceId,
+        baseScenario.space.id,
         spaceNameId,
         SpaceVisibility.Active
       );
@@ -92,19 +82,19 @@ describe('Update space platform settings', () => {
     test('Update space settings', async () => {
       // Act
       await updateSpacePlatformSettings(
-        entitiesId.spaceId,
+        baseScenario.space.id,
         spaceNameId,
         SpaceVisibility.Demo
       );
 
-      const spaceData = await getSpaceData(entitiesId.spaceId);
+      const spaceData = await getSpaceData(baseScenario.space.id);
       const spaceSettings = spaceData?.data?.space;
 
       // Assert
 
       expect(spaceSettings?.visibility).toEqual(SpaceVisibility.Demo);
       expect(spaceSettings?.account.host?.id).toEqual(
-        entitiesId.organization.id
+        baseScenario.organization.id
       );
     });
   });
@@ -112,7 +102,7 @@ describe('Update space platform settings', () => {
   describe('Authorization - Update space platform settings', () => {
     beforeAll(async () => {
       await updateSpacePlatformSettings(
-        entitiesId.spaceId,
+        baseScenario.space.id,
         spaceNameId,
         SpaceVisibility.Active
       );
@@ -131,7 +121,7 @@ describe('Update space platform settings', () => {
       `(
         'User: "$user", should have private Space privileges: "$spaceMyPrivileges"',
         async ({ user, spaceMyPrivileges }) => {
-          const request = await getPrivateSpaceData(entitiesId.spaceId, user);
+          const request = await getPrivateSpaceData(baseScenario.space.id, user);
           const result = request?.data?.space;
 
           // Assert
@@ -146,12 +136,12 @@ describe('Update space platform settings', () => {
       // Arrange
       beforeAll(async () => {
         await updateSpacePlatformSettings(
-          entitiesId.spaceId,
+          baseScenario.space.id,
           spaceNameId,
           SpaceVisibility.Active
         );
 
-        await updateSpaceSettings(entitiesId.spaceId, {
+        await updateSpaceSettings(baseScenario.space.id, {
           privacy: { mode: SpacePrivacyMode.Public },
         });
       });
@@ -167,7 +157,7 @@ describe('Update space platform settings', () => {
       `(
         'User: "$user", should have private Space privileges: "$spaceMyPrivileges"',
         async ({ user, spaceMyPrivileges }) => {
-          const request = await getPrivateSpaceData(entitiesId.spaceId, user);
+          const request = await getPrivateSpaceData(baseScenario.space.id, user);
           const result = request?.data?.space;
 
           // Assert
@@ -184,14 +174,14 @@ describe('Update space platform settings', () => {
     // Arrange
     beforeEach(async () => {
       await updateSpacePlatformSettings(
-        entitiesId.spaceId,
+        baseScenario.space.id,
         spaceNameId,
         SpaceVisibility.Active
       );
     });
 
     beforeAll(async () => {
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
     });
@@ -217,7 +207,7 @@ describe('Update space platform settings', () => {
           }
         );
         await updateSpacePlatformSettings(
-          entitiesId.spaceId,
+          baseScenario.space.id,
           spaceNameId,
           SpaceVisibility.Archived
         );
@@ -236,7 +226,7 @@ describe('Update space platform settings', () => {
         );
 
         const spaceDataAfterArchive = await getSpacesFilteredByVisibilityWithAccess(
-          entitiesId.spaceId,
+          baseScenario.space.id,
           user
         );
         const allSpaces = spaceDataAfterArchive?.data?.spaces;
@@ -260,14 +250,14 @@ describe('Update space platform settings', () => {
     // Arrange
     beforeEach(async () => {
       await updateSpacePlatformSettings(
-        entitiesId.spaceId,
+        baseScenario.space.id,
         spaceNameId,
         SpaceVisibility.Active
       );
     });
 
     beforeAll(async () => {
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
     });
@@ -294,7 +284,7 @@ describe('Update space platform settings', () => {
 
         // Act
         await updateSpacePlatformSettings(
-          entitiesId.spaceId,
+          baseScenario.space.id,
           spaceNameId,
           SpaceVisibility.Archived
         );
@@ -313,7 +303,7 @@ describe('Update space platform settings', () => {
         );
 
         const spaceDataAfterArchive = await getSpacesFilteredByVisibilityNoAccess(
-          entitiesId.spaceId,
+          baseScenario.space.id,
           user
         );
 

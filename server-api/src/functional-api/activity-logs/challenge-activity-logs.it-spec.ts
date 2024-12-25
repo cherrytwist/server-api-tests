@@ -98,11 +98,11 @@ describe('Activity logs - Subspace', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(baseScenario.subspace.roleSetId, TestUser.SPACE_MEMBER);
+    await joinRoleSet(baseScenario.subspace.community.roleSetId, TestUser.SPACE_MEMBER);
 
     await assignRoleToUser(
       users.spaceAdmin.id,
-      baseScenario.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
 

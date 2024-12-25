@@ -2,7 +2,6 @@ import '@utils/array.matcher';
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-import { createOrgAndSpace } from '@utils/data-setup/entities';
 import {
   CalloutState,
   CalloutType,
@@ -97,11 +96,11 @@ describe('Activity logs - Space', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(baseScenario.space.roleSetId, TestUser.SPACE_MEMBER);
+    await joinRoleSet(baseScenario.space.community.roleSetId, TestUser.SPACE_MEMBER);
 
     await assignRoleToUser(
       users.spaceAdmin.id,
-      baseScenario.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
     // Act
@@ -300,12 +299,12 @@ describe('Access to Activity logs - Space', () => {
   beforeAll(async () => {
     await assignRoleToUser(
       users.spaceAdmin.id,
-      baseScenario.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Admin
     );
     await assignRoleToUser(
       users.spaceMember.id,
-      baseScenario.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
   });

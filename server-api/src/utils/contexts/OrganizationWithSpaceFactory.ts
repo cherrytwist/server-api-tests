@@ -147,11 +147,11 @@ export class OrganizationWithSpaceModelFactory {
     const subspaceData = responseSubspace.data?.createSubspace;
     targetModel.id = subspaceData?.id ?? '';
     targetModel.nameId = subspaceData?.nameID ?? '';
-    targetModel.communityId = subspaceData?.community?.id ?? '';
-    targetModel.roleSetId = subspaceData?.community?.roleSet?.id ?? '';
-    targetModel.communicationId =
+    targetModel.community.id = subspaceData?.community?.id ?? '';
+    targetModel.community.roleSetId = subspaceData?.community?.roleSet?.id ?? '';
+    targetModel.communication.id =
       subspaceData?.community?.communication?.id ?? '';
-    targetModel.updatesId =
+    targetModel.communication.updatesId =
       subspaceData?.community?.communication?.updates.id ?? '';
     targetModel.collaboration.id = subspaceData?.collaboration?.id ?? '';
     targetModel.contextId = subspaceData?.context?.id ?? '';
@@ -263,23 +263,28 @@ export class OrganizationWithSpaceModelFactory {
   private static createEmptySpaceContext(): SpaceModel {
     return {
       id: '',
-        communityId: '',
-        roleSetId: '',
-        profile: {
-          id: '',
-          displayName: '',
-        },
-        collaboration: {
-          id: '',
-          calloutPostCollectionId: '',
-          calloutWhiteboardId: '',
-          calloutPostId: '',
-          calloutPostCommentsId: '',
-        },
-        contextId: '',
+      community: {
+        id: '',
+        roleSetId: ''
+      },
+      profile: {
+        id: '',
+        displayName: '',
+      },
+      collaboration: {
+        id: '',
+        calloutPostCollectionId: '',
+        calloutWhiteboardId: '',
+        calloutPostId: '',
+        calloutPostCommentsId: '',
+      },
+      contextId: '',
+      communication: {
+        id: '',
         updatesId: '',
-        communicationId: '',
-        nameId: '',
+        messageId: '',
+      },
+      nameId: '',
     }
   }
 }
