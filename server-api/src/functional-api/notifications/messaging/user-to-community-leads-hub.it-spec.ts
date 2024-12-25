@@ -50,19 +50,19 @@ beforeAll(async () => {
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.spaceAdmin.id,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.spaceMember.id,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
@@ -99,7 +99,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -131,7 +131,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -173,7 +173,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -204,7 +204,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -254,7 +254,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -285,7 +285,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -327,7 +327,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -358,7 +358,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        baseScenario.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -398,12 +398,12 @@ describe('Notifications - messages to Public space NO hosts', () => {
 
     await removeRoleFromUser(
       users.spaceAdmin.id,
-      baseScenario.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
     await removeRoleFromUser(
       users.spaceMember.id,
-      baseScenario.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
   });
@@ -415,7 +415,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
   test('NOT space member sends message to Space community (0 hosts) - 1 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      baseScenario.space.communityId,
+      baseScenario.space.community.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -438,7 +438,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
   test('Space member send message to Space community (0 hosts) - 1 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      baseScenario.space.communityId,
+      baseScenario.space.community.id,
       'Test message',
       TestUser.QA_USER
     );

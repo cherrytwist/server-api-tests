@@ -14,23 +14,35 @@ export const getMailsData = async () => {
 };
 
 interface CommonSpaceIds {
-  profileId: string;
-  communityId: string;
-  roleSetId: string;
-  updatesId: string;
-  communicationId: string;
+  profile: {
+    id: string;
+    displayName: string;
+  };
+  community: {
+    id: string;
+    roleSetId: string;
+  };
+  communication: {
+    id: string;
+    updatesId: string;
+  };
   contextId: string;
-  collaborationId: string;
-  calloutId: string;
-  whiteboardCalloutId: string;
-  discussionCalloutId: string;
-  discussionCalloutCommentsId: string;
+  collaboration: {
+    id: string;
+    calloutId: string;
+    whiteboardCalloutId: string;
+    discussionCalloutId: string;
+    discussionCalloutCommentsId: string;
+  };
 }
 
 interface ProfileableIds {
   id: string;
   nameId: string;
-  profileId: string;
+  profile: {
+    id: string;
+    displayName: string;
+  };
 }
 interface EntityIds {
   accountId: string;
@@ -41,7 +53,6 @@ interface EntityIds {
     accountId: string;
     agentId: string;
     verificationId: string;
-    displayName: string;
   };
   space: CommonSpaceIds & {
     id: string;
@@ -63,25 +74,36 @@ export const baseScenario: EntityIds = {
     id: '',
     accountId: '',
     nameId: '',
-    profileId: '',
+    profile: {
+      id: '',
+      displayName: '',
+    },
     agentId: '',
     verificationId: '',
-    displayName: '',
   },
   space: {
     id: '',
     applicationId: '',
-    profileId: '',
-    communityId: '',
-    roleSetId: '',
-    updatesId: '',
-    communicationId: '',
+    profile: {
+      id: '',
+      displayName: '',
+    },
+    community: {
+      id: '',
+      roleSetId: '',
+    },
+    communication: {
+      id: '',
+      updatesId: '',
+    },
     contextId: '',
-    collaborationId: '',
-    calloutId: '',
-    whiteboardCalloutId: '',
-    discussionCalloutId: '',
-    discussionCalloutCommentsId: '',
+    collaboration: {
+      id: '',
+      calloutId: '',
+      whiteboardCalloutId: '',
+      discussionCalloutId: '',
+      discussionCalloutCommentsId: '',
+    },
     templateId: '',
     templateSetId: '',
     subspaceCollaborationTemplateId: '',
@@ -89,31 +111,49 @@ export const baseScenario: EntityIds = {
   subspace: {
     id: '',
     nameId: '',
-    profileId: '',
-    communityId: '',
-    roleSetId: '',
-    updatesId: '',
-    communicationId: '',
+    profile: {
+      id: '',
+      displayName: '',
+    },
+    community: {
+      id: '',
+      roleSetId: '',
+    },
+    communication: {
+      id: '',
+      updatesId: '',
+    },
     contextId: '',
-    collaborationId: '',
-    calloutId: '',
-    whiteboardCalloutId: '',
-    discussionCalloutId: '',
-    discussionCalloutCommentsId: '',
+    collaboration: {
+      id: '',
+      calloutId: '',
+      whiteboardCalloutId: '',
+      discussionCalloutId: '',
+      discussionCalloutCommentsId: '',
+    },
   },
   subsubspace: {
     id: '',
     nameId: '',
-    profileId: '',
-    communityId: '',
-    roleSetId: '',
-    updatesId: '',
-    communicationId: '',
+    profile: {
+      id: '',
+      displayName: '',
+    },
+    community: {
+      id: '',
+      roleSetId: '',
+    },
+    communication: {
+      id: '',
+      updatesId: '',
+    },
     contextId: '',
-    collaborationId: '',
-    calloutId: '',
-    whiteboardCalloutId: '',
-    discussionCalloutId: '',
-    discussionCalloutCommentsId: '',
+    collaboration: {
+      id: '',
+      calloutId: '',
+      whiteboardCalloutId: '',
+      discussionCalloutId: '',
+      discussionCalloutCommentsId: '',
+    },
   },
 };

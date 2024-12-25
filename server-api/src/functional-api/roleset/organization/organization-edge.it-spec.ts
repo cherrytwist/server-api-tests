@@ -54,70 +54,70 @@ describe('Assign / Remove organization to community', () => {
     beforeAll(async () => {
       await assignRoleToOrganization(
         baseScenario.organization.id,
-        baseScenario.subsubspace.roleSetId,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
       await assignRoleToOrganization(
         baseScenario.organization.id,
-        baseScenario.subspace.roleSetId,
-        CommunityRoleType.Member
-      );
-
-      await assignRoleToOrganization(
-        baseScenario.organization.id,
-        baseScenario.space.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToOrganization(
         baseScenario.organization.id,
-        baseScenario.subsubspace.roleSetId,
+        baseScenario.space.community.roleSetId,
+        CommunityRoleType.Member
+      );
+
+      await assignRoleToOrganization(
+        baseScenario.organization.id,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
       await assignRoleToOrganization(
         baseScenario.organization.id,
-        baseScenario.subspace.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await assignRoleToOrganization(
         baseScenario.organization.id,
-        baseScenario.space.roleSetId,
+        baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
     });
     afterAll(async () => {
       await removeRoleFromOrganization(
         baseScenario.organization.id,
-        baseScenario.subsubspace.roleSetId,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
       await removeRoleFromOrganization(
         baseScenario.organization.id,
-        baseScenario.subspace.roleSetId,
-        CommunityRoleType.Member
-      );
-
-      await removeRoleFromOrganization(
-        baseScenario.organization.id,
-        baseScenario.space.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await removeRoleFromOrganization(
         baseScenario.organization.id,
-        baseScenario.subsubspace.roleSetId,
+        baseScenario.space.community.roleSetId,
+        CommunityRoleType.Member
+      );
+
+      await removeRoleFromOrganization(
+        baseScenario.organization.id,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
       await removeRoleFromOrganization(
         baseScenario.organization.id,
-        baseScenario.subspace.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromOrganization(
         baseScenario.organization.id,
-        baseScenario.space.roleSetId,
+        baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
     });
@@ -126,12 +126,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const getRoleSetMembers = await getRoleSetMembersList(
-          baseScenario.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data =
           getRoleSetMembers.data?.lookup.roleSet?.memberOrganizations;
@@ -153,12 +153,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data =
           roleSetMembersList.data?.lookup.roleSet?.memberOrganizations;
@@ -180,12 +180,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data =
           roleSetMembersList.data?.lookup.roleSet?.memberOrganizations;
@@ -209,12 +209,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data =
           roleSetMembersList.data?.lookup.roleSet?.memberOrganizations;
@@ -233,12 +233,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data =
           roleSetMembersList.data?.lookup.roleSet?.memberOrganizations;
@@ -257,12 +257,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data =
           roleSetMembersList.data?.lookup.roleSet?.memberOrganizations;
@@ -284,12 +284,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data = roleSetMembersList.data?.lookup.roleSet?.leadOrganizations;
 
@@ -310,12 +310,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data = roleSetMembersList.data?.lookup.roleSet?.leadOrganizations;
 
@@ -336,12 +336,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data = roleSetMembersList.data?.lookup.roleSet?.leadOrganizations;
 
@@ -364,35 +364,35 @@ describe('Assign / Remove organization to community', () => {
       beforeAll(async () => {
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Member
         );
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Member
         );
 
         await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Lead
         );
         await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         await assignRoleToOrganization(
           baseScenario.organization.id,
-          baseScenario.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Lead
         );
       });
@@ -402,12 +402,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         const res = await assignRoleToOrganization(
           newOrgId,
-          baseScenario.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data = roleSetMembersList.data?.lookup.roleSet?.leadOrganizations;
 
@@ -428,12 +428,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data = roleSetMembersList.data?.lookup.roleSet?.leadOrganizations;
 
@@ -444,12 +444,12 @@ describe('Assign / Remove organization to community', () => {
         // Act
         await assignRoleToOrganization(
           newOrgId,
-          baseScenario.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembersList = await getRoleSetMembersList(
-          baseScenario.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data = roleSetMembersList.data?.lookup.roleSet?.leadOrganizations;
 

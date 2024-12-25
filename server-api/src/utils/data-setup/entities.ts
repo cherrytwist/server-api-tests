@@ -37,9 +37,9 @@ export const createOrgAndSpace = async (
   baseScenario.organization.id = responseOrg.data?.createOrganization.id ?? '';
   baseScenario.organization.verificationId =
     responseOrg.data?.createOrganization.verification.id ?? '';
-  baseScenario.organization.profileId =
+  baseScenario.organization.profile.id =
     responseOrg.data?.createOrganization.profile.id ?? '';
-  baseScenario.organization.displayName =
+  baseScenario.organization.profile.displayName =
     responseOrg.data?.createOrganization.profile.displayName ?? '';
   baseScenario.organization.nameId =
     responseOrg.data?.createOrganization.nameID ?? '';
@@ -53,22 +53,22 @@ export const createOrgAndSpace = async (
   baseScenario.accountId = spaceData?.account.id ?? '';
   baseScenario.space.id = spaceData?.id ?? '';
 
-  baseScenario.space.communityId = spaceData?.community?.id ?? '';
-  baseScenario.space.roleSetId = spaceData?.community?.roleSet?.id ?? '';
+  baseScenario.space.community.id = spaceData?.community?.id ?? '';
+  baseScenario.space.community.roleSetId = spaceData?.community?.roleSet?.id ?? '';
 
-  baseScenario.space.communicationId =
+  baseScenario.space.communication.id =
     spaceData?.community?.communication?.id ?? '';
 
-  baseScenario.space.updatesId =
+  baseScenario.space.communication.updatesId =
     spaceData?.community?.communication?.updates.id ?? '';
   baseScenario.space.contextId = spaceData?.context?.id ?? '';
-  baseScenario.space.profileId = spaceData?.profile?.id ?? '';
-  baseScenario.space.collaborationId = spaceData?.collaboration?.id ?? '';
+  baseScenario.space.profile.id = spaceData?.profile?.id ?? '';
+  baseScenario.space.collaboration.id = spaceData?.collaboration?.id ?? '';
   baseScenario.space.templateSetId =
     spaceData?.templatesManager?.templatesSet?.id ?? '';
 
   const callForPostCalloutData = await createCalloutOnCollaboration(
-    baseScenario.space.collaborationId,
+    baseScenario.space.collaboration.id,
     {
       framing: {
         profile: {
@@ -80,16 +80,16 @@ export const createOrgAndSpace = async (
     }
   );
 
-  baseScenario.space.calloutId =
+  baseScenario.space.collaboration.calloutId =
     callForPostCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    baseScenario.space.calloutId,
+    baseScenario.space.collaboration.calloutId,
     CalloutVisibility.Published
   );
 
   const whiteboardCalloutData = await createWhiteboardCalloutOnCollaboration(
-    baseScenario.space.collaborationId,
+    baseScenario.space.collaboration.id,
     {
       framing: {
         profile: {
@@ -102,16 +102,16 @@ export const createOrgAndSpace = async (
     TestUser.GLOBAL_ADMIN
   );
 
-  baseScenario.space.whiteboardCalloutId =
+  baseScenario.space.collaboration.whiteboardCalloutId =
     whiteboardCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    baseScenario.space.whiteboardCalloutId,
+    baseScenario.space.collaboration.whiteboardCalloutId,
     CalloutVisibility.Published
   );
 
   const creatPostCallout = await createCalloutOnCollaboration(
-    baseScenario.space.collaborationId,
+    baseScenario.space.collaboration.id,
     {
       framing: {
         profile: { displayName: 'Space Post Callout' },
@@ -120,11 +120,11 @@ export const createOrgAndSpace = async (
   );
   const postCalloutData = creatPostCallout.data?.createCalloutOnCollaboration;
 
-  baseScenario.space.discussionCalloutId = postCalloutData?.id ?? '';
-  baseScenario.space.discussionCalloutCommentsId =
+  baseScenario.space.collaboration.discussionCalloutId = postCalloutData?.id ?? '';
+  baseScenario.space.collaboration.discussionCalloutCommentsId =
     postCalloutData?.comments?.id ?? '';
   await updateCalloutVisibility(
-    baseScenario.space.discussionCalloutId,
+    baseScenario.space.collaboration.discussionCalloutId,
     CalloutVisibility.Published
   );
 };
@@ -135,7 +135,7 @@ export const getDefaultSpaceCalloutByNameId = async (
 ) => {
   delay(100);
   const calloutsPerSpace = await getCollaborationCalloutsData(
-    (collaborationId = baseScenario.space.collaborationId)
+    (collaborationId = baseScenario.space.collaboration.id)
   );
 
   const allCallouts =
@@ -160,7 +160,7 @@ export const assignUsersToSpaceAndOrgAsMembers = async () => {
   for (const userId of usersIdsToAssign) {
     await assignRoleToUser(
       userId,
-      baseScenario.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
   }
@@ -170,7 +170,7 @@ export const assignUsersToSpaceAndOrg = async () => {
   await assignUsersToSpaceAndOrgAsMembers();
   await assignRoleToUser(
     users.spaceAdmin.id,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Admin
   );
 };
@@ -195,17 +195,17 @@ export const createSubspaceForOrgSpace = async (subspaceName: string) => {
   const subspaceData = responseSubspace.data?.createSubspace;
   baseScenario.subspace.id = subspaceData?.id ?? '';
   baseScenario.subspace.nameId = subspaceData?.nameID ?? '';
-  baseScenario.subspace.communityId = subspaceData?.community?.id ?? '';
-  baseScenario.subspace.roleSetId = subspaceData?.community?.roleSet?.id ?? '';
-  baseScenario.subspace.communicationId =
+  baseScenario.subspace.community.id = subspaceData?.community?.id ?? '';
+  baseScenario.subspace.community.roleSetId = subspaceData?.community?.roleSet?.id ?? '';
+  baseScenario.subspace.communication.id =
     subspaceData?.community?.communication?.id ?? '';
-  baseScenario.subspace.updatesId =
+  baseScenario.subspace.communication.updatesId =
     subspaceData?.community?.communication?.updates.id ?? '';
-  baseScenario.subspace.collaborationId = subspaceData?.collaboration?.id ?? '';
+  baseScenario.subspace.collaboration.id = subspaceData?.collaboration?.id ?? '';
   baseScenario.subspace.contextId = subspaceData?.context?.id ?? '';
-  baseScenario.subspace.profileId = subspaceData?.profile?.id ?? '';
+  baseScenario.subspace.profile.id = subspaceData?.profile?.id ?? '';
   const callForPostCalloutData = await createCalloutOnCollaboration(
-    baseScenario.subspace.collaborationId,
+    baseScenario.subspace.collaboration.id,
     {
       framing: {
         profile: {
@@ -217,16 +217,16 @@ export const createSubspaceForOrgSpace = async (subspaceName: string) => {
     }
   );
 
-  baseScenario.subspace.calloutId =
+  baseScenario.subspace.collaboration.calloutId =
     callForPostCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    baseScenario.subspace.calloutId,
+    baseScenario.subspace.collaboration.calloutId,
     CalloutVisibility.Published
   );
 
   const whiteboardCalloutData = await createWhiteboardCalloutOnCollaboration(
-    baseScenario.subspace.collaborationId,
+    baseScenario.subspace.collaboration.id,
     {
       framing: {
         profile: {
@@ -239,16 +239,16 @@ export const createSubspaceForOrgSpace = async (subspaceName: string) => {
     TestUser.GLOBAL_ADMIN
   );
 
-  baseScenario.subspace.whiteboardCalloutId =
+  baseScenario.subspace.collaboration.whiteboardCalloutId =
     whiteboardCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    baseScenario.subspace.whiteboardCalloutId,
+    baseScenario.subspace.collaboration.whiteboardCalloutId,
     CalloutVisibility.Published
   );
 
   const creatPostCallout = await createCalloutOnCollaboration(
-    baseScenario.subspace.collaborationId,
+    baseScenario.subspace.collaboration.id,
     {
       framing: {
         profile: { displayName: 'Subspace Post Callout' },
@@ -257,11 +257,11 @@ export const createSubspaceForOrgSpace = async (subspaceName: string) => {
   );
   const postCalloutData = creatPostCallout.data?.createCalloutOnCollaboration;
 
-  baseScenario.subspace.discussionCalloutId = postCalloutData?.id ?? '';
-  baseScenario.subspace.discussionCalloutCommentsId =
+  baseScenario.subspace.collaboration.discussionCalloutId = postCalloutData?.id ?? '';
+  baseScenario.subspace.collaboration.discussionCalloutCommentsId =
     postCalloutData?.comments?.id ?? '';
   await updateCalloutVisibility(
-    baseScenario.subspace.discussionCalloutId,
+    baseScenario.subspace.collaboration.discussionCalloutId,
     CalloutVisibility.Published
   );
 };
@@ -272,7 +272,7 @@ export const getDefaultSubspaceCalloutByNameId = async (
   nameID: string
 ) => {
   const calloutsPerCollaboration = await getCollaborationCalloutsData(
-    (collaborationId = baseScenario.subspace.collaborationId)
+    (collaborationId = baseScenario.subspace.collaboration.id)
   );
   const allCallouts =
     calloutsPerCollaboration.data?.lookup?.collaboration?.callouts ?? [];
@@ -293,7 +293,7 @@ export const assignUsersToSubspaceAsMembers = async () => {
   for (const userID of usersIdsToAssign) {
     await assignRoleToUser(
       userID,
-      baseScenario.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
   }
@@ -304,7 +304,7 @@ export const assignUsersToSubspace = async () => {
 
   await assignRoleToUser(
     users.subspaceAdmin.id,
-    baseScenario.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Admin
   );
 };
@@ -320,7 +320,7 @@ export const getDefaultSubsubspaceCalloutByNameId = async (
   nameID: string
 ) => {
   const calloutsPerCollaboration = await getCollaborationCalloutsData(
-    (collaborationId = baseScenario.subsubspace.collaborationId)
+    (collaborationId = baseScenario.subsubspace.collaboration.id)
   );
 
   const allCallouts =
@@ -344,21 +344,21 @@ export const createSubsubspaceForSubspace = async (
   baseScenario.subsubspace.id = responseSubsubspace.data?.createSubspace.id ?? '';
   baseScenario.subsubspace.nameId =
     responseSubsubspace.data?.createSubspace.nameID ?? '';
-  baseScenario.subsubspace.communityId =
+  baseScenario.subsubspace.community.id =
     responseSubsubspace.data?.createSubspace.community?.id ?? '';
-  baseScenario.subsubspace.roleSetId =
+  baseScenario.subsubspace.community.roleSetId =
     responseSubsubspace.data?.createSubspace.community?.roleSet.id ?? '';
-  baseScenario.subsubspace.communicationId =
+  baseScenario.subsubspace.communication.id =
     responseSubsubspace.data?.createSubspace.community?.communication?.id ?? '';
-  baseScenario.subsubspace.updatesId =
+  baseScenario.subsubspace.communication.updatesId =
     responseSubsubspace.data?.createSubspace.community?.communication?.updates
       .id ?? '';
-  baseScenario.subsubspace.collaborationId =
+  baseScenario.subsubspace.collaboration.id =
     responseSubsubspace.data?.createSubspace.collaboration?.id ?? '';
   baseScenario.subsubspace.contextId =
     responseSubsubspace.data?.createSubspace.context?.id ?? '';
   const callForPostCalloutData = await createCalloutOnCollaboration(
-    baseScenario.subsubspace.collaborationId,
+    baseScenario.subsubspace.collaboration.id,
     {
       framing: {
         profile: {
@@ -370,16 +370,16 @@ export const createSubsubspaceForSubspace = async (
     }
   );
 
-  baseScenario.subsubspace.calloutId =
+  baseScenario.subsubspace.collaboration.calloutId =
     callForPostCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    baseScenario.subsubspace.calloutId,
+    baseScenario.subsubspace.collaboration.calloutId,
     CalloutVisibility.Published
   );
 
   const whiteboardCalloutData = await createWhiteboardCalloutOnCollaboration(
-    baseScenario.subsubspace.collaborationId,
+    baseScenario.subsubspace.collaboration.id,
     {
       framing: {
         profile: {
@@ -392,16 +392,16 @@ export const createSubsubspaceForSubspace = async (
     TestUser.GLOBAL_ADMIN
   );
 
-  baseScenario.subsubspace.whiteboardCalloutId =
+  baseScenario.subsubspace.collaboration.whiteboardCalloutId =
     whiteboardCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
 
   await updateCalloutVisibility(
-    baseScenario.subsubspace.whiteboardCalloutId,
+    baseScenario.subsubspace.collaboration.whiteboardCalloutId,
     CalloutVisibility.Published
   );
 
   const creatPostCallout = await createCalloutOnCollaboration(
-    baseScenario.subsubspace.collaborationId,
+    baseScenario.subsubspace.collaboration.id,
     {
       framing: {
         profile: { displayName: 'Subsubspace Post Callout' },
@@ -410,11 +410,11 @@ export const createSubsubspaceForSubspace = async (
   );
   const postCalloutData = creatPostCallout.data?.createCalloutOnCollaboration;
 
-  baseScenario.subsubspace.discussionCalloutId = postCalloutData?.id ?? '';
-  baseScenario.subsubspace.discussionCalloutCommentsId =
+  baseScenario.subsubspace.collaboration.discussionCalloutId = postCalloutData?.id ?? '';
+  baseScenario.subsubspace.collaboration.discussionCalloutCommentsId =
     postCalloutData?.comments?.id ?? '';
   await updateCalloutVisibility(
-    baseScenario.subsubspace.discussionCalloutId,
+    baseScenario.subsubspace.collaboration.discussionCalloutId,
     CalloutVisibility.Published
   );
 };
@@ -427,7 +427,7 @@ export const assignUsersToSubsubspaceAsMembers = async () => {
   for (const user of usersToAssign) {
     await assignRoleToUser(
       user,
-      baseScenario.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
   }
@@ -437,7 +437,7 @@ export const assignUsersToSubsubspace = async () => {
   await assignUsersToSubsubspaceAsMembers();
   await assignRoleToUser(
     users.subsubspaceAdmin.id,
-    baseScenario.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Admin
   );
 };
@@ -475,36 +475,36 @@ export const registerUsersAndAssignToAllEntitiesAsMembers = async (
   // Assign users to Space community
   await assignRoleToUser(
     spaceMemberId,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Member
   );
   await assignRoleToUser(
     subspaceMemberId,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Member
   );
   await assignRoleToUser(
     subsubspaceMemberId,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Member
   );
 
   // Assign users to Subspace community
   await assignRoleToUser(
     subsubspaceMemberId,
-    baseScenario.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Member
   );
   await assignRoleToUser(
     subspaceMemberId,
-    baseScenario.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Member
   );
 
   // Assign users to Subsubspace community
   await assignRoleToUser(
     subsubspaceMemberId,
-    baseScenario.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Member
   );
 };

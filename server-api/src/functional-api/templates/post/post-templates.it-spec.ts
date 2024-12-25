@@ -168,7 +168,7 @@ describe('Post templates - Utilization in posts', () => {
     test('Create Post on Space', async () => {
       // Act
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.calloutId,
+        baseScenario.space.collaboration.calloutId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
@@ -179,7 +179,7 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.calloutId
+        baseScenario.space.collaboration.calloutId
       );
       const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId
@@ -192,7 +192,7 @@ describe('Post templates - Utilization in posts', () => {
     test('Create Post on Subspace', async () => {
       // Act
       const res = await createPostOnCallout(
-        baseScenario.subspace.calloutId,
+        baseScenario.subspace.collaboration.calloutId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
@@ -208,7 +208,7 @@ describe('Post templates - Utilization in posts', () => {
     test('Create Post on Subsubspace', async () => {
       // Act
       const res = await createPostOnCallout(
-        baseScenario.subsubspace.calloutId,
+        baseScenario.subsubspace.collaboration.calloutId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
@@ -226,7 +226,7 @@ describe('Post templates - Utilization in posts', () => {
     let postDataCreate: PostDataFragment | undefined;
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.calloutId,
+        baseScenario.space.collaboration.calloutId,
         { displayName: `new-asp-d-name-${uniqueId}` },
         `new-asp-n-id-${uniqueId}`
       );
@@ -248,7 +248,7 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.calloutId
+        baseScenario.space.collaboration.calloutId
       );
       const data = postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId
@@ -269,7 +269,7 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.calloutId
+        baseScenario.space.collaboration.calloutId
       );
       const data = postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId
@@ -284,7 +284,7 @@ describe('Post templates - Utilization in posts', () => {
     let postDataCreate: PostDataFragment | undefined;
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.calloutId,
+        baseScenario.space.collaboration.calloutId,
         {
           displayName: postDisplayName + `rem-temp-asp-d-n-${uniqueId}`,
         },
@@ -303,7 +303,7 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.calloutId
+        baseScenario.space.collaboration.calloutId
       );
       const data = postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId

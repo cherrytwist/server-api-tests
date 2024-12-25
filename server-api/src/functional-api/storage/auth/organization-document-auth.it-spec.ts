@@ -69,7 +69,7 @@ describe('Organization - documents', () => {
     });
     beforeAll(async () => {
       const visualData = await lookupProfileVisuals(
-        baseScenario.organization.profileId
+        baseScenario.organization.profile.id
       );
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
@@ -77,7 +77,7 @@ describe('Organization - documents', () => {
         visualId
       );
       const getDocId = await getProfileDocuments(
-        baseScenario.organization.profileId,
+        baseScenario.organization.profile.id,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -97,7 +97,7 @@ describe('Organization - documents', () => {
       'User: "$userRole" has this privileges: "$privileges" to organization profile visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          baseScenario.organization.profileId,
+          baseScenario.organization.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -123,7 +123,7 @@ describe('Organization - documents', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          baseScenario.organization.profileId,
+          baseScenario.organization.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -140,7 +140,7 @@ describe('Organization - documents', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        baseScenario.organization.profileId
+        baseScenario.organization.profile.id
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
       await uploadFileOnRef(
@@ -149,7 +149,7 @@ describe('Organization - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        baseScenario.organization.profileId,
+        baseScenario.organization.profile.id,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -169,7 +169,7 @@ describe('Organization - documents', () => {
       'User: "$userRole" has this privileges: "$privileges" to organization reference document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          baseScenario.organization.profileId,
+          baseScenario.organization.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -195,7 +195,7 @@ describe('Organization - documents', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          baseScenario.organization.profileId,
+          baseScenario.organization.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -212,7 +212,7 @@ describe('Organization - documents', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        baseScenario.organization.profileId,
+        baseScenario.organization.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -225,7 +225,7 @@ describe('Organization - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        baseScenario.space.profileId,
+        baseScenario.space.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -246,7 +246,7 @@ describe('Organization - documents', () => {
       'User: "$userRole" has this privileges: "$privileges" to organization description visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          baseScenario.organization.profileId,
+          baseScenario.organization.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -272,7 +272,7 @@ describe('Organization - documents', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          baseScenario.organization.profileId,
+          baseScenario.organization.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;

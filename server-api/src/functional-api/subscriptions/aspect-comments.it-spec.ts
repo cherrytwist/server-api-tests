@@ -108,7 +108,7 @@ describe('Post comments subscription', () => {
   describe('Space comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.calloutId,
+        baseScenario.space.collaboration.calloutId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.GLOBAL_ADMIN
@@ -188,7 +188,7 @@ describe('Post comments subscription', () => {
   describe('Subspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
-        baseScenario.subspace.calloutId,
+        baseScenario.subspace.collaboration.calloutId,
         { displayName: postDisplayName + 'ch' },
         postNameID + 'ch',
         TestUser.GLOBAL_ADMIN
@@ -268,7 +268,7 @@ describe('Post comments subscription', () => {
   describe('Subsubspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
-        baseScenario.subsubspace.calloutId,
+        baseScenario.subsubspace.collaboration.calloutId,
         { displayName: postDisplayName + 'opp' },
         postNameID + 'opp',
         TestUser.GLOBAL_ADMIN

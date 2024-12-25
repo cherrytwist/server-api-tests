@@ -74,7 +74,7 @@ describe('Lifecycle', () => {
 
         const application = eventResponseData?.data?.eventOnApplication;
         const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-          baseScenario.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
 
         const roleSetFirstApplication =

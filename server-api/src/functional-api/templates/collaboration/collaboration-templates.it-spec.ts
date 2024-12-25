@@ -51,7 +51,7 @@ describe('Subspace templates - CRUD', () => {
     );
 
     const res = await createTemplateFromCollaboration(
-      baseScenario.subspace.collaborationId,
+      baseScenario.subspace.collaboration.id,
       baseScenario.space.templateSetId,
       'Subspace Template 1'
     );
@@ -82,7 +82,7 @@ describe('Subspace templates - CRUD', () => {
       baseScenario.space.id
     );
     const res = await createTemplateFromCollaboration(
-      baseScenario.subspace.collaborationId,
+      baseScenario.subspace.collaboration.id,
       baseScenario.space.templateSetId,
       'Subspace Template 2'
     );
@@ -104,7 +104,7 @@ describe('Subspace templates - CRUD', () => {
   test('Update subspace template', async () => {
     // Arrange
     const res = await createTemplateFromCollaboration(
-      baseScenario.subspace.collaborationId,
+      baseScenario.subspace.collaboration.id,
       baseScenario.space.templateSetId,
       'Subspace Template 3'
     );

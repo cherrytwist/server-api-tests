@@ -32,37 +32,37 @@ beforeAll(async () => {
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
-    baseScenario.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
-    baseScenario.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
-    baseScenario.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
-    baseScenario.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
-    baseScenario.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 });
