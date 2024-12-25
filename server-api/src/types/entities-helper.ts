@@ -34,7 +34,6 @@ interface ProfileableIds {
 }
 interface EntityIds {
   accountId: string;
-  spaceId: string;
   whiteboardTemplateId: string;
   messageId: string;
   discussionId: string;
@@ -45,6 +44,7 @@ interface EntityIds {
     displayName: string;
   };
   space: CommonSpaceIds & {
+    id: string;
     applicationId: string;
     templateId: string;
     templateSetId: string;
@@ -54,9 +54,8 @@ interface EntityIds {
   subsubspace: CommonSpaceIds & ProfileableIds;
 }
 
-export const entitiesId: EntityIds = {
+export const baseScenario: EntityIds = {
   accountId: '',
-  spaceId: '',
   whiteboardTemplateId: '',
   messageId: '',
   discussionId: '',
@@ -70,6 +69,7 @@ export const entitiesId: EntityIds = {
     displayName: '',
   },
   space: {
+    id: '',
     applicationId: '',
     profileId: '',
     communityId: '',

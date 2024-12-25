@@ -16,7 +16,7 @@ import {
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { getRoleSetInvitationsApplications } from '../application/application.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -41,8 +41,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 afterEach(async () => {
@@ -59,13 +59,13 @@ describe('Invitations', () => {
   test('should create external invitation', async () => {
     // Arrange
     const getInvBefore = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 
     // Act
     const invitationData = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       emailExternalUser,
       message,
       TestUser.GLOBAL_ADMIN
@@ -82,7 +82,7 @@ describe('Invitations', () => {
     );
 
     const getInvAfter = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 
@@ -100,12 +100,12 @@ describe('Invitations', () => {
     const userEmail = `2+${emailExternalUser}`;
 
     const getInvBefore = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 
     const invitationData = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       userEmail,
       message,
       TestUser.GLOBAL_ADMIN
@@ -117,7 +117,7 @@ describe('Invitations', () => {
 
     // Act
     const invitationData2 = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       userEmail,
       message,
       TestUser.GLOBAL_ADMIN
@@ -129,7 +129,7 @@ describe('Invitations', () => {
     );
 
     const getInvAfter = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 
@@ -141,7 +141,7 @@ describe('Invitations', () => {
       getInvAfter?.data?.lookup?.roleSet?.platformInvitations?.[0].email
     ).toEqual(userEmail);
     expect(invitationData2.error?.errors[0].message).toContain(
-      `An invitation with the provided email address (${userEmail}) already exists for the specified roleSet: ${entitiesId.space.roleSetId}`
+      `An invitation with the provided email address (${userEmail}) already exists for the specified roleSet: ${baseScenario.space.roleSetId}`
     );
   });
 
@@ -150,7 +150,7 @@ describe('Invitations', () => {
     const userEmail = `3+${emailExternalUser}`;
 
     const invitationData = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       userEmail,
       message,
       TestUser.GLOBAL_ADMIN
@@ -161,7 +161,7 @@ describe('Invitations', () => {
     invitationId = invitationInfo?.id ?? '';
 
     const invData = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 
@@ -169,7 +169,7 @@ describe('Invitations', () => {
     await deleteExternalInvitation(invitationId);
 
     const invitationData2 = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       userEmail,
       message,
       TestUser.GLOBAL_ADMIN
@@ -186,7 +186,7 @@ describe('Invitations', () => {
     );
 
     const invData2 = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 
@@ -206,7 +206,7 @@ describe('Invitations', () => {
     const responseSpace2 = await createSpaceAndGetData(
       spaceName,
       spaceName,
-      entitiesId.organization.accountId
+      baseScenario.organization.accountId
     );
 
     const secondSpaceData = responseSpace2?.data?.space;
@@ -214,7 +214,7 @@ describe('Invitations', () => {
     const secondSpaceRoleSetId = secondSpaceData?.community?.roleSet.id ?? '';
 
     const invitationData = await inviteExternalUser(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       userEmail,
       message,
       TestUser.GLOBAL_ADMIN
@@ -239,7 +239,7 @@ describe('Invitations', () => {
     );
 
     const invSpace1 = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.GLOBAL_ADMIN
     );
 

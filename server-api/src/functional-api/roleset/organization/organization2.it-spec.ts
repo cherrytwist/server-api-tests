@@ -10,7 +10,7 @@ import {
   assignRoleToOrganization,
   getOrganizationRole,
 } from '../roles-request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import { CommunityRoleType } from '@generated/graphql';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 
@@ -31,53 +31,53 @@ beforeAll(async () => {
   await createSubsubspaceForSubspace(subsubspaceName);
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.space.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.space.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subspace.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subsubspace.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.space.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.space.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subspace.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subsubspace.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Organization role', () => {
   test('Organization role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
-    const res = await getOrganizationRole(entitiesId.organization.id);
+    const res = await getOrganizationRole(baseScenario.organization.id);
     const spacesData = res?.data?.rolesOrganization.spaces ?? [];
 
     // Assert
@@ -93,7 +93,7 @@ describe('Organization role', () => {
     expect(spacesData[0].subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: entitiesId.subspace.nameId,
+          nameID: baseScenario.subspace.nameId,
           roles: expect.arrayContaining(availableRoles),
         }),
       ])

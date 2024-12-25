@@ -1,4 +1,4 @@
-import { entitiesId } from '@src/types/entities-helper';
+import { baseScenario } from '@src/types/entities-helper';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { TestUser } from '@alkemio/tests-lib';

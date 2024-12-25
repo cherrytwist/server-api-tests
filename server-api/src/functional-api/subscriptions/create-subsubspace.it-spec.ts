@@ -8,7 +8,7 @@ import {
   createSubspaceWithUsers,
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
-import { entitiesId } from '../../types/entities-helper';
+import { baseScenario } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
@@ -44,9 +44,9 @@ afterAll(async () => {
   subscription2.terminate();
   subscription3.terminate();
 
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 describe('Create subsubspace subscription', () => {
   beforeAll(async () => {
@@ -57,7 +57,7 @@ describe('Create subsubspace subscription', () => {
     const utilizedQuery = {
       operationName: 'SubsubspaceCreated',
       query: subscriptionSubsubspaceCreated,
-      variables: { subspaceID: entitiesId.subspace.id },
+      variables: { subspaceID: baseScenario.subspace.id },
     };
 
     await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
@@ -81,14 +81,14 @@ describe('Create subsubspace subscription', () => {
     const resOne = await createSubsubspace(
       subsubspaceDisplayName1,
       subsubspaceDisplayName1,
-      entitiesId.subspace.id
+      baseScenario.subspace.id
     );
     subsubspaceIdOne = resOne?.data?.createSubspace.id ?? '';
 
     const resTwo = await createSubsubspace(
       subsubspaceDisplayName2,
       subsubspaceDisplayName2,
-      entitiesId.subspace.id,
+      baseScenario.subspace.id,
       TestUser.SPACE_ADMIN
     );
     subsubspaceIdTwo = resTwo?.data?.createSubspace.id ?? '';

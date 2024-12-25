@@ -9,7 +9,7 @@ import {
 } from '@utils/data-setup/entities';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '@src/types/entities-helper';
+import { baseScenario } from '@src/types/entities-helper';
 import {
   createWhiteboardTemplate,
   getWhiteboardTemplatesCount,
@@ -33,10 +33,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 beforeEach(async () => {
@@ -53,16 +53,16 @@ describe('WHITEBOARD templates - CRUD', () => {
   test('Create Whiteboard template', async () => {
     // Arrange
     const countBefore = await getWhiteboardTemplatesCount(
-      entitiesId.space.templateSetId
+      baseScenario.space.templateSetId
     );
     // Act
     const resCreateTemplate = await createWhiteboardTemplate(
-      entitiesId.space.templateSetId
+      baseScenario.space.templateSetId
     );
     const whiteboardData = resCreateTemplate?.data?.createTemplate;
     templateId = whiteboardData?.id ?? '';
     const countAfter = await getWhiteboardTemplatesCount(
-      entitiesId.space.templateSetId
+      baseScenario.space.templateSetId
     );
 
     const getTemplate = await GetTemplateById(templateId);
@@ -81,14 +81,14 @@ describe('WHITEBOARD templates - CRUD', () => {
   test('Delete Whiteboard template', async () => {
     // Arrange
     const resCreatePostTempl = await createWhiteboardTemplate(
-      entitiesId.space.templateSetId
+      baseScenario.space.templateSetId
     );
     templateId = resCreatePostTempl?.data?.createTemplate.id ?? '';
-    const countBefore = await getWhiteboardTemplatesCount(entitiesId.space.templateSetId);
+    const countBefore = await getWhiteboardTemplatesCount(baseScenario.space.templateSetId);
 
     // Act
     const remove = await deleteTemplate(templateId);
-    const countAfter = await getWhiteboardTemplatesCount(entitiesId.space.templateSetId);
+    const countAfter = await getWhiteboardTemplatesCount(baseScenario.space.templateSetId);
 
     // Assert
     expect(countAfter).toEqual((countBefore as number) - 1);

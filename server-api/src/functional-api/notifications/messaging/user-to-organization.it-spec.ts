@@ -10,7 +10,7 @@ import { users } from '@utils/queries/users-data';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { sendMessageToOrganization } from '@functional-api/communications/communication.params';
 import {
-  entitiesId,
+  baseScenario,
   getMailsData,
 } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
@@ -40,12 +40,12 @@ beforeAll(async () => {
 
   await assignUserAsOrganizationAdmin(
     users.spaceAdmin.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   await assignUserAsOrganizationAdmin(
     users.spaceMember.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   receivers = `${users.nonSpaceMember.displayName} sent a message to your organization`;
@@ -64,8 +64,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Notifications - user to organization messages', () => {
@@ -81,7 +81,7 @@ describe('Notifications - user to organization messages', () => {
   test("User 'A' sends message to Organization(both admins ORGANIZATION_MESSAGE:true) (3 admins) - 4 messages are sent", async () => {
     // Act
     await sendMessageToOrganization(
-      entitiesId.organization.id,
+      baseScenario.organization.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -122,7 +122,7 @@ describe('Notifications - user to organization messages', () => {
     );
     // Act
     await sendMessageToOrganization(
-      entitiesId.organization.id,
+      baseScenario.organization.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -165,7 +165,7 @@ describe('Notifications - user to organization messages', () => {
     );
     // Act
     await sendMessageToOrganization(
-      entitiesId.organization.id,
+      baseScenario.organization.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );

@@ -13,7 +13,7 @@ import {
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
 import { CommunityMembershipPolicy } from '@generated/graphql';
@@ -31,20 +31,20 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Lifecycle', () => {
   describe('Update application entity state - positive path - REJECT', () => {
     beforeAll(async () => {
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         membership: {
           policy: CommunityMembershipPolicy.Applications,
         },
       });
 
-      const spaceCommunityIds = await getSpaceData(entitiesId.spaceId);
+      const spaceCommunityIds = await getSpaceData(baseScenario.space.id);
       spaceRoleSetId =
         spaceCommunityIds?.data?.space?.community?.roleSet.id ?? '';
 
@@ -74,7 +74,7 @@ describe('Lifecycle', () => {
 
         const application = eventResponseData?.data?.eventOnApplication;
         const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-          entitiesId.space.roleSetId
+          baseScenario.space.roleSetId
         );
 
         const roleSetFirstApplication =

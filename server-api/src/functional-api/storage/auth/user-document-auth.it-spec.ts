@@ -19,7 +19,7 @@ import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,
 } from '../../references/references.request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import { sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii, sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin, sorted__create_read_update_delete_grant_readUserPii_platformAdmin, sorted__create_read_update_delete_readUserPii } from '@common/constants/privileges';
 
 const organizationName = 'org-name' + uniqueId;
@@ -38,8 +38,8 @@ beforeAll(async () => {
   );
 });
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('User - documents', () => {

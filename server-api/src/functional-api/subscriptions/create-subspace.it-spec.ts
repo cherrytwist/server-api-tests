@@ -5,7 +5,7 @@ import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionSubspaceCreated } from './subscrition-queries';
 import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
-import { entitiesId } from '../../types/entities-helper';
+import { baseScenario } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
@@ -37,8 +37,8 @@ afterAll(async () => {
   subscription2.terminate();
   subscription3.terminate();
 
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 describe('Create subspace subscription', () => {
   beforeAll(async () => {
@@ -49,7 +49,7 @@ describe('Create subspace subscription', () => {
     const utilizedQuery = {
       operationName: 'SubspaceCreated',
       query: subscriptionSubspaceCreated,
-      variables: { spaceID: entitiesId.spaceId },
+      variables: { spaceID: baseScenario.space.id },
     };
 
     await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
@@ -73,14 +73,14 @@ describe('Create subspace subscription', () => {
     const resOne = await createSubspace(
       subspaceDisplayName1,
       subspaceDisplayName1,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     subspaceIdOne = resOne?.data?.createSubspace.id ?? '';
 
     const resTwo = await createSubspace(
       subspaceDisplayName2,
       subspaceDisplayName2,
-      entitiesId.spaceId,
+      baseScenario.space.id,
       TestUser.SPACE_ADMIN
     );
     subspaceIdTwo = resTwo?.data?.createSubspace.id ?? '';
@@ -90,13 +90,13 @@ describe('Create subspace subscription', () => {
     const expectedData = expect.arrayContaining([
       expect.objectContaining({
         subspaceCreated: {
-          spaceID: entitiesId.spaceId,
+          spaceID: baseScenario.space.id,
           subspace: { profile: { displayName: subspaceDisplayName1 } },
         },
       }),
       expect.objectContaining({
         subspaceCreated: {
-          spaceID: entitiesId.spaceId,
+          spaceID: baseScenario.space.id,
           subspace: { profile: { displayName: subspaceDisplayName2 } },
         },
       }),

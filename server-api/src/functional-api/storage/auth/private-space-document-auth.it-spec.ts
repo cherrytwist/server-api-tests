@@ -49,7 +49,7 @@ import {
 } from '../../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-callout.params.request';
 import { createReferenceOnProfile } from '../../references/references.request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import {
   SpacePrivacyMode,
   SpaceVisibility,
@@ -70,19 +70,19 @@ beforeAll(async () => {
     spaceNameId
   );
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: { mode: SpacePrivacyMode.Private },
   });
 
   await updateSpacePlatformSettings(
-    entitiesId.spaceId,
+    baseScenario.space.id,
     spaceNameId,
     SpaceVisibility.Active
   );
 });
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Private Space - visual on profile', () => {
@@ -91,14 +91,14 @@ describe('Private Space - visual on profile', () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
-      const visualData = await lookupProfileVisuals(entitiesId.space.profileId);
+      const visualData = await lookupProfileVisuals(baseScenario.space.profileId);
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
         path.join(__dirname, 'files-to-upload', '190-410.jpg'),
         visualId
       );
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -117,7 +117,7 @@ describe('Private Space - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space profile visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -142,7 +142,7 @@ describe('Private Space - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -159,7 +159,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        entitiesId.space.profileId
+        baseScenario.space.profileId
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
       await uploadFileOnRef(
@@ -168,7 +168,7 @@ describe('Private Space - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -187,7 +187,7 @@ describe('Private Space - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space profile reference document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profileId,
           userRole
         );
 
@@ -213,7 +213,7 @@ describe('Private Space - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profileId,
           userRole
         );
 
@@ -231,7 +231,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -244,7 +244,7 @@ describe('Private Space - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -264,7 +264,7 @@ describe('Private Space - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space context (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profileId,
           userRole
         );
 
@@ -290,7 +290,7 @@ describe('Private Space - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -308,7 +308,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createLinkCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'link11',
         'Link collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -390,7 +390,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'post11',
         'Post collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -483,7 +483,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'post12',
         'Post collection Callout12',
         TestUser.GLOBAL_ADMIN
@@ -577,7 +577,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createWhiteboardCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'whiteboard11',
         'Whiteboard collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -676,7 +676,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'post3',
         'Post collection Callout3',
         TestUser.GLOBAL_ADMIN
@@ -755,7 +755,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'post4',
         'Post collection Callout4',
         TestUser.GLOBAL_ADMIN
@@ -832,7 +832,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'whiteboard1',
         'Whiteboard Callout1',
         TestUser.GLOBAL_ADMIN
@@ -910,7 +910,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaborationId,
         'whiteboard2',
         'Whiteboard Callout2',
         TestUser.GLOBAL_ADMIN

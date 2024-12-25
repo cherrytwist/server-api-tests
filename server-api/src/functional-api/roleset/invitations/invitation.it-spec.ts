@@ -30,7 +30,7 @@ import {
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
@@ -51,7 +51,7 @@ beforeAll(async () => {
     spaceName,
     spaceNameId
   );
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
       mode: SpacePrivacyMode.Private,
     },
@@ -62,15 +62,15 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Invitations', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       CommunityRoleType.Member
     );
     if (invitationId && invitationId.length === 36) {
@@ -81,7 +81,7 @@ describe('Invitations', () => {
   test('should create invitation', async () => {
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -95,7 +95,7 @@ describe('Invitations', () => {
     expect(invitationId.length).toEqual(36);
 
     const getInv = await getSpaceInvitation(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       TestUser.GLOBAL_ADMIN
     );
     const data = getInv?.data?.space?.community?.roleSet.invitations;
@@ -107,7 +107,7 @@ describe('Invitations', () => {
   test('should create space invitation, when previous was REJECTED and ARCHIVED', async () => {
     // Arrange
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -127,7 +127,7 @@ describe('Invitations', () => {
     // Act
     // Creates invitation second time
     const invitationDataTwo = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -151,7 +151,7 @@ describe('Invitations', () => {
             id: invitationIdTwo,
             state: 'invited',
           }),
-          spacePendingMembershipInfo: { id: entitiesId.spaceId },
+          spacePendingMembershipInfo: { id: baseScenario.space.id },
         }),
       ])
     );
@@ -161,7 +161,7 @@ describe('Invitations', () => {
   test('should remove invitation', async () => {
     // Arrange
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -176,7 +176,7 @@ describe('Invitations', () => {
     // Act
     const removeInv = await deleteInvitation(invitationId);
     const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
+      baseScenario.space.roleSetId
     );
     // Assert
     expect(removeInv?.data?.deleteInvitation.id).toEqual(invitationId);
@@ -186,7 +186,7 @@ describe('Invitations', () => {
 
     // Re-invite to avoid error when deleting in the test setup
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -204,7 +204,7 @@ describe('Invitations', () => {
     // Act
     const invId = '8bf7752d-59bf-404a-97c8-e906d8377c37';
     const getInv = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
+      baseScenario.space.roleSetId
     );
 
     // Assert
@@ -217,7 +217,7 @@ describe('Invitations', () => {
   test('should throw error for creating the same invitation twice', async () => {
     // Arrange
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -232,21 +232,21 @@ describe('Invitations', () => {
 
     // Act
     const invitationDataTwo = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
     // Assert
     expect(invitationDataTwo?.error?.errors[0].message).toContain(
-      `Invitation not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
+      `Invitation not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.roleSetId}.`
     );
   });
 
   test('should return invitations after user is removed', async () => {
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.qaUser.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -264,7 +264,7 @@ describe('Invitations', () => {
     await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
 
     const invitationsDataCommunity = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
+      baseScenario.space.roleSetId
     );
 
     // Assert
@@ -279,7 +279,7 @@ describe('Invitations-flows', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       CommunityRoleType.Member
     );
 
@@ -289,7 +289,7 @@ describe('Invitations-flows', () => {
   test('invitee is able to ACCEPT invitation and access space data', async () => {
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -319,7 +319,7 @@ describe('Invitations-flows', () => {
   test('invitee is able to REJECT and ARCHIVE invitation: no access to space data', async () => {
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -356,33 +356,33 @@ describe('Invitations-flows', () => {
     // Arrange
     await assignRoleToUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       CommunityRoleType.Member
     );
 
     await assignRoleToUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       CommunityRoleType.Member
     );
 
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
     // Assert
     expect(invitationData?.error?.errors[0].message).toContain(
-      `Invitation not possible: Contributor ${users.nonSpaceMember.id} is already a member of the RoleSet: ${entitiesId.space.roleSetId}.`
+      `Invitation not possible: Contributor ${users.nonSpaceMember.id} is already a member of the RoleSet: ${baseScenario.space.roleSetId}.`
     );
   });
 
   test('should fail to send invitation, when user has active application', async () => {
     // Arrange
     const res = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       TestUser.NON_SPACE_MEMBER
     );
     let applicationId = 'applicationIdNotRetrieved';
@@ -393,14 +393,14 @@ describe('Invitations-flows', () => {
 
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
     // Assert
     expect(invitationData?.error?.errors[0].message).toContain(
-      `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.nonSpaceMember.id} on RoleSet: ${entitiesId.space.roleSetId}.`
+      `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.nonSpaceMember.id} on RoleSet: ${baseScenario.space.roleSetId}.`
     );
     await deleteApplication(applicationId);
   });
@@ -408,7 +408,7 @@ describe('Invitations-flows', () => {
   test('User with received inviation, cannot apply to the community', async () => {
     // Arrange
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       [users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
@@ -430,7 +430,7 @@ describe('Invitations-flows', () => {
     expect(invitationId.length).toEqual(36);
 
     // Act
-    const res = await createApplication(entitiesId.space.roleSetId);
+    const res = await createApplication(baseScenario.space.roleSetId);
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const membershipData = userAppsData?.data?.me;
@@ -441,7 +441,7 @@ describe('Invitations-flows', () => {
       applicationsCountOrig
     );
     expect(res.error?.errors[0].message).toContain(
-      `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${entitiesId.space.roleSetId}.`
+      `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.roleSetId}.`
     );
   });
 });
@@ -457,7 +457,7 @@ describe('Invitations - Authorization', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.roleSetId,
       CommunityRoleType.Member
     );
 
@@ -475,7 +475,7 @@ describe('Invitations - Authorization', () => {
       'User: "$user", should get: "$text" to update invitation of another user',
       async ({ user, text }) => {
         invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
+          baseScenario.space.roleSetId,
           [users.nonSpaceMember.id],
           TestUser.GLOBAL_ADMIN
         );
@@ -507,7 +507,7 @@ describe('Invitations - Authorization', () => {
       'User: "$user", should get Error: "$text" to update invitation of another user',
       async ({ user, text }) => {
         invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
+          baseScenario.space.roleSetId,
           [users.nonSpaceMember.id],
           TestUser.GLOBAL_ADMIN
         );
@@ -541,7 +541,7 @@ describe('Invitations - Authorization', () => {
       'User: "$user", should get: "$text" to create invitation to another user',
       async ({ user, state }) => {
         invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
+          baseScenario.space.roleSetId,
           [users.nonSpaceMember.id],
           user
         );
@@ -574,7 +574,7 @@ describe('Invitations - Authorization', () => {
       'User: "$user", should get: "$text" to create invitation to another user',
       async ({ user, text }) => {
         invitationData = await inviteContributors(
-          entitiesId.space.roleSetId,
+          baseScenario.space.roleSetId,
           [users.nonSpaceMember.id],
           user
         );

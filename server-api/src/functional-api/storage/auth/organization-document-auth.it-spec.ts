@@ -22,7 +22,7 @@ import {
 } from '@common/constants/privileges';
 import { users } from '@utils/queries/users-data';
 import { createReferenceOnProfile } from '../../references/references.request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { baseScenario } from '../../../types/entities-helper';
 import { assignUserToOrganization } from '../../roleset/roles-request.params';
 import { assignUserAsOrganizationAdmin, assignUserAsOrganizationOwner } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 
@@ -44,22 +44,22 @@ beforeAll(async () => {
 
   await assignUserAsOrganizationAdmin(
     users.subspaceAdmin.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   await assignUserAsOrganizationOwner(
     users.spaceAdmin.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   await assignUserToOrganization(
     users.spaceMember.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 });
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Organization - documents', () => {
@@ -69,7 +69,7 @@ describe('Organization - documents', () => {
     });
     beforeAll(async () => {
       const visualData = await lookupProfileVisuals(
-        entitiesId.organization.profileId
+        baseScenario.organization.profileId
       );
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
@@ -77,7 +77,7 @@ describe('Organization - documents', () => {
         visualId
       );
       const getDocId = await getProfileDocuments(
-        entitiesId.organization.profileId,
+        baseScenario.organization.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -97,7 +97,7 @@ describe('Organization - documents', () => {
       'User: "$userRole" has this privileges: "$privileges" to organization profile visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.organization.profileId,
+          baseScenario.organization.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -123,7 +123,7 @@ describe('Organization - documents', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.organization.profileId,
+          baseScenario.organization.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -140,7 +140,7 @@ describe('Organization - documents', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        entitiesId.organization.profileId
+        baseScenario.organization.profileId
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
       await uploadFileOnRef(
@@ -149,7 +149,7 @@ describe('Organization - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.organization.profileId,
+        baseScenario.organization.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -169,7 +169,7 @@ describe('Organization - documents', () => {
       'User: "$userRole" has this privileges: "$privileges" to organization reference document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.organization.profileId,
+          baseScenario.organization.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -195,7 +195,7 @@ describe('Organization - documents', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.organization.profileId,
+          baseScenario.organization.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -212,7 +212,7 @@ describe('Organization - documents', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        entitiesId.organization.profileId,
+        baseScenario.organization.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -225,7 +225,7 @@ describe('Organization - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -246,7 +246,7 @@ describe('Organization - documents', () => {
       'User: "$userRole" has this privileges: "$privileges" to organization description visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.organization.profileId,
+          baseScenario.organization.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -272,7 +272,7 @@ describe('Organization - documents', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.organization.profileId,
+          baseScenario.organization.profileId,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;

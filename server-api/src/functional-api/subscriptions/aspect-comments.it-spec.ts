@@ -11,7 +11,7 @@ import {
   createOrgAndSpaceWithUsers,
 } from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '../communications/communication.params';
-import { entitiesId } from '../../types/entities-helper';
+import { baseScenario } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
@@ -99,16 +99,16 @@ afterAll(async () => {
   subscription2.terminate();
   subscription3.terminate();
 
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 describe('Post comments subscription', () => {
   describe('Space comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.space.calloutId,
+        baseScenario.space.calloutId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.GLOBAL_ADMIN
@@ -188,7 +188,7 @@ describe('Post comments subscription', () => {
   describe('Subspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
-        entitiesId.subspace.calloutId,
+        baseScenario.subspace.calloutId,
         { displayName: postDisplayName + 'ch' },
         postNameID + 'ch',
         TestUser.GLOBAL_ADMIN
@@ -268,7 +268,7 @@ describe('Post comments subscription', () => {
   describe('Subsubspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
-        entitiesId.subsubspace.calloutId,
+        baseScenario.subsubspace.calloutId,
         { displayName: postDisplayName + 'opp' },
         postNameID + 'opp',
         TestUser.GLOBAL_ADMIN
