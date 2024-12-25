@@ -1,42 +1,38 @@
-/* eslint-disable prettier/prettier */
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
-
 import {
   assignRoleToOrganization,
   removeRoleFromOrganization,
 } from '../roles-request.params';
-import { baseScenario } from '../../../types/entities-helper';
-import { CommunityRoleType } from '@generated/alkemio-schema';
-import { createOrganization, deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { CommunityRoleType } from '@generated/graphql';
+import {
+  createOrganization,
+  deleteOrganization,
+} from '@functional-api/contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-org-name' + uniqueId;
-const hostNameId = 'com-org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-const subsubspaceName = 'com-opp';
-const subspaceName = 'com-chal';
 let newOrgId = '';
-const newOrgNameId = 'ha' + organizationName;
-const newOrgName = 'ha' + hostNameId;
+const newOrgNameId = 'ha-new-org-nameid';
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpace(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
 
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.space.id,
+    'subspace',
+    baseScenario.subspace
+  );
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.subspace.id,
+    'subsubspace',
+    baseScenario.subsubspace
+  );
+
+  const newOrgName = 'ha-new-org';
   const res = await createOrganization(newOrgName, newOrgNameId);
   newOrgId = res.data?.createOrganization?.id ?? '';
 });
@@ -144,7 +140,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -171,7 +167,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -198,7 +194,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -224,7 +220,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -248,7 +244,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -272,7 +268,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -301,7 +297,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -327,7 +323,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );
@@ -353,7 +349,7 @@ describe('Assign / Remove organization to community', () => {
         expect(data).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              nameID: hostNameId,
+              nameID: baseScenario.organization.nameId,
             }),
           ])
         );

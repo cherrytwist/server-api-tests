@@ -18,7 +18,6 @@ import {
 } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import { readPrivilege } from '@common/constants/privileges';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import {
   removeRoleFromUser,
   assignRoleToUser,
@@ -30,27 +29,21 @@ import {
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { baseScenario } from '../../../types/entities-helper';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 let invitationId = '';
 let invitationData: any;
-const organizationName = 'appl-org-name' + uniqueId;
-const hostNameId = 'appl-org-nameid' + uniqueId;
-const spaceName = 'appl-eco-name' + uniqueId;
-const spaceNameId = 'appl-eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+    baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
       mode: SpacePrivacyMode.Private,
@@ -308,7 +301,7 @@ describe('Invitations-flows', () => {
       TestUser.NON_SPACE_MEMBER
     );
 
-    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_SPACE_MEMBER);
+    const spaceData = await getSpaceData(baseScenario.space.nameId, TestUser.NON_SPACE_MEMBER);
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -344,7 +337,7 @@ describe('Invitations-flows', () => {
       TestUser.NON_SPACE_MEMBER
     );
 
-    const spaceData = await getSpaceData(spaceNameId, TestUser.NON_SPACE_MEMBER);
+    const spaceData = await getSpaceData(baseScenario.space.nameId, TestUser.NON_SPACE_MEMBER);
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(

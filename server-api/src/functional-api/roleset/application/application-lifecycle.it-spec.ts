@@ -10,24 +10,21 @@ import {
   createApplication,
   getRoleSetInvitationsApplications,
 } from '@functional-api/roleset/application/application.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
-import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { baseScenario } from '../../../types/entities-helper';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
 import { CommunityMembershipPolicy } from '@generated/graphql';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 let applicationId = '';
 let applicationData;
 let spaceRoleSetId = '';
-const organizationName = 'life-org-name' + uniqueId;
-const hostNameId = 'life-org-nameid' + uniqueId;
-const spaceName = 'life-eco-name' + uniqueId;
-const spaceNameId = 'life-eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
 });
 
 afterAll(async () => {
@@ -73,16 +70,17 @@ describe('Lifecycle', () => {
         );
 
         const application = eventResponseData?.data?.eventOnApplication;
-        const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-          baseScenario.space.community.roleSetId
-        );
+        const roleSetPendingMemberships =
+          await getRoleSetInvitationsApplications(
+            baseScenario.space.community.roleSetId
+          );
 
         const roleSetFirstApplication =
           roleSetPendingMemberships?.data?.lookup?.roleSet?.applications[0];
         if (!roleSetFirstApplication) {
           throw new Error('Role set application not found');
         }
-          // Assert
+        // Assert
         expect(application?.state).toEqual(state);
         expect(application?.nextEvents).toEqual(nextEvents);
         expect(application).toEqual(roleSetFirstApplication);

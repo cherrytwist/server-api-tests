@@ -1,6 +1,4 @@
 /* eslint-disable quotes */
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -12,10 +10,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import {
-  createSubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
+
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import {
   deleteSpace,
@@ -51,31 +46,29 @@ import {
 } from '../../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-callout.params.request';
 import { createReferenceOnProfile } from '../../references/references.request.params';
-import { baseScenario } from '../../../types/entities-helper';
 import { SpacePrivacyMode } from '@generated/alkemio-schema';
 import { SpaceVisibility } from '@generated/graphql';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'lifec-eco-name' + uniqueId;
-const spaceNameId = 'lifec-eco-nameid' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
 let refId = '';
 let documentId = '';
 
-beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+let baseScenario: OrganizationWithSpaceModel;
 
-  await createSubspaceWithUsers(subspaceName);
+beforeAll(async () => {
+    baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.space.id,
+      'subspace',
+      baseScenario.subspace
+    );
 
   await updateSpacePlatformSettings(
     baseScenario.space.id,
-    spaceNameId,
+    baseScenario.space.nameId,
     SpaceVisibility.Active
   );
 

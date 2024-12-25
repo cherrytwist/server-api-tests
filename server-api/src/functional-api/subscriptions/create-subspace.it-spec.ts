@@ -1,19 +1,16 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionSubspaceCreated } from './subscrition-queries';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
-import { baseScenario } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-sub-org-n' + uniqueId;
-const hostNameId = 'com-sub-org-nd' + uniqueId;
-const spaceName = 'com-sub-eco-n' + uniqueId;
-const spaceNameId = 'com-sub-eco-nd' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
+
 const subspaceDisplayName1 = 'ch1-display-name' + uniqueId;
 const subspaceDisplayName2 = 'ch2-display-name' + uniqueId;
 let subspaceIdOne = '';
@@ -23,13 +20,11 @@ let subscription1: SubscriptionClient;
 let subscription2: SubscriptionClient;
 let subscription3: SubscriptionClient;
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+        await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
 });
 
 afterAll(async () => {

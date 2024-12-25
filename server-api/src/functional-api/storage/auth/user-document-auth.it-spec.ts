@@ -1,6 +1,4 @@
 /* eslint-disable quotes */
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -11,7 +9,6 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
@@ -19,24 +16,21 @@ import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,
 } from '../../references/references.request.params';
-import { baseScenario } from '../../../types/entities-helper';
 import { sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii, sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin, sorted__create_read_update_delete_grant_readUserPii_platformAdmin, sorted__create_read_update_delete_readUserPii } from '@common/constants/privileges';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'lifec-eco-name' + uniqueId;
-const spaceNameId = 'lifec-eco-nameid' + uniqueId;
 let refId = '';
 let documentId = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+    baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
 });
+
 afterAll(async () => {
   await deleteSpace(baseScenario.space.id);
   await deleteOrganization(baseScenario.organization.id);

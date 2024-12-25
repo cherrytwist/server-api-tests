@@ -1,42 +1,29 @@
-/* eslint-disable prettier/prettier */
-
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { sendMessageToOrganization } from '@functional-api/communications/communication.params';
-import {
-  baseScenario,
-  getMailsData,
-} from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
-
-const firstOrganizationName = 'sample-org-name' + uniqueId;
-const hostNameId = 'sample-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 let preferencesConfig: any[] = [];
 let receivers = '';
 let sender = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    firstOrganizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
 
   await assignUserAsOrganizationAdmin(
     users.spaceAdmin.id,
@@ -49,7 +36,7 @@ beforeAll(async () => {
   );
 
   receivers = `${users.nonSpaceMember.displayName} sent a message to your organization`;
-  sender = `You have sent a message to ${firstOrganizationName}!`;
+  sender = `You have sent a message to ${baseScenario.organization.profile.displayName}!`;
 
   preferencesConfig = [
     {
@@ -159,10 +146,7 @@ describe('Notifications - user to organization messages', () => {
       PreferenceType.NotificationOrganizationMessage,
       'true'
     );
-    await updateUserSettingCommunicationMessage(
-      users.spaceAdmin.id,
-      false
-    );
+    await updateUserSettingCommunicationMessage(users.spaceAdmin.id, false);
     // Act
     await sendMessageToOrganization(
       baseScenario.organization.id,

@@ -1,27 +1,18 @@
 import { SubscriptionClient } from '@utils/subscriptions';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionRooms } from './subscrition-queries';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { sendMessageToRoom } from '../communications/communication.params';
-import { baseScenario } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-sub-org-n' + uniqueId;
-const hostNameId = 'com-sub-org-nd' + uniqueId;
-const spaceName = 'com-sub-eco-n' + uniqueId;
-const spaceNameId = 'com-sub-eco-nd' + uniqueId;
-const subspaceName = `chname${uniqueId}`;
-const subsubspaceName = `opname${uniqueId}`;
+const uniqueId = UniqueIDGenerator.getID();
+
 const postNameID = `asp-name-id-${uniqueId}`;
 const postDisplayName = `post-d-name-${uniqueId}`;
 let postCommentsIdSpace = '';
@@ -82,16 +73,23 @@ const expectedDataFunc = async (
   ];
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.space.id,
+    'subspace',
+    baseScenario.subspace
   );
 
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+    baseScenario.subspace.id,
+    'subsubspace',
+    baseScenario.subsubspace
+  );
 });
 
 afterAll(async () => {
@@ -108,7 +106,7 @@ describe('Post comments subscription', () => {
   describe('Space comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.collaboration.calloutId,
+        baseScenario.space.collaboration.calloutPostId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.GLOBAL_ADMIN
@@ -188,14 +186,14 @@ describe('Post comments subscription', () => {
   describe('Subspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
-        baseScenario.subspace.collaboration.calloutId,
+        baseScenario.subspace.collaboration.calloutPostId,
         { displayName: postDisplayName + 'ch' },
         postNameID + 'ch',
         TestUser.GLOBAL_ADMIN
       );
       postCommentsIdSubspace =
-        resPostonSubspace.data?.createContributionOnCallout.post?.comments
-          .id ?? '';
+        resPostonSubspace.data?.createContributionOnCallout.post?.comments.id ??
+        '';
 
       subscription1 = new SubscriptionClient();
       subscription2 = new SubscriptionClient();
@@ -268,15 +266,15 @@ describe('Post comments subscription', () => {
   describe('Subsubspace comments subscription ', () => {
     beforeAll(async () => {
       const resPostonSubspace = await createPostOnCallout(
-        baseScenario.subsubspace.collaboration.calloutId,
+        baseScenario.subsubspace.collaboration.calloutPostId,
         { displayName: postDisplayName + 'opp' },
         postNameID + 'opp',
         TestUser.GLOBAL_ADMIN
       );
 
       postCommentsIdSubsubspace =
-        resPostonSubspace.data?.createContributionOnCallout.post?.comments
-          .id ?? '';
+        resPostonSubspace.data?.createContributionOnCallout.post?.comments.id ??
+        '';
 
       subscription1 = new SubscriptionClient();
       subscription2 = new SubscriptionClient();

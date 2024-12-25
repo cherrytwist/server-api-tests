@@ -1,5 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
   createSpaceAndGetData,
@@ -7,28 +6,21 @@ import {
   getUserRoleSpacesVisibility,
 } from '../../journey/space/space.request.params';
 import { createSubsubspace } from '../../journey/subsubspace/subsubspace.request.params';
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
-
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   assignRoleToUser,
   assignUserToOrganization,
 } from '../roles-request.params';
-import { baseScenario } from '../../../types/entities-helper';
 import { CommunityRoleType, SpaceVisibility } from '@generated/graphql';
 import {
   createOrganization,
   deleteOrganization,
 } from '../../contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'urole-org-name' + uniqueId;
-const hostNameId = 'urole-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
 const spaceNameId = '111' + uniqueId;
 const spaceName2 = '222' + uniqueId;
 const spaceNameId2 = '222' + uniqueId;
@@ -36,12 +28,24 @@ const subsubspaceName = 'urole-opp';
 const subspaceName = 'urole-chal';
 const availableRoles = ['member', 'lead'];
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteSpace('eco1');
 
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.space.id,
+    'subspace',
+    baseScenario.subspace
+  );
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.subspace.id,
+    'subsubspace',
+    baseScenario.subsubspace
+  );
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
@@ -126,7 +130,7 @@ describe('User roles', () => {
     expect(orgData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: hostNameId,
+          nameID: baseScenario.organization.nameId,
           roles: expect.arrayContaining(['associate']),
         }),
       ])
@@ -150,8 +154,8 @@ describe('User roles', () => {
 
     beforeAll(async () => {
       const orgRes = await createOrganization(
-        organizationName + '1',
-        hostNameId + '1'
+        baseScenario.organization.profile.displayName + '1',
+        baseScenario.organization.nameId + '1'
       );
       orgId = orgRes?.data?.createOrganization.id ?? '';
       const orgAccountId = orgRes?.data?.createOrganization.account?.id ?? '';
@@ -360,11 +364,11 @@ describe('User roles', () => {
       expect(orgData).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            nameID: hostNameId,
+            nameID: baseScenario.organization.nameId,
             roles: expect.arrayContaining(['associate']),
           }),
           expect.objectContaining({
-            nameID: hostNameId + '1',
+            nameID: baseScenario.organization.nameId + '1',
             roles: expect.arrayContaining(['associate']),
           }),
         ])

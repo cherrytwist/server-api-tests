@@ -1,12 +1,5 @@
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import { baseScenario } from '../../../types/entities-helper';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
-import {
-  createOrgAndSpaceWithUsers,
-  createSubspaceForOrgSpace,
-} from '../../../utils/data-setup/entities';
 import {
   createTemplateFromCollaboration,
   getCollaborationTemplatesCount,
@@ -15,21 +8,28 @@ import {
 import { getCollaborationTemplatesCountForSpace } from './collaboration-template.request.params';
 import { templateInfoUpdate } from './collaboration-template-testdata';
 import { deleteTemplate, GetTemplateById } from '../template.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'lifec-org-name' + uniqueId;
-const hostNameId = 'lifec-org-nameid' + uniqueId;
-const spaceName = 'lifec-eco-name' + uniqueId;
-const spaceNameId = 'lifec-eco-nameid' + uniqueId;
-const subspaceName = 'subspaceName' + uniqueId;
 let templateId = '';
+
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceForOrgSpace(subspaceName);
+  baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+    await OrganizationWithSpaceModelFactory.createSubspace(
+      baseScenario.space.id,
+      'subspace',
+      baseScenario.subspace
+    );
+
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.subspace.id,
+      'subsubspace',
+      baseScenario.subsubspace
+    );
 });
 
 afterAll(async () => {

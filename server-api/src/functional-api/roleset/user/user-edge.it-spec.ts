@@ -1,41 +1,28 @@
-/* eslint-disable prettier/prettier */
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { users } from '@utils/queries/users-data';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
-import {
-  assignUsersToSubspaceAsMembers,
-  assignUsersToSubsubspaceAsMembers,
-  assignUsersToSpaceAndOrgAsMembers,
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
-import {
-  removeRoleFromUser,
-  assignRoleToUser,
-} from '../roles-request.params';
-import { baseScenario } from '../../../types/entities-helper';
+import { removeRoleFromUser, assignRoleToUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/alkemio-schema';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-org-name' + uniqueId;
-const hostNameId = 'com-org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-const subsubspaceName = 'com-opp';
-const subspaceName = 'com-chal';
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpace(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.space.id,
+    'subspace',
+    baseScenario.subspace
   );
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.subspace.id,
+    'subsubspace',
+    baseScenario.subsubspace
+  );
 
   await removeRoleFromUser(
     users.globalAdmin.id,
@@ -346,7 +333,7 @@ describe('Assign / Remove users to community', () => {
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-           baseScenario.subsubspace.community.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -366,9 +353,9 @@ describe('Assign / Remove users to community', () => {
 
 describe('Assign different users as lead to same community', () => {
   beforeAll(async () => {
-    await assignUsersToSpaceAndOrgAsMembers();
-    await assignUsersToSubspaceAsMembers();
-    await assignUsersToSubsubspaceAsMembers();
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.space.community.roleSetId);
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subspace.community.roleSetId);
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subsubspace.community.roleSetId);
 
     await assignRoleToUser(
       users.qaUser.id,

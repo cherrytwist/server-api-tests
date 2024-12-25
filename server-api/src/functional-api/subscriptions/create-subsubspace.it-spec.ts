@@ -1,23 +1,15 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../journey/space/space.request.params';
 import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
 import { subscriptionSubsubspaceCreated } from './subscrition-queries';
-import {
-  createSubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
-import { baseScenario } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-sub-org-n' + uniqueId;
-const hostNameId = 'com-sub-org-nd' + uniqueId;
-const spaceName = 'com-sub-eco-n' + uniqueId;
-const spaceNameId = 'com-sub-eco-nd' + uniqueId;
-const subspaceName = 'ch1-display-name' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
 
 const subsubspaceDisplayName1 = 'opp1-disp-name' + uniqueId;
 const subsubspaceDisplayName2 = 'opp2-disp-name' + uniqueId;
@@ -28,15 +20,18 @@ let subscription1: SubscriptionClient;
 let subscription2: SubscriptionClient;
 let subscription3: SubscriptionClient;
 
-beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+let baseScenario: OrganizationWithSpaceModel;
 
-  await createSubspaceWithUsers(subspaceName);
+beforeAll(async () => {
+   baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.space.id,
+      'subspace',
+      baseScenario.subspace
+    );
+
 });
 
 afterAll(async () => {

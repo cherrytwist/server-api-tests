@@ -1,6 +1,8 @@
 import {
   createCalloutOnCollaboration,
   createWhiteboardCalloutOnCollaboration,
+  getCalloutDetails,
+  getCollaborationCalloutsData,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
 import { OrganizationWithSpaceModel } from './types/OrganizationWithSpaceModel';
@@ -10,7 +12,7 @@ import {
   getSpaceData,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
+import { delay, TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
 import { CalloutType, CommunityRoleType } from '@generated/graphql';
 import { CalloutVisibility } from '@generated/alkemio-schema';
 import { SpaceModel } from './types/SpaceModel';
@@ -326,6 +328,7 @@ export class OrganizationWithSpaceModelFactory {
         messageId: '',
       },
       nameId: '',
+      templateSetId: '',
     }
   }
   public static async registerUsersAndAssignToAllEntitiesAsMembers(
@@ -389,6 +392,25 @@ export class OrganizationWithSpaceModelFactory {
       orgSpaceModel.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
+  };
+
+  public static async getDefaultSpaceCalloutByNameId(
+    collaborationId: string,
+    nameID: string
+  ) {
+    delay(100);
+    const calloutsPerSpace = await getCollaborationCalloutsData(
+      (collaborationId = collaborationId)
+    );
+
+    const allCallouts =
+      calloutsPerSpace.data?.lookup.collaboration?.callouts ?? [];
+    const filteredCallout = allCallouts.filter(
+      callout => callout.nameID.includes(nameID) || callout.id === nameID
+    );
+
+    const colloutDetails = await getCalloutDetails(filteredCallout[0].id);
+    return colloutDetails;
   };
 
 }

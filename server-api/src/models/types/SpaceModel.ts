@@ -4,6 +4,7 @@ export type SpaceModel = {
   id: string;
   nameId: string;
   profile: ProfileModel;
+  templateSetId: string;
   community: {
     id: string;
     roleSetId: string;

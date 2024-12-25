@@ -1,35 +1,37 @@
 import '@utils/array.matcher';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { baseScenario } from '@src/types/entities-helper';
 import {
   createWhiteboardTemplate,
   getWhiteboardTemplatesCount,
 } from './whiteboard-templates.request.params';
 import { deleteTemplate } from '../template.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-let subsubspaceName = 'post-opp';
-let subspaceName = 'post-chal';
+const uniqueId = UniqueIDGenerator.getID();
 let postNameID = '';
 let postDisplayName = '';
-const organizationName = 'post-org-name' + uniqueId;
-const hostNameId = 'post-org-nameid' + uniqueId;
-const spaceName = 'post-eco-name' + uniqueId;
-const spaceNameId = 'post-eco-nameid' + uniqueId;
 let templateId = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+
+    await OrganizationWithSpaceModelFactory.createSubspace(
+      baseScenario.space.id,
+      'subspace',
+      baseScenario.subspace
+    );
+    await OrganizationWithSpaceModelFactory.createSubspace(
+      baseScenario.subspace.id,
+      'subsubspace',
+      baseScenario.subsubspace
+    );
 });
 
 afterAll(async () => {
@@ -40,8 +42,6 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
-  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });

@@ -1,13 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../../journey/space/space.request.params';
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
-
-import { baseScenario } from '../../../types/entities-helper';
 import {
   getRoleSetUsersInLeadRole,
   getRoleSetUsersInMemberRole,
@@ -17,18 +8,26 @@ import { users } from '@utils/queries/users-data';
 import { assignRoleToUser, removeRoleFromUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-org-name' + uniqueId;
-const hostNameId = 'com-org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-const subsubspaceName = 'com-opp';
-const subspaceName = 'com-chal';
+
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.space.id,
+    'subspace',
+    baseScenario.subspace
+  );
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.subspace.id,
+    'subsubspace',
+    baseScenario.subsubspace
+  );
 
   await removeRoleFromUser(
     users.globalAdmin.id,

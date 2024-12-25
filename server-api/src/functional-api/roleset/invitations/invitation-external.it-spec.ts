@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import '@utils/array.matcher';
 import {
   deleteExternalInvitation,
@@ -13,11 +12,11 @@ import {
   registerVerifiedUser,
   deleteUser,
 } from '../../contributor-management/user/user.request.params';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { getRoleSetInvitationsApplications } from '../application/application.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { baseScenario } from '../../../types/entities-helper';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 const uniqueId = UniqueIDGenerator.getID();
 
 let emailExternalUser = '';
@@ -25,19 +24,13 @@ const firstNameExternalUser = `FirstName${uniqueId}`;
 const message = 'Hello, feel free to join our community!';
 
 let invitationId = '';
-const organizationName = 'appl-org-name' + uniqueId;
-const hostNameId = 'appl-org-nameid' + uniqueId;
-const spaceName = 'appl-eco-name' + uniqueId;
-const spaceNameId = 'appl-eco-nameid' + uniqueId;
 let userId = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
 });
 
 afterAll(async () => {
@@ -71,8 +64,7 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    const invitationInfo =
-      invitationData?.data?.inviteUserToPlatformAndRoleSet;
+    const invitationInfo = invitationData?.data?.inviteUserToPlatformAndRoleSet;
     invitationId = invitationInfo?.id ?? '';
 
     userId = await registerVerifiedUser(
@@ -111,8 +103,7 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    const invitationInfo =
-      invitationData?.data?.inviteUserToPlatformAndRoleSet;
+    const invitationInfo = invitationData?.data?.inviteUserToPlatformAndRoleSet;
     invitationId = invitationInfo?.id ?? '';
 
     // Act
@@ -156,8 +147,7 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    const invitationInfo =
-      invitationData?.data?.inviteUserToPlatformAndRoleSet;
+    const invitationInfo = invitationData?.data?.inviteUserToPlatformAndRoleSet;
     invitationId = invitationInfo?.id ?? '';
 
     const invData = await getRoleSetInvitationsApplications(
@@ -220,8 +210,7 @@ describe('Invitations', () => {
       TestUser.GLOBAL_ADMIN
     );
 
-    const invitationInfo =
-      invitationData?.data?.inviteUserToPlatformAndRoleSet;
+    const invitationInfo = invitationData?.data?.inviteUserToPlatformAndRoleSet;
     invitationId = invitationInfo?.id || '';
 
     // Act

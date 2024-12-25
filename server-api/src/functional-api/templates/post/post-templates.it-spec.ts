@@ -5,20 +5,13 @@ import {
   updatePostTemplate,
 } from './post-template.request.params';
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
   errorAuthCreatePostTemplate,
   errorAuthDeleteTemplate,
   errorAuthUpdatePostTemplate,
   errorNoPostTemplate,
 } from './post-template-testdata';
-import {
-  assignUsersToSpaceAndOrg,
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
 import { PostDataFragment } from '@generated/alkemio-schema';
 import {
   deletePost,
@@ -29,27 +22,39 @@ import {
 } from '../../callout/post/post.request.params';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { baseScenario } from '@src/types/entities-helper';
 import { deleteTemplate } from '../template.request.params';
 import { TestUser } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
+import { users } from '@utils/queries/users-data';
+import { CommunityRoleType } from '@generated/graphql';
 
-let subsubspaceName = 'post-opp';
-let subspaceName = 'post-chal';
+const uniqueId = UniqueIDGenerator.getID();
+
 let spacePostId = '';
 let subspacePostId = '';
 let subsubspacePostId = '';
 let postNameID = '';
 let postDisplayName = '';
-const organizationName = 'post-org-name' + uniqueId;
-const hostNameId = 'post-org-nameid' + uniqueId;
-const spaceName = 'post-eco-name' + uniqueId;
-const spaceNameId = 'post-eco-nameid' + uniqueId;
 let postTemplateId = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.space.id,
+    'subspace',
+    baseScenario.subspace
+  );
+  await OrganizationWithSpaceModelFactory.createSubspace(
+    baseScenario.subspace.id,
+    'subsubspace',
+    baseScenario.subsubspace
+  );
 });
 
 afterAll(async () => {
@@ -60,8 +65,6 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
-  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
@@ -73,7 +76,9 @@ describe('Post templates - CRUD', () => {
   });
   test('Create Post template', async () => {
     // Arrange
-    const countBefore = await getPostTemplatesCountForSpace(baseScenario.space.id);
+    const countBefore = await getPostTemplatesCountForSpace(
+      baseScenario.space.id
+    );
 
     // Act
     const resCreatePostTempl = await createPostTemplate(
@@ -82,7 +87,9 @@ describe('Post templates - CRUD', () => {
 
     const postDataCreate = resCreatePostTempl?.data?.createTemplate;
     postTemplateId = postDataCreate?.id ?? '';
-    const countAfter = await getPostTemplatesCountForSpace(baseScenario.space.id);
+    const countAfter = await getPostTemplatesCountForSpace(
+      baseScenario.space.id
+    );
 
     const getTemplate = await GetTemplateById(postTemplateId);
     const templateData = getTemplate?.data?.lookup.template;
@@ -134,11 +141,15 @@ describe('Post templates - CRUD', () => {
       baseScenario.space.templateSetId
     );
     postTemplateId = resCreatePostTempl?.data?.createTemplate.id ?? '';
-    const countBefore = await getPostTemplatesCountForSpace(baseScenario.space.id);
+    const countBefore = await getPostTemplatesCountForSpace(
+      baseScenario.space.id
+    );
 
     // Act
     const remove = await deleteTemplate(postTemplateId);
-    const countAfter = await getPostTemplatesCountForSpace(baseScenario.space.id);
+    const countAfter = await getPostTemplatesCountForSpace(
+      baseScenario.space.id
+    );
 
     // Assert
     expect(countAfter).toEqual(countBefore - 1);
@@ -149,7 +160,7 @@ describe('Post templates - CRUD', () => {
 describe('Post templates - Utilization in posts', () => {
   beforeAll(async () => {
     const resCreatePostTempl = await createPostTemplate(
-      baseScenario.space.templateId
+      baseScenario.space.templateSetId
     );
     postTemplateId = resCreatePostTempl?.data?.createTemplate.id ?? '';
   });
@@ -168,7 +179,7 @@ describe('Post templates - Utilization in posts', () => {
     test('Create Post on Space', async () => {
       // Act
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.collaboration.calloutId,
+        baseScenario.space.collaboration.calloutPostId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
@@ -179,11 +190,12 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.collaboration.calloutId
+        baseScenario.space.collaboration.calloutPostId
       );
-      const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
-        c => c.post && c.post.id === spacePostId
-      )?.post;
+      const data =
+        postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+          c => c.post && c.post.id === spacePostId
+        )?.post;
 
       // Assert
       expect(data).toEqual(postDataCreate);
@@ -192,7 +204,7 @@ describe('Post templates - Utilization in posts', () => {
     test('Create Post on Subspace', async () => {
       // Act
       const res = await createPostOnCallout(
-        baseScenario.subspace.collaboration.calloutId,
+        baseScenario.subspace.collaboration.calloutPostId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
@@ -208,7 +220,7 @@ describe('Post templates - Utilization in posts', () => {
     test('Create Post on Subsubspace', async () => {
       // Act
       const res = await createPostOnCallout(
-        baseScenario.subsubspace.collaboration.calloutId,
+        baseScenario.subsubspace.collaboration.calloutPostId,
         { displayName: `new-temp-d-name-${uniqueId}` },
         `new-temp-n-id-${uniqueId}`
       );
@@ -226,7 +238,7 @@ describe('Post templates - Utilization in posts', () => {
     let postDataCreate: PostDataFragment | undefined;
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.collaboration.calloutId,
+        baseScenario.space.collaboration.calloutPostId,
         { displayName: `new-asp-d-name-${uniqueId}` },
         `new-asp-n-id-${uniqueId}`
       );
@@ -248,11 +260,12 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.collaboration.calloutId
+        baseScenario.space.collaboration.calloutPostId
       );
-      const data = postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
-        c => c.post && c.post.id === spacePostId
-      )?.post;
+      const data =
+        postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
+          c => c.post && c.post.id === spacePostId
+        )?.post;
 
       // Assert
       expect(data).toEqual(postDataCreate);
@@ -269,11 +282,12 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.collaboration.calloutId
+        baseScenario.space.collaboration.calloutPostId
       );
-      const data = postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
-        c => c.post && c.post.id === spacePostId
-      )?.post;
+      const data =
+        postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
+          c => c.post && c.post.id === spacePostId
+        )?.post;
 
       // Assert
       expect(data).toEqual(postDataUpdate);
@@ -284,7 +298,7 @@ describe('Post templates - Utilization in posts', () => {
     let postDataCreate: PostDataFragment | undefined;
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.collaboration.calloutId,
+        baseScenario.space.collaboration.calloutPostId,
         {
           displayName: postDisplayName + `rem-temp-asp-d-n-${uniqueId}`,
         },
@@ -303,11 +317,12 @@ describe('Post templates - Utilization in posts', () => {
 
       const postsData = await getDataPerSpaceCallout(
         baseScenario.space.id,
-        baseScenario.space.collaboration.calloutId
+        baseScenario.space.collaboration.calloutPostId
       );
-      const data = postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
-        c => c.post && c.post.id === spacePostId
-      )?.post;
+      const data =
+        postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
+          c => c.post && c.post.id === spacePostId
+        )?.post;
 
       // Assert
       expect(data).toEqual(postDataCreate);
@@ -317,7 +332,12 @@ describe('Post templates - Utilization in posts', () => {
 
 describe('Post templates - CRUD Authorization', () => {
   beforeAll(async () => {
-    await assignUsersToSpaceAndOrg();
+    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.space.community.roleSetId);
+    await assignRoleToUser(
+        users.spaceAdmin.id,
+        baseScenario.space.community.roleSetId,
+        CommunityRoleType.Admin
+      );
   });
   describe('Post templates - Create', () => {
     describe('DDT user privileges to create space post template - positive', () => {
@@ -349,7 +369,7 @@ describe('Post templates - CRUD Authorization', () => {
     describe('DDT user privileges to create space post template - negative', () => {
       // Arrange
       test.each`
-        userRole                   | message
+        userRole                     | message
         ${TestUser.SPACE_MEMBER}     | ${errorAuthCreatePostTemplate}
         ${TestUser.NON_SPACE_MEMBER} | ${errorAuthCreatePostTemplate}
       `(
@@ -410,7 +430,7 @@ describe('Post templates - CRUD Authorization', () => {
       );
 
       test.each`
-        userRole                   | message
+        userRole                     | message
         ${TestUser.SPACE_MEMBER}     | ${errorAuthUpdatePostTemplate}
         ${TestUser.NON_SPACE_MEMBER} | ${errorAuthUpdatePostTemplate}
       `(
@@ -463,7 +483,7 @@ describe('Post templates - CRUD Authorization', () => {
       );
 
       test.each`
-        userRole                   | message
+        userRole                     | message
         ${TestUser.SPACE_MEMBER}     | ${errorAuthDeleteTemplate}
         ${TestUser.NON_SPACE_MEMBER} | ${errorAuthDeleteTemplate}
       `(

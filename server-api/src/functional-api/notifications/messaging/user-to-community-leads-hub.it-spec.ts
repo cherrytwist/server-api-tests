@@ -7,26 +7,20 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '../../../utils/data-setup/entities';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
-import { baseScenario, getMailsData } from '../../../types/entities-helper';
+import { getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,
 } from '@functional-api/roleset/roles-request.params';
-
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
-import { CommunityRoleType, PreferenceType, SpacePrivacyMode } from '@generated/graphql';
+import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'urole-org-name' + uniqueId;
-const hostNameId = 'urole-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
 
 let usersList: any[] = [];
 
@@ -38,15 +32,15 @@ const receivers = (senderDisplayName: string) => {
   return `${senderDisplayName} sent a message to your community`;
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+
+
 
   await removeRoleFromUser(
     users.globalAdmin.id,
@@ -121,7 +115,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -152,7 +146,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -194,7 +188,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -225,7 +219,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -275,7 +269,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -306,7 +300,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -348,7 +342,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -379,7 +373,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -428,7 +422,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: senders(spaceName),
+          subject: senders(baseScenario.space.profile.displayName),
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -451,7 +445,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: await senders(spaceName),
+          subject: await senders(baseScenario.space.profile.displayName),
           toAddresses: [users.qaUser.email],
         }),
       ])

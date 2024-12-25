@@ -12,11 +12,6 @@ import {
 } from '../post/post.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import {
-  getDefaultSubspaceCalloutByNameId,
-  getDefaultSubsubspaceCalloutByNameId,
-  getDefaultSpaceCalloutByNameId,
-} from '@utils/data-setup/entities';
-import {
   CalloutState,
   CalloutVisibility,
 } from '@generated/alkemio-schema';
@@ -151,27 +146,25 @@ describe('Callout - Close State - User Privileges Posts', () => {
       return postCommentsId;
     };
 
-    const spaceCallout = await getDefaultSpaceCalloutByNameId(
-      baseScenario.space.id,
+    const spaceCallout = await OrganizationWithSpaceModelFactory.getDefaultSpaceCalloutByNameId(
+      baseScenario.space.collaboration.id,
       baseScenario.space.collaboration.calloutPostId
     );
     spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSpace = await preconditions(spaceCalloutId);
 
-    const subspaceCallout = await getDefaultSubspaceCalloutByNameId(
-      baseScenario.space.id,
-      baseScenario.subspace.id,
+    const subspaceCallout = await await OrganizationWithSpaceModelFactory.getDefaultSpaceCalloutByNameId(
+      baseScenario.subspace.collaboration.id,
       baseScenario.subspace.collaboration.calloutPostId
     );
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSubspace = await preconditions(subspaceCalloutId);
 
-    const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
-      baseScenario.space.id,
-      baseScenario.subsubspace.id,
+    const subsubspaceCallout = await OrganizationWithSpaceModelFactory.getDefaultSpaceCalloutByNameId(
+      baseScenario.subsubspace.collaboration.id,
       baseScenario.subsubspace.collaboration.calloutPostId
     );
-    subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
+    subsubspaceCalloutId = subsubspaceCallout?.data?.lookup.callout?.id ?? '';
     postCommentsIdSubsubspace = await preconditions(subsubspaceCalloutId);
   });
 
@@ -303,8 +296,8 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       });
     };
 
-    const spaceCallout = await getDefaultSpaceCalloutByNameId(
-      baseScenario.space.id,
+    const spaceCallout = await OrganizationWithSpaceModelFactory.getDefaultSpaceCalloutByNameId(
+      baseScenario.space.collaboration.id,
       baseScenario.space.collaboration.calloutPostCommentsId
     );
 
@@ -313,9 +306,8 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       spaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(spaceCalloutId);
 
-    const subspaceCallout = await getDefaultSubspaceCalloutByNameId(
-      baseScenario.space.id,
-      baseScenario.subspace.id,
+    const subspaceCallout = await OrganizationWithSpaceModelFactory.getDefaultSpaceCalloutByNameId(
+      baseScenario.subspace.collaboration.id,
       baseScenario.subspace.collaboration.calloutPostCommentsId
     );
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
@@ -323,13 +315,12 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       subspaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(subspaceCalloutId);
 
-    const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
-      baseScenario.space.id,
-      baseScenario.subsubspace.id,
+    const subsubspaceCallout = await OrganizationWithSpaceModelFactory.getDefaultSpaceCalloutByNameId(
+      baseScenario.subsubspace.collaboration.id,
       baseScenario.subsubspace.collaboration.calloutPostCommentsId
     );
-    subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
-    subsubspaceCalloutCommentsId = subsubspaceCallout?.comments?.id ?? '';
+    subsubspaceCalloutId = subsubspaceCallout?.data?.lookup.callout?.id ?? '';
+    subsubspaceCalloutCommentsId = subsubspaceCallout?.data?.lookup.callout?.comments?.id ?? '';
     await preconditions(subsubspaceCalloutId);
   });
 

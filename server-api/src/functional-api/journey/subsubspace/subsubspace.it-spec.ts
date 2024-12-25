@@ -5,39 +5,32 @@ import {
   createSubspace,
   getSubspaceData,
 } from '../subspace/subspace.request.params';
-import { baseScenario } from '@src/types/entities-helper';
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
 import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = '';
 let subsubspaceNameId = '';
 let subsubspaceId = '';
 let additionalSubsubspaceId: string;
-let subspaceName = '';
 let additionalSubspaceId = '';
-const organizationName = 'opp-org-name' + uniqueId;
-const hostNameId = 'opp-org-nameid' + uniqueId;
-const spaceName = 'opp-eco-name' + uniqueId;
-const spaceNameId = 'opp-eco-nameid' + uniqueId;
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
   subsubspaceName = `subsubspaceName ${uniqueId}`;
   subsubspaceNameId = `op${uniqueId}`;
 });
 
+let baseScenario: OrganizationWithSpaceModel;
+
 beforeAll(async () => {
+  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+
+  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'subspace', baseScenario.subspace);
+  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'subsubspace', baseScenario.subsubspace);
+
   subsubspaceName = 'post-opp';
-  subspaceName = 'post-chal';
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
@@ -145,7 +138,7 @@ describe('Opportunities', () => {
   test('should throw an error for creating subsubspace with same name/NameId on different subspaces', async () => {
     // Arrange
     const responseCreateSubspaceTwo = await createSubspace(
-      `${subspaceName}ch`,
+      `${subsubspaceName}ch`,
       `${uniqueId}ch`,
       baseScenario.space.id
     );
