@@ -1,5 +1,3 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
 import { users } from '@utils/queries/users-data';
 import {
   deleteSpace,
@@ -13,74 +11,72 @@ import {
   sorted__read_applyToCommunity,
   sorted__read_applyToCommunity_invite_addVC,
 } from '@common/constants/privileges';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { removeRoleFromUser } from '../roles-request.params';
-
-import { entitiesId } from '../../../types/entities-helper';
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
-const organizationName = 'com-org-name' + uniqueId;
-const hostNameId = 'com-org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-const subsubspaceName = 'com-opp';
-const subspaceName = 'com-chal';
+let baseScenario: OrganizationWithSpaceModel;
 
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+    baseScenario =
+      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.space.id,
+      'notification-userMention-subspace',
+      baseScenario.subspace
+    );
+
+    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
+      baseScenario.subspace.id,
+      'notification-userMention-subsubspace',
+      baseScenario.subsubspace
+    );
+
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: { mode: SpacePrivacyMode.Public },
     membership: { policy: CommunityMembershipPolicy.Applications },
   });
-  await createSubspaceWithUsers(subspaceName);
-  await updateSpaceSettings(entitiesId.subspace.id, {
+
+  await updateSpaceSettings(baseScenario.subspace.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
     privacy: { mode: SpacePrivacyMode.Private },
   });
-  await createSubsubspaceWithUsers(subsubspaceName);
-  await updateSpaceSettings(entitiesId.subsubspace.id, {
+
+  await updateSpaceSettings(baseScenario.subsubspace.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
     privacy: { mode: SpacePrivacyMode.Private },
   });
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await deleteSpace(baseScenario.subsubspace.id);
+  await deleteSpace(baseScenario.subspace.id);
+  await deleteSpace(baseScenario.space.id);
+  await deleteOrganization(baseScenario.organization.id);
 });
 
 describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
@@ -101,7 +97,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       'User: "$user", should have privileges: "$myPrivileges" for space journey',
       async ({ user, myPrivileges }) => {
         const request = await getRoleSetUserPrivilege(
-          entitiesId.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           user
         );
         const result =
@@ -129,7 +125,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       'User: "$user", should have privileges: "$myPrivileges" for subspace journey',
       async ({ user, myPrivileges }) => {
         const request = await getRoleSetUserPrivilege(
-          entitiesId.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           user
         );
         const result =
@@ -157,7 +153,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       'User: "$user", should have privileges: "$myPrivileges" for subsubspace journey',
       async ({ user, myPrivileges }) => {
         const request = await getRoleSetUserPrivilege(
-          entitiesId.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           user
         );
         const result =
