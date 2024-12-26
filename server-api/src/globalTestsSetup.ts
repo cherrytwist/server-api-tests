@@ -5,8 +5,11 @@ import { TestUser } from '@alkemio/tests-lib';
 import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
 import { testConfiguration } from './config/test.configuration';
+import { stringifyConfig } from './config/create-config-using-envvars';
 
 module.exports = async () => {
+  console.log(`\nLaunching tests using configuration: ${stringifyConfig(testConfiguration)}`);
+
   if (!testConfiguration.registerUsers) return;
 
   // get all user names to register
