@@ -1,8 +1,7 @@
 import request from 'supertest';
 import { TestUtil } from './test.util';
 import { TestUser } from '@alkemio/tests-lib';
-
-const SERVER_REST_URL = process.env.ALKEMIO_SERVER_REST;
+import { testConfiguration } from '@src/config/test.configuration';
 
 export const getDocument = (documentId: string) => {
   return request(buildDocumentUrl(documentId)).get('');
@@ -22,4 +21,4 @@ export const getAuthDocument = async (documentId: string, user?: TestUser) => {
 };
 
 const buildDocumentUrl = (documentId: string) =>
-  `${SERVER_REST_URL}/storage/document/${documentId}`;
+  `${testConfiguration.endPoints.rest}/storage/document/${documentId}`;

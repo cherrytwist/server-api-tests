@@ -1,14 +1,8 @@
 import { getSdk } from '@generated/graphql';
-import dotenv from 'dotenv';
+import { testConfiguration } from '@src/config/test.configuration';
 import { GraphQLClient } from 'graphql-request';
 
-dotenv.config();
-
-const apiEndpointPrivateGraphql =
-  process.env.ALKEMIO_SERVER ??
-  'http://localhost:3000/api/private/non-interactive/graphql';
-
-const graphqlClient = new GraphQLClient(apiEndpointPrivateGraphql);
+const graphqlClient = new GraphQLClient(testConfiguration.endPoints.graphql.private);
 const graphqlSdkClient = getSdk(graphqlClient);
 
 export const getGraphqlClient = () => {

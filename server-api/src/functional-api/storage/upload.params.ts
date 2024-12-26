@@ -1,22 +1,20 @@
 import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
+import { testConfiguration } from '@src/config/test.configuration';
 import { setAuthHeader } from '@utils/graphql.authorization.header';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { PathLike } from 'fs';
 
-const server = process.env.ALKEMIO_SERVER || '';
-const kratos = process.env.KRATOS_ENDPOINT || '';
-const password = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
 
 const generateClientConfig = (user: TestUser) => ({
-  apiEndpointPrivateGraphql: server,
+  apiEndpointPrivateGraphql: testConfiguration.endPoints.graphql.private,
   authInfo: {
     credentials: {
       email: `${user}@alkem.io`,
-      password: password,
+      password: testConfiguration.identities.admin.password,
     },
-    kratosPublicApiEndpoint: kratos,
+    kratosPublicApiEndpoint: testConfiguration.endPoints.kratos.public,
   },
 });
 

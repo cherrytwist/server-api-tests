@@ -11,9 +11,9 @@ import { TestUser } from '@alkemio/tests-lib';
 import { CalloutState, CalloutType } from '@generated/alkemio-schema';
 import { getDataPerSpaceCallout } from './post/post.request.params';
 import { CalloutVisibility } from '@generated/graphql';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 

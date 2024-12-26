@@ -1,12 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../../../lib/src/utils/delay';
-import { TestUser } from '@alkemio/tests-lib';
+import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
-
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
-import { getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,
@@ -16,9 +12,10 @@ import {
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 
 const senders = (communityName: string) => {
   return `You have sent a message to ${communityName} community`;

@@ -1,8 +1,5 @@
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '@functional-api/journey/space/space.request.params';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
@@ -10,13 +7,11 @@ import {
   inviteContributors,
 } from '@functional-api/roleset/invitations/invitation.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { getMailsData } from '@src/types/entities-helper';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 let invitationId = '';
 let preferencesConfig: any[] = [];
@@ -56,8 +51,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: {

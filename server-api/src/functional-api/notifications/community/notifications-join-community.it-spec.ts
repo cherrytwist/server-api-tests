@@ -1,9 +1,8 @@
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-
 import {
   joinRoleSet,
   assignRoleToUser,
@@ -13,12 +12,11 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import { getMailsData } from '@src/types/entities-helper';
 import { CommunityRoleType, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 let preferencesConfig: any[] = [];
 

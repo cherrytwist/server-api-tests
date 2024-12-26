@@ -6,9 +6,9 @@ import { subscriptionSubsubspaceCreated } from './subscrition-queries';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 

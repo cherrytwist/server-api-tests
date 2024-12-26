@@ -1,18 +1,15 @@
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import { sendMessageToOrganization } from '@functional-api/communications/communication.params';
-import { getMailsData } from '@src/types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 let preferencesConfig: any[] = [];
 let receivers = '';

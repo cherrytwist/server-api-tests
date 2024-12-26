@@ -1,5 +1,6 @@
 import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
+import { testConfiguration } from '@src/config/test.configuration';
 
 export class TokenHelper {
   private users = Object.values(TestUser);
@@ -8,10 +9,6 @@ export class TokenHelper {
     const userUpn = `${user}@alkem.io`;
 
     return userUpn;
-  }
-
-  private getPassword() {
-    return process.env.AUTH_TEST_HARNESS_PASSWORD || '';
   }
 
   /**
@@ -23,14 +20,12 @@ export class TokenHelper {
    */
   async buildUserTokenMap() {
     const userTokenMap: Map<string, string> = new Map<string, string>();
-    const password = this.getPassword();
-
-    const server = process.env.ALKEMIO_SERVER || '';
+    const password = testConfiguration.identities.admin.password;
 
     for (const user of this.users) {
       const identifier = this.buildIdentifier(user);
       const alkemioClientConfig = {
-        apiEndpointPrivateGraphql: server,
+        apiEndpointPrivateGraphql: testConfiguration.endPoints.graphql.private,
         authInfo: {
           credentials: {
             email: identifier,
