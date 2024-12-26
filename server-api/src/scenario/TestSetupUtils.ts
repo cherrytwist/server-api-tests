@@ -1,5 +1,5 @@
 import { createUser } from '@functional-api/contributor-management/user/user.request.params';
-import { OrganizationWithSpaceModel } from './types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModel } from './models/OrganizationWithSpaceModel';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
 import {

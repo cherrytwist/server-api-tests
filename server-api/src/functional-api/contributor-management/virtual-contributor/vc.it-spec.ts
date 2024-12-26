@@ -31,9 +31,9 @@ import { getRoleSetInvitationsApplications } from '../../roleset/application/app
 import { createUser, deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 ;
 const uniqueId = UniqueIDGenerator.getID();
 

@@ -3,7 +3,7 @@ import {
   createWhiteboardCalloutOnCollaboration,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
-import { OrganizationWithSpaceModel } from './types/OrganizationWithSpaceModel';
+import { OrganizationWithSpaceModel } from './models/OrganizationWithSpaceModel';
 import {
   createOrganization,
   deleteOrganization,
@@ -17,14 +17,14 @@ import {
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
 import { CalloutType, CommunityRoleType } from '@generated/graphql';
 import { CalloutVisibility } from '@generated/alkemio-schema';
-import { SpaceModel } from './types/SpaceModel';
+import { SpaceModel } from './models/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { users } from '@utils/queries/users-data';
 import {
   TestScenarioConfig,
   TestScenarioSpaceConfig,
-} from './test-scenario-config';
+} from './config/test-scenario-config';
 
 export class TestScenarioFactory {
 

@@ -2,9 +2,9 @@ import { createSubspace, getSubspaceData } from './subspace.request.params';
 import '@utils/array.matcher';
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 ;
 const uniqueId = UniqueIDGenerator.getID();
 

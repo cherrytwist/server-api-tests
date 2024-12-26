@@ -15,11 +15,11 @@ import { CalloutState, CalloutVisibility } from '@generated/alkemio-schema';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
-import { TestSetupUtils } from '@src/models/TestSetupUtils';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { TestSetupUtils } from '@src/scenario/TestSetupUtils';
 const uniqueId = UniqueIDGenerator.getID();
 
 let calloutId = '';

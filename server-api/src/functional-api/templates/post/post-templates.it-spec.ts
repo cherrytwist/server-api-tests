@@ -22,13 +22,13 @@ import {
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import { deleteTemplate } from '../template.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { users } from '@utils/queries/users-data';
 import { CommunityRoleType } from '@generated/graphql';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
-import { TestSetupUtils } from '@src/models/TestSetupUtils';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { TestSetupUtils } from '@src/scenario/TestSetupUtils';
 
 const uniqueId = UniqueIDGenerator.getID();
 

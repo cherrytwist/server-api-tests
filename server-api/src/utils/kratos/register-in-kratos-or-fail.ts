@@ -1,5 +1,5 @@
-import { kratosDomain } from '@common/constants/kratos';
 import { Configuration, IdentityApi, FrontendApi } from '@ory/kratos-client';
+import { testConfiguration } from '@src/config/test.configuration';
 
 /***
  * Registration Flow on v0.8.0-alpha3
@@ -26,7 +26,7 @@ export const registerInKratosOrFail = async (
   const PASSWORD = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
 
   const kratosConfig = new Configuration({
-    basePath: kratosDomain,
+    basePath: testConfiguration.endPoints.kratos.public,
     baseOptions: {
       withCredentials: true, // Important for CORS
       timeout: 30000, // 30 seconds

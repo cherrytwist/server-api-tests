@@ -2,7 +2,7 @@ import request from 'supertest';
 import { delay } from '../../../../lib/src/utils/delay';
 import { getMails } from '../mailslurper.rest.requests';
 import { Configuration, IdentityApi, FrontendApi } from '@ory/kratos-client';
-import { kratosDomain } from '@common/constants/kratos';
+import { testConfiguration } from '@src/config/test.configuration';
 
 /***
  * Verification flow on v0.8.0-alpha3
@@ -25,7 +25,7 @@ import { kratosDomain } from '@common/constants/kratos';
  */
 export const verifyInKratosOrFail = async (email: string) => {
   const kratosConfig = new Configuration({
-    basePath: kratosDomain,
+    basePath: testConfiguration.endPoints.kratos.public,
     baseOptions: {
       withCredentials: true, // Important for CORS
       timeout: 30000, // 30 seconds

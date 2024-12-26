@@ -20,9 +20,9 @@ import {
   sorted__create_read_update_delete_grant_readUserPii_platformAdmin,
   sorted__create_read_update_delete_readUserPii,
 } from '@common/constants/privileges';
-import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 let refId = '';
 let documentId = '';
