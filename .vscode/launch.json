@@ -13,7 +13,7 @@
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.e2e.js"
+        "${workspaceRoot}/src/config/jest.config.e2e.js"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -27,7 +27,7 @@
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.it.js"
+        "${workspaceRoot}/src/config/jest.config.it.js"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -55,7 +55,7 @@
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.roleset.js invitation.ts-spec.ts"
+        "${workspaceRoot}/src/config/jest.config.roleset.js invitation.ts-spec.ts"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -64,7 +64,7 @@
       "name": "Debug Register Users",
       "type": "node",
       "request": "launch",
-      "args": ["${workspaceFolder}/test/utils/register-user.ts"],
+      "args": ["${workspaceFolder}/src/utils/register-user.ts"],
       "envFile": "${workspaceFolder}/.env",
       "runtimeArgs": [
         "-r",
@@ -73,6 +73,24 @@
         "tsconfig-paths/register"
       ],
       "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Debug Scenario Setup",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/server-api/src/validate-base-scenario-setup.ts"],
+      "envFile": "${workspaceFolder}/server-api/.env",
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "cwd": "${workspaceRoot}/server-api",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
       "internalConsoleOptions": "neverOpen"
     }
   ]
