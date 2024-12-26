@@ -1,34 +1,41 @@
 // This is critical to be able to use TypeScript aliases in Jest tests
 require('tsconfig-paths/register');
-import { UiText } from '@ory/kratos-client';
-import { TestUser } from '@alkemio/tests-lib';
+import { TestScenarioFactory } from '../scenario/TestScenarioFactory';
+import { TestScenarioConfig } from '../scenario/config/test-scenario-config';
+import { testConfiguration } from '../config/test.configuration';
+import { stringifyConfig } from '../config/create-config-using-envvars';
 import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-import { testConfiguration } from './config/test.configuration';
-import { stringifyConfig } from './config/create-config-using-envvars';
+import { UiText } from '@ory/kratos-client';
+import { TestUser } from '@alkemio/tests-lib';
 
-module.exports = async () => {
-  console.log(`\nLaunching tests using configuration: ${stringifyConfig(testConfiguration)}`);
+const scenarioConfig: TestScenarioConfig = {
+  name: 'organization-settings',
+  space: {},
+};
 
-  if (!testConfiguration.registerUsers) return;
+const main = async () => {
+  const testConfig = testConfiguration;
+  console.log(`Test config: ${stringifyConfig(testConfig)}`);
 
-  // get all user names to register
-  // exclude GLOBAL_ADMIN as he already is created and verified
-  // and it's used to create the the users
   const userNames = Object.values(TestUser).filter(
-    x => x !== TestUser.GLOBAL_ADMIN
-  );
-  // running register flows in parallel brings 3x less waiting times
-  // NOTE: may require limit on amount of flows run in parallel
+      x => x !== TestUser.GLOBAL_ADMIN
+    );
+    // running register flows in parallel brings 3x less waiting times
+    // NOTE: may require limit on amount of flows run in parallel
 
-  //DO NOT MAKE THIS PARALLEL AS NEW FLOW TRIES TO OVERRIDE OLD FLOWS RESULTING IN ERRORS
-  for (const username of userNames) {
-    try {
-      await userRegisterFlow(username);
-    } catch (error) {
-      console.error(`Unable to register user ${username}: ${error}`);
+    //DO NOT MAKE THIS PARALLEL AS NEW FLOW TRIES TO OVERRIDE OLD FLOWS RESULTING IN ERRORS
+    for (const username of userNames) {
+      try {
+        await userRegisterFlow(username);
+      } catch (error) {
+        console.error(`Unable to register user ${username}: ${error}`);
+      }
     }
-  }
+
+  const baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  console.log(`Base scenario: ${JSON.stringify(baseScenario, null, 2)}`);
 };
 
 const getUserName = (userName: string): [string, string] => {
@@ -36,7 +43,7 @@ const getUserName = (userName: string): [string, string] => {
   return [first, last];
 };
 
-export const userRegisterFlow = async (userName: string) => {
+const userRegisterFlow = async (userName: string) => {
   const [firstName, lastName] = getUserName(userName);
   const email = `${userName}@alkem.io`;
   try {
@@ -72,3 +79,11 @@ export const userRegisterFlow = async (userName: string) => {
     }
   }
 };
+
+try {
+  main();
+} catch (error) {
+  console.error(error);
+}
+
+
