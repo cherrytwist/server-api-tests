@@ -7,9 +7,6 @@ import { TestScenarioConfig } from './models/test-scenario-config';
 const scenarioConfig: TestScenarioConfig = {
   name: 'organization-settings',
   space: {
-    collaboration: {
-      addCallouts: true,
-    },
   },
 };
 

@@ -131,12 +131,13 @@ export class TestScenarioFactory {
   ): Promise<OrganizationWithSpaceModel> {
     const model: OrganizationWithSpaceModel = this.createEmptyBaseScenario();
     const uniqueId = UniqueIDGenerator.getID();
-    const organizationName = `${scenarioName} - org-name-${uniqueId}`;
-    const hostNameId = this.validateAndClean(`${scenarioName} - org-nameid-${uniqueId}`);
-    if (!hostNameId) {
-      throw new Error(`Failed to create organization: Invalid hostNameId: ${hostNameId}`);
+    const truncatedScenarioName = scenarioName.slice(0, 18);
+    const orgName = `${truncatedScenarioName}-${uniqueId}`;
+    const orgNameId = this.validateAndClean(`${orgName}`);
+    if (!orgNameId) {
+      throw new Error(`Unable to create organization: Invalid hostNameId: ${orgNameId}`);
     }
-    const responseOrg = await createOrganization(organizationName, hostNameId.toLowerCase().slice(0, 24));
+    const responseOrg = await createOrganization(orgName, orgNameId.toLowerCase().slice(0, 24));
 
     if (!responseOrg.data?.createOrganization) {
       throw new Error(`Failed to create organization: ${JSON.stringify(responseOrg.error)}`);
@@ -173,15 +174,24 @@ export class TestScenarioFactory {
     scenarioName: string
   ): Promise<SpaceModel> {
     const uniqueId = UniqueIDGenerator.getID();
-    const spaceName = `space-l0-${scenarioName}-${uniqueId}`;
-    const spaceNameId = `space-${scenarioName.toLowerCase()}-${uniqueId}`;
-    const responseEco = await this.createSpaceAndGetData(
+    const truncatedScenarioName = scenarioName.slice(0, 18);
+    const spaceName = `${truncatedScenarioName}-${uniqueId}`;
+    const spaceNameId = this.validateAndClean(`${spaceName.toLowerCase()}`);
+    if (!spaceNameId) {
+      throw new Error(`Unable to create space: Invalid nameId: ${spaceNameId}`);
+    }
+
+    const responseRootSpace = await this.createSpaceAndGetData(
       spaceName,
       spaceNameId,
       accountID
     );
 
-    const spaceData = responseEco.data?.space;
+    if (!responseRootSpace.data?.space) {
+      throw new Error(`Failed to create root space: ${JSON.stringify(responseRootSpace.error)}`);
+    }
+
+    const spaceData = responseRootSpace.data?.space;
     spaceModel.id = spaceData?.id ?? '';
     spaceModel.nameId = spaceData?.nameID ?? '';
     spaceModel.profile = {
