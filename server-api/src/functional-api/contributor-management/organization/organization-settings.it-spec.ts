@@ -20,14 +20,9 @@ const lastName = `ln${uniqueId}`;
 let userId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
-
+// Note: no space, just the org to make this test suite much faster
 const scenarioConfig: TestScenarioConfig = {
   name: 'organization-settings',
-  space: {
-    collaboration: {
-      addCallouts: true,
-    },
-  },
 };
 
 beforeAll(async () => {

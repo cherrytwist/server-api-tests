@@ -56,7 +56,8 @@
     "test:innovation": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.innovationPacks.js",
     "test:documents": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.documents.js",
     "test:configuration": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.configuration.js",
-    "innovation-pack-with-templates": "ts-node-dev ./src/functional-api/innovation-pack/innovation-pack-with-templates.ts"
+    "innovation-pack-with-templates": "ts-node-dev ./src/functional-api/innovation-pack/innovation-pack-with-templates.ts",
+    "validate-base-scenario-setup": "ts-node-dev ./src/validate-base-scenario-setup.ts"
   },
   "dependencies": {
     "@alkemio/client-lib": "^0.32.0",
