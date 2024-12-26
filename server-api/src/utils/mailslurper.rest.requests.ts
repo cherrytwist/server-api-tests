@@ -1,6 +1,19 @@
 import { testConfiguration } from '@src/config/test.configuration';
 import request from 'supertest';
 
+/**
+ * Returns 2 values:
+ ** 1st: emails array
+ ** 2nd: emails count
+ */
+ export const getMailsData = async () => {
+  const response = await getMails();
+  const emailsData = response.body.mailItems;
+  const emailsCount = response.body.totalRecords;
+
+  return [emailsData, emailsCount];
+};
+
 export const deleteMailSlurperMails = async () => {
   return await request(testConfiguration.endPoints.mailSlurper)
     .delete('')

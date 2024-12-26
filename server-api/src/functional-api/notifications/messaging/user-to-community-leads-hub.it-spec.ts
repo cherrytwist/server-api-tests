@@ -1,12 +1,10 @@
-import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../../../lib/src/utils/delay';
-import { TestUser } from '@alkemio/tests-lib';
+
+import { delay, TestUser } from '@alkemio/tests-lib';
 import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
-import { getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,
@@ -18,6 +16,7 @@ import { updateUserSettingCommunicationMessage } from '@functional-api/contribut
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 
 let usersList: any[] = [];
 

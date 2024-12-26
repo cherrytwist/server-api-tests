@@ -1,11 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
-import { getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,

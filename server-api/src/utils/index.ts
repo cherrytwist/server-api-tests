@@ -1,5 +1,4 @@
 export * from './kratos';
-export * from '../../../lib/src/utils/delay';
 export * from './register-in-alkemio-or-fail';
 export * from './token.helper';
 export * from './test.util';

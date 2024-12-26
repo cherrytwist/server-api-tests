@@ -1,12 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
-import { delay } from '../../../../../lib/src/utils/delay';
-import { TestUser } from '@alkemio/tests-lib';
+import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { users } from '../../../utils/queries/users-data';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { getMailsData } from '../../../types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
@@ -15,6 +12,7 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { testConfiguration } from '@src/config/test.configuration';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 
 const uniqueId = UniqueIDGenerator.getID();
 let postCommentsIdSpace = '';

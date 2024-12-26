@@ -1,4 +1,4 @@
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import {
   createApplication,
@@ -11,7 +11,6 @@ import {
   CommunityMembershipPolicy,
   CommunityRoleType,
 } from '@generated/alkemio-schema';
-import { getMailsData } from '@src/types/entities-helper';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';

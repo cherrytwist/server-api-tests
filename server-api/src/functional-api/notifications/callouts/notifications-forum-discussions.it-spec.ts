@@ -1,4 +1,4 @@
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import { TestUser } from '@alkemio/tests-lib';
@@ -10,7 +10,6 @@ import {
 } from '@functional-api/communications/communication.params';
 import { sendMessageReplyToRoom } from '@functional-api/communications/replies/reply.request.params';
 import { ForumDiscussionCategory } from '@generated/alkemio-schema';
-import { getMailsData } from '@src/types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 

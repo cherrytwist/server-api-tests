@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
+import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import {
   createCalloutOnCollaboration,
@@ -9,7 +9,6 @@ import {
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
 import { users } from '@utils/queries/users-data';
-import { getMailsData } from '@src/types/entities-helper';
 import { CalloutVisibility, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
