@@ -132,8 +132,15 @@ export class TestScenarioFactory {
     const model: OrganizationWithSpaceModel = this.createEmptyBaseScenario();
     const uniqueId = UniqueIDGenerator.getID();
     const organizationName = `${scenarioName} - org-name-${uniqueId}`;
-    const hostNameId = `${scenarioName} - org-nameid-${uniqueId}`;
-    const responseOrg = await createOrganization(organizationName, hostNameId);
+    const hostNameId = this.validateAndClean(`${scenarioName} - org-nameid-${uniqueId}`);
+    if (!hostNameId) {
+      throw new Error(`Failed to create organization: Invalid hostNameId: ${hostNameId}`);
+    }
+    const responseOrg = await createOrganization(organizationName, hostNameId.toLowerCase().slice(0, 24));
+
+    if (!responseOrg.data?.createOrganization) {
+      throw new Error(`Failed to create organization: ${JSON.stringify(responseOrg.error)}`);
+    }
 
     model.organization.id = responseOrg.data?.createOrganization.id ?? '';
     model.organization.agentId =
@@ -149,6 +156,16 @@ export class TestScenarioFactory {
     };
     return model;
   }
+
+  private static validateAndClean(input: string): string | null {
+    // Remove all spaces from the string
+    const cleaned = input.replace(/\s+/g, "");
+
+    // Validate that the string contains only letters, numbers, and "-"
+    const isValid = /^[a-zA-Z0-9-]+$/.test(cleaned);
+
+    return isValid ? cleaned : null;
+}
 
   private static async createRootSpace(
     spaceModel: SpaceModel,
