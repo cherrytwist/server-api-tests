@@ -1,5 +1,4 @@
 import {
-  deleteOrganization,
   getOrganizationData,
   updateOrganization,
 } from './organization.request.params';
@@ -7,11 +6,12 @@ import { updateOrganizationSettings } from './organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 const domain = 'alkem.io';
@@ -21,8 +21,18 @@ let userId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'organization-settings',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  },
+};
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateOrganization(baseScenario.organization.id, {
     domain: domain,
@@ -41,8 +51,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Organization settings', () => {
@@ -51,8 +60,8 @@ describe('Organization settings', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.SPACE_ADMIN}    | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.SPACE_MEMBER}   | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
+      ${TestUser.SPACE_ADMIN}  | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
+      ${TestUser.SPACE_MEMBER} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
     `(
       'User: "$userRole" get message: "$message", when intend to update organization settings ',
       async ({ userRole, message }) => {
@@ -69,7 +78,8 @@ describe('Organization settings', () => {
 
         // Assert
         expect(
-          res?.data?.updateOrganizationSettings.settings.membership.allowUsersMatchingDomainToJoin
+          res?.data?.updateOrganizationSettings.settings.membership
+            .allowUsersMatchingDomainToJoin
         ).toEqual(true);
       }
     );
@@ -78,7 +88,7 @@ describe('Organization settings', () => {
   describe('DDT user WITHOUT privileges to update organization settings', () => {
     // Arrange
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'update' privilege: organization settings update:"}
     `(
       'User: "$userRole" get message: "$message", when intend to update organization settings ',

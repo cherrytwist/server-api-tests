@@ -1,15 +1,14 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { createPostOnCallout } from '../callout/post/post.request.params';
-import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionRooms } from './subscrition-queries';
 import { users } from '@utils/queries/users-data';
 import { sendMessageToRoom } from '../communications/communication.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -74,22 +73,40 @@ const expectedDataFunc = async (
 };
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callouts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
-
-  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-    baseScenario.space.id,
-    'subspace',
-    baseScenario.subspace
-  );
-
-  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-    baseScenario.subspace.id,
-    'subsubspace',
-    baseScenario.subsubspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -97,10 +114,7 @@ afterAll(async () => {
   subscription2.terminate();
   subscription3.terminate();
 
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 describe('Post comments subscription', () => {
   describe('Space comments subscription ', () => {

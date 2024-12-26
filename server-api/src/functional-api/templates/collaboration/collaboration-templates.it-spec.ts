@@ -1,5 +1,3 @@
-import { deleteSpace } from '../../journey/space/space.request.params';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import {
   createTemplateFromCollaboration,
   getCollaborationTemplatesCount,
@@ -8,34 +6,46 @@ import {
 import { getCollaborationTemplatesCountForSpace } from './collaboration-template.request.params';
 import { templateInfoUpdate } from './collaboration-template-testdata';
 import { deleteTemplate, GetTemplateById } from '../template.request.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let templateId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
-
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callouts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
 beforeAll(async () => {
   baseScenario =
-      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
-
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.space.id,
-      'subspace',
-      baseScenario.subspace
-    );
-
-    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-      baseScenario.subspace.id,
-      'subsubspace',
-      baseScenario.subsubspace
-    );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Subspace templates - CRUD', () => {
@@ -88,7 +98,6 @@ describe('Subspace templates - CRUD', () => {
     );
 
     templateId = res?.data?.createTemplateFromCollaboration.id ?? '';
-
 
     // Act
     const resDeleteTemplate = await deleteTemplate(templateId);

@@ -7,8 +7,6 @@ import {
   updatePost,
   getPostData,
 } from './post.request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
@@ -22,8 +20,9 @@ import {
 } from '@functional-api/references/references.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -37,20 +36,34 @@ let postCommentsIdSubspace = '';
 let msessageId = '';
 const spaceCalloutId = '';
 
-
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'post-on-callout',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'callout-subspace', baseScenario.subspace);
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'callout-subsubspace', baseScenario.subsubspace);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
@@ -82,9 +95,10 @@ describe('Posts - Create', () => {
       baseScenario.space.collaboration.calloutPostId,
       TestUser.SPACE_MEMBER
     );
-    const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
-      c => c.post && c.post.id === spacePostId
-    )?.post;
+    const data =
+      postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+        c => c.post && c.post.id === spacePostId
+      )?.post;
 
     // Assert
     expect(data).toEqual(postDataCreate);
@@ -219,9 +233,10 @@ describe('Posts - Update', () => {
       baseScenario.space.collaboration.calloutPostId,
       TestUser.SPACE_ADMIN
     );
-    const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
-      c => c.post && c.post.id === postDataUpdate?.id
-    )?.post;
+    const data =
+      postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+        c => c.post && c.post.id === postDataUpdate?.id
+      )?.post;
 
     // Assert
     expect(data).toEqual(postDataUpdate);
@@ -241,9 +256,10 @@ describe('Posts - Update', () => {
       baseScenario.space.id,
       baseScenario.space.collaboration.calloutPostId
     );
-    const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
-      c => c.post && c.post.id === postDataUpdate?.id
-    )?.post;
+    const data =
+      postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+        c => c.post && c.post.id === postDataUpdate?.id
+      )?.post;
 
     // Assert
     expect(data).toEqual(postDataUpdate);
@@ -278,9 +294,10 @@ test('HM should update post created on space callout from HM', async () => {
     baseScenario.space.collaboration.calloutPostId,
     TestUser.SPACE_MEMBER
   );
-  const data = postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
-    c => c.post && c.post.id === spacePostIdEM
-  )?.post;
+  const data =
+    postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+      c => c.post && c.post.id === spacePostIdEM
+    )?.post;
 
   // Assert
   expect(data).toEqual(postDataUpdate);
@@ -546,8 +563,8 @@ describe('Posts - Messages', () => {
       subspacePostId =
         resPostonSubspace.data?.createContributionOnCallout.post?.id ?? '';
       postCommentsIdSubspace =
-        resPostonSubspace.data?.createContributionOnCallout.post?.comments
-          .id ?? '';
+        resPostonSubspace.data?.createContributionOnCallout.post?.comments.id ??
+        '';
     });
 
     afterAll(async () => {

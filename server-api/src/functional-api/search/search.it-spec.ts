@@ -24,8 +24,9 @@ import {
   deleteOrganization,
   updateOrganization,
 } from '@functional-api/contributor-management/organization/organization.request.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -74,22 +75,39 @@ const termTooLong = [
 const termAllScored = ['qa', 'qa', 'user'];
 
 let baseScenario: OrganizationWithSpaceModel;
-
+const scenarioConfig: TestScenarioConfig = {
+  name: 'search',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
 beforeAll(async () => {
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
-
-  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-    baseScenario.space.id,
-    'notification-userMention-subspace',
-    baseScenario.subspace
-  );
-
-  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-    baseScenario.subspace.id,
-    'notification-userMention-subsubspace',
-    baseScenario.subsubspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   organizationNameText = `qa organizationNameText ${uniqueId}`;
 
@@ -156,12 +174,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
   await deleteSpace(secondSpaceId);
-  await deleteOrganization(baseScenario.organization.id);
   await deleteOrganization(organizationIdTest);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Search', () => {

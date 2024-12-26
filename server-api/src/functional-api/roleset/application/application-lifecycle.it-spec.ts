@@ -10,11 +10,11 @@ import {
   createApplication,
   getRoleSetInvitationsApplications,
 } from '@functional-api/roleset/application/application.request.params';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
 import { CommunityMembershipPolicy } from '@generated/graphql';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let applicationId = '';
 let applicationData;
@@ -22,14 +22,27 @@ let spaceRoleSetId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'application-lifecycle',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+    }
+  }
+}
+
 beforeAll(async () => {
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Lifecycle', () => {

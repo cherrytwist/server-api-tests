@@ -4,32 +4,38 @@ import {
   getOrganizationRole,
 } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const spaceRoles = ['lead', 'member'];
 const availableRoles = ['member', 'lead'];
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subspace-activity',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteSpace('eco1');
 
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.space.id,
-    'subspace',
-    baseScenario.subspace
-  );
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.subspace.id,
-    'subsubspace',
-    baseScenario.subsubspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
@@ -69,10 +75,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Organization role', () => {

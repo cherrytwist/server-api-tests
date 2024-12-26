@@ -12,7 +12,6 @@ import {
   inviteContributors,
 } from './invitation.request.params';
 import {
-  deleteSpace,
   getSpaceData,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
@@ -28,21 +27,33 @@ import {
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let invitationId = '';
 let invitationData: any;
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'access-invitations',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+  },
+};
 
 beforeAll(async () => {
-    baseScenario =
-      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
@@ -55,8 +66,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Invitations', () => {
@@ -301,7 +311,10 @@ describe('Invitations-flows', () => {
       TestUser.NON_SPACE_MEMBER
     );
 
-    const spaceData = await getSpaceData(baseScenario.space.nameId, TestUser.NON_SPACE_MEMBER);
+    const spaceData = await getSpaceData(
+      baseScenario.space.nameId,
+      TestUser.NON_SPACE_MEMBER
+    );
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -337,7 +350,10 @@ describe('Invitations-flows', () => {
       TestUser.NON_SPACE_MEMBER
     );
 
-    const spaceData = await getSpaceData(baseScenario.space.nameId, TestUser.NON_SPACE_MEMBER);
+    const spaceData = await getSpaceData(
+      baseScenario.space.nameId,
+      TestUser.NON_SPACE_MEMBER
+    );
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
@@ -459,11 +475,11 @@ describe('Invitations - Authorization', () => {
   describe('DDT rights to change invitation state', () => {
     // Arrange
     test.each`
-      user                          | text
-      ${TestUser.NON_SPACE_MEMBER}    | ${accepted}
-      ${TestUser.GLOBAL_ADMIN}      | ${invited}
+      user                             | text
+      ${TestUser.NON_SPACE_MEMBER}     | ${accepted}
+      ${TestUser.GLOBAL_ADMIN}         | ${invited}
       ${TestUser.GLOBAL_LICENSE_ADMIN} | ${invited}
-      ${TestUser.SPACE_ADMIN}         | ${invited}
+      ${TestUser.SPACE_ADMIN}          | ${invited}
     `(
       'User: "$user", should get: "$text" to update invitation of another user',
       async ({ user, text }) => {
@@ -493,9 +509,9 @@ describe('Invitations - Authorization', () => {
     );
 
     test.each`
-      user                   | text
+      user                     | text
       ${TestUser.SPACE_MEMBER} | ${authErrorUpdateInvitationMessage}
-      ${TestUser.QA_USER}    | ${authErrorUpdateInvitationMessage}
+      ${TestUser.QA_USER}      | ${authErrorUpdateInvitationMessage}
     `(
       'User: "$user", should get Error: "$text" to update invitation of another user',
       async ({ user, text }) => {
@@ -526,10 +542,10 @@ describe('Invitations - Authorization', () => {
   describe('DDT users with rights to create invitation', () => {
     // Arrange
     test.each`
-      user                          | state
-      ${TestUser.GLOBAL_ADMIN}      | ${invited}
+      user                             | state
+      ${TestUser.GLOBAL_ADMIN}         | ${invited}
       ${TestUser.GLOBAL_LICENSE_ADMIN} | ${invited}
-      ${TestUser.SPACE_ADMIN}         | ${invited}
+      ${TestUser.SPACE_ADMIN}          | ${invited}
     `(
       'User: "$user", should get: "$text" to create invitation to another user',
       async ({ user, state }) => {
@@ -558,11 +574,11 @@ describe('Invitations - Authorization', () => {
     // Arrange
     //
     test.each`
-      user                               | text
+      user                             | text
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${authErrorCreateInvitationMessage}
-      ${TestUser.SPACE_MEMBER}             | ${authErrorCreateInvitationMessage}
-      ${TestUser.QA_USER}                | ${authErrorCreateInvitationMessage}
-      ${TestUser.NON_SPACE_MEMBER}         | ${authErrorCreateInvitationMessage}
+      ${TestUser.SPACE_MEMBER}         | ${authErrorCreateInvitationMessage}
+      ${TestUser.QA_USER}              | ${authErrorCreateInvitationMessage}
+      ${TestUser.NON_SPACE_MEMBER}     | ${authErrorCreateInvitationMessage}
     `(
       'User: "$user", should get: "$text" to create invitation to another user',
       async ({ user, text }) => {

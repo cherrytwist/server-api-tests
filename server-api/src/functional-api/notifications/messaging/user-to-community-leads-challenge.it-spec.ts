@@ -2,10 +2,7 @@
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '@functional-api/journey/space/space.request.params';
+import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
 import { getMailsData } from '../../../types/entities-helper';
@@ -15,14 +12,12 @@ import {
   assignRoleToOrganization,
   removeRoleFromOrganization,
 } from '@functional-api/roleset/roles-request.params';
-import {
-  deleteOrganization,
-  updateOrganization,
-} from '@functional-api/contributor-management/organization/organization.request.params';
+import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const senders = (communityName: string) => {
   return `You have sent a message to ${communityName} community`;
@@ -33,18 +28,33 @@ const receivers = (senderDisplayName: string) => {
 };
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'messaging-user-community-leads-subspace',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
-
-  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-    baseScenario.space.id,
-    'notification-userMention-subspace',
-    baseScenario.subspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateOrganization(baseScenario.organization.id, {
     legalEntityName: 'legalEntityName',
@@ -90,9 +100,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 describe('Notifications - send messages to Private Space, Public Subspace Community Leads', () => {
   beforeEach(async () => {

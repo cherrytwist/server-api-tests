@@ -17,8 +17,9 @@ import {
   createOrganization,
   deleteOrganization,
 } from '../../contributor-management/organization/organization.request.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 const spaceNameId = '111' + uniqueId;
@@ -29,23 +30,30 @@ const subspaceName = 'urole-chal';
 const availableRoles = ['member', 'lead'];
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'organization2',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteSpace('eco1');
 
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.space.id,
-    'subspace',
-    baseScenario.subspace
-  );
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.subspace.id,
-    'subsubspace',
-    baseScenario.subsubspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignRoleToUser(
     users.nonSpaceMember.id,
@@ -90,10 +98,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('User roles', () => {

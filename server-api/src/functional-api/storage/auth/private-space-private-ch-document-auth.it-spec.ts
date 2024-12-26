@@ -8,10 +8,8 @@ import {
   uploadImageOnVisual,
 } from '../upload.params';
 import path from 'path';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import {
-  deleteSpace,
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
@@ -47,24 +45,35 @@ import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-cal
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { SpacePrivacyMode } from '@generated/alkemio-schema';
 import { SpaceVisibility } from '@generated/graphql';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let refId = '';
 let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'doc-private-space-private-subspace',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
-   baseScenario =
-      await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
-
-    await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-      baseScenario.space.id,
-      'notification-userMention-subspace',
-      baseScenario.subspace
-    );
-
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpacePlatformSettings(
     baseScenario.space.id,
@@ -76,7 +85,7 @@ beforeAll(async () => {
     privacy: { mode: SpacePrivacyMode.Private },
   });
 
-  const a = await updateSpaceSettings(baseScenario.subspace.id, {
+  await updateSpaceSettings(baseScenario.subspace.id, {
     privacy: { mode: SpacePrivacyMode.Private },
     collaboration: {
       inheritMembershipRights: true,
@@ -86,9 +95,7 @@ beforeAll(async () => {
   });
 });
 afterAll(async () => {
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Private Space - Private Subspace - visual on profile', () => {

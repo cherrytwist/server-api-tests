@@ -8,9 +8,7 @@ import {
   uploadImageOnVisual,
 } from '../upload.params';
 import path from 'path';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   sorted__create_read_update_delete_grant,
   sorted__create_read_update_delete_grant_fileUp_fileDel,
@@ -24,18 +22,48 @@ import {
   assignUserAsOrganizationAdmin,
   assignUserAsOrganizationOwner,
 } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let refId = '';
 
 let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
-
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callouts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
 beforeAll(async () => {
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignUserAsOrganizationAdmin(
     users.subspaceAdmin.id,
@@ -53,8 +81,7 @@ beforeAll(async () => {
   );
 });
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Organization - documents', () => {

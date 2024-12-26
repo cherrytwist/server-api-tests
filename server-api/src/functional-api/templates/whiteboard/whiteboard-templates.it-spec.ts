@@ -1,15 +1,14 @@
 import '@utils/array.matcher';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   createWhiteboardTemplate,
   getWhiteboardTemplatesCount,
 } from './whiteboard-templates.request.params';
 import { deleteTemplate } from '../template.request.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 let postNameID = '';
@@ -18,27 +17,32 @@ let templateId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'templates-whiteboard',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
   baseScenario =
-      await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.space.id,
-      'subspace',
-      baseScenario.subspace
-    );
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.subspace.id,
-      'subsubspace',
-      baseScenario.subsubspace
-    );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
@@ -84,11 +88,15 @@ describe('WHITEBOARD templates - CRUD', () => {
       baseScenario.space.templateSetId
     );
     templateId = resCreatePostTempl?.data?.createTemplate.id ?? '';
-    const countBefore = await getWhiteboardTemplatesCount(baseScenario.space.templateSetId);
+    const countBefore = await getWhiteboardTemplatesCount(
+      baseScenario.space.templateSetId
+    );
 
     // Act
     const remove = await deleteTemplate(templateId);
-    const countAfter = await getWhiteboardTemplatesCount(baseScenario.space.templateSetId);
+    const countAfter = await getWhiteboardTemplatesCount(
+      baseScenario.space.templateSetId
+    );
 
     // Assert
     expect(countAfter).toEqual((countBefore as number) - 1);

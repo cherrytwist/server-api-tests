@@ -1,8 +1,6 @@
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { deleteUser } from '@functional-api/contributor-management/user/user.request.params';
 import { users } from '@utils/queries/users-data';
@@ -11,11 +9,14 @@ import {
   sendMessageToRoom,
 } from '@functional-api/communications/communication.params';
 import { getMailsData } from '@src/types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestSetupUtils } from '@src/models/TestSetupUtils';
+
+const uniqueId = UniqueIDGenerator.getID();
 
 const spaceName = 'not-disc-eco-name' + uniqueId;
 const ecoName = spaceName;
@@ -30,20 +31,35 @@ const subspaceDiscussionSubjectText = `${subspaceName} - New discussion created:
 const subspaceDiscussionSubjectTextAdmin = `[${subspaceName}] New discussion created: Default title`;
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'notifications-discussions',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpaceAndUsers();
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  await OrganizationWithSpaceModelFactory.createSubspaceWithUsers(
-    baseScenario.space.id,
-    'notification-discussions-subspace',
-    baseScenario.subspace
-  );
-
-  await OrganizationWithSpaceModelFactory.registerUsersAndAssignToAllEntitiesAsMembers(
+  await TestSetupUtils.registerUsersAndAssignToAllEntitiesAsMembers(
     baseScenario,
     spaceMemOnly,
     subspaceAndSpaceMemOnly,
@@ -132,9 +148,7 @@ afterAll(async () => {
   await deleteUser(spaceMemOnly);
   await deleteUser(subspaceAndSpaceMemOnly);
   await deleteUser(subsubspaceAndSubspaceAndSpaceMem);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 // skipping the tests as they need to be updated
@@ -163,9 +177,13 @@ describe.skip('Notifications - discussions', () => {
     // Act
     const res = await createDiscussion(baseScenario.space.communication.id);
     // TODO: may not be the right usage
-    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId =
+      res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
+    await sendMessageToRoom(
+      baseScenario.space.collaboration.calloutPostCommentsId,
+      'test message'
+    );
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -224,9 +242,13 @@ describe.skip('Notifications - discussions', () => {
       baseScenario.space.communication.id,
       TestUser.QA_USER
     );
-    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId =
+      res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
+    await sendMessageToRoom(
+      baseScenario.space.collaboration.calloutPostCommentsId,
+      'test message'
+    );
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -282,9 +304,13 @@ describe.skip('Notifications - discussions', () => {
   test('GA create subspace discussion and send message - GA(1), HA(1), CA(1), CM(4) get notifications', async () => {
     // Act
     const res = await createDiscussion(baseScenario.subspace.communication.id);
-    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId =
+      res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
+    await sendMessageToRoom(
+      baseScenario.space.collaboration.calloutPostCommentsId,
+      'test message'
+    );
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -333,9 +359,13 @@ describe.skip('Notifications - discussions', () => {
       baseScenario.subspace.communication.id,
       TestUser.QA_USER
     );
-    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId =
+      res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
+    await sendMessageToRoom(
+      baseScenario.space.collaboration.calloutPostCommentsId,
+      'test message'
+    );
 
     await delay(6000);
     const getEmailsData = await getMailsData();
@@ -390,9 +420,13 @@ describe.skip('Notifications - discussions', () => {
       baseScenario.space.communication.id,
       TestUser.QA_USER
     );
-    baseScenario.space.collaboration.calloutPostCommentsId = res?.data?.createDiscussion.id ?? '';
+    baseScenario.space.collaboration.calloutPostCommentsId =
+      res?.data?.createDiscussion.id ?? '';
 
-    await sendMessageToRoom(baseScenario.space.collaboration.calloutPostCommentsId, 'test message');
+    await sendMessageToRoom(
+      baseScenario.space.collaboration.calloutPostCommentsId,
+      'test message'
+    );
 
     // Act
     await delay(1500);

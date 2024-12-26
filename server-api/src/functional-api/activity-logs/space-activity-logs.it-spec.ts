@@ -1,5 +1,4 @@
 import '@utils/array.matcher';
-import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
@@ -12,7 +11,6 @@ import {
   CommunityMembershipPolicy,
 } from '@generated/alkemio-schema';
 import {
-  deleteSpace,
   updateSpaceSettings,
 } from '../journey/space/space.request.params';
 import {
@@ -27,8 +25,9 @@ import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/white
 import { assignRoleToUser, joinRoleSet } from '../roleset/roles-request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
-;
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+
 const uniqueId = UniqueIDGenerator.getID();
 
 let calloutDisplayName = '';
@@ -36,11 +35,19 @@ let calloutId = '';
 let postNameID = '';
 let postDisplayName = '';
 
-
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'space-activity',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  },
+};
 
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: {
@@ -50,8 +57,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
@@ -96,7 +102,10 @@ describe('Activity logs - Space', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(baseScenario.space.community.roleSetId, TestUser.SPACE_MEMBER);
+    await joinRoleSet(
+      baseScenario.space.community.roleSetId,
+      TestUser.SPACE_MEMBER
+    );
 
     await assignRoleToUser(
       users.spaceAdmin.id,
@@ -319,8 +328,8 @@ describe('Access to Activity logs - Space', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${baseScenario.space.collaboration.id}
-      ${TestUser.SPACE_ADMIN}    | ${baseScenario.space.collaboration.id}
-      ${TestUser.SPACE_MEMBER}   | ${baseScenario.space.collaboration.id}
+      ${TestUser.SPACE_ADMIN}  | ${baseScenario.space.collaboration.id}
+      ${TestUser.SPACE_MEMBER} | ${baseScenario.space.collaboration.id}
     `(
       'User: "$userRole" get message: "$message", when intend to access Private space activity logs',
       async ({ userRole, message }) => {
@@ -339,7 +348,7 @@ describe('Access to Activity logs - Space', () => {
     );
 
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
       'User: "$userRole" get Error message: "$message", when intend to access Private space activity logs',
@@ -367,8 +376,8 @@ describe('Access to Activity logs - Space', () => {
     });
     // Arrange
     test.each`
-      userRole                   | message
-      ${TestUser.GLOBAL_ADMIN}   | ${baseScenario.space.collaboration.id}
+      userRole                     | message
+      ${TestUser.GLOBAL_ADMIN}     | ${baseScenario.space.collaboration.id}
       ${TestUser.SPACE_ADMIN}      | ${baseScenario.space.collaboration.id}
       ${TestUser.SPACE_MEMBER}     | ${baseScenario.space.collaboration.id}
       ${TestUser.NON_SPACE_MEMBER} | ${baseScenario.space.collaboration.id}

@@ -9,12 +9,11 @@ import {
 } from './callouts.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { CalloutState, CalloutType } from '@generated/alkemio-schema';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { getDataPerSpaceCallout } from './post/post.request.params';
 import { CalloutVisibility } from '@generated/graphql';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -23,17 +22,32 @@ let calloutId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callouts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'post-subspace', baseScenario.subspace);
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'post-subsubspace', baseScenario.subsubspace);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
@@ -74,21 +88,17 @@ describe('Callouts - CRUD', () => {
     );
     calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
 
-    const resUpdate = await updateCallout(
-      calloutId,
-      TestUser.GLOBAL_ADMIN,
-      {
-        framing: {
-          profile: {
-            displayName: calloutDisplayName + 'update',
-            description: 'calloutDescription update',
-          },
+    const resUpdate = await updateCallout(calloutId, TestUser.GLOBAL_ADMIN, {
+      framing: {
+        profile: {
+          displayName: calloutDisplayName + 'update',
+          description: 'calloutDescription update',
         },
-        contributionPolicy: {
-          state: CalloutState.Archived,
-        },
-      }
-    );
+      },
+      contributionPolicy: {
+        state: CalloutState.Archived,
+      },
+    });
     const calloutReq = await getDataPerSpaceCallout(
       baseScenario.space.id,
       calloutId
@@ -106,10 +116,7 @@ describe('Callouts - CRUD', () => {
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
-    await updateCalloutVisibility(
-      calloutId,
-      CalloutVisibility.Published
-    );
+    await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
 
     const calloutReq = await getDataPerSpaceCallout(
       baseScenario.space.id,
@@ -194,7 +201,7 @@ describe('Callouts - AUTH Space', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.SPACE_ADMIN}    | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {
@@ -215,7 +222,7 @@ describe('Callouts - AUTH Space', () => {
   describe('DDT user NO privileges to create callout', () => {
     // Arrange
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.SPACE_MEMBER}     | ${'errors'}
       ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
@@ -239,8 +246,8 @@ describe('Callouts - AUTH Space', () => {
       await deleteCallout(calloutId);
     });
     test.each`
-      userRole                   | message
-      ${TestUser.GLOBAL_ADMIN}   | ${'"data":{"updateCallout"'}
+      userRole                     | message
+      ${TestUser.GLOBAL_ADMIN}     | ${'"data":{"updateCallout"'}
       ${TestUser.SPACE_ADMIN}      | ${'"data":{"updateCallout"'}
       ${TestUser.SPACE_MEMBER}     | ${'errors'}
       ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
@@ -275,8 +282,8 @@ describe('Callouts - AUTH Space', () => {
       await deleteCallout(calloutId);
     });
     test.each`
-      userRole                   | message
-      ${TestUser.GLOBAL_ADMIN}   | ${'"data":{"deleteCallout"'}
+      userRole                     | message
+      ${TestUser.GLOBAL_ADMIN}     | ${'"data":{"deleteCallout"'}
       ${TestUser.SPACE_ADMIN}      | ${'"data":{"deleteCallout"'}
       ${TestUser.SPACE_MEMBER}     | ${'errors'}
       ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
@@ -305,8 +312,8 @@ describe('Callouts - AUTH Subspace', () => {
     });
     // Arrange
     test.each`
-      userRole                     | message
-      ${TestUser.SPACE_ADMIN}        | ${'"data":{"createCalloutOnCollaboration"'}
+      userRole                    | message
+      ${TestUser.SPACE_ADMIN}     | ${'"data":{"createCalloutOnCollaboration"'}
       ${TestUser.SUBSPACE_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
       ${TestUser.SUBSPACE_MEMBER} | ${'"data":{"createCalloutOnCollaboration"'}
     `(
@@ -330,7 +337,7 @@ describe('Callouts - AUTH Subspace', () => {
   describe('DDT user NO privileges to create callout', () => {
     // Arrange
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
@@ -354,10 +361,10 @@ describe('Callouts - AUTH Subspace', () => {
     });
     test.each`
       userRole                     | message
-      ${TestUser.SPACE_ADMIN}        | ${'"data":{"updateCallout"'}
-      ${TestUser.SUBSPACE_ADMIN}  | ${'"data":{"updateCallout"'}
-      ${TestUser.SUBSPACE_MEMBER} | ${'errors'}
-      ${TestUser.NON_SPACE_MEMBER}   | ${'errors'}
+      ${TestUser.SPACE_ADMIN}      | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}   | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
@@ -390,10 +397,10 @@ describe('Callouts - AUTH Subspace', () => {
     });
     test.each`
       userRole                     | message
-      ${TestUser.SPACE_ADMIN}        | ${'"data":{"deleteCallout"'}
-      ${TestUser.SUBSPACE_ADMIN}  | ${'"data":{"deleteCallout"'}
-      ${TestUser.SUBSPACE_MEMBER} | ${'errors'}
-      ${TestUser.NON_SPACE_MEMBER}   | ${'errors'}
+      ${TestUser.SPACE_ADMIN}      | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}   | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
@@ -420,11 +427,11 @@ describe('Callouts - AUTH Subsubspace', () => {
     // Arrange
     test.each`
       userRole                       | message
-      ${TestUser.SPACE_ADMIN}          | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_ADMIN}        | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSPACE_ADMIN}     | ${'"data":{"createCalloutOnCollaboration"'}
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.SPACE_MEMBER}         | ${'"data":{"createCalloutOnCollaboration"'}
-      ${TestUser.SUBSPACE_MEMBER}   | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SPACE_MEMBER}       | ${'"data":{"createCalloutOnCollaboration"'}
+      ${TestUser.SUBSPACE_MEMBER}    | ${'"data":{"createCalloutOnCollaboration"'}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${'"data":{"createCalloutOnCollaboration"'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
@@ -446,7 +453,7 @@ describe('Callouts - AUTH Subsubspace', () => {
   describe('DDT user NO privileges to create callout', () => {
     // Arrange
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
@@ -470,13 +477,13 @@ describe('Callouts - AUTH Subsubspace', () => {
     });
     test.each`
       userRole                       | message
-      ${TestUser.SPACE_ADMIN}          | ${'"data":{"updateCallout"'}
-      ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"updateCallout"'}
+      ${TestUser.SPACE_ADMIN}        | ${'"data":{"updateCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}     | ${'"data":{"updateCallout"'}
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"updateCallout"'}
-      ${TestUser.SPACE_MEMBER}         | ${'errors'}
-      ${TestUser.SUBSPACE_MEMBER}   | ${'errors'}
+      ${TestUser.SPACE_MEMBER}       | ${'errors'}
+      ${TestUser.SUBSPACE_MEMBER}    | ${'errors'}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${'errors'}
-      ${TestUser.NON_SPACE_MEMBER}     | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
@@ -510,13 +517,13 @@ describe('Callouts - AUTH Subsubspace', () => {
     });
     test.each`
       userRole                       | message
-      ${TestUser.SPACE_ADMIN}          | ${'"data":{"deleteCallout"'}
-      ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"deleteCallout"'}
+      ${TestUser.SPACE_ADMIN}        | ${'"data":{"deleteCallout"'}
+      ${TestUser.SUBSPACE_ADMIN}     | ${'"data":{"deleteCallout"'}
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"deleteCallout"'}
-      ${TestUser.SPACE_MEMBER}         | ${'errors'}
-      ${TestUser.SUBSPACE_MEMBER}   | ${'errors'}
+      ${TestUser.SPACE_MEMBER}       | ${'errors'}
+      ${TestUser.SUBSPACE_MEMBER}    | ${'errors'}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${'errors'}
-      ${TestUser.NON_SPACE_MEMBER}     | ${'errors'}
+      ${TestUser.NON_SPACE_MEMBER}   | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {

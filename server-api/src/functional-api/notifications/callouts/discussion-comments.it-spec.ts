@@ -1,17 +1,15 @@
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { getMailsData } from '@src/types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -49,15 +47,38 @@ const expectedDataOpp = async (toAddresses: any[]) => {
 };
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subspace-activity',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addMembers: true,
+        addAdmin: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addMembers: true,
+          addAdmin: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-    baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-    await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'post-subspace', baseScenario.subspace);
-    await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'post-subsubspace', baseScenario.subsubspace);
-    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subspace.community.roleSetId);
-    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subsubspace.community.roleSetId);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesConfig = [
     {
@@ -103,10 +124,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Notifications - callout comments', () => {

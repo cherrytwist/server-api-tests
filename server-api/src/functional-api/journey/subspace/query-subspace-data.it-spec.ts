@@ -1,5 +1,4 @@
 import '@utils/array.matcher';
-
 import {
   createSubspace,
   getSubspaceData,
@@ -13,8 +12,9 @@ import {
   updateSpaceContext,
 } from '../space/space.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -30,8 +30,18 @@ let organizationIdTest = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subspace-data-access',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  }
+}
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   organizationNameTest = `QA organizationNameTest ${uniqueId}`;
 
@@ -45,8 +55,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
   await deleteOrganization(organizationIdTest);
 });
 

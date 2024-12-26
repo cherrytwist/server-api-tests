@@ -1,13 +1,13 @@
 import '@utils/array.matcher';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import {
   createSubspace,
   getSubspaceData,
 } from '../subspace/subspace.request.params';
 import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 ;
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -24,21 +24,32 @@ beforeEach(async () => {
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subsubspace',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },subspace: {
+      collaboration: {
+        addCallouts: true,
+      },},
+    }
+  }
+}
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'subspace', baseScenario.subspace);
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'subsubspace', baseScenario.subsubspace);
-
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
   subsubspaceName = 'post-opp';
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
   await deleteSpace(additionalSubspaceId);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Opportunities', () => {

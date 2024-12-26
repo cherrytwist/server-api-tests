@@ -6,7 +6,6 @@ import {
   getPrivateSpaceData,
   getSpacesFilteredByVisibilityWithAccess,
   getSpacesFilteredByVisibilityNoAccess,
-  deleteSpace,
   updateSpaceSettings,
   updateSpacePlatformSettings,
 } from './space.request.params';
@@ -20,12 +19,12 @@ import {
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
   sorted__create_read_update_delete_grant_createSubspace_platformAdmin,
 } from '@common/constants/privileges';
-import { deleteSubspace } from '../subsubspace/subsubspace.request.params';
-
 import { SpacePrivacyMode, SpaceVisibility } from '@generated/alkemio-schema';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+
 const uniqueId = UniqueIDGenerator.getID();
 
 const spaceNameId = 'space-nameid' + uniqueId;
@@ -35,21 +34,31 @@ let orgAccountIdTwo = '';
 const organizationNameTwo = 'org2' + uniqueId;
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'space-platform-settings',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
 
 describe('Update space platform settings', () => {
   beforeAll(async () => {
     baseScenario =
-      await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.space.id,
-      'activity-subspace',
-      baseScenario.subspace
-    );
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.subspace.id,
-      'activity-subsubspace',
-      baseScenario.subsubspace
-    );
+      await TestScenarioFactory.createBaseScenario(
+        scenarioConfig
+      );
 
     await updateSpaceSettings(baseScenario.space.id, {
       privacy: { mode: SpacePrivacyMode.Private },
@@ -57,10 +66,7 @@ describe('Update space platform settings', () => {
   });
 
   afterAll(async () => {
-    await deleteSubspace(baseScenario.subsubspace.id);
-    await deleteSpace(baseScenario.subspace.id);
-    await deleteSpace(baseScenario.space.id);
-    await deleteOrganization(baseScenario.organization.id);
+    await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
     await deleteOrganization(organizationIdTwo);
   });
 

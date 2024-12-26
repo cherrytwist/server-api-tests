@@ -1,28 +1,36 @@
 import { users } from '@utils/queries/users-data';
-import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import { removeRoleFromUser, assignRoleToUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/alkemio-schema';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestSetupUtils } from '@src/models/TestSetupUtils';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'user-edge',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.space.id,
-    'subspace',
-    baseScenario.subspace
-  );
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.subspace.id,
-    'subsubspace',
-    baseScenario.subsubspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await removeRoleFromUser(
     users.globalAdmin.id,
@@ -44,10 +52,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Assign / Remove users to community', () => {
@@ -353,9 +358,15 @@ describe('Assign / Remove users to community', () => {
 
 describe('Assign different users as lead to same community', () => {
   beforeAll(async () => {
-    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.space.community.roleSetId);
-    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subspace.community.roleSetId);
-    await OrganizationWithSpaceModelFactory.assignUsersToRoles(baseScenario.subsubspace.community.roleSetId);
+    await TestSetupUtils.assignUsersToRoles(
+      baseScenario.space.community.roleSetId
+    );
+    await TestSetupUtils.assignUsersToRoles(
+      baseScenario.subspace.community.roleSetId
+    );
+    await TestSetupUtils.assignUsersToRoles(
+      baseScenario.subsubspace.community.roleSetId
+    );
 
     await assignRoleToUser(
       users.qaUser.id,

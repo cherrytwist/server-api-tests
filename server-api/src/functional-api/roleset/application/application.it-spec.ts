@@ -5,10 +5,7 @@ import {
   getRoleSetInvitationsApplications,
   meQuery,
 } from './application.request.params';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { updateSpaceSettings } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import {
   CommunityMembershipPolicy,
@@ -20,12 +17,12 @@ import {
   assignRoleToUser,
   removeRoleFromUser,
 } from '@functional-api/roleset/roles-request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let applicationId: string;
 let subspaceApplicationId = '';
@@ -35,15 +32,23 @@ const isMember = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'application',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.space.id,
-    'subspace',
-    baseScenario.subspace
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
@@ -56,9 +61,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Application', () => {

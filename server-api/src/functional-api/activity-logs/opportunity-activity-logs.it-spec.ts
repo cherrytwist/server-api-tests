@@ -10,10 +10,7 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '@functional-api/journey/space/space.request.params';
+import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
@@ -24,11 +21,11 @@ import { createPostOnCallout } from '@functional-api/callout/post/post.request.p
 import { sendMessageToRoom } from '../communications/communication.params';
 import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { assignRoleToUser } from '../roleset/roles-request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { Organization } from '@alkemio/client-lib';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
-;
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+
 const uniqueId = UniqueIDGenerator.getID();
 
 let callDN = '';
@@ -38,10 +35,28 @@ let postDisplayName = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subsubspace-activity',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.space.id, 'activity-subspace', baseScenario.subspace);
-  await OrganizationWithSpaceModelFactory.createSubspace(baseScenario.subspace.id, 'activity-subsubspace', baseScenario.subsubspace);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: {
@@ -51,10 +66,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
@@ -308,8 +320,8 @@ describe('Access to Activity logs - Subsubspace', () => {
     test.each`
       userRole                 | message
       ${TestUser.GLOBAL_ADMIN} | ${baseScenario.subsubspace.collaboration.id}
-      ${TestUser.SPACE_ADMIN}    | ${baseScenario.subsubspace.collaboration.id}
-      ${TestUser.SPACE_MEMBER}   | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.SPACE_ADMIN}  | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.SPACE_MEMBER} | ${baseScenario.subsubspace.collaboration.id}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Subsubspace activity logs of a Private space',
       async ({ userRole, message }) => {
@@ -328,7 +340,7 @@ describe('Access to Activity logs - Subsubspace', () => {
     );
 
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
       'User: "$userRole" get Error message: "$message", when intend to access Public Subsubspace activity logs of a Private space',
@@ -361,8 +373,8 @@ describe('Access to Activity logs - Subsubspace', () => {
 
     // Arrange
     test.each`
-      userRole                   | message
-      ${TestUser.GLOBAL_ADMIN}   | ${baseScenario.subsubspace.collaboration.id}
+      userRole                     | message
+      ${TestUser.GLOBAL_ADMIN}     | ${baseScenario.subsubspace.collaboration.id}
       ${TestUser.SPACE_ADMIN}      | ${baseScenario.subsubspace.collaboration.id}
       ${TestUser.SPACE_MEMBER}     | ${baseScenario.subsubspace.collaboration.id}
       ${TestUser.NON_SPACE_MEMBER} | ${baseScenario.subsubspace.collaboration.id}

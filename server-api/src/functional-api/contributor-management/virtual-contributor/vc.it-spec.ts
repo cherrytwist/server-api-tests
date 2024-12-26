@@ -28,12 +28,12 @@ import {
   inviteContributors,
 } from '../../roleset/invitations/invitation.request.params';
 import { getRoleSetInvitationsApplications } from '../../roleset/application/application.request.params';
-import { deleteOrganization } from '../organization/organization.request.params';
 import { createUser, deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 ;
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -54,8 +54,18 @@ const vcName = 'vcName1' + uniqueId;
 
 let baseScenario: OrganizationWithSpaceModel;
 
+const scenarioConfig: TestScenarioConfig = {
+  name: 'virtual-contributor',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  }
+}
+
 beforeAll(async () => {
-  baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   const vcLicensePlan = await getLicensePlanByName('FEATURE_VIRTUAL_CONTRIBUTORS');
   vcLicensePlanId = vcLicensePlan[0].id;
@@ -105,8 +115,7 @@ afterAll(async () => {
   await deleteSpace(l1VCId);
   await deleteSpace(vcSpaceId);
 
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Virtual Contributor', () => {

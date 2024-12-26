@@ -1,24 +1,22 @@
 /* eslint-disable prettier/prettier */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
-
 import { users } from '@utils/queries/users-data';
 import { getMailsData } from '@src/types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { CalloutVisibility, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
+const uniqueId = UniqueIDGenerator.getID();
 
 const spaceName = 'not-up-eco-name' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
@@ -51,29 +49,38 @@ const templateResult = async (entityName: string, userEmail: string) => {
 };
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callouts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
   baseScenario =
-    await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.space.id,
-    'post-subspace',
-    baseScenario.subspace
-  );
-  await OrganizationWithSpaceModelFactory.createSubspace(
-    baseScenario.subspace.id,
-    'post-subsubspace',
-    baseScenario.subsubspace
-  );
-
-  await OrganizationWithSpaceModelFactory.assignUsersToRoles(
-    baseScenario.subspace.community.roleSetId
-  );
-  await OrganizationWithSpaceModelFactory.assignUsersToRoles(
-    baseScenario.subsubspace.community.roleSetId
-  );
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesConfigCallout = [
     {
@@ -119,10 +126,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 afterEach(async () => {

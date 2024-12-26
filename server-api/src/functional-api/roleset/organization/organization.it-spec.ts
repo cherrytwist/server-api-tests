@@ -1,37 +1,30 @@
-import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   removeRoleFromOrganization,
   assignRoleToOrganization,
 } from '../roles-request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import { CommunityRoleType } from '@generated/graphql';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
 
 let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'organization',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  },
+};
 
 beforeAll(async () => {
-    baseScenario =
-      await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
-
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.space.id,
-      'subspace',
-      baseScenario.subspace
-    );
-    await OrganizationWithSpaceModelFactory.createSubspace(
-      baseScenario.subspace.id,
-      'subsubspace',
-      baseScenario.subsubspace
-    );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.subsubspace.id);
-  await deleteSpace(baseScenario.subspace.id);
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Assign / Remove organization to community', () => {

@@ -1,37 +1,38 @@
 import {
   getSpaceData,
-  deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { delay } from '@alkemio/tests-lib';
-import {
-  CommunityRoleType,
-  SpacePrivacyMode,
-} from '@generated/alkemio-schema';
+import { CommunityRoleType, SpacePrivacyMode } from '@generated/alkemio-schema';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
 } from '../communication.params';
-import { OrganizationWithSpaceModelFactory } from '@src/models/OrganizationWithSpaceFactory';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
-
-const uniqueId = UniqueIDGenerator.getID();
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let baseScenario: OrganizationWithSpaceModel;
 
-beforeAll(async () => {
+const scenarioConfig: TestScenarioConfig = {
+  name: 'community-updates',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  },
+};
 
-    baseScenario = await OrganizationWithSpaceModelFactory.createOrganizationWithSpace();
+beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(baseScenario.space.id);
-  await deleteOrganization(baseScenario.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Communities', () => {
@@ -47,8 +48,12 @@ describe('Communities', () => {
         CommunityRoleType.Member
       );
 
-      const res = await sendMessageToRoom(baseScenario.space.communication.updatesId, 'test');
-      baseScenario.space.communication.messageId = res?.data?.sendMessageToRoom.id;
+      const res = await sendMessageToRoom(
+        baseScenario.space.communication.updatesId,
+        'test'
+      );
+      baseScenario.space.communication.messageId =
+        res?.data?.sendMessageToRoom.id;
     });
 
     afterAll(async () => {
@@ -167,8 +172,12 @@ describe('Communities', () => {
   describe('Community updates - create / delete', () => {
     test('should create community update', async () => {
       // Act
-      const res = await sendMessageToRoom(baseScenario.space.communication.updatesId, 'test');
-      baseScenario.space.communication.messageId = res?.data?.sendMessageToRoom.id;
+      const res = await sendMessageToRoom(
+        baseScenario.space.communication.updatesId,
+        'test'
+      );
+      baseScenario.space.communication.messageId =
+        res?.data?.sendMessageToRoom.id;
 
       const spaceDataSender = await getSpaceData(baseScenario.space.id);
       const retrievedMessage =
@@ -192,8 +201,12 @@ describe('Communities', () => {
 
     test('should delete community update', async () => {
       // Arrange
-      const res = await sendMessageToRoom(baseScenario.space.communication.updatesId, 'test');
-      baseScenario.space.communication.messageId = res?.data?.sendMessageToRoom.id;
+      const res = await sendMessageToRoom(
+        baseScenario.space.communication.updatesId,
+        'test'
+      );
+      baseScenario.space.communication.messageId =
+        res?.data?.sendMessageToRoom.id;
       await delay(600);
       // Act
       await removeMessageOnRoom(
