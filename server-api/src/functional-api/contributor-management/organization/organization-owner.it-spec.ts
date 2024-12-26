@@ -5,7 +5,7 @@ import {
 } from '../organization/organization.request.params';
 import { users } from '@utils/queries/users-data';
 import { assignUserAsOrganizationOwner, removeUserAsOrganizationOwner } from './organization-authorization-mutation';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let organizationId = '';
@@ -17,8 +17,8 @@ const hostNameId = 'org-auth-org-nameid' + uniqueId;
 let responseData: object;
 
 beforeEach(async () => {
-  const responseOrg = await createOrganization(organizationName, hostNameId);
-  organizationId = responseOrg.data?.createOrganization?.id ?? '';
+  const baseScenario = await createOrganization(organizationName, hostNameId);
+  organizationId = baseScenario.data?.createOrganization?.id ?? '';
 
   responseData = {
     resourceID: organizationId,

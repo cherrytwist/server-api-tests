@@ -1,7 +1,5 @@
 /* eslint-disable quotes */
 import '@utils/array.matcher';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import {
   deleteCallout,
   createCalloutOnCollaboration,
@@ -13,32 +11,19 @@ import {
   getDataPerSpaceCallout,
 } from '../post/post.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-  getDefaultSubspaceCalloutByNameId,
-  getDefaultSubsubspaceCalloutByNameId,
-  getDefaultSpaceCalloutByNameId,
-} from '@utils/data-setup/entities';
-import {
-  CalloutState,
-  CalloutVisibility,
-} from '@generated/alkemio-schema';
+import { CalloutState, CalloutVisibility } from '@generated/alkemio-schema';
 import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestSetupUtils } from '@src/models/TestSetupUtils';
+const uniqueId = UniqueIDGenerator.getID();
 
-let subsubspaceName = 'post-opp';
-let subspaceName = 'post-chal';
 let calloutId = '';
 let postNameID = '';
-
-const organizationName = 'callout-org-name' + uniqueId;
-const hostNameId = 'callout-org-nameid' + uniqueId;
-const spaceName = 'callout-eco-name' + uniqueId;
-const spaceNameId = 'callout-eco-nameid' + uniqueId;
 
 const getIdentifier = (
   entity: string,
@@ -58,27 +43,38 @@ const getIdentifier = (
     return id;
   }
 };
+
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callout-close-state',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
-  subsubspaceName = `subsubspaceName ${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
 });
 
@@ -89,7 +85,7 @@ describe('Callouts - Close State', () => {
   test('Close callout that has not been published', async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       {
         framing: { profile: { displayName: 'check' } },
       }
@@ -103,7 +99,7 @@ describe('Callouts - Close State', () => {
     });
 
     const postsData = await getDataPerSpaceCallout(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       calloutId
     );
     const data = postsData.data?.space.collaboration?.callouts?.[0];
@@ -115,7 +111,7 @@ describe('Callouts - Close State', () => {
   test('Close callout that has been published', async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId
+      baseScenario.space.collaboration.id
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
@@ -127,7 +123,7 @@ describe('Callouts - Close State', () => {
       },
     });
     const postsData = await getDataPerSpaceCallout(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       calloutId
     );
     const data = postsData.data?.space.collaboration?.callouts?.[0];
@@ -163,27 +159,28 @@ describe('Callout - Close State - User Privileges Posts', () => {
       return postCommentsId;
     };
 
-    const spaceCallout = await getDefaultSpaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.space.calloutId
-    );
+    const spaceCallout =
+      await TestSetupUtils.getDefaultSpaceCalloutByNameId(
+        baseScenario.space.collaboration.id,
+        baseScenario.space.collaboration.calloutPostId
+      );
     spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSpace = await preconditions(spaceCalloutId);
 
-    const subspaceCallout = await getDefaultSubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subspace.id,
-      entitiesId.subspace.calloutId
-    );
+    const subspaceCallout =
+      await await TestSetupUtils.getDefaultSpaceCalloutByNameId(
+        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutPostId
+      );
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     postCommentsIdSubspace = await preconditions(subspaceCalloutId);
 
-    const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subsubspace.id,
-      entitiesId.subsubspace.calloutId
-    );
-    subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
+    const subsubspaceCallout =
+      await TestSetupUtils.getDefaultSpaceCalloutByNameId(
+        baseScenario.subsubspace.collaboration.id,
+        baseScenario.subsubspace.collaboration.calloutPostId
+      );
+    subsubspaceCalloutId = subsubspaceCallout?.data?.lookup.callout?.id ?? '';
     postCommentsIdSubsubspace = await preconditions(subsubspaceCalloutId);
   });
 
@@ -198,10 +195,10 @@ describe('Callout - Close State - User Privileges Posts', () => {
       // Arrange
       test.each`
         userRole                       | message          | entity
-        ${TestUser.SPACE_ADMIN}          | ${'sendComment'} | ${'space'}
-        ${TestUser.SPACE_MEMBER}         | ${'sendComment'} | ${'space'}
-        ${TestUser.SUBSPACE_ADMIN}    | ${'sendComment'} | ${'subspace'}
-        ${TestUser.SUBSPACE_MEMBER}   | ${'sendComment'} | ${'subspace'}
+        ${TestUser.SPACE_ADMIN}        | ${'sendComment'} | ${'space'}
+        ${TestUser.SPACE_MEMBER}       | ${'sendComment'} | ${'space'}
+        ${TestUser.SUBSPACE_ADMIN}     | ${'sendComment'} | ${'subspace'}
+        ${TestUser.SUBSPACE_MEMBER}    | ${'sendComment'} | ${'subspace'}
         ${TestUser.SUBSUBSPACE_ADMIN}  | ${'sendComment'} | ${'subsubspace'}
         ${TestUser.SUBSUBSPACE_MEMBER} | ${'sendComment'} | ${'subsubspace'}
       `(
@@ -228,7 +225,7 @@ describe('Callout - Close State - User Privileges Posts', () => {
       );
 
       test.each`
-        userRole                   | message                                                                            | entity
+        userRole                     | message                                                                            | entity
         ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'space'}
         ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'subspace'}
         ${TestUser.NON_SPACE_MEMBER} | ${"Authorization: unable to grant 'create-message' privilege: room send message:"} | ${'subsubspace'}
@@ -262,15 +259,15 @@ describe('Callout - Close State - User Privileges Posts', () => {
       // Arrange
       test.each`
         userRole                       | message                                                                                    | entity
-        ${TestUser.SPACE_ADMIN}          | ${'"data":{"createContributionOnCallout"'}                                                 | ${'space'}
-        ${TestUser.SPACE_MEMBER}         | ${'"New contributions to a closed Callout with id'}                                        | ${'space'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'space'}
-        ${TestUser.SUBSPACE_ADMIN}    | ${'"data":{"createContributionOnCallout"'}                                                 | ${'subspace'}
-        ${TestUser.SUBSPACE_MEMBER}   | ${'"New contributions to a closed Callout with id'}                                        | ${'subspace'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'subspace'}
+        ${TestUser.SPACE_ADMIN}        | ${'"data":{"createContributionOnCallout"'}                                                 | ${'space'}
+        ${TestUser.SPACE_MEMBER}       | ${'"New contributions to a closed Callout with id'}                                        | ${'space'}
+        ${TestUser.NON_SPACE_MEMBER}   | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'space'}
+        ${TestUser.SUBSPACE_ADMIN}     | ${'"data":{"createContributionOnCallout"'}                                                 | ${'subspace'}
+        ${TestUser.SUBSPACE_MEMBER}    | ${'"New contributions to a closed Callout with id'}                                        | ${'subspace'}
+        ${TestUser.NON_SPACE_MEMBER}   | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'subspace'}
         ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createContributionOnCallout"'}                                                 | ${'subsubspace'}
         ${TestUser.SUBSUBSPACE_MEMBER} | ${'"New contributions to a closed Callout with id'}                                        | ${'subsubspace'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'subsubspace'}
+        ${TestUser.NON_SPACE_MEMBER}   | ${"Authorization: unable to grant 'contribute' privilege: create contribution on callout"} | ${'subsubspace'}
       `(
         'User: "$userRole" get error when create post to closed "$entity" callout',
         async ({ userRole, message, entity }) => {
@@ -315,33 +312,35 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       });
     };
 
-    const spaceCallout = await getDefaultSpaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.space.discussionCalloutId
-    );
+    const spaceCallout =
+      await TestSetupUtils.getDefaultSpaceCalloutByNameId(
+        baseScenario.space.collaboration.id,
+        baseScenario.space.collaboration.calloutPostCommentsId
+      );
 
     spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
     spaceCalloutCommentsId =
       spaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(spaceCalloutId);
 
-    const subspaceCallout = await getDefaultSubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subspace.id,
-      entitiesId.subspace.discussionCalloutId
-    );
+    const subspaceCallout =
+      await TestSetupUtils.getDefaultSpaceCalloutByNameId(
+        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutPostCommentsId
+      );
     subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     subspaceCalloutCommentsId =
       subspaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(subspaceCalloutId);
 
-    const subsubspaceCallout = await getDefaultSubsubspaceCalloutByNameId(
-      entitiesId.spaceId,
-      entitiesId.subsubspace.id,
-      entitiesId.subsubspace.discussionCalloutId
-    );
-    subsubspaceCalloutId = subsubspaceCallout?.id ?? '';
-    subsubspaceCalloutCommentsId = subsubspaceCallout?.comments?.id ?? '';
+    const subsubspaceCallout =
+      await TestSetupUtils.getDefaultSpaceCalloutByNameId(
+        baseScenario.subsubspace.collaboration.id,
+        baseScenario.subsubspace.collaboration.calloutPostCommentsId
+      );
+    subsubspaceCalloutId = subsubspaceCallout?.data?.lookup.callout?.id ?? '';
+    subsubspaceCalloutCommentsId =
+      subsubspaceCallout?.data?.lookup.callout?.comments?.id ?? '';
     await preconditions(subsubspaceCalloutId);
   });
 
@@ -356,15 +355,15 @@ describe('Callout - Close State - User Privileges Discussions', () => {
       // Arrange
       test.each`
         userRole                       | code                  | entity
-        ${TestUser.SPACE_ADMIN}          | ${'CALLOUT_CLOSED'}   | ${'space'}
-        ${TestUser.SPACE_MEMBER}         | ${'CALLOUT_CLOSED'}   | ${'space'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'space'}
-        ${TestUser.SUBSPACE_ADMIN}    | ${'CALLOUT_CLOSED'}   | ${'subspace'}
-        ${TestUser.SUBSPACE_MEMBER}   | ${'CALLOUT_CLOSED'}   | ${'subspace'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'subspace'}
+        ${TestUser.SPACE_ADMIN}        | ${'CALLOUT_CLOSED'}   | ${'space'}
+        ${TestUser.SPACE_MEMBER}       | ${'CALLOUT_CLOSED'}   | ${'space'}
+        ${TestUser.NON_SPACE_MEMBER}   | ${'FORBIDDEN_POLICY'} | ${'space'}
+        ${TestUser.SUBSPACE_ADMIN}     | ${'CALLOUT_CLOSED'}   | ${'subspace'}
+        ${TestUser.SUBSPACE_MEMBER}    | ${'CALLOUT_CLOSED'}   | ${'subspace'}
+        ${TestUser.NON_SPACE_MEMBER}   | ${'FORBIDDEN_POLICY'} | ${'subspace'}
         ${TestUser.SUBSUBSPACE_ADMIN}  | ${'CALLOUT_CLOSED'}   | ${'subsubspace'}
         ${TestUser.SUBSUBSPACE_MEMBER} | ${'CALLOUT_CLOSED'}   | ${'subsubspace'}
-        ${TestUser.NON_SPACE_MEMBER}     | ${'FORBIDDEN_POLICY'} | ${'subsubspace'}
+        ${TestUser.NON_SPACE_MEMBER}   | ${'FORBIDDEN_POLICY'} | ${'subsubspace'}
       `(
         'User: "$userRole" get error when send code to closed "$entity" callout',
         async ({ userRole, code, entity }) => {

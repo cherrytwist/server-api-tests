@@ -1,66 +1,58 @@
-/* eslint-disable prettier/prettier */
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { users } from '@utils/queries/users-data';
-import { deleteSpace } from '../../journey/space/space.request.params';
 import { getRoleSetMembersList } from '../roleset.request.params';
-import {
-  assignUsersToSubspaceAsMembers,
-  assignUsersToSubsubspaceAsMembers,
-  assignUsersToSpaceAndOrgAsMembers,
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
-import {
-  removeRoleFromUser,
-  assignRoleToUser,
-} from '../roles-request.params';
-import { entitiesId } from '../../../types/entities-helper';
+import { removeRoleFromUser, assignRoleToUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/alkemio-schema';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+import { TestSetupUtils } from '@src/models/TestSetupUtils';
 
-const organizationName = 'com-org-name' + uniqueId;
-const hostNameId = 'com-org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-const subsubspaceName = 'com-opp';
-const subspaceName = 'com-chal';
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'user-edge',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
-  await createOrgAndSpace(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.subspace.roleSetId,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Assign / Remove users to community', () => {
@@ -68,74 +60,74 @@ describe('Assign / Remove users to community', () => {
     beforeAll(async () => {
       await assignRoleToUser(
         users.nonSpaceMember.id,
-        entitiesId.space.roleSetId,
+        baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
         users.nonSpaceMember.id,
-        entitiesId.subspace.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
         users.nonSpaceMember.id,
-        entitiesId.subsubspace.roleSetId,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
         users.nonSpaceMember.id,
-        entitiesId.subsubspace.roleSetId,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await assignRoleToUser(
         users.nonSpaceMember.id,
-        entitiesId.subspace.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await assignRoleToUser(
         users.nonSpaceMember.id,
-        entitiesId.space.roleSetId,
+        baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
     });
     afterAll(async () => {
       await removeRoleFromUser(
         users.nonSpaceMember.id,
-        entitiesId.subsubspace.roleSetId,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromUser(
         users.nonSpaceMember.id,
-        entitiesId.subspace.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromUser(
         users.nonSpaceMember.id,
-        entitiesId.space.roleSetId,
+        baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromUser(
         users.nonSpaceMember.id,
-        entitiesId.subsubspace.roleSetId,
+        baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await removeRoleFromUser(
         users.nonSpaceMember.id,
-        entitiesId.subspace.roleSetId,
+        baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await removeRoleFromUser(
         users.nonSpaceMember.id,
-        entitiesId.space.roleSetId,
+        baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
     });
@@ -145,12 +137,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
-          entitiesId.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.memberUsers;
 
@@ -169,12 +161,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
-          entitiesId.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.memberUsers;
 
@@ -193,12 +185,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
-          entitiesId.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.memberUsers;
 
@@ -219,12 +211,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.spaceMember.id,
-          entitiesId.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.memberUsers;
 
@@ -243,12 +235,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.spaceMember.id,
-          entitiesId.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.memberUsers;
 
@@ -267,12 +259,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.spaceMember.id,
-          entitiesId.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Member
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.memberUsers;
 
@@ -293,12 +285,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
-          entitiesId.space.roleSetId,
+          baseScenario.space.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.space.roleSetId
+          baseScenario.space.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -317,12 +309,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
-          entitiesId.subspace.roleSetId,
+          baseScenario.subspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-          entitiesId.subspace.roleSetId
+          baseScenario.subspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -341,12 +333,12 @@ describe('Assign / Remove users to community', () => {
         // Act
         await assignRoleToUser(
           users.nonSpaceMember.id,
-          entitiesId.subsubspace.roleSetId,
+          baseScenario.subsubspace.community.roleSetId,
           CommunityRoleType.Lead
         );
 
         const roleSetMembers = await getRoleSetMembersList(
-           entitiesId.subsubspace.roleSetId
+          baseScenario.subsubspace.community.roleSetId
         );
         const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -366,80 +358,86 @@ describe('Assign / Remove users to community', () => {
 
 describe('Assign different users as lead to same community', () => {
   beforeAll(async () => {
-    await assignUsersToSpaceAndOrgAsMembers();
-    await assignUsersToSubspaceAsMembers();
-    await assignUsersToSubsubspaceAsMembers();
+    await TestSetupUtils.assignUsersToRoles(
+      baseScenario.space.community.roleSetId
+    );
+    await TestSetupUtils.assignUsersToRoles(
+      baseScenario.subspace.community.roleSetId
+    );
+    await TestSetupUtils.assignUsersToRoles(
+      baseScenario.subsubspace.community.roleSetId
+    );
 
     await assignRoleToUser(
       users.qaUser.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await assignRoleToUser(
       users.qaUser.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await assignRoleToUser(
       users.qaUser.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await assignRoleToUser(
       users.subsubspaceAdmin.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await assignRoleToUser(
       users.subspaceAdmin.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await assignRoleToUser(
       users.spaceAdmin.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
   });
   afterAll(async () => {
     await removeRoleFromUser(
       users.subsubspaceAdmin.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromUser(
       users.subspaceAdmin.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromUser(
       users.subsubspaceAdmin.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     await removeRoleFromUser(
       users.subsubspaceAdmin.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await removeRoleFromUser(
       users.subspaceAdmin.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await removeRoleFromUser(
       users.spaceAdmin.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
   });
@@ -448,12 +446,12 @@ describe('Assign different users as lead to same community', () => {
     // Act
     const res = await assignRoleToUser(
       users.spaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     const roleSetMembers = await getRoleSetMembersList(
-      entitiesId.space.roleSetId
+      baseScenario.space.community.roleSetId
     );
     const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -475,12 +473,12 @@ describe('Assign different users as lead to same community', () => {
     // Act
     const res = await assignRoleToUser(
       users.qaUser.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     const roleSetMembers = await getRoleSetMembersList(
-      entitiesId.space.roleSetId
+      baseScenario.space.community.roleSetId
     );
     const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -502,12 +500,12 @@ describe('Assign different users as lead to same community', () => {
     // Act
     const res = await assignRoleToUser(
       users.subspaceMember.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     const roleSetMembers = await getRoleSetMembersList(
-      entitiesId.subspace.roleSetId
+      baseScenario.subspace.community.roleSetId
     );
     const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -529,12 +527,12 @@ describe('Assign different users as lead to same community', () => {
     // Act
     const res = await assignRoleToUser(
       users.qaUser.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     const roleSetMembers = await getRoleSetMembersList(
-      entitiesId.subspace.roleSetId
+      baseScenario.subspace.community.roleSetId
     );
     const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -556,12 +554,12 @@ describe('Assign different users as lead to same community', () => {
     // Act
     const res = await assignRoleToUser(
       users.subsubspaceMember.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     const roleSetMembers = await getRoleSetMembersList(
-      entitiesId.subsubspace.roleSetId
+      baseScenario.subsubspace.community.roleSetId
     );
     const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 
@@ -583,12 +581,12 @@ describe('Assign different users as lead to same community', () => {
     // Act
     const res = await assignRoleToUser(
       users.qaUser.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Lead
     );
 
     const roleSetMembers = await getRoleSetMembersList(
-      entitiesId.subsubspace.roleSetId
+      baseScenario.subsubspace.community.roleSetId
     );
     const data = roleSetMembers.data?.lookup.roleSet?.leadUsers;
 

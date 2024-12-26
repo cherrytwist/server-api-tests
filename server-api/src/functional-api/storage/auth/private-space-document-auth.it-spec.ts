@@ -1,6 +1,4 @@
 /* eslint-disable quotes */
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -11,11 +9,8 @@ import {
   uploadImageOnVisual,
 } from '../upload.params';
 import path from 'path';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import {
-  deleteSpace,
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
@@ -49,40 +44,44 @@ import {
 } from '../../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-callout.params.request';
 import { createReferenceOnProfile } from '../../references/references.request.params';
-import { entitiesId } from '../../../types/entities-helper';
-import {
-  SpacePrivacyMode,
-  SpaceVisibility,
-} from '@generated/alkemio-schema';
+import { SpacePrivacyMode, SpaceVisibility } from '@generated/alkemio-schema';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'lifec-eco-name' + uniqueId;
-const spaceNameId = 'lifec-eco-nameid' + uniqueId;
 let refId = '';
 let documentId = '';
 
-beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'document-private-space',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+  },
+};
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: { mode: SpacePrivacyMode.Private },
   });
 
   await updateSpacePlatformSettings(
-    entitiesId.spaceId,
-    spaceNameId,
+    baseScenario.space.id,
+    baseScenario.space.nameId,
     SpaceVisibility.Active
   );
 });
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Private Space - visual on profile', () => {
@@ -91,14 +90,16 @@ describe('Private Space - visual on profile', () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
-      const visualData = await lookupProfileVisuals(entitiesId.space.profileId);
+      const visualData = await lookupProfileVisuals(
+        baseScenario.space.profile.id
+      );
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
         path.join(__dirname, 'files-to-upload', '190-410.jpg'),
         visualId
       );
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profile.id,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -107,9 +108,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${['READ']}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant}
+      userRole                     | privileges
+      ${undefined}                 | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}
@@ -117,7 +118,7 @@ describe('Private Space - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space profile visual document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -128,21 +129,17 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                | parentEntityType
-      ${undefined}               | ${['READ']}                                               | ${'SPACE'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
+      userRole                     | privileges                                                | parentEntityType
+      ${undefined}                 | ${['READ']}                                               | ${'SPACE'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                               | ${'SPACE'}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'SPACE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space profile storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -159,7 +156,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        entitiesId.space.profileId
+        baseScenario.space.profile.id
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
       await uploadFileOnRef(
@@ -168,7 +165,7 @@ describe('Private Space - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profile.id,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -177,9 +174,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${['READ']}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant}
+      userRole                     | privileges
+      ${undefined}                 | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}
@@ -187,7 +184,7 @@ describe('Private Space - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space profile reference document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profile.id,
           userRole
         );
 
@@ -199,21 +196,17 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                | parentEntityType
-      ${undefined}               | ${['READ']}                                               | ${'SPACE'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
+      userRole                     | privileges                                                | parentEntityType
+      ${undefined}                 | ${['READ']}                                               | ${'SPACE'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                               | ${'SPACE'}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'SPACE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space profile storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profile.id,
           userRole
         );
 
@@ -231,7 +224,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -244,7 +237,7 @@ describe('Private Space - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.space.profileId,
+        baseScenario.space.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -254,9 +247,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${['READ']}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant}
+      userRole                     | privileges
+      ${undefined}                 | ${['READ']}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}
@@ -264,7 +257,7 @@ describe('Private Space - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space context (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profile.id,
           userRole
         );
 
@@ -276,21 +269,17 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                | parentEntityType
-      ${undefined}               | ${['READ']}                                               | ${'SPACE'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
+      userRole                     | privileges                                                | parentEntityType
+      ${undefined}                 | ${['READ']}                                               | ${'SPACE'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'SPACE'}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                               | ${'SPACE'}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'SPACE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space context storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await getProfileDocuments(
-          entitiesId.space.profileId,
+          baseScenario.space.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -308,7 +297,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createLinkCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'link11',
         'Link collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -336,9 +325,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -359,19 +348,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                       | parentEntityType
-      ${undefined}               | ${undefined}                                                                     | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'CALLOUT_FRAMING'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'CALLOUT_FRAMING'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                     | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                         | ${'CALLOUT_FRAMING'}
+      userRole                     | privileges                                                           | parentEntityType
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await calloutStorageConfig(calloutId, userRole);
         const data = res.data?.lookup?.callout?.framing.profile.storageBucket;
 
@@ -390,7 +375,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'post11',
         'Post collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -421,9 +406,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -445,19 +430,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                       | parentEntityType
-      ${undefined}               | ${undefined}                                                                     | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'POST'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'POST'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                     | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                         | ${'POST'}
+      userRole                     | privileges                                                           | parentEntityType
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space post collection callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await calloutPostCardStorageConfig(
           postCardId,
           calloutId,
@@ -483,7 +464,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'post12',
         'Post collection Callout12',
         TestUser.GLOBAL_ADMIN
@@ -516,9 +497,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -539,19 +520,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                       | parentEntityType
-      ${undefined}               | ${undefined}                                                                     | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'POST'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'POST'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                     | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                         | ${'POST'}
+      userRole                     | privileges                                                           | parentEntityType
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space post collection callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await calloutPostCardStorageConfig(
           postCardId,
           calloutId,
@@ -577,7 +554,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createWhiteboardCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'whiteboard11',
         'Whiteboard collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -611,9 +588,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute_updateContent}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContent}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -637,19 +614,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                                     | parentEntityType
-      ${undefined}               | ${undefined}                                                                                   | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent}             | ${'WHITEBOARD'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}                           | ${'WHITEBOARD'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                                   | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                                       | ${'WHITEBOARD'}
+      userRole                     | privileges                                                                         | parentEntityType
+      ${undefined}                 | ${undefined}                                                                       | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space whiteboard collection callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await calloutWhiteboardStorageConfig(
           whiteboardCardId,
           calloutId,
@@ -676,7 +649,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'post3',
         'Post collection Callout3',
         TestUser.GLOBAL_ADMIN
@@ -705,9 +678,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -725,19 +698,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                       | parentEntityType
-      ${undefined}               | ${undefined}                                                                     | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'CALLOUT_FRAMING'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'CALLOUT_FRAMING'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                     | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                         | ${'CALLOUT_FRAMING'}
+      userRole                     | privileges                                                           | parentEntityType
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await calloutStorageConfig(calloutId, userRole);
         const data = res.data?.lookup?.callout?.framing.profile.storageBucket;
 
@@ -755,7 +724,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'post4',
         'Post collection Callout4',
         TestUser.GLOBAL_ADMIN
@@ -783,9 +752,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -802,19 +771,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                       | parentEntityType
-      ${undefined}               | ${undefined}                                                                     | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'CALLOUT_FRAMING'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}             | ${'CALLOUT_FRAMING'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                     | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                         | ${'CALLOUT_FRAMING'}
+      userRole                     | privileges                                                           | parentEntityType
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await calloutStorageConfig(calloutId, userRole);
         const data = res.data?.lookup?.callout?.framing.profile.storageBucket;
 
@@ -832,7 +797,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'whiteboard1',
         'Whiteboard Callout1',
         TestUser.GLOBAL_ADMIN
@@ -860,9 +825,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute_updateContent}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContent}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -879,19 +844,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                                     | parentEntityType
-      ${undefined}               | ${undefined}                                                                                   | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent}             | ${'WHITEBOARD'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}                           | ${'WHITEBOARD'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                                   | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                                       | ${'WHITEBOARD'}
+      userRole                     | privileges                                                                         | parentEntityType
+      ${undefined}                 | ${undefined}                                                                       | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space whiteboard callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await whiteboardCalloutStorageConfig(calloutId, userRole);
         const data =
           res.data?.lookup.callout?.framing.whiteboard?.profile.storageBucket;
@@ -910,7 +871,7 @@ describe('Private Space - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.space.collaborationId,
+        baseScenario.space.collaboration.id,
         'whiteboard2',
         'Whiteboard Callout2',
         TestUser.GLOBAL_ADMIN
@@ -938,9 +899,9 @@ describe('Private Space - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}
@@ -957,19 +918,15 @@ describe('Private Space - visual on profile', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                                     | parentEntityType
-      ${undefined}               | ${undefined}                                                                                   | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent}             | ${'WHITEBOARD'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}                           | ${'WHITEBOARD'}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                                   | ${undefined}
-      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                                       | ${'WHITEBOARD'}
+      userRole                     | privileges                                                                         | parentEntityType
+      ${undefined}                 | ${undefined}                                                                       | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space whiteboardRt callout storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await whiteboardCalloutStorageConfig(calloutId, userRole);
         const data =
           res.data?.lookup.callout?.framing.whiteboard?.profile.storageBucket;

@@ -1,5 +1,4 @@
 import '@utils/array.matcher';
-
 import {
   createSubspace,
   getSubspaceData,
@@ -12,9 +11,10 @@ import {
   deleteSpace,
   updateSpaceContext,
 } from '../space/space.request.params';
-import { entitiesId } from '@src/types/entities-helper';
-import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -27,18 +27,21 @@ const additionalSubspaceId = '';
 let uniqueTextId = '';
 let organizationNameTest = '';
 let organizationIdTest = '';
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'eco-name' + uniqueId;
-const spaceNameId = 'eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subspace-data-access',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  }
+}
 
 beforeAll(async () => {
-  await createOrgAndSpace(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   organizationNameTest = `QA organizationNameTest ${uniqueId}`;
 
@@ -52,8 +55,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
   await deleteOrganization(organizationIdTest);
 });
 
@@ -75,7 +77,7 @@ beforeEach(async () => {
   const responseCreateSubspace = await createSubspace(
     subspaceName,
     uniqueTextId,
-    entitiesId.spaceId
+    baseScenario.space.id
   );
   subspaceId = responseCreateSubspace.data?.createSubspace.id ?? '';
 });
@@ -84,7 +86,7 @@ describe('Query Subspace data', () => {
   test('should query community through subspace', async () => {
     // Act
     const responseQueryData = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subspaceId
     );
 
@@ -108,7 +110,7 @@ describe('Query Subspace data', () => {
 
     // Query Subsubspace data through Subspace query
     const responseQueryData = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subspaceId
     );
 
@@ -142,7 +144,7 @@ describe('Query Subspace data', () => {
 
     // Query Subsubspace data
     const requestQuerySubsubspace = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subsubspaceId
     );
     const requestSubsubspaceData = requestQuerySubsubspace.data?.space.subspace;
@@ -167,7 +169,7 @@ describe('Query Subspace data', () => {
 
     // Act
     const getSubspaceDatas = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subspaceId
     );
 

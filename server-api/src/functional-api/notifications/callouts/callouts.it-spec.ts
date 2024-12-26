@@ -1,30 +1,24 @@
 /* eslint-disable prettier/prettier */
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { users } from '@utils/queries/users-data';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { getMailsData } from '@src/types/entities-helper';
 import { CalloutVisibility, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'not-up-org-name' + uniqueId;
-const hostNameId = 'not-up-org-nameid' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
+
 const spaceName = 'not-up-eco-name' + uniqueId;
-const spaceNameId = 'not-up-eco-nameid' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
 const subsubspaceName = `opName${uniqueId}`;
 
@@ -54,17 +48,39 @@ const templateResult = async (entityName: string, userEmail: string) => {
   ]);
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'callouts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesConfigCallout = [
     {
@@ -110,10 +126,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 afterEach(async () => {
@@ -148,16 +161,13 @@ describe('Notifications - post', () => {
     const spaceCalloutSubjectText = `${spaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.GLOBAL_ADMIN
     );
     calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
 
-    await updateCalloutVisibility(
-      calloutId,
-      CalloutVisibility.Published
-    );
+    await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
 
     await delay(6000);
     const mails = await getMailsData();
@@ -198,7 +208,7 @@ describe('Notifications - post', () => {
   test("GA PUBLISH space callout with 'sendNotification':'false' - HM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.GLOBAL_ADMIN
     );
@@ -222,7 +232,7 @@ describe('Notifications - post', () => {
   test.skip('GA create DRAFT -> PUBLISHED -> DRAFT -> PUBLISHED space callout - HM(7) get notifications on PUBLISH event only', async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
       TestUser.GLOBAL_ADMIN
@@ -273,7 +283,7 @@ describe('Notifications - post', () => {
     const spaceCalloutSubjectText = `${spaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
       TestUser.SPACE_ADMIN
@@ -326,7 +336,7 @@ describe('Notifications - post', () => {
     const spaceCalloutSubjectText = `${spaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.space.collaborationId,
+      baseScenario.space.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
       TestUser.SPACE_ADMIN
@@ -407,7 +417,7 @@ describe('Notifications - post', () => {
     const calloutSubjectText = `${subspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.subspace.collaborationId,
+      baseScenario.subspace.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SPACE_ADMIN
     );
@@ -454,7 +464,7 @@ describe('Notifications - post', () => {
   test("HA create PUBLISHED subspace callout type: POST with 'sendNotification':'false' - CM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.subspace.collaborationId,
+      baseScenario.subspace.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SPACE_ADMIN
     );
@@ -478,7 +488,7 @@ describe('Notifications - post', () => {
     const calloutSubjectText = `${subsubspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -528,7 +538,7 @@ describe('Notifications - post', () => {
   test("OA create PUBLISHED subsubspace callout type: POST with 'sendNotification':'false' - OM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -554,7 +564,7 @@ describe('Notifications - post', () => {
     );
     // Act
     const res = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );

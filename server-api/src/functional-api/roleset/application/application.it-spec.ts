@@ -5,16 +5,8 @@ import {
   getRoleSetInvitationsApplications,
   meQuery,
 } from './application.request.params';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { updateSpaceSettings } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceForOrgSpace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
-
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
@@ -25,30 +17,40 @@ import {
   assignRoleToUser,
   removeRoleFromUser,
 } from '@functional-api/roleset/roles-request.params';
-import { entitiesId } from '../../../types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let applicationId: string;
 let subspaceApplicationId = '';
 let applicationData: any;
-const subspaceName = `testSubspace ${uniqueId}`;
 let roleSetPendingMemberships: any;
 const isMember = '';
-const organizationName = 'appl-org-name' + uniqueId;
-const hostNameId = 'appl-org-nameid' + uniqueId;
-const spaceName = 'appl-eco-name' + uniqueId;
-const spaceNameId = 'appl-eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'application',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  await createSubspaceForOrgSpace(subspaceName);
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
       mode: SpacePrivacyMode.Public,
     },
@@ -59,16 +61,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Application', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       users.nonSpaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
 
@@ -81,7 +81,7 @@ describe('Application', () => {
   test('should create application', async () => {
     // Act
     applicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
@@ -101,7 +101,7 @@ describe('Application', () => {
             id: applicationId,
             state: 'new',
           }),
-          spacePendingMembershipInfo: { id: entitiesId.spaceId },
+          spacePendingMembershipInfo: { id: baseScenario.space.id },
         }),
       ])
     );
@@ -111,7 +111,7 @@ describe('Application', () => {
   test('should create space application, when previous was REJECTED and ARCHIVED', async () => {
     // Arrange
     applicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
@@ -123,7 +123,7 @@ describe('Application', () => {
     // Act
     // Creates application second time
     applicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
@@ -143,7 +143,7 @@ describe('Application', () => {
             id: applicationId,
             state: 'new',
           }),
-          spacePendingMembershipInfo: { id: entitiesId.spaceId },
+          spacePendingMembershipInfo: { id: baseScenario.space.id },
         }),
       ])
     );
@@ -155,33 +155,34 @@ describe('Application', () => {
   test('should throw error for creating the same application twice', async () => {
     // Act
     const applicationDataOne = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     applicationId =
       applicationDataOne?.data?.applyForEntryRoleOnRoleSet?.id ?? 'undefined';
     const applicationDataTwo = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
     // Assert
     expect(applicationDataTwo.error?.errors[0].message).toContain(
-      `Application not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.globalSupportAdmin.id} on RoleSet: ${entitiesId.space.roleSetId}.`
+      `Application not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.globalSupportAdmin.id} on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
   });
 
   test('should remove application', async () => {
     // Arrange
-    const applicationsBeforeCreateDelete = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
+    const applicationsBeforeCreateDelete =
+      await getRoleSetInvitationsApplications(
+        baseScenario.space.community.roleSetId
+      );
     const countAppBeforeCreateDelete =
       applicationsBeforeCreateDelete?.data?.lookup?.roleSet?.applications
         .length;
 
     applicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.QA_USER
     );
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
@@ -190,9 +191,10 @@ describe('Application', () => {
     await deleteApplication(applicationId);
     const userAppsData = await meQuery(TestUser.QA_USER);
     const getApp = userAppsData?.data?.me?.communityApplications;
-    const applicationsAfterCreateDelete = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
+    const applicationsAfterCreateDelete =
+      await getRoleSetInvitationsApplications(
+        baseScenario.space.community.roleSetId
+      );
     const countAppAfterCreateDelete =
       applicationsAfterCreateDelete?.data?.lookup?.roleSet?.applications.length;
 
@@ -216,7 +218,9 @@ describe('Application', () => {
   test.skip('should throw error for APPROVING subspace application, when user is not space member', async () => {
     // Arrange
     // Create subspace application
-    applicationData = await createApplication(entitiesId.subspace.roleSetId);
+    applicationData = await createApplication(
+      baseScenario.subspace.community.roleSetId
+    );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
     subspaceApplicationId = createAppData?.id;
 
@@ -235,7 +239,7 @@ describe('Application', () => {
   test('User should not be able to approve own application', async () => {
     // Act
     applicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.QA_USER
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
@@ -259,15 +263,16 @@ describe('Application', () => {
 
   test('should return applications after user is removed', async () => {
     // Arrange
-    const applicationsBeforeCreateDelete = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
+    const applicationsBeforeCreateDelete =
+      await getRoleSetInvitationsApplications(
+        baseScenario.space.community.roleSetId
+      );
     const countAppBeforeCreateDelete =
       applicationsBeforeCreateDelete?.data?.lookup?.roleSet?.applications
         .length;
 
     applicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.QA_USER
     );
 
@@ -277,9 +282,10 @@ describe('Application', () => {
     await deleteUser(users.qaUser.id);
     await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
 
-    const applicationsAfterCreateDelete = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId
-    );
+    const applicationsAfterCreateDelete =
+      await getRoleSetInvitationsApplications(
+        baseScenario.space.community.roleSetId
+      );
     const countAppAfterCreateDelete =
       applicationsAfterCreateDelete?.data?.lookup?.roleSet?.applications.length;
 
@@ -292,7 +298,7 @@ describe('Application-flows', () => {
   beforeAll(async () => {
     await assignRoleToUser(
       users.globalSupportAdmin.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
   });
@@ -300,7 +306,7 @@ describe('Application-flows', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       users.globalSupportAdmin.id,
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
     if (subspaceApplicationId.length === 36) {
@@ -313,14 +319,14 @@ describe('Application-flows', () => {
 
   test('should create application on subspace', async () => {
     // Act
-    await updateSpaceSettings(entitiesId.subspace.id, {
+    await updateSpaceSettings(baseScenario.subspace.id, {
       membership: {
         policy: CommunityMembershipPolicy.Applications,
       },
     });
 
     applicationData = await createApplication(
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
@@ -336,7 +342,7 @@ describe('Application-flows', () => {
     // Act
     // Create subspace application
     applicationData = await createApplication(
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
@@ -354,7 +360,7 @@ describe('Application-flows', () => {
           nextEvents: ['APPROVE', 'REJECT'],
         }),
         spacePendingMembershipInfo: expect.objectContaining({
-          id: entitiesId.subspace.id,
+          id: baseScenario.subspace.id,
         }),
       }),
     ];
@@ -372,7 +378,7 @@ describe('Application-flows', () => {
     // Act
     // Create subspace application
     applicationData = await createApplication(
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
@@ -394,7 +400,7 @@ describe('Application-flows', () => {
           id: subspaceApplicationId,
           state: 'new',
         },
-        spacePendingMembershipInfo: { id: entitiesId.subspace.id },
+        spacePendingMembershipInfo: { id: baseScenario.subspace.id },
       },
     ];
 
@@ -409,7 +415,7 @@ describe('Application-flows', () => {
     // Arrange
     // Create + approve space application
     const spaceApplicationData = await createApplication(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
@@ -419,7 +425,7 @@ describe('Application-flows', () => {
       await eventOnRoleSetApplication(applicationId, 'APPROVE');
     }
 
-    await updateSpaceSettings(entitiesId.subspace.id, {
+    await updateSpaceSettings(baseScenario.subspace.id, {
       privacy: {
         mode: SpacePrivacyMode.Public,
       },
@@ -430,7 +436,7 @@ describe('Application-flows', () => {
 
     // Create subspace application
     const subspaceApplicationData = await createApplication(
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
 
@@ -469,7 +475,7 @@ describe('Application-flows', () => {
   test('should be able to remove subspace application, when space application is removed', async () => {
     // Create subspace application
     applicationData = await createApplication(
-      entitiesId.subspace.roleSetId,
+      baseScenario.subspace.community.roleSetId,
       TestUser.GLOBAL_SUPPORT_ADMIN
     );
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
@@ -483,7 +489,7 @@ describe('Application-flows', () => {
     // Remove subspace application
     await deleteApplication(subspaceApplicationId);
     roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-      entitiesId.subspace.roleSetId
+      baseScenario.subspace.community.roleSetId
     );
     const applications =
       roleSetPendingMemberships?.data?.lookup.roleSet.applications;

@@ -10,41 +10,51 @@ import {
   createApplication,
   getRoleSetInvitationsApplications,
 } from '@functional-api/roleset/application/application.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
-import { createOrgAndSpace } from '@utils/data-setup/entities';
-import { entitiesId } from '../../../types/entities-helper';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
 import { eventOnRoleSetApplication } from '../roleset-events.request.params';
 import { CommunityMembershipPolicy } from '@generated/graphql';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let applicationId = '';
 let applicationData;
 let spaceRoleSetId = '';
-const organizationName = 'life-org-name' + uniqueId;
-const hostNameId = 'life-org-nameid' + uniqueId;
-const spaceName = 'life-eco-name' + uniqueId;
-const spaceNameId = 'life-eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'application-lifecycle',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+    }
+  }
+}
 
 beforeAll(async () => {
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Lifecycle', () => {
   describe('Update application entity state - positive path - REJECT', () => {
     beforeAll(async () => {
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         membership: {
           policy: CommunityMembershipPolicy.Applications,
         },
       });
 
-      const spaceCommunityIds = await getSpaceData(entitiesId.spaceId);
+      const spaceCommunityIds = await getSpaceData(baseScenario.space.id);
       spaceRoleSetId =
         spaceCommunityIds?.data?.space?.community?.roleSet.id ?? '';
 
@@ -73,16 +83,17 @@ describe('Lifecycle', () => {
         );
 
         const application = eventResponseData?.data?.eventOnApplication;
-        const roleSetPendingMemberships = await getRoleSetInvitationsApplications(
-          entitiesId.space.roleSetId
-        );
+        const roleSetPendingMemberships =
+          await getRoleSetInvitationsApplications(
+            baseScenario.space.community.roleSetId
+          );
 
         const roleSetFirstApplication =
           roleSetPendingMemberships?.data?.lookup?.roleSet?.applications[0];
         if (!roleSetFirstApplication) {
           throw new Error('Role set application not found');
         }
-          // Assert
+        // Assert
         expect(application?.state).toEqual(state);
         expect(application?.nextEvents).toEqual(nextEvents);
         expect(application).toEqual(roleSetFirstApplication);

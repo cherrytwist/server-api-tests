@@ -1,51 +1,55 @@
 import '@utils/array.matcher';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import {
   createSubspace,
   getSubspaceData,
 } from '../subspace/subspace.request.params';
-import { entitiesId } from '@src/types/entities-helper';
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
 import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = '';
 let subsubspaceNameId = '';
 let subsubspaceId = '';
 let additionalSubsubspaceId: string;
-let subspaceName = '';
 let additionalSubspaceId = '';
-const organizationName = 'opp-org-name' + uniqueId;
-const hostNameId = 'opp-org-nameid' + uniqueId;
-const spaceName = 'opp-eco-name' + uniqueId;
-const spaceNameId = 'opp-eco-nameid' + uniqueId;
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
   subsubspaceName = `subsubspaceName ${uniqueId}`;
   subsubspaceNameId = `op${uniqueId}`;
 });
 
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subsubspace',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },subspace: {
+      collaboration: {
+        addCallouts: true,
+      },},
+    }
+  }
+}
+
 beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
   subsubspaceName = 'post-opp';
-  subspaceName = 'post-chal';
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
   await deleteSpace(additionalSubspaceId);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Opportunities', () => {
@@ -59,7 +63,7 @@ describe('Opportunities', () => {
     const responseCreateSubsubspaceOnSubspace = await createSubspace(
       subsubspaceName,
       subsubspaceNameId,
-      entitiesId.subspace.id
+      baseScenario.subspace.id
     );
     const createSubsubspaceData =
       responseCreateSubsubspaceOnSubspace?.data?.createSubspace;
@@ -68,7 +72,7 @@ describe('Opportunities', () => {
 
     // Query Subsubspace data
     const requestQuerySubsubspace = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subsubspaceId
     );
     const requestSubsubspaceData =
@@ -84,7 +88,7 @@ describe('Opportunities', () => {
     const responseCreateSubsubspaceOnSubspace = await createSubspace(
       subsubspaceName,
       subsubspaceNameId,
-      entitiesId.subspace.id
+      baseScenario.subspace.id
     );
 
     subsubspaceId =
@@ -96,7 +100,7 @@ describe('Opportunities', () => {
 
     // Query Subsubspace data
     const requestQuerySubsubspace = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subsubspaceId
     );
     const requestSubsubspaceData =
@@ -117,7 +121,7 @@ describe('Opportunities', () => {
     const responseCreateSubsubspaceOnSubspace = await createSubspace(
       subsubspaceName,
       subsubspaceNameId,
-      entitiesId.subspace.id
+      baseScenario.subspace.id
     );
     subsubspaceId =
       responseCreateSubsubspaceOnSubspace?.data?.createSubspace.id ?? '';
@@ -128,7 +132,7 @@ describe('Opportunities', () => {
 
     // Query Subsubspace data
     const requestQuerySubsubspace = await getSubspaceData(
-      entitiesId.spaceId,
+      baseScenario.space.id,
       subsubspaceId
     );
 
@@ -145,9 +149,9 @@ describe('Opportunities', () => {
   test('should throw an error for creating subsubspace with same name/NameId on different subspaces', async () => {
     // Arrange
     const responseCreateSubspaceTwo = await createSubspace(
-      `${subspaceName}ch`,
+      `${subsubspaceName}ch`,
       `${uniqueId}ch`,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     additionalSubspaceId =
       responseCreateSubspaceTwo?.data?.createSubspace.id ?? '';
@@ -157,7 +161,7 @@ describe('Opportunities', () => {
     const responseCreateSubsubspaceOnSubspaceOne = await createSubspace(
       subsubspaceName,
       `${subsubspaceNameId}new`,
-      entitiesId.subspace.id
+      baseScenario.subspace.id
     );
     subsubspaceId =
       responseCreateSubsubspaceOnSubspaceOne?.data?.createSubspace.id ?? '';
@@ -195,7 +199,7 @@ describe('DDT should not create opportunities with same nameID within the same s
       const responseCreateSubsubspaceOnSubspace = await createSubspace(
         subsubspaceDisplayName,
         subsubspaceNameIdD,
-        entitiesId.subspace.id
+        baseScenario.subspace.id
       );
       const responseData = JSON.stringify(
         responseCreateSubsubspaceOnSubspace

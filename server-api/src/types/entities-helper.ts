@@ -14,27 +14,38 @@ export const getMailsData = async () => {
 };
 
 interface CommonSpaceIds {
-  profileId: string;
-  communityId: string;
-  roleSetId: string;
-  updatesId: string;
-  communicationId: string;
+  profile: {
+    id: string;
+    displayName: string;
+  };
+  community: {
+    id: string;
+    roleSetId: string;
+  };
+  communication: {
+    id: string;
+    updatesId: string;
+  };
   contextId: string;
-  collaborationId: string;
-  calloutId: string;
-  whiteboardCalloutId: string;
-  discussionCalloutId: string;
-  discussionCalloutCommentsId: string;
+  collaboration: {
+    id: string;
+    calloutId: string;
+    whiteboardCalloutId: string;
+    discussionCalloutId: string;
+    discussionCalloutCommentsId: string;
+  };
 }
 
 interface ProfileableIds {
   id: string;
   nameId: string;
-  profileId: string;
+  profile: {
+    id: string;
+    displayName: string;
+  };
 }
 interface EntityIds {
   accountId: string;
-  spaceId: string;
   whiteboardTemplateId: string;
   messageId: string;
   discussionId: string;
@@ -42,9 +53,9 @@ interface EntityIds {
     accountId: string;
     agentId: string;
     verificationId: string;
-    displayName: string;
   };
   space: CommonSpaceIds & {
+    id: string;
     applicationId: string;
     templateId: string;
     templateSetId: string;
@@ -53,67 +64,3 @@ interface EntityIds {
   subspace: CommonSpaceIds & ProfileableIds;
   subsubspace: CommonSpaceIds & ProfileableIds;
 }
-
-export const entitiesId: EntityIds = {
-  accountId: '',
-  spaceId: '',
-  whiteboardTemplateId: '',
-  messageId: '',
-  discussionId: '',
-  organization: {
-    id: '',
-    accountId: '',
-    nameId: '',
-    profileId: '',
-    agentId: '',
-    verificationId: '',
-    displayName: '',
-  },
-  space: {
-    applicationId: '',
-    profileId: '',
-    communityId: '',
-    roleSetId: '',
-    updatesId: '',
-    communicationId: '',
-    contextId: '',
-    collaborationId: '',
-    calloutId: '',
-    whiteboardCalloutId: '',
-    discussionCalloutId: '',
-    discussionCalloutCommentsId: '',
-    templateId: '',
-    templateSetId: '',
-    subspaceCollaborationTemplateId: '',
-  },
-  subspace: {
-    id: '',
-    nameId: '',
-    profileId: '',
-    communityId: '',
-    roleSetId: '',
-    updatesId: '',
-    communicationId: '',
-    contextId: '',
-    collaborationId: '',
-    calloutId: '',
-    whiteboardCalloutId: '',
-    discussionCalloutId: '',
-    discussionCalloutCommentsId: '',
-  },
-  subsubspace: {
-    id: '',
-    nameId: '',
-    profileId: '',
-    communityId: '',
-    roleSetId: '',
-    updatesId: '',
-    communicationId: '',
-    contextId: '',
-    collaborationId: '',
-    calloutId: '',
-    whiteboardCalloutId: '',
-    discussionCalloutId: '',
-    discussionCalloutCommentsId: '',
-  },
-};

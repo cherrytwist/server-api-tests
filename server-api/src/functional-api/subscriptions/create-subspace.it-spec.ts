@@ -1,19 +1,17 @@
 import { SubscriptionClient } from '@utils/subscriptions';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteSpace } from '../journey/space/space.request.params';
 import { subscriptionSubspaceCreated } from './subscrition-queries';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
-import { entitiesId } from '../../types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'com-sub-org-n' + uniqueId;
-const hostNameId = 'com-sub-org-nd' + uniqueId;
-const spaceName = 'com-sub-eco-n' + uniqueId;
-const spaceNameId = 'com-sub-eco-nd' + uniqueId;
+const uniqueId = UniqueIDGenerator.getID();
+
 const subspaceDisplayName1 = 'ch1-display-name' + uniqueId;
 const subspaceDisplayName2 = 'ch2-display-name' + uniqueId;
 let subspaceIdOne = '';
@@ -23,13 +21,23 @@ let subscription1: SubscriptionClient;
 let subscription2: SubscriptionClient;
 let subscription3: SubscriptionClient;
 
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subs-create-subspace',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+  },
+};
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -37,8 +45,7 @@ afterAll(async () => {
   subscription2.terminate();
   subscription3.terminate();
 
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 describe('Create subspace subscription', () => {
   beforeAll(async () => {
@@ -49,7 +56,7 @@ describe('Create subspace subscription', () => {
     const utilizedQuery = {
       operationName: 'SubspaceCreated',
       query: subscriptionSubspaceCreated,
-      variables: { spaceID: entitiesId.spaceId },
+      variables: { spaceID: baseScenario.space.id },
     };
 
     await subscription1.subscribe(utilizedQuery, TestUser.GLOBAL_ADMIN);
@@ -73,14 +80,14 @@ describe('Create subspace subscription', () => {
     const resOne = await createSubspace(
       subspaceDisplayName1,
       subspaceDisplayName1,
-      entitiesId.spaceId
+      baseScenario.space.id
     );
     subspaceIdOne = resOne?.data?.createSubspace.id ?? '';
 
     const resTwo = await createSubspace(
       subspaceDisplayName2,
       subspaceDisplayName2,
-      entitiesId.spaceId,
+      baseScenario.space.id,
       TestUser.SPACE_ADMIN
     );
     subspaceIdTwo = resTwo?.data?.createSubspace.id ?? '';
@@ -90,13 +97,13 @@ describe('Create subspace subscription', () => {
     const expectedData = expect.arrayContaining([
       expect.objectContaining({
         subspaceCreated: {
-          spaceID: entitiesId.spaceId,
+          spaceID: baseScenario.space.id,
           subspace: { profile: { displayName: subspaceDisplayName1 } },
         },
       }),
       expect.objectContaining({
         subspaceCreated: {
-          spaceID: entitiesId.spaceId,
+          spaceID: baseScenario.space.id,
           subspace: { profile: { displayName: subspaceDisplayName2 } },
         },
       }),

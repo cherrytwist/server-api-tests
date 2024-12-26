@@ -1,6 +1,3 @@
-/* eslint-disable quotes */
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -11,14 +8,8 @@ import {
   uploadImageOnVisual,
 } from '../upload.params';
 import path from 'path';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import {
-  createSubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
 import {
-  deleteSpace,
   updateSpacePlatformSettings,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
@@ -52,39 +43,49 @@ import {
 } from '../../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { createWhiteboardCallout } from '../../callout/whiteboard/whiteboard-callout.params.request';
 import { createReferenceOnProfile } from '../../references/references.request.params';
-import { entitiesId } from '../../../types/entities-helper';
 import { SpacePrivacyMode } from '@generated/alkemio-schema';
 import { SpaceVisibility } from '@generated/graphql';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'lifec-eco-name' + uniqueId;
-const spaceNameId = 'lifec-eco-nameid' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
 let refId = '';
 let documentId = '';
 
-beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'doc-private-space-private-subspace',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+    },
+  },
+};
 
-  await createSubspaceWithUsers(subspaceName);
+beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpacePlatformSettings(
-    entitiesId.spaceId,
-    spaceNameId,
+    baseScenario.space.id,
+    baseScenario.space.nameId,
     SpaceVisibility.Active
   );
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: { mode: SpacePrivacyMode.Private },
   });
 
-  const a = await updateSpaceSettings(entitiesId.subspace.id, {
+  await updateSpaceSettings(baseScenario.subspace.id, {
     privacy: { mode: SpacePrivacyMode.Private },
     collaboration: {
       inheritMembershipRights: true,
@@ -94,9 +95,7 @@ beforeAll(async () => {
   });
 });
 afterAll(async () => {
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Private Space - Private Subspace - visual on profile', () => {
@@ -106,7 +105,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const visualData = await lookupProfileVisuals(
-        entitiesId.subspace.profileId
+        baseScenario.subspace.profile.id
       );
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
@@ -115,7 +114,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.subspace.profileId,
+        baseScenario.subspace.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -137,7 +136,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space subspace profile visual document',
       async ({ userRole, privileges}) => {
         const res = await getProfileDocuments(
-          entitiesId.subspace.profileId,
+          baseScenario.subspace.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
@@ -164,7 +163,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.subspace.profileId,
+          baseScenario.subspace.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -181,7 +180,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        entitiesId.subspace.profileId
+        baseScenario.subspace.profile.id
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
       await uploadFileOnRef(
@@ -190,7 +189,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.subspace.profileId,
+        baseScenario.subspace.profile.id,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -211,7 +210,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space subspace profile reference document',
       async ({ userRole, privileges}) => {
         const res = await getProfileDocuments(
-          entitiesId.subspace.profileId,
+          baseScenario.subspace.profile.id,
           userRole
         );
 
@@ -240,7 +239,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.subspace.profileId,
+          baseScenario.subspace.profile.id,
           userRole
         );
 
@@ -258,7 +257,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        entitiesId.subspace.profileId,
+        baseScenario.subspace.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -271,7 +270,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        entitiesId.subspace.profileId,
+        baseScenario.subspace.profile.id,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -293,7 +292,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space context (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await getProfileDocuments(
-          entitiesId.subspace.profileId,
+          baseScenario.subspace.profile.id,
           userRole
         );
 
@@ -322,7 +321,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
         parentEntityType,
       }) => {
         const res = await getProfileDocuments(
-          entitiesId.subspace.profileId,
+          baseScenario.subspace.profile.id,
           userRole
         );
         const data = res.data?.lookup?.profile?.storageBucket;
@@ -340,7 +339,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const linkCallout = await createLinkCollectionCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'link11',
         'Link collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -425,7 +424,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'post11',
         'Post collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -522,7 +521,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const calloutData = await createPostCollectionCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'post12',
         'Post collection Callout12',
         TestUser.GLOBAL_ADMIN
@@ -620,7 +619,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createWhiteboardCollectionCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'whiteboard11',
         'Whiteboard collection Callout1',
         TestUser.GLOBAL_ADMIN
@@ -717,7 +716,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'post3',
         'Post collection Callout3',
         TestUser.GLOBAL_ADMIN
@@ -800,7 +799,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'post4',
         'Post collection Callout4',
         TestUser.GLOBAL_ADMIN
@@ -881,7 +880,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'whiteboard1',
         'Whiteboard Callout1',
         TestUser.GLOBAL_ADMIN
@@ -963,7 +962,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        entitiesId.subspace.collaborationId,
+        baseScenario.subspace.collaboration.id,
         'whiteboard2',
         'Whiteboard Callout2',
         TestUser.GLOBAL_ADMIN

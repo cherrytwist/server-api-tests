@@ -1,9 +1,8 @@
-import { entitiesId } from '@src/types/entities-helper';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { TestUser } from '@alkemio/tests-lib';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 
-import { UniqueIDGenerator } from '@utils/uniqueId';
 const uniqueId = UniqueIDGenerator.getID();
 
 export const createSubsubspace = async (

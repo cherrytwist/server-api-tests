@@ -1,90 +1,94 @@
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '../../journey/space/space.request.params';
-import {
-  createSubspaceForOrgSpace,
-  createSubsubspaceForSubspace,
-  createOrgAndSpace,
-} from '@utils/data-setup/entities';
 import {
   assignRoleToOrganization,
   getOrganizationRole,
 } from '../roles-request.params';
-import { entitiesId } from '../../../types/entities-helper';
 import { CommunityRoleType } from '@generated/graphql';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'orole-org-name' + uniqueId;
-const hostNameId = 'orole-org-nameid' + uniqueId;
-const spaceName = 'orole-eco-name' + uniqueId;
-const spaceNameId = 'orole-eco-nameid' + uniqueId;
-const subsubspaceName = 'orole-opp';
-const subspaceName = 'orole-chal';
 const spaceRoles = ['lead', 'member'];
 const availableRoles = ['member', 'lead'];
+
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subspace-activity',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteSpace('eco1');
 
-  await createOrgAndSpace(organizationName, hostNameId, spaceName, spaceNameId);
-  await createSubspaceForOrgSpace(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.space.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Member
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.space.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToOrganization(
-    entitiesId.organization.id,
-    entitiesId.subsubspace.roleSetId,
+    baseScenario.organization.id,
+    baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Organization role', () => {
   test('Organization role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
-    const res = await getOrganizationRole(entitiesId.organization.id);
+    const res = await getOrganizationRole(baseScenario.organization.id);
     const spacesData = res?.data?.rolesOrganization.spaces ?? [];
 
     // Assert
     expect(spacesData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: spaceNameId,
+          nameID: baseScenario.space.nameId,
           roles: expect.arrayContaining(spaceRoles),
         }),
       ])
@@ -93,7 +97,7 @@ describe('Organization role', () => {
     expect(spacesData[0].subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: entitiesId.subspace.nameId,
+          nameID: baseScenario.subspace.nameId,
           roles: expect.arrayContaining(availableRoles),
         }),
       ])

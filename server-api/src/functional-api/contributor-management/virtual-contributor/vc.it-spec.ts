@@ -14,8 +14,6 @@ import {
 } from '../../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
-import { entitiesId } from '@src/types/entities-helper';
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
@@ -30,18 +28,18 @@ import {
   inviteContributors,
 } from '../../roleset/invitations/invitation.request.params';
 import { getRoleSetInvitationsApplications } from '../../roleset/application/application.request.params';
-import { deleteOrganization } from '../organization/organization.request.params';
 import { createUser, deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let invitationId = '';
 let invitationData: any;
 
-const organizationName = 'appl-org-name' + uniqueId;
-const hostNameId = 'appl-org-nameid' + uniqueId;
-const spaceName = 'appl-eco-name' + uniqueId;
 const spaceNameId = 'appl-eco-nameid' + uniqueId;
 let vcSpaceId = '';
 let l1VCId = '';
@@ -54,17 +52,25 @@ let vcId = '';
 let vcSpaceAccountId = '';
 const vcName = 'vcName1' + uniqueId;
 
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'virtual-contributor',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  }
+}
+
 beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+
   const vcLicensePlan = await getLicensePlanByName('FEATURE_VIRTUAL_CONTRIBUTORS');
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
   vcLicensePlanId = vcLicensePlan[0].id;
 
-  await updateSpaceSettings(entitiesId.spaceId, {
+  await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
       mode: SpacePrivacyMode.Public,
     },
@@ -73,10 +79,10 @@ beforeAll(async () => {
     },
   });
 
-  await assignLicensePlanToAccount(entitiesId.accountId, vcLicensePlanId);
+  await assignLicensePlanToAccount(baseScenario.organization.accountId, vcLicensePlanId);
 
   await updateSpacePlatformSettings(
-    entitiesId.spaceId,
+    baseScenario.space.id,
     spaceNameId,
     SpaceVisibility.Active
   );
@@ -109,13 +115,12 @@ afterAll(async () => {
   await deleteSpace(l1VCId);
   await deleteSpace(vcSpaceId);
 
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Virtual Contributor', () => {
   afterEach(async () => {
-    await removeVirtualContributorFromRoleSet(entitiesId.space.roleSetId, vcId);
+    await removeVirtualContributorFromRoleSet(baseScenario.space.community.roleSetId, vcId);
     await deleteInvitation(invitationId);
   });
 
@@ -137,7 +142,7 @@ describe('Virtual Contributor', () => {
   test('should return invitations after virtual contributor is removed', async () => {
     // Act
     invitationData = await inviteContributors(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       [vcId],
       TestUser.GLOBAL_ADMIN
     );
@@ -148,7 +153,7 @@ describe('Virtual Contributor', () => {
     await deleteVirtualContributorOnAccount(vcId);
 
     const invitationsDataCommunity = await getRoleSetInvitationsApplications(
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       TestUser.SPACE_ADMIN
     );
 

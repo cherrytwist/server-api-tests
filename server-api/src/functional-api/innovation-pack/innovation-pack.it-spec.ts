@@ -1,5 +1,5 @@
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 import { createInnovationPack } from './innovation_pack.request.params';
 import {

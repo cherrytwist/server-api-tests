@@ -10,7 +10,7 @@ import {
   sendMessageToRoom,
   removeMessageOnRoom,
 } from '../communication.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let platformDiscussionId = '';

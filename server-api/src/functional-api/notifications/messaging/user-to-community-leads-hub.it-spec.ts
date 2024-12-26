@@ -1,32 +1,23 @@
-
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../../../lib/src/utils/delay';
 import { TestUser } from '@alkemio/tests-lib';
 import {
-  deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { users } from '../../../utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '../../../utils/data-setup/entities';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '../../../types/entities-helper';
+import { getMailsData } from '../../../types/entities-helper';
 import {
   removeRoleFromUser,
   assignRoleToUser,
 } from '@functional-api/roleset/roles-request.params';
-
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
-import { CommunityRoleType, PreferenceType, SpacePrivacyMode } from '@generated/graphql';
+import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
-
-const organizationName = 'urole-org-name' + uniqueId;
-const hostNameId = 'urole-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let usersList: any[] = [];
 
@@ -38,45 +29,54 @@ const receivers = (senderDisplayName: string) => {
   return `${senderDisplayName} sent a message to your community`;
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'messaging-user-to-community-leads-space',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+  },
+};
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await removeRoleFromUser(
     users.globalAdmin.id,
-    entitiesId.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.spaceAdmin.id,
-    entitiesId.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
     users.spaceMember.id,
-    entitiesId.space.roleSetId,
+    baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignUserAsOrganizationAdmin(
     users.spaceAdmin.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   usersList = [users.spaceAdmin.email, users.spaceMember.email];
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Notifications - send messages to Private space hosts', () => {
@@ -85,7 +85,7 @@ describe('Notifications - send messages to Private space hosts', () => {
       for (const userOnList of usersList)
         await updateUserSettingCommunicationMessage(userOnList.userID, true);
 
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         privacy: {
           mode: SpacePrivacyMode.Private,
         },
@@ -99,7 +99,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -121,7 +121,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -131,7 +131,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -152,7 +152,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -173,7 +173,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -194,7 +194,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -204,7 +204,7 @@ describe('Notifications - send messages to Private space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -225,7 +225,7 @@ describe('Notifications - send messages to Private space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -235,7 +235,7 @@ describe('Notifications - send messages to Private space hosts', () => {
 });
 describe('Notifications - messages to Public space hosts', () => {
   beforeAll(async () => {
-    await updateSpaceSettings(entitiesId.spaceId, {
+    await updateSpaceSettings(baseScenario.space.id, {
       privacy: {
         mode: SpacePrivacyMode.Public,
       },
@@ -254,7 +254,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -275,7 +275,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -285,7 +285,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -306,7 +306,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -327,7 +327,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('NOT space member sends message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.NON_SPACE_MEMBER
       );
@@ -348,7 +348,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.nonSpaceMember.email],
           }),
         ])
@@ -358,7 +358,7 @@ describe('Notifications - messages to Public space hosts', () => {
     test('Space member send message to Space community (2 hosts) - 3 messages sent', async () => {
       // Act
       await sendMessageToCommunityLeads(
-        entitiesId.space.communityId,
+        baseScenario.space.community.id,
         'Test message',
         TestUser.SUBSPACE_MEMBER
       );
@@ -379,7 +379,7 @@ describe('Notifications - messages to Public space hosts', () => {
             toAddresses: [users.spaceMember.email],
           }),
           expect.objectContaining({
-            subject: senders(spaceName),
+            subject: senders(baseScenario.space.profile.displayName),
             toAddresses: [users.subspaceMember.email],
           }),
         ])
@@ -390,7 +390,7 @@ describe('Notifications - messages to Public space hosts', () => {
 
 describe('Notifications - messages to Public space NO hosts', () => {
   beforeAll(async () => {
-    await updateSpaceSettings(entitiesId.spaceId, {
+    await updateSpaceSettings(baseScenario.space.id, {
       privacy: {
         mode: SpacePrivacyMode.Public,
       },
@@ -398,12 +398,12 @@ describe('Notifications - messages to Public space NO hosts', () => {
 
     await removeRoleFromUser(
       users.spaceAdmin.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
     await removeRoleFromUser(
       users.spaceMember.id,
-      entitiesId.space.roleSetId,
+      baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
   });
@@ -415,7 +415,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
   test('NOT space member sends message to Space community (0 hosts) - 1 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.space.communityId,
+      baseScenario.space.community.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -428,7 +428,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: senders(spaceName),
+          subject: senders(baseScenario.space.profile.displayName),
           toAddresses: [users.nonSpaceMember.email],
         }),
       ])
@@ -438,7 +438,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
   test('Space member send message to Space community (0 hosts) - 1 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
-      entitiesId.space.communityId,
+      baseScenario.space.community.id,
       'Test message',
       TestUser.QA_USER
     );
@@ -451,7 +451,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: await senders(spaceName),
+          subject: await senders(baseScenario.space.profile.displayName),
           toAddresses: [users.qaUser.email],
         }),
       ])

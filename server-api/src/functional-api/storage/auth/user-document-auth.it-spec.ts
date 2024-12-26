@@ -1,6 +1,4 @@
 /* eslint-disable quotes */
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -10,36 +8,46 @@ import {
   uploadImageOnVisual,
 } from '../upload.params';
 import path from 'path';
-import { deleteOrganization } from '../../contributor-management/organization/organization.request.params';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import { deleteSpace } from '../../journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
 import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,
 } from '../../references/references.request.params';
-import { entitiesId } from '../../../types/entities-helper';
-import { sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii, sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin, sorted__create_read_update_delete_grant_readUserPii_platformAdmin, sorted__create_read_update_delete_readUserPii } from '@common/constants/privileges';
+import {
+  sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii,
+  sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin,
+  sorted__create_read_update_delete_grant_readUserPii_platformAdmin,
+  sorted__create_read_update_delete_readUserPii,
+} from '@common/constants/privileges';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'lifec-eco-name' + uniqueId;
-const spaceNameId = 'lifec-eco-nameid' + uniqueId;
 let refId = '';
 let documentId = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'storage-user-document-auth',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+  },
+};
+
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
+
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('User - documents', () => {
@@ -67,11 +75,11 @@ describe('User - documents', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
+      ${TestUser.QA_USER}          | ${sorted__create_read_update_delete_readUserPii}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile visual document',
       async ({ userRole, privileges }) => {
@@ -84,18 +92,14 @@ describe('User - documents', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                                 | parentEntityType
-      ${undefined}               | ${undefined}                                                                               | ${undefined}
+      userRole                     | privileges                                                                                 | parentEntityType
+      ${undefined}                 | ${undefined}                                                                               | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
+      ${TestUser.QA_USER}          | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
@@ -132,11 +136,11 @@ describe('User - documents', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
+      ${TestUser.QA_USER}          | ${sorted__create_read_update_delete_readUserPii}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user reference document',
       async ({ userRole, privileges }) => {
@@ -149,18 +153,14 @@ describe('User - documents', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                                 | parentEntityType
-      ${undefined}               | ${undefined}                                                                               | ${undefined}
+      userRole                     | privileges                                                                                 | parentEntityType
+      ${undefined}                 | ${undefined}                                                                               | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
+      ${TestUser.QA_USER}          | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile reference storage bucket',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
@@ -201,11 +201,11 @@ describe('User - documents', () => {
 
     // Arrange
     test.each`
-      userRole                   | privileges
-      ${undefined}               | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_readUserPii}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_readUserPii_platformAdmin}
+      ${TestUser.QA_USER}          | ${sorted__create_read_update_delete_readUserPii}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description visual document',
       async ({ userRole, privileges }) => {
@@ -218,18 +218,14 @@ describe('User - documents', () => {
     );
 
     test.each`
-      userRole                   | privileges                                                                                  | parentEntityType
-      ${undefined}               | ${undefined}                                                                                | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                 | ${'USER'}
-      ${TestUser.GLOBAL_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin}  | ${'USER'}
-      ${TestUser.QA_USER}        | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                      | ${'USER'}
+      userRole                     | privileges                                                                                 | parentEntityType
+      ${undefined}                 | ${undefined}                                                                               | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                                                | ${'USER'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUpload_fileDelete_readUserPii_platformAdmin} | ${'USER'}
+      ${TestUser.QA_USER}          | ${sorted__create_read_update_delete_fileUpload_fileDelete_readUserPii}                     | ${'USER'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description (storageBucket) document',
-      async ({
-        userRole,
-        privileges,
-        parentEntityType,
-      }) => {
+      async ({ userRole, privileges, parentEntityType }) => {
         const res = await getProfileDocuments(users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 

@@ -2,11 +2,6 @@ import '@utils/array.matcher';
 import { TestUser } from '@alkemio/tests-lib';
 import { users } from '@utils/queries/users-data';
 import {
-  createSubspaceWithUsers,
-  createSubsubspaceForSubspace,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
-import {
   CalloutState,
   CalloutType,
   CommunityRoleType,
@@ -15,10 +10,7 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '@functional-api/journey/space/space.request.params';
+import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import {
   createCalloutOnCollaboration,
   deleteCallout,
@@ -29,49 +21,55 @@ import { createPostOnCallout } from '@functional-api/callout/post/post.request.p
 import { sendMessageToRoom } from '../communications/communication.params';
 import { createWhiteboardOnCallout } from '../callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
 import { assignRoleToUser } from '../roleset/roles-request.params';
-import { entitiesId } from '../../types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
+
 const uniqueId = UniqueIDGenerator.getID();
 
-let subsubspaceName = 'post-opp';
-let subspaceName = 'post-chal';
 let callDN = '';
 let calloutId = '';
 let postNameID = '';
 let postDisplayName = '';
-const organizationName = 'callout-org-name' + uniqueId;
-const hostNameId = 'callout-org-nameid' + uniqueId;
-const spaceName = 'callout-eco-name' + uniqueId;
-const spaceNameId = 'callout-eco-nameid' + uniqueId;
+
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subsubspace-activity',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await updateSpaceSettings(entitiesId.spaceId, {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+
+  await updateSpaceSettings(baseScenario.space.id, {
     membership: {
       policy: CommunityMembershipPolicy.Open,
     },
   });
-
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceForSubspace(subsubspaceName);
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 beforeEach(async () => {
-  subspaceName = `testSubspace ${uniqueId}`;
-  subsubspaceName = `subsubspaceName ${uniqueId}`;
   callDN = `callout-d-name-${uniqueId}`;
   postNameID = `post-name-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
@@ -84,7 +82,7 @@ describe('Activity logs - Subsubspace', () => {
   test('should return empty arrays', async () => {
     // Act
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       5
     );
     const resActivityData = resActivity?.data?.activityLogOnCollaboration;
@@ -96,13 +94,13 @@ describe('Activity logs - Subsubspace', () => {
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
     const res = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: callDN } } }
     );
     calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       5
     );
     const resActivityData = resActivity?.data?.activityLogOnCollaboration;
@@ -114,13 +112,13 @@ describe('Activity logs - Subsubspace', () => {
     // Arrange
     await assignRoleToUser(
       users.subspaceMember.id,
-      entitiesId.subsubspace.roleSetId,
+      baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
 
     // Act
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       5
     );
     const resActivityData = resActivity?.data?.activityLogOnCollaboration;
@@ -130,7 +128,7 @@ describe('Activity logs - Subsubspace', () => {
     expect(resActivityData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          collaborationID: entitiesId.subsubspace.collaborationId,
+          collaborationID: baseScenario.subsubspace.collaboration.id,
           description: `${users.subspaceMember.id}`,
           triggeredBy: { id: users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
@@ -141,7 +139,7 @@ describe('Activity logs - Subsubspace', () => {
     expect(resActivityData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          collaborationID: entitiesId.subsubspace.collaborationId,
+          collaborationID: baseScenario.subsubspace.collaboration.id,
           description: `${users.globalAdmin.id}`,
           triggeredBy: { id: users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
@@ -154,7 +152,7 @@ describe('Activity logs - Subsubspace', () => {
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
     const res = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: callDN } } }
     );
     calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
@@ -179,7 +177,7 @@ describe('Activity logs - Subsubspace', () => {
     messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       {
         framing: {
           profile: {
@@ -207,7 +205,7 @@ describe('Activity logs - Subsubspace', () => {
     );
 
     const resWhiteboard = await createCalloutOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       {
         framing: {
           profile: {
@@ -232,7 +230,7 @@ describe('Activity logs - Subsubspace', () => {
 
     // Act
     const resActivity = await getActivityLogOnCollaboration(
-      entitiesId.subsubspace.collaborationId,
+      baseScenario.subsubspace.collaboration.id,
       7
     );
     const resAD = resActivity?.data?.activityLogOnCollaboration;
@@ -242,7 +240,7 @@ describe('Activity logs - Subsubspace', () => {
     const expextedData = async (description: string, type: string) => {
       return expect.arrayContaining([
         expect.objectContaining({
-          collaborationID: entitiesId.subsubspace.collaborationId,
+          collaborationID: baseScenario.subsubspace.collaboration.id,
           description,
           triggeredBy: { id: users.globalAdmin.id },
           type,
@@ -302,34 +300,34 @@ describe('Access to Activity logs - Subsubspace', () => {
   beforeAll(async () => {
     await assignRoleToUser(
       users.spaceMember.id,
-      entitiesId.subsubspace.id,
+      baseScenario.subsubspace.id,
       CommunityRoleType.Admin
     );
   });
 
   describe('DDT user privileges to Public Subsubspace activity logs of Private Space', () => {
     beforeAll(async () => {
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         privacy: { mode: SpacePrivacyMode.Private },
       });
 
       // The privilege of the subspace should cascade to subspace level2
-      await updateSpaceSettings(entitiesId.subsubspace.id, {
+      await updateSpaceSettings(baseScenario.subsubspace.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
     });
     // Arrange
     test.each`
       userRole                 | message
-      ${TestUser.GLOBAL_ADMIN} | ${entitiesId.subsubspace.collaborationId}
-      ${TestUser.SPACE_ADMIN}    | ${entitiesId.subsubspace.collaborationId}
-      ${TestUser.SPACE_MEMBER}   | ${entitiesId.subsubspace.collaborationId}
+      ${TestUser.GLOBAL_ADMIN} | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.SPACE_ADMIN}  | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.SPACE_MEMBER} | ${baseScenario.subsubspace.collaboration.id}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Subsubspace activity logs of a Private space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
-          entitiesId.subsubspace.collaborationId,
+          baseScenario.subsubspace.collaboration.id,
           5,
           userRole
         );
@@ -342,14 +340,14 @@ describe('Access to Activity logs - Subsubspace', () => {
     );
 
     test.each`
-      userRole                   | message
+      userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${'Authorization'}
     `(
       'User: "$userRole" get Error message: "$message", when intend to access Public Subsubspace activity logs of a Private space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
-          entitiesId.subsubspace.collaborationId,
+          baseScenario.subsubspace.collaboration.id,
           5,
           userRole
         );
@@ -362,30 +360,30 @@ describe('Access to Activity logs - Subsubspace', () => {
 
   describe('DDT user privileges to Public Subsubspace activity logs of Public Space', () => {
     beforeAll(async () => {
-      await updateSpaceSettings(entitiesId.spaceId, {
+      await updateSpaceSettings(baseScenario.space.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
-      await updateSpaceSettings(entitiesId.subspace.id, {
+      await updateSpaceSettings(baseScenario.subspace.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
-      await updateSpaceSettings(entitiesId.subsubspace.id, {
+      await updateSpaceSettings(baseScenario.subsubspace.id, {
         privacy: { mode: SpacePrivacyMode.Public },
       });
     });
 
     // Arrange
     test.each`
-      userRole                   | message
-      ${TestUser.GLOBAL_ADMIN}   | ${entitiesId.subsubspace.collaborationId}
-      ${TestUser.SPACE_ADMIN}      | ${entitiesId.subsubspace.collaborationId}
-      ${TestUser.SPACE_MEMBER}     | ${entitiesId.subsubspace.collaborationId}
-      ${TestUser.NON_SPACE_MEMBER} | ${entitiesId.subsubspace.collaborationId}
+      userRole                     | message
+      ${TestUser.GLOBAL_ADMIN}     | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.SPACE_ADMIN}      | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.SPACE_MEMBER}     | ${baseScenario.subsubspace.collaboration.id}
+      ${TestUser.NON_SPACE_MEMBER} | ${baseScenario.subsubspace.collaboration.id}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Subsubspace activity logs of a Public space',
       async ({ userRole, message }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
-          entitiesId.subsubspace.collaborationId,
+          baseScenario.subsubspace.collaboration.id,
           5,
           userRole
         );

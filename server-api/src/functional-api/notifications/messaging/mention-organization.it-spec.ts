@@ -2,32 +2,20 @@
 import { deleteMailSlurperMails } from '../../../utils/mailslurper.rest.requests';
 import { delay } from '../../../../../lib/src/utils/delay';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteOrganization, updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
+import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { users } from '../../../utils/queries/users-data';
-import {
-  createPostOnCallout,
-} from '@functional-api/callout/post/post.request.params';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '../../../utils/data-setup/entities';
+import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { entitiesId, getMailsData } from '../../../types/entities-helper';
+import { getMailsData } from '../../../types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { PreferenceType } from '@generated/graphql';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'urole-org-name' + uniqueId;
-const hostNameId = 'urole-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `oppName${uniqueId}`;
-
+const uniqueId = UniqueIDGenerator.getID();
 let postCommentsIdSpace = '';
 
 const receivers = (senderDisplayName: string, orgDisplayName: string) => {
@@ -40,31 +28,54 @@ const mentionedOrganization = (userDisplayName: string, userNameId: string) => {
   return `[@${userDisplayName}](${baseUrl}/${userNameId})`;
 };
 
-let preferencesConfig: any[] = [];
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'messaging-mention-org',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  await updateOrganization(entitiesId.organization.id, {
+  await updateOrganization(baseScenario.organization.id, {
     legalEntityName: 'legalEntityName',
     domain: 'domain',
     website: 'https://website.org',
     contactEmail: 'test-org@alkem.io',
   });
 
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
-
   await assignUserAsOrganizationAdmin(
     users.qaUser.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   await changePreferenceUser(
@@ -75,7 +86,7 @@ beforeAll(async () => {
 
   // preferencesConfig = [
   //   {
-  //     organizationID: entitiesId.organization.id,
+  //     organizationID: baseScenario.organization.id,
   //     type: PreferenceType.NotificationOrganizationMention,
   //   },
   // ];
@@ -91,10 +102,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 describe('Notifications - Mention Organization', () => {
   beforeEach(async () => {
@@ -105,10 +113,10 @@ describe('Notifications - Mention Organization', () => {
     test('GA mention Organization in Space comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.space.discussionCalloutCommentsId,
+        baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedOrganization(
-          entitiesId.organization.displayName,
-          entitiesId.organization.nameId
+          baseScenario.organization.profile.displayName,
+          baseScenario.organization.nameId
         )} comment on discussion callout`,
         TestUser.GLOBAL_ADMIN
       );
@@ -123,14 +131,14 @@ describe('Notifications - Mention Organization', () => {
           expect.objectContaining({
             subject: receivers(
               users.globalAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
               users.globalAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.globalAdmin.email],
           }),
@@ -141,10 +149,10 @@ describe('Notifications - Mention Organization', () => {
     test('HM mention Organization in Space comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.space.discussionCalloutCommentsId,
+        baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedOrganization(
-          entitiesId.organization.displayName,
-          entitiesId.organization.nameId
+          baseScenario.organization.profile.displayName,
+          baseScenario.organization.nameId
         )} comment on discussion callout`,
         TestUser.SPACE_MEMBER
       );
@@ -159,14 +167,14 @@ describe('Notifications - Mention Organization', () => {
           expect.objectContaining({
             subject: receivers(
               users.spaceMember.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
               users.spaceMember.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.globalAdmin.email],
           }),
@@ -177,10 +185,10 @@ describe('Notifications - Mention Organization', () => {
     test('GA mention Organization in Subspace comments callout - 2 notification to Organization admins are sent', async () => {
       // Act
       await sendMessageToRoom(
-        entitiesId.subspace.discussionCalloutCommentsId,
+        baseScenario.subspace.collaboration.calloutPostCommentsId,
         `${mentionedOrganization(
-          entitiesId.organization.displayName,
-          entitiesId.organization.nameId
+          baseScenario.organization.profile.displayName,
+          baseScenario.organization.nameId
         )} comment on discussion callout`,
         TestUser.GLOBAL_ADMIN
       );
@@ -195,14 +203,14 @@ describe('Notifications - Mention Organization', () => {
           expect.objectContaining({
             subject: receivers(
               users.globalAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
               users.globalAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.globalAdmin.email],
           }),
@@ -214,10 +222,10 @@ describe('Notifications - Mention Organization', () => {
       // Act
 
       await sendMessageToRoom(
-        entitiesId.subsubspace.discussionCalloutCommentsId,
+        baseScenario.subsubspace.collaboration.calloutPostCommentsId,
         `${mentionedOrganization(
-          entitiesId.organization.displayName,
-          entitiesId.organization.nameId
+          baseScenario.organization.profile.displayName,
+          baseScenario.organization.nameId
         )} comment on discussion callout`,
         TestUser.GLOBAL_ADMIN
       );
@@ -232,14 +240,14 @@ describe('Notifications - Mention Organization', () => {
           expect.objectContaining({
             subject: receivers(
               users.globalAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
               users.globalAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.globalAdmin.email],
           }),
@@ -254,7 +262,7 @@ describe('Notifications - Mention Organization', () => {
       postNameID = `post-name-id-${uniqueId}`;
       const postDisplayName = `post-d-name-${uniqueId}`;
       const resPostonSpace = await createPostOnCallout(
-        entitiesId.space.calloutId,
+        baseScenario.space.collaboration.calloutPostCollectionId,
         { displayName: postDisplayName },
         postNameID,
         TestUser.GLOBAL_ADMIN
@@ -272,8 +280,8 @@ describe('Notifications - Mention Organization', () => {
       await sendMessageToRoom(
         postCommentsIdSpace,
         `${mentionedOrganization(
-          entitiesId.organization.displayName,
-          entitiesId.organization.nameId
+          baseScenario.organization.profile.displayName,
+          baseScenario.organization.nameId
         )} comment on discussion callout`,
         TestUser.SPACE_ADMIN
       );
@@ -288,14 +296,14 @@ describe('Notifications - Mention Organization', () => {
           expect.objectContaining({
             subject: receivers(
               users.spaceAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
               users.spaceAdmin.displayName,
-              entitiesId.organization.displayName
+              baseScenario.organization.profile.displayName
             ),
             toAddresses: [users.globalAdmin.email],
           }),
@@ -318,8 +326,8 @@ describe('Notifications - Mention Organization', () => {
       await sendMessageToRoom(
         postCommentsIdSpace,
         `${mentionedOrganization(
-          entitiesId.organization.displayName,
-          entitiesId.organization.nameId
+          baseScenario.organization.profile.displayName,
+          baseScenario.organization.nameId
         )} comment on discussion callout`,
         TestUser.SPACE_ADMIN
       );

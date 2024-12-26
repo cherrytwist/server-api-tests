@@ -8,7 +8,7 @@ import {
 } from './user.request.params';
 import '@utils/array.matcher';
 import { users } from '@utils/queries/users-data';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';

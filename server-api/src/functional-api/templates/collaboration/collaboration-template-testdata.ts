@@ -7,7 +7,7 @@ import {
   TagsetReservedName,
   CreateCollaborationInput,
 } from '@generated/graphql';
-import { UniqueIDGenerator } from '@utils/uniqueId';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 export const lifecycleDefaultDefinition: InnovationFlowState[] = [

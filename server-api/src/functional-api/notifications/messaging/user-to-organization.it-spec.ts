@@ -1,55 +1,55 @@
-/* eslint-disable prettier/prettier */
-
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
 import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { users } from '@utils/queries/users-data';
-import { createOrgAndSpaceWithUsers } from '@utils/data-setup/entities';
 import { sendMessageToOrganization } from '@functional-api/communications/communication.params';
-import {
-  entitiesId,
-  getMailsData,
-} from '@src/types/entities-helper';
+import { getMailsData } from '@src/types/entities-helper';
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
-
-const firstOrganizationName = 'sample-org-name' + uniqueId;
-const hostNameId = 'sample-org-nameid' + uniqueId;
-const spaceName = '111' + uniqueId;
-const spaceNameId = '111' + uniqueId;
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
 let preferencesConfig: any[] = [];
 let receivers = '';
 let sender = '';
 
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'messaging-user-to-organization',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+  },
+};
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    firstOrganizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignUserAsOrganizationAdmin(
     users.spaceAdmin.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   await assignUserAsOrganizationAdmin(
     users.spaceMember.id,
-    entitiesId.organization.id
+    baseScenario.organization.id
   );
 
   receivers = `${users.nonSpaceMember.displayName} sent a message to your organization`;
-  sender = `You have sent a message to ${firstOrganizationName}!`;
+  sender = `You have sent a message to ${baseScenario.organization.profile.displayName}!`;
 
   preferencesConfig = [
     {
@@ -64,8 +64,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Notifications - user to organization messages', () => {
@@ -81,7 +80,7 @@ describe('Notifications - user to organization messages', () => {
   test("User 'A' sends message to Organization(both admins ORGANIZATION_MESSAGE:true) (3 admins) - 4 messages are sent", async () => {
     // Act
     await sendMessageToOrganization(
-      entitiesId.organization.id,
+      baseScenario.organization.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -122,7 +121,7 @@ describe('Notifications - user to organization messages', () => {
     );
     // Act
     await sendMessageToOrganization(
-      entitiesId.organization.id,
+      baseScenario.organization.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -159,13 +158,10 @@ describe('Notifications - user to organization messages', () => {
       PreferenceType.NotificationOrganizationMessage,
       'true'
     );
-    await updateUserSettingCommunicationMessage(
-      users.spaceAdmin.id,
-      false
-    );
+    await updateUserSettingCommunicationMessage(users.spaceAdmin.id, false);
     // Act
     await sendMessageToOrganization(
-      entitiesId.organization.id,
+      baseScenario.organization.id,
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );

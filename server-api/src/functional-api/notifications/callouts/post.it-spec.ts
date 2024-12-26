@@ -1,30 +1,21 @@
-import { UniqueIDGenerator } from '@utils/uniqueId';
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails } from '@utils/mailslurper.rest.requests';
-import { deleteSpace } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import {
   createPostOnCallout,
   deletePost,
 } from '@functional-api/callout/post/post.request.params';
 import { users } from '@utils/queries/users-data';
-import {
-  createSubspaceWithUsers,
-  createSubsubspaceWithUsers,
-  createOrgAndSpaceWithUsers,
-} from '@utils/data-setup/entities';
-import { entitiesId, getMailsData } from '@src/types/entities-helper';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
+import { getMailsData } from '@src/types/entities-helper';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { TestScenarioFactory } from '@src/models/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/models/types/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/models/test-scenario-config';
 
-const organizationName = 'not-up-org-name' + uniqueId;
-const hostNameId = 'not-up-org-nameid' + uniqueId;
-const spaceName = 'not-up-eco-name' + uniqueId;
-const spaceNameId = 'not-up-eco-nameid' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `opName${uniqueId}`;
+const uniqueId = UniqueIDGenerator.getID();
+
 let spacePostId = '';
 let subspacePostId = '';
 let subsubspacePostId = '';
@@ -49,17 +40,43 @@ const templateMemberResult = async (entityName: string, userEmail: string) => {
   ]);
 };
 
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'notifications-posts',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addAdmin: true,
+        addMembers: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: {
+          addAdmin: true,
+          addMembers: true,
+        },
+      },
+    },
+  },
+};
+
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  await createOrgAndSpaceWithUsers(
-    organizationName,
-    hostNameId,
-    spaceName,
-    spaceNameId
-  );
-  await createSubspaceWithUsers(subspaceName);
-  await createSubsubspaceWithUsers(subsubspaceName);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesConfig = [
     {
@@ -134,10 +151,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await deleteSpace(entitiesId.subsubspace.id);
-  await deleteSpace(entitiesId.subspace.id);
-  await deleteSpace(entitiesId.spaceId);
-  await deleteOrganization(entitiesId.organization.id);
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
 describe('Notifications - post', () => {
@@ -197,12 +211,12 @@ describe('Notifications - post', () => {
 
   //ToDo: fix test
   test.skip('GA create space post - GA(1), HA (2), HM(6) get notifications', async () => {
-    const postSubjectAdmin = `${spaceName}: New Post created by admin`;
-    const postSubjectMember = `${spaceName}: New Post created by admin, have a look!`;
+    const postSubjectAdmin = `${baseScenario.space.profile.displayName}: New Post created by admin`;
+    const postSubjectMember = `${baseScenario.space.profile.displayName}: New Post created by admin, have a look!`;
 
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.space.calloutId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.GLOBAL_ADMIN
@@ -252,11 +266,11 @@ describe('Notifications - post', () => {
   });
 
   test('HA create space post - GA(1), HA (1), HM(6) get notifications', async () => {
-    const postSubjectAdmin = `${spaceName}: New Post created by space`;
-    const postSubjectMember = `${spaceName}: New Post created by space, have a look!`;
+    const postSubjectAdmin = `${baseScenario.space.profile.displayName}: New Post created by space`;
+    const postSubjectMember = `${baseScenario.space.profile.displayName}: New Post created by space, have a look!`;
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.space.calloutId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SPACE_ADMIN
@@ -308,11 +322,11 @@ describe('Notifications - post', () => {
   });
 
   test('HA create subspace post - GA(1), HA (1), CA(1), CM(3),  get notifications', async () => {
-    const postSubjectAdmin = `${subspaceName}: New Post created by space`;
-    const postSubjectMember = `${subspaceName}: New Post created by space, have a look!`;
+    const postSubjectAdmin = `${baseScenario.subspace.profile.displayName}: New Post created by space`;
+    const postSubjectMember = `${baseScenario.subspace.profile.displayName}: New Post created by space, have a look!`;
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.subspace.calloutId,
+      baseScenario.subspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SPACE_ADMIN
@@ -365,11 +379,11 @@ describe('Notifications - post', () => {
   });
 
   test('OM create subsubspace post - HA(2), CA(1), OA(2), OM(4), get notifications', async () => {
-    const postSubjectAdmin = `${subsubspaceName}: New Post created by subsubspace`;
-    const postSubjectMember = `${subsubspaceName}: New Post created by subsubspace, have a look!`;
+    const postSubjectAdmin = `${baseScenario.subsubspace.profile.displayName}: New Post created by subsubspace`;
+    const postSubjectMember = `${baseScenario.subsubspace.profile.displayName}: New Post created by subsubspace, have a look!`;
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.subsubspace.calloutId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SUBSUBSPACE_MEMBER
@@ -445,7 +459,7 @@ describe('Notifications - post', () => {
     );
     // Act
     const resPostonSpace = await createPostOnCallout(
-      entitiesId.subsubspace.calloutId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SUBSUBSPACE_ADMIN
