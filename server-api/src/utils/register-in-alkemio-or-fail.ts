@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { getUserToken } from './get-user-token';
-
-const SERVER_URL = process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found';
+import { testConfiguration } from '@src/config/test.configuration';
 
 export const registerInAlkemioOrFail = async (
   firstName: string,
@@ -57,7 +56,7 @@ export const createUserNewRegistration = async (
 
   const userToken = await getUserToken(userEmail);
 
-  return await request(SERVER_URL)
+  return await request(testConfiguration.endPoints.graphql.private)
     .post('')
     .send({ ...requestParams })
     .set('Accept', 'application/json')

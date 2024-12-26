@@ -1,15 +1,14 @@
 // This is critical to be able to use TypeScript aliases in Jest tests
 require('tsconfig-paths/register');
-import { config } from 'dotenv';
 import { UiText } from '@ory/kratos-client';
 import { TestUser } from '@alkemio/tests-lib';
 import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
 import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
-
-config({ path: '.env' });
+import { testConfiguration } from './config/test.configuration';
 
 module.exports = async () => {
-  if (process.env.SKIP_USER_REGISTRATION === 'true') return;
+  if (!testConfiguration.registerUsers) return;
+
   // get all user names to register
   // exclude GLOBAL_ADMIN as he already is created and verified
   // and it's used to create the the users

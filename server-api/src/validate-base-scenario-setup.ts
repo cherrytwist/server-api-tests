@@ -3,6 +3,7 @@ require('tsconfig-paths/register');
 import { TestScenarioFactory } from './scenario/TestScenarioFactory';
 import { TestScenarioConfig } from './scenario/config/test-scenario-config';
 import { testConfiguration } from './config/test.configuration';
+import { stringifyConfig } from './config/create-config-using-envvars';
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'organization-settings',
@@ -12,7 +13,7 @@ const scenarioConfig: TestScenarioConfig = {
 
 const main = async () => {
   const testConfig = testConfiguration;
-  console.log(`Test config: ${JSON.stringify(testConfig, null, 2)}`);
+  console.log(`Test config: ${stringifyConfig(testConfig)}`);
 
   const baseScenario =
     await TestScenarioFactory.createBaseScenario(scenarioConfig);

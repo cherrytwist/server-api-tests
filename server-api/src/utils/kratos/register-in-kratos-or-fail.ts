@@ -23,7 +23,6 @@ export const registerInKratosOrFail = async (
   lastName: string,
   email: string
 ) => {
-  const PASSWORD = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
 
   const kratosConfig = new Configuration({
     basePath: testConfiguration.endPoints.kratos.public,
@@ -46,7 +45,7 @@ export const registerInKratosOrFail = async (
     flow: flowId,
     updateRegistrationFlowBody: {
       method: 'password',
-      password: PASSWORD,
+      password: testConfiguration.identities.admin.password,
       traits: {
         email: email,
         accepted_terms: true,

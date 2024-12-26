@@ -1,8 +1,7 @@
 import request from 'supertest';
 import { TestUtil } from './test.util';
 import { TestUser } from '@alkemio/tests-lib';
-
-const environment = process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found';
+import { testConfiguration } from '@src/config/test.configuration';
 
 // ToDo
 // Add support for connection to the DB and drop/populate DB
@@ -16,7 +15,7 @@ const environment = process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found';
  * @api public
  */
 export const graphqlRequest = async (requestParams: any) => {
-  return await request(environment)
+  return await request(testConfiguration.endPoints.graphql.private)
     .post('')
     .send({ ...requestParams })
     .set('Accept', 'application/json');
@@ -42,7 +41,7 @@ export const graphqlRequestAuth = async (
     else auth_token = res as string;
   }
 
-  return await request(environment)
+  return await request(testConfiguration.endPoints.graphql.private)
     .post('')
     .send({ ...requestParams })
     .set('Accept', 'application/json')

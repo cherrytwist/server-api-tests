@@ -1,12 +1,10 @@
+import { testConfiguration } from '@src/config/test.configuration';
 import { registerInKratosOrFail, verifyInKratosOrFail } from './kratos';
 import { registerInAlkemioOrFail } from './register-in-alkemio-or-fail';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
 
-const uniqueId = UniqueIDGenerator.getID();
-
-const email = process.env.USER_EMAIL || `default${uniqueId}@alkem.io`;
-const firstName = process.env.USER_FIRST_NAME || 'fn';
-const lastName = process.env.USER_LAST_NAME || 'ln';
+const email = testConfiguration.identities.user.email;
+const firstName = testConfiguration.identities.user.firstName;
+const lastName = testConfiguration.identities.user.lastName;
 
 const main = async () => {
   await registerInKratosOrFail(firstName, lastName, email);

@@ -14,6 +14,7 @@ import { PreferenceType } from '@generated/graphql';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { testConfiguration } from '@src/config/test.configuration';
 
 const uniqueId = UniqueIDGenerator.getID();
 let postCommentsIdSpace = '';
@@ -22,7 +23,7 @@ const receivers = (senderDisplayName: string, orgDisplayName: string) => {
   return `${senderDisplayName} mentioned ${orgDisplayName} in a comment on Alkemio`;
 };
 
-const baseUrl = process.env.ALKEMIO_BASE_URL + '/organization';
+const baseUrl = testConfiguration.endPoints.server + '/organization';
 
 const mentionedOrganization = (userDisplayName: string, userNameId: string) => {
   return `[@${userDisplayName}](${baseUrl}/${userNameId})`;

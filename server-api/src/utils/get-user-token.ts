@@ -1,8 +1,9 @@
 import { AlkemioClient } from '@alkemio/client-lib';
+import { testConfiguration } from '@src/config/test.configuration';
 
-const PASSWORD = process.env.AUTH_TEST_HARNESS_PASSWORD || '';
+
 export const getUserToken = async (userEmail: string) => {
-  const server = process.env.ALKEMIO_SERVER || '';
+  const server = testConfiguration.endPoints.graphql.private;
 
   if (!server) {
     throw new Error('server url not provided');
@@ -13,7 +14,7 @@ export const getUserToken = async (userEmail: string) => {
     authInfo: {
       credentials: {
         email: userEmail,
-        password: PASSWORD,
+        password: testConfiguration.identities.admin.password,
       },
     },
   };

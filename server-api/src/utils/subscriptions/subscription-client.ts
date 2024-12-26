@@ -2,8 +2,7 @@ import { Client, createClient, SubscribePayload } from 'graphql-ws';
 import { GraphQLError } from 'graphql';
 import { TestUser } from '@alkemio/tests-lib';
 import { buildConnectionParams } from './build-connection-params';
-
-const SERVER_URL_WS = process.env.ALKEMIO_SERVER_WS ?? '';
+import { testConfiguration } from '@src/config/test.configuration';
 
 type SubscriptionCleanUpFn = () => void;
 export type SubscriptionMessage = Record<string, unknown> | null | undefined;
@@ -26,7 +25,7 @@ export class SubscriptionClient {
   public subscribe(payload: SubscribePayload, user: TestUser): Promise<void> {
     return new Promise<void>((res, rej) => {
       this.client = createClient({
-        url: SERVER_URL_WS,
+        url: testConfiguration.endPoints.ws,
         webSocketImpl: WebSocket,
         connectionParams: async () => await buildConnectionParams(user),
       });

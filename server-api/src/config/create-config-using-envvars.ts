@@ -15,17 +15,15 @@ export const createConfigUsingEnvVars = (): AlkemioTestConfig => {
     registerUsers: registerUsers,
     endPoints: {
       graphql: {
-        private: process.env.API_ENDPOINT_PRIVATE_GRAPHQL ||
-        'http://localhost:3000/api/private/non-interactive/graphql',
-        public: process.env.API_ENDPOINT_PUBLIC_GRAPHQL || '',
+        private:
+          process.env.ALKEMIO_SERVER ||
+          'http://localhost:3000/api/private/non-interactive/graphql',
       },
-      server: process.env.ALKEMIO_SERVER_URL ?? 'serverURL not found',
-      cluster: {
-        http: process.env.ALKEMIO_BASE_URL ?? 'http://localhost:3000',
-        ws: process.env.ALKEMIO_SERVER_WS ?? 'ws://localhost:3000/graphql',
-        rest: process.env.ALKEMIO_SERVER_REST ?? 'http://localhost:3000/rest',
-      },
-      mailSlurper:  process.env.MAIL_SLURPER_ENDPOINT || 'http://localhost:4437/mail',
+      server: process.env.ALKEMIO_BASE_URL ?? 'http://localhost:3000',
+      ws: process.env.ALKEMIO_SERVER_WS ?? 'ws://localhost:3000/graphql',
+      rest: process.env.ALKEMIO_SERVER_REST ?? 'http://localhost:3000/rest',
+      mailSlurper:
+        process.env.MAIL_SLURPER_ENDPOINT || 'http://localhost:4437/mail',
       kratos: {
         public: process.env.KRATOS_PUBLIC_API_URL ?? 'http://localhost:4434',
         private: process.env.KRATOS_PRIVATE_API_URL ?? 'http://localhost:4434',
@@ -44,4 +42,13 @@ export const createConfigUsingEnvVars = (): AlkemioTestConfig => {
     },
   };
   return config;
-}
+};
+
+export const stringifyConfig = (config: AlkemioTestConfig): string => {
+  const fieldsToMask = ['password'];
+  return JSON.stringify(
+    config,
+    (key, value) => (fieldsToMask.includes(key) ? `**${value.length}**` : value),
+    2 // Indentation for pretty output
+  );
+};
