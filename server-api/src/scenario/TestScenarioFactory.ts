@@ -24,16 +24,11 @@ import {
   TestScenarioConfig,
   TestScenarioSpaceConfig,
 } from './config/test-scenario-config';
-import {
-  assignPlatformRoleToUser,
-  assignUserAsGlobalCommunityAdmin,
-  assignUserAsGlobalSupport,
-} from '@functional-api/platform/authorization-platform-mutation';
 import { TestUserManager } from './TestUserManager';
+import { UserModel } from './models/UserModel';
+import { assignPlatformRoleToUser } from '@functional-api/platform/authorization-platform-mutation';
 
 export class TestScenarioFactory {
-
-
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
@@ -92,19 +87,30 @@ export class TestScenarioFactory {
   }
 
   private static async populateGlobalRoles(): Promise<void> {
-    // TODO: check the role already assigned to the user
-    await assignUserAsGlobalSupport(
-      TestUserManager.users.globalLicenseAdmin.id,
-      TestUser.GLOBAL_ADMIN
+    await this.checkAndAssignPlatformRoleToUser(
+      TestUserManager.users.globalLicenseAdmin,
+      PlatformRole.LicenseManager
     );
-    await assignUserAsGlobalCommunityAdmin(
-      TestUserManager.users.globalSupportAdmin.id,
-      TestUser.GLOBAL_ADMIN
+
+    await this.checkAndAssignPlatformRoleToUser(
+      TestUserManager.users.globalSupportAdmin,
+      PlatformRole.Support
     );
-    await assignPlatformRoleToUser(
-      TestUserManager.users.betaTester.id,
+
+    await this.checkAndAssignPlatformRoleToUser(
+      TestUserManager.users.betaTester,
       PlatformRole.BetaTester
     );
+  }
+
+  private static async checkAndAssignPlatformRoleToUser(
+    userModel: UserModel,
+    role: PlatformRole
+  ): Promise<void> {
+    const alreadyHasRole = userModel.platformRoles.includes(role);
+    if (!alreadyHasRole) {
+      await assignPlatformRoleToUser(userModel.id, role);
+    }
   }
 
   public static async cleanUpBaseScenario(
