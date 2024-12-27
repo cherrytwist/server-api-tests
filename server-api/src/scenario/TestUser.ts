@@ -12,7 +12,7 @@ export interface Users {
   subsubspaceAdmin: UserModel;
   subsubspaceMember: UserModel;
   qaUser: UserModel;
-  notificationsAdmin: UserModel;
+  // notificationsAdmin: UserModel;
   nonSpaceMember: UserModel;
   betaTester: UserModel;
 }

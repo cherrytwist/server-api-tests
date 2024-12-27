@@ -2,8 +2,8 @@ import { testConfiguration } from '@src/config/test.configuration';
 import { UserModel } from './models/UserModel';
 import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { getUserData } from './util/user.management';
 import { Users } from './TestUser';
+import { getGraphqlClient } from '@utils/graphqlClient';
 
 export class TestUserManager {
   private static userModelMapEmail: Map<string, UserModel>;
@@ -13,17 +13,19 @@ export class TestUserManager {
 
   public static async populateUserModelMap() {
     this.userModelMapEmail = new Map<string, UserModel>();
+    this.userModelMapType = new Map<string, UserModel>();
+
     for (const user of Object.keys(TestUser)) {
       const userValue = TestUser[user as keyof typeof TestUser];
       // Create a user model for each test user
       const email = this.buildIdentifier(userValue);
       const userModel = this.createUserModel(email, userValue);
 
-      // Populate the user model with details from the api
-      await this.populateUserModelFromApi(userModel);
-
       // Populate the authentication token for each user
       await this.populateUserAuthenticationToken(userModel);
+
+      // Populate the user model with details from the api
+      await this.populateUserModelFromApi(userModel);
 
       this.userModelMapEmail.set(userModel.email, userModel);
       this.userModelMapType.set(userModel.type, userModel);
@@ -58,8 +60,12 @@ export class TestUserManager {
       ),
       spaceAdmin: TestUserManager.getUserModelByEmail('space.admin@alkem.io'),
       spaceMember: TestUserManager.getUserModelByEmail('space.member@alkem.io'),
-      subspaceAdmin: TestUserManager.getUserModelByEmail('subspace.admin@alkem.io'),
-      subspaceMember: TestUserManager.getUserModelByEmail('subspace.member@alkem.io'),
+      subspaceAdmin: TestUserManager.getUserModelByEmail(
+        'subspace.admin@alkem.io'
+      ),
+      subspaceMember: TestUserManager.getUserModelByEmail(
+        'subspace.member@alkem.io'
+      ),
       subsubspaceAdmin: TestUserManager.getUserModelByEmail(
         'subsubspace.admin@alkem.io'
       ),
@@ -67,9 +73,9 @@ export class TestUserManager {
         'subsubspace.member@alkem.io'
       ),
       qaUser: TestUserManager.getUserModelByEmail('qa.user@alkem.io'),
-      notificationsAdmin: TestUserManager.getUserModelByEmail(
-        'notifications@alkem.io'
-      ),
+      // notificationsAdmin: TestUserManager.getUserModelByEmail(
+      //   'notifications@alkem.io'
+      // ),
       nonSpaceMember: TestUserManager.getUserModelByEmail('non.space@alkem.io'),
       betaTester: TestUserManager.getUserModelByEmail('beta.tester@alkem.io'),
     };
@@ -94,13 +100,29 @@ export class TestUserManager {
   private static async populateUserModelFromApi(
     userModel: UserModel
   ): Promise<void> {
-    const userData = await getUserData(userModel.email);
+    const userData = await this.getUserData(
+      userModel.email,
+      userModel.authToken
+    );
     userModel.displayName = userData?.data?.user.profile.displayName || '';
     userModel.id = userData?.data?.user.id || '';
     userModel.profileId = userData?.data?.user.profile.id || '';
     userModel.nameId = userData?.data?.user.nameID || '';
     userModel.agentId = userData?.data?.user.agent.id || '';
     userModel.accountId = userData?.data?.user?.account?.id || '';
+  }
+
+  private static async getUserData(email: string, authToken: string) {
+    const graphqlClient = getGraphqlClient();
+    const result = graphqlClient.getUserData(
+      {
+        userId: email,
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+    return result;
   }
 
   /**
