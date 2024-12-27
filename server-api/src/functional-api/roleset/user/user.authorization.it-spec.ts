@@ -1,4 +1,4 @@
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import {
   getRoleSetUserPrivilege,
   updateSpaceSettings,

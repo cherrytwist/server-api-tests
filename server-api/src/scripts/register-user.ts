@@ -1,6 +1,7 @@
 import { testConfiguration } from '@src/config/test.configuration';
-import { registerInKratosOrFail, verifyInKratosOrFail } from './kratos';
-import { registerInAlkemioOrFail } from './register-in-alkemio-or-fail';
+import { registerInAlkemioOrFail } from '../scenario/registration/register-in-alkemio-or-fail';
+import { registerInKratosOrFail } from '@src/scenario/registration/register-in-kratos-or-fail';
+import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-kratos-or-fail';
 
 const email = testConfiguration.identities.user.email;
 const firstName = testConfiguration.identities.user.firstName;

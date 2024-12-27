@@ -15,7 +15,7 @@ import {
   sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin,
   sorted__create_read_update_delete_grant_platformAdmin,
 } from '@common/constants/privileges';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { assignUserToOrganization } from '../../roleset/roles-request.params';
 import {

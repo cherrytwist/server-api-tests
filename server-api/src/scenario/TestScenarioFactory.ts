@@ -16,15 +16,21 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
 import { CalloutType, CommunityRoleType } from '@generated/graphql';
-import { CalloutVisibility } from '@generated/alkemio-schema';
+import { CalloutVisibility, PlatformRole } from '@generated/alkemio-schema';
 import { SpaceModel } from './models/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { users } from '@utils/queries/users-data';
+import { users, usersSetEmail } from '@src/scenario/TestUser';
 import {
   TestScenarioConfig,
   TestScenarioSpaceConfig,
 } from './config/test-scenario-config';
+import {
+  assignPlatformRoleToUser,
+  assignUserAsGlobalCommunityAdmin,
+  assignUserAsGlobalSupport,
+} from '@functional-api/platform/authorization-platform-mutation';
+import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
 
 export class TestScenarioFactory {
 
@@ -32,6 +38,7 @@ export class TestScenarioFactory {
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const scenarioName = scenarioConfig.name;
+    await this.populateGlobalRoles();
     const baseScenario = await this.createOrganization(scenarioName);
     if (!scenarioConfig.space) {
       // nothing more to do, return
@@ -82,6 +89,43 @@ export class TestScenarioFactory {
 
     return baseScenario;
   }
+
+  private static async populateGlobalRoles(): Promise<void> {
+    // Use a check on the global admin having the id set to determine if need to assign roles
+    if (users.globalAdmin.id.length > 0) {
+      return;
+    }
+    await this.populateGlobalUserInfo();
+    await assignUserAsGlobalSupport(
+      users.globalLicenseAdmin.id,
+      TestUser.GLOBAL_ADMIN
+    );
+    await assignUserAsGlobalCommunityAdmin(
+      users.globalSupportAdmin.id,
+      TestUser.GLOBAL_ADMIN
+    );
+    await assignPlatformRoleToUser(
+      users.betaTester.id,
+      PlatformRole.BetaTester
+    );
+  }
+
+  private static async populateGlobalUserInfo(): Promise<void> {
+    for (const user of usersSetEmail) {
+      const userData = await getUserData(user.email);
+      user.displayName = userData?.data?.user.profile.displayName || '';
+      user.id = userData?.data?.user.id || '';
+      user.profileId = userData?.data?.user.profile.id || '';
+      user.nameId = userData?.data?.user.nameID || '';
+      user.agentId = userData?.data?.user.agent.id || '';
+      user.accountId = userData?.data?.user?.account?.id || '';
+    }
+
+    // If necessary, this block can update the `users` object. However, since
+    // `users` is directly referencing `usersSetEmail`, it will automatically be updated.
+  }
+
+
 
   public static async cleanUpBaseScenario(
     baseScenario: OrganizationWithSpaceModel
@@ -135,12 +179,19 @@ export class TestScenarioFactory {
     const orgName = `${truncatedScenarioName}-${uniqueId}`;
     const orgNameId = this.validateAndClean(`${orgName}`);
     if (!orgNameId) {
-      throw new Error(`Unable to create organization: Invalid hostNameId: ${orgNameId}`);
+      throw new Error(
+        `Unable to create organization: Invalid hostNameId: ${orgNameId}`
+      );
     }
-    const responseOrg = await createOrganization(orgName, orgNameId.toLowerCase().slice(0, 24));
+    const responseOrg = await createOrganization(
+      orgName,
+      orgNameId.toLowerCase().slice(0, 24)
+    );
 
     if (!responseOrg.data?.createOrganization) {
-      throw new Error(`Failed to create organization: ${JSON.stringify(responseOrg.error)}`);
+      throw new Error(
+        `Failed to create organization: ${JSON.stringify(responseOrg.error)}`
+      );
     }
 
     model.organization.id = responseOrg.data?.createOrganization.id ?? '';
@@ -160,13 +211,13 @@ export class TestScenarioFactory {
 
   private static validateAndClean(input: string): string | null {
     // Remove all spaces from the string
-    const cleaned = input.replace(/\s+/g, "");
+    const cleaned = input.replace(/\s+/g, '');
 
     // Validate that the string contains only letters, numbers, and "-"
     const isValid = /^[a-zA-Z0-9-]+$/.test(cleaned);
 
     return isValid ? cleaned : null;
-}
+  }
 
   private static async createRootSpace(
     spaceModel: SpaceModel,
@@ -188,7 +239,9 @@ export class TestScenarioFactory {
     );
 
     if (!responseRootSpace.data?.space) {
-      throw new Error(`Failed to create root space: ${JSON.stringify(responseRootSpace.error)}`);
+      throw new Error(
+        `Failed to create root space: ${JSON.stringify(responseRootSpace.error)}`
+      );
     }
 
     const spaceData = responseRootSpace.data?.space;
@@ -384,6 +437,4 @@ export class TestScenarioFactory {
       templateSetId: '',
     };
   }
-
-
 }

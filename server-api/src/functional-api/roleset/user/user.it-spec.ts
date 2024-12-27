@@ -3,7 +3,7 @@ import {
   getRoleSetUsersInMemberRole,
   getRoleSetMembersList,
 } from '../roleset.request.params';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { assignRoleToUser, removeRoleFromUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';

@@ -8,7 +8,7 @@ import {
   getPostData,
 } from './post.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,

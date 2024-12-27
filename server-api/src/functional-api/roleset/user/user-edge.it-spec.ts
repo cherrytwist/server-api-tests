@@ -1,4 +1,4 @@
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import { removeRoleFromUser, assignRoleToUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/alkemio-schema';

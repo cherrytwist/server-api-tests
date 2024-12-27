@@ -1,6 +1,6 @@
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   createDiscussion,

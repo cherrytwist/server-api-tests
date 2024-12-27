@@ -3,7 +3,7 @@ import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.re
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { PreferenceType } from '@generated/alkemio-schema';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';

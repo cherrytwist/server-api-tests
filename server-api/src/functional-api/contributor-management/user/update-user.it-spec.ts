@@ -7,7 +7,7 @@ import {
   updateUser,
 } from './user.request.params';
 import '@utils/array.matcher';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 

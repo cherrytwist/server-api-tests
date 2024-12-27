@@ -9,7 +9,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,

@@ -2,10 +2,10 @@ import {
   createUser,
   deleteUser,
   getUserData,
-  registerVerifiedUser,
 } from './user.request.params';
 import '@utils/array.matcher';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';

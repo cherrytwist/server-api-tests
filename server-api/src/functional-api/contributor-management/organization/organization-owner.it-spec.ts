@@ -3,7 +3,7 @@ import {
   createOrganization,
   deleteOrganization,
 } from '../organization/organization.request.params';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { assignUserAsOrganizationOwner, removeUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();

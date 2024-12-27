@@ -15,7 +15,7 @@ import {
   getSpaceData,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { readPrivilege } from '@common/constants/privileges';
 import {
   removeRoleFromUser,
@@ -29,7 +29,7 @@ import {
 import { deleteUser } from '../../contributor-management/user/user.request.params';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';

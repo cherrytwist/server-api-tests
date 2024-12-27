@@ -4,10 +4,11 @@ import { TestScenarioFactory } from '../scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '../scenario/config/test-scenario-config';
 import { testConfiguration } from '../config/test.configuration';
 import { stringifyConfig } from '../config/create-config-using-envvars';
-import { registerInKratosOrFail, verifyInKratosOrFail } from '@utils/kratos';
-import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
 import { UiText } from '@ory/kratos-client';
 import { TestUser } from '@alkemio/tests-lib';
+import { registerInKratosOrFail } from '@src/scenario/registration/register-in-kratos-or-fail';
+import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-kratos-or-fail';
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'organization-settings',

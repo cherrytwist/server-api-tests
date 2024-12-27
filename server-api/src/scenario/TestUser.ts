@@ -1,36 +1,23 @@
-import { TestUser } from '@alkemio/tests-lib';
 
-import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
-import { assignPlatformRoleToUser, assignUserAsGlobalCommunityAdmin, assignUserAsGlobalSupport } from '@functional-api/platform/authorization-platform-mutation';
-import { PlatformRole } from '@generated/graphql';
-
-interface UserData {
-  email: string;
-  id: string;
-  displayName: string;
-  profileId: string;
-  nameId: string;
-  agentId: string;
-  accountId: string;
-}
+import { UserModel } from './models/UserModel';
 
 interface Users {
-  globalAdmin: UserData;
-  globalSupportAdmin: UserData;
-  globalLicenseAdmin: UserData;
-  spaceAdmin: UserData;
-  spaceMember: UserData;
-  subspaceAdmin: UserData;
-  subspaceMember: UserData;
-  subsubspaceAdmin: UserData;
-  subsubspaceMember: UserData;
-  qaUser: UserData;
-  notificationsAdmin: UserData;
-  nonSpaceMember: UserData;
-  betaTester: UserData;
+  globalAdmin: UserModel;
+  globalSupportAdmin: UserModel;
+  globalLicenseAdmin: UserModel;
+  spaceAdmin: UserModel;
+  spaceMember: UserModel;
+  subspaceAdmin: UserModel;
+  subspaceMember: UserModel;
+  subsubspaceAdmin: UserModel;
+  subsubspaceMember: UserModel;
+  qaUser: UserModel;
+  notificationsAdmin: UserModel;
+  nonSpaceMember: UserModel;
+  betaTester: UserModel;
 }
 
-const createUserData = (email: string): UserData => ({
+const createUserData = (email: string): UserModel => ({
   email,
   id: '',
   displayName: '',
@@ -38,9 +25,10 @@ const createUserData = (email: string): UserData => ({
   nameId: '',
   agentId: '',
   accountId: '',
+  authToken: '',
 });
 
-const usersSetEmail: UserData[] = [
+export const usersSetEmail: UserModel[] = [
   createUserData('admin@alkem.io'),
   createUserData('global.support@alkem.io'),
   createUserData('global.license@alkem.io'),
@@ -71,5 +59,8 @@ export const users: Users = {
   nonSpaceMember: usersSetEmail[11],
   betaTester: usersSetEmail[12],
 };
+
+
+
 
 

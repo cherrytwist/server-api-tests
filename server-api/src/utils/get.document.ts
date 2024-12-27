@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { TestUtil } from './test.util';
+import { TestUtil } from '../scenario/test.util';
 import { TestUser } from '@alkemio/tests-lib';
 import { testConfiguration } from '@src/config/test.configuration';
 

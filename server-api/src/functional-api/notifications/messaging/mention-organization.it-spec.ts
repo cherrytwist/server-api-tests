@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { users } from '../../../utils/queries/users-data';
+import { users } from '../../../scenario/TestUser';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';

@@ -5,7 +5,7 @@ import {
   deleteSpace,
   getSpaceData,
 } from '@functional-api/journey/space/space.request.params';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 

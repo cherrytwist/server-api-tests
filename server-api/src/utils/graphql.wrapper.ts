@@ -1,6 +1,6 @@
 //import * as Dom from 'graphql-request/dist/types.dom';
 import { TestUser } from '@alkemio/tests-lib';
-import { getTestUserToken } from './getTestUserToken';
+import { getTestUserToken } from '../scenario/getTestUserToken';
 import Headers from 'graphql-request';
 
 export type ErrorType = {
@@ -38,14 +38,18 @@ export const graphqlErrorWrapper = async <TData>(
   } catch (error) {
     const err = error as ErrorType;
     if (!err.response || !err.response.errors) {
-      console.error(err);
       console.error(`Unable to complete call '${fn}'`);
+      console.error(`Returned error:`);
+      console.error(err);
       return {
         error: {
           errors: [{ message: 'Unable to complete call', code: 'UNKNOWN' }],
         },
       };
     } else {
+      for (const error of err.response.errors) {
+        console.error(`Error received: [${error.extensions.code}] - ${error.message}`);
+      }
       const badErrors = err.response.errors.filter(
         e => e.extensions.code !== 'BAD_USER_INPUT'
       );

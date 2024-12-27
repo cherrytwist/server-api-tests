@@ -1,5 +1,5 @@
 import { TestUser } from "@alkemio/tests-lib";
-import { TestUtil } from "@utils/test.util";
+import { TestUtil } from "@src/scenario/test.util";
 
 export const buildConnectionParams = async (user: TestUser) => {
   const token = (await TestUtil.Instance()).userTokenMap.get(user);

@@ -1,13 +1,14 @@
-import { registerInKratosOrFail } from '@utils/kratos/register-in-kratos-or-fail';
-import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { registerInKratosOrFail } from '@src/scenario/registration/register-in-kratos-or-fail';
+import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { PreferenceType } from '@generated/graphql';
 import { UpdateUserSettingsEntityInput } from '@generated/alkemio-schema';
-import { verifyInKratosOrFail } from '@utils/kratos';
+import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-kratos-or-fail';
+
+const uniqueId = UniqueIDGenerator.getID();
 
 export const registerVerifiedUser = async (
   email: string,

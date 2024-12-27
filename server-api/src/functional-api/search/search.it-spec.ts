@@ -2,7 +2,7 @@ import { updateUser } from '@functional-api/contributor-management/user/user.req
 import { TestUser } from '@alkemio/tests-lib';
 import '@utils/array.matcher';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { users } from '@src/scenario/TestUser';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { updateSubsubspaceLocation } from '../journey/subsubspace/subsubspace.request.params';
 import {

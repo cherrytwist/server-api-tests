@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
-import { users } from '../../../utils/queries/users-data';
+import { users } from '../../../scenario/TestUser';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
 import {
   removeRoleFromUser,
