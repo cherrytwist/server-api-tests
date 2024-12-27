@@ -4,6 +4,7 @@ import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserModels } from './models/TestUserModels';
 import { getGraphqlClient } from '@utils/graphqlClient';
+import { logElapsedTime } from '@utils/profiling';
 
 export class TestUserManager {
   private static userModelMapEmail: Map<string, UserModel>;
@@ -12,6 +13,8 @@ export class TestUserManager {
   public static users: TestUserModels;
 
   public static async populateUserModelMap() {
+    const start = performance.now();
+
     this.userModelMapEmail = new Map<string, UserModel>();
     this.userModelMapType = new Map<string, UserModel>();
 
@@ -32,6 +35,8 @@ export class TestUserManager {
     }
     // Finally ensure the exposed users field is populated
     this.populateUsers();
+
+    logElapsedTime('populateUserModels', start);
   }
 
   private static createUserModel(email: string, testUser: TestUser): UserModel {

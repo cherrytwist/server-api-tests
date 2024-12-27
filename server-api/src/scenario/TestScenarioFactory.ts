@@ -27,9 +27,21 @@ import {
 import { TestUserManager } from './TestUserManager';
 import { UserModel } from './models/UserModel';
 import { assignPlatformRoleToUser } from '@functional-api/platform/authorization-platform-mutation';
+import { logElapsedTime } from '@utils/profiling';
 
 export class TestScenarioFactory {
+
   public static async createBaseScenario(
+    scenarioConfig: TestScenarioConfig
+  ): Promise<OrganizationWithSpaceModel> {
+    const start = performance.now();
+    const result = await this.createBaseScenarioPrivate(scenarioConfig);
+    logElapsedTime('createBaseScenario', start);
+    return result;
+
+  }
+
+  public static async createBaseScenarioPrivate(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const scenarioName = scenarioConfig.name;
