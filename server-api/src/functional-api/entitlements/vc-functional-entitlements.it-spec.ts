@@ -32,9 +32,9 @@ import {
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 import { PlatformRole } from '@generated/graphql';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
+;
 const uniqueId = UniqueIDGenerator.getID();
-import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
 
 const spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;

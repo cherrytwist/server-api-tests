@@ -1,0 +1,22 @@
+query getMyUserInfo {
+  me {
+    user {
+      id
+      nameID
+      email
+      profile {
+        id
+        displayName
+      }
+      agent {
+        id
+      }
+      account {
+        id
+      }
+    }
+  }
+  platform {
+    myRoles
+  }
+}

@@ -26,7 +26,6 @@ export const assignPlatformRoleToUser = async (
 export const removePlatformRoleFromUser = async (
   userID: string,
   platformRole: PlatformRole,
-
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -43,113 +42,6 @@ export const removePlatformRoleFromUser = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const assignUserAsGlobalCommunityAdmin = async (
-  userID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.assignPlatformRoleToUser(
-      {
-        input: { userID, role: PlatformRole.CommunityReader },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const removeUserAsGlobalCommunityAdmin = async (
-  userID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.removePlatformRoleFromUser(
-      {
-        input: { userID, role: PlatformRole.CommunityReader },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const assignUserAsGlobalSupport = async (
-  userID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.assignPlatformRoleToUser(
-      {
-        input: { userID, role: PlatformRole.Support },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const removeUserAsGlobalSupport = async (
-  userID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.removePlatformRoleFromUser(
-      {
-        input: { userID, role: PlatformRole.Support },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const assignUserAsGlobalAdmin = async (
-  userID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.assignPlatformRoleToUser(
-      {
-        input: { userID, role: PlatformRole.GlobalAdmin },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
-
-export const removeUserAsGlobalAdmin = async (
-  userID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.removePlatformRoleFromUser(
-      {
-        input: { userID, role: PlatformRole.GlobalAdmin },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, userRole);
-};
 
 export const authorizationPolicyResetOnPlatform = async (
   userRole: TestUser = TestUser.GLOBAL_ADMIN

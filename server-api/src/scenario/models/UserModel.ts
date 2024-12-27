@@ -10,4 +10,5 @@ export type UserModel = {
   accountId: string;
   authToken: string;
   type: TestUser;
+  platformRoles: string[];
 };

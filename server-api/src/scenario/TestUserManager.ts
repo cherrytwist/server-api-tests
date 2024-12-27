@@ -4,6 +4,7 @@ import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserModels } from './models/TestUserModels';
 import { getGraphqlClient } from '@utils/graphqlClient';
+import { logElapsedTime } from '@utils/profiling';
 
 export class TestUserManager {
   private static userModelMapEmail: Map<string, UserModel>;
@@ -12,6 +13,8 @@ export class TestUserManager {
   public static users: TestUserModels;
 
   public static async populateUserModelMap() {
+    const start = performance.now();
+
     this.userModelMapEmail = new Map<string, UserModel>();
     this.userModelMapType = new Map<string, UserModel>();
 
@@ -32,6 +35,8 @@ export class TestUserManager {
     }
     // Finally ensure the exposed users field is populated
     this.populateUsers();
+
+    logElapsedTime('populateUserModels', start);
   }
 
   private static createUserModel(email: string, testUser: TestUser): UserModel {
@@ -45,6 +50,7 @@ export class TestUserManager {
       accountId: '',
       authToken: '',
       type: testUser,
+      platformRoles: [],
     };
     return result;
   }
@@ -74,7 +80,7 @@ export class TestUserManager {
       ),
       qaUser: TestUserManager.getUserModelByEmail('qa.user@alkem.io'),
       notificationsAdmin: TestUserManager.getUserModelByEmail(
-        'notifications@alkem.io'
+        'subspace.member@alkem.io' // TODO: notifications seems to not be properly setup
       ),
       nonSpaceMember: TestUserManager.getUserModelByEmail('non.space@alkem.io'),
       betaTester: TestUserManager.getUserModelByEmail('beta.tester@alkem.io'),
@@ -101,22 +107,24 @@ export class TestUserManager {
     userModel: UserModel
   ): Promise<void> {
     const userData = await this.getUserData(
-      userModel.email,
       userModel.authToken
     );
-    userModel.displayName = userData?.data?.user.profile.displayName || '';
-    userModel.id = userData?.data?.user.id || '';
-    userModel.profileId = userData?.data?.user.profile.id || '';
-    userModel.nameId = userData?.data?.user.nameID || '';
-    userModel.agentId = userData?.data?.user.agent.id || '';
-    userModel.accountId = userData?.data?.user?.account?.id || '';
+    const userInfo = userData?.data?.me.user;
+    userModel.displayName = userInfo?.profile.displayName || '';
+    userModel.id = userInfo?.id || '';
+    userModel.profileId = userInfo?.profile.id || '';
+    userModel.nameId = userInfo?.nameID || '';
+    userModel.agentId = userInfo?.agent.id || '';
+    userModel.accountId = userInfo?.account?.id || '';
+
+    const platformRoles = userData?.data?.platform?.myRoles || [];
+    userModel.platformRoles = platformRoles;
   }
 
-  private static async getUserData(email: string, authToken: string) {
+  private static async getUserData(authToken: string) {
     const graphqlClient = getGraphqlClient();
-    const result = graphqlClient.getUserData(
+    const result = graphqlClient.getMyUserInfo(
       {
-        userId: email,
       },
       {
         authorization: `Bearer ${authToken}`,
