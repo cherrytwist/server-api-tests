@@ -7,7 +7,7 @@ import {
   getCollaborationCalloutsData,
 } from '@functional-api/callout/callouts.request.params';
 import { delay } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { TestScenarioFactory } from './TestScenarioFactory';
 
 export class TestSetupUtils {

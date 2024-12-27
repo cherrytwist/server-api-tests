@@ -1,4 +1,4 @@
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { getRoleSetMembersList } from '../roleset.request.params';
 import { removeRoleFromUser, assignRoleToUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/alkemio-schema';

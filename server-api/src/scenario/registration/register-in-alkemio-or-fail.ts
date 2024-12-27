@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { getUserToken } from '../get-user-token';
+import { getUserToken } from './get-user-token';
 import { testConfiguration } from '@src/config/test.configuration';
 
 export const registerInAlkemioOrFail = async (

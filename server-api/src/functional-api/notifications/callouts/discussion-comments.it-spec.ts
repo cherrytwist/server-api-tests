@@ -2,7 +2,7 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';

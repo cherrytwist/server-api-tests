@@ -5,7 +5,7 @@ import { assignUserAsOrganizationOwner } from './organization-authorization-muta
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 const domain = 'alkem.io';
 

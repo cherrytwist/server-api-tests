@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { TestUser } from '@alkemio/tests-lib';
 import { testConfiguration } from '@src/config/test.configuration';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 // ToDo
 // Add support for connection to the DB and drop/populate DB

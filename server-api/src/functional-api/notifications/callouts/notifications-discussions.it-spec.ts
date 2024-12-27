@@ -3,7 +3,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { deleteUser } from '@functional-api/contributor-management/user/user.request.params';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   createDiscussion,
   sendMessageToRoom,

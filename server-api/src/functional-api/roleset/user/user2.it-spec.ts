@@ -1,5 +1,5 @@
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   createSpaceAndGetData,
   deleteSpace,

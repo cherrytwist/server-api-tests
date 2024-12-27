@@ -4,7 +4,7 @@ import {
 } from '@functional-api/contributor-management/user/user.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { delay } from '@alkemio/tests-lib';

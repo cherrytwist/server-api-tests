@@ -1,5 +1,5 @@
 import { TestUser } from "@alkemio/tests-lib";
-import { TestUserManager } from "@src/scenario/test.user.manager";
+import { TestUserManager } from "@src/scenario/TestUserManager";
 
 export const buildConnectionParams = async (user: TestUser) => {
   const testUserModel = TestUserManager.getUserModelByType(user);

@@ -29,7 +29,7 @@ import {
   assignUserAsGlobalCommunityAdmin,
   assignUserAsGlobalSupport,
 } from '@functional-api/platform/authorization-platform-mutation';
-import { TestUserManager } from './test.user.manager';
+import { TestUserManager } from './TestUserManager';
 
 export class TestScenarioFactory {
 

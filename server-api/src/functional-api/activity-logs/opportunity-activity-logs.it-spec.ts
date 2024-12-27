@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { TestUser } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CalloutState,
   CalloutType,

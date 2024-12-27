@@ -2,14 +2,14 @@ import { testConfiguration } from '@src/config/test.configuration';
 import { UserModel } from './models/UserModel';
 import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { Users } from './TestUser';
+import { TestUserModels } from './models/TestUserModels';
 import { getGraphqlClient } from '@utils/graphqlClient';
 
 export class TestUserManager {
   private static userModelMapEmail: Map<string, UserModel>;
   private static userModelMapType: Map<string, UserModel>;
 
-  public static users: Users;
+  public static users: TestUserModels;
 
   public static async populateUserModelMap() {
     this.userModelMapEmail = new Map<string, UserModel>();
@@ -73,9 +73,9 @@ export class TestUserManager {
         'subsubspace.member@alkem.io'
       ),
       qaUser: TestUserManager.getUserModelByEmail('qa.user@alkem.io'),
-      // notificationsAdmin: TestUserManager.getUserModelByEmail(
-      //   'notifications@alkem.io'
-      // ),
+      notificationsAdmin: TestUserManager.getUserModelByEmail(
+        'notifications@alkem.io'
+      ),
       nonSpaceMember: TestUserManager.getUserModelByEmail('non.space@alkem.io'),
       betaTester: TestUserManager.getUserModelByEmail('beta.tester@alkem.io'),
     };

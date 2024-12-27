@@ -13,7 +13,7 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,

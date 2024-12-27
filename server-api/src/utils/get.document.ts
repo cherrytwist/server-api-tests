@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { TestUser } from '@alkemio/tests-lib';
 import { testConfiguration } from '@src/config/test.configuration';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 export const getDocument = (documentId: string) => {
   return request(buildDocumentUrl(documentId)).get('');

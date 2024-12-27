@@ -3,7 +3,7 @@ import { delay, TestUser } from '@alkemio/tests-lib';
 import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
 import {
   removeRoleFromUser,

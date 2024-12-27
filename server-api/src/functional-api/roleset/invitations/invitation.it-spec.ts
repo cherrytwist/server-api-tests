@@ -15,7 +15,7 @@ import {
   getSpaceData,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { readPrivilege } from '@common/constants/privileges';
 import {
   removeRoleFromUser,

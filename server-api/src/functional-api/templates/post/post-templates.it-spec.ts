@@ -28,7 +28,7 @@ import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { TestSetupUtils } from '@src/scenario/TestSetupUtils';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 const uniqueId = UniqueIDGenerator.getID();
 

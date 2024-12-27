@@ -1,7 +1,7 @@
 //import * as Dom from 'graphql-request/dist/types.dom';
 import { TestUser } from '@alkemio/tests-lib';
 import Headers from 'graphql-request';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 export type ErrorType = {
   response: {

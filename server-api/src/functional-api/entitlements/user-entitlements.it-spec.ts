@@ -20,7 +20,7 @@
  * and the platform roles are removed after the tests are executed.
  */
 import { TestUser } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   accountNoLicenses,
   accountVCCampaignLicenses,

@@ -3,7 +3,7 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { delay } from '@alkemio/tests-lib';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/alkemio-schema';

@@ -5,7 +5,7 @@ import {
   deleteApplication,
 } from '@functional-api/roleset/application/application.request.params';
 import { delay } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,

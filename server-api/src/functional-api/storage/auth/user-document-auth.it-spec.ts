@@ -9,7 +9,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,

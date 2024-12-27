@@ -2,7 +2,7 @@ import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.re
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   joinRoleSet,
   assignRoleToUser,

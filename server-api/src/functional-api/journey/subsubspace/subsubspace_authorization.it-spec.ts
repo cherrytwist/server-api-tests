@@ -2,7 +2,7 @@ import '@utils/array.matcher';
 import { createSubspace } from '../subspace/subspace.request.params';
 import { deleteSpace } from '../space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { CommunityRoleType } from '@generated/alkemio-schema';
 import {
   assignRoleToUserExtendedData,

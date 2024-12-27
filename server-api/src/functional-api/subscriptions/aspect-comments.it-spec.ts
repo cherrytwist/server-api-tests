@@ -2,7 +2,7 @@ import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { subscriptionRooms } from './subscrition-queries';
-import { TestUserManager } from '@src/scenario/test.user.manager';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToRoom } from '../communications/communication.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
