@@ -3,7 +3,7 @@
  *
  * This test suite verifies the following scenarios:
  *
- * - Assigning and removing platform roles to/from users.
+ * - Assigning and removing platform roles to/from TestUserManager.users.
  * - Creating and deleting spaces and virtual contributors.
  * - Checking user entitlements and licenses.
  *
@@ -20,7 +20,7 @@
  *
  */
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createSpaceBasicData,
@@ -43,7 +43,7 @@ let vcId = '';
 describe('Functional tests - VC', () => {
   afterEach(async () => {
     const spaceData = await getAccountMainEntities(
-      users.nonSpaceMember.accountId,
+      TestUserManager.users.nonSpaceMember.accountId,
       TestUser.NON_SPACE_MEMBER
     );
     const vcs = spaceData.data?.account?.virtualContributors;
@@ -61,7 +61,7 @@ describe('Functional tests - VC', () => {
   describe('VC Campaign user vc creation', () => {
     beforeAll(async () => {
       await assignPlatformRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
@@ -80,7 +80,7 @@ describe('Functional tests - VC', () => {
 
     afterAll(async () => {
       await removePlatformRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
@@ -99,7 +99,7 @@ describe('Functional tests - VC', () => {
         const createSpace = await createSpaceBasicData(
           vcName,
           vcName,
-          users.nonSpaceMember.accountId,
+          TestUserManager.users.nonSpaceMember.accountId,
           TestUser.NON_SPACE_MEMBER
         );
 
@@ -108,7 +108,7 @@ describe('Functional tests - VC', () => {
         // Act
         const createVc = await createVirtualContributorOnAccount(
           vcName,
-          users.nonSpaceMember.accountId,
+          TestUserManager.users.nonSpaceMember.accountId,
           spaceId,
           TestUser.NON_SPACE_MEMBER
         );
@@ -127,7 +127,7 @@ describe('Functional tests - VC', () => {
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
 
@@ -138,7 +138,7 @@ describe('Functional tests - VC', () => {
         const tempVcName = `temp-vc-${i}-${uniqueId}`;
         await createVirtualContributorOnAccount(
           tempVcName,
-          users.nonSpaceMember.accountId,
+          TestUserManager.users.nonSpaceMember.accountId,
           spaceId,
           TestUser.NON_SPACE_MEMBER
         );
@@ -148,7 +148,7 @@ describe('Functional tests - VC', () => {
       // // Act
       const createVc = await createVirtualContributorOnAccount(
         vcName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         spaceId,
         TestUser.NON_SPACE_MEMBER
       );

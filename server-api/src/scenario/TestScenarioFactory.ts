@@ -20,7 +20,6 @@ import { CalloutVisibility, PlatformRole } from '@generated/alkemio-schema';
 import { SpaceModel } from './models/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { users, usersSetEmail } from '@src/scenario/TestUser';
 import {
   TestScenarioConfig,
   TestScenarioSpaceConfig,
@@ -30,14 +29,16 @@ import {
   assignUserAsGlobalCommunityAdmin,
   assignUserAsGlobalSupport,
 } from '@functional-api/platform/authorization-platform-mutation';
-import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
+import { TestUserManager } from './test.user.manager';
 
 export class TestScenarioFactory {
+
 
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const scenarioName = scenarioConfig.name;
+    await TestUserManager.populateUserModelMap();
     await this.populateGlobalRoles();
     const baseScenario = await this.createOrganization(scenarioName);
     if (!scenarioConfig.space) {
@@ -91,41 +92,20 @@ export class TestScenarioFactory {
   }
 
   private static async populateGlobalRoles(): Promise<void> {
-    // Use a check on the global admin having the id set to determine if need to assign roles
-    if (users.globalAdmin.id.length > 0) {
-      return;
-    }
-    await this.populateGlobalUserInfo();
+    // TODO: check the role already assigned to the user
     await assignUserAsGlobalSupport(
-      users.globalLicenseAdmin.id,
+      TestUserManager.users.globalLicenseAdmin.id,
       TestUser.GLOBAL_ADMIN
     );
     await assignUserAsGlobalCommunityAdmin(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       TestUser.GLOBAL_ADMIN
     );
     await assignPlatformRoleToUser(
-      users.betaTester.id,
+      TestUserManager.users.betaTester.id,
       PlatformRole.BetaTester
     );
   }
-
-  private static async populateGlobalUserInfo(): Promise<void> {
-    for (const user of usersSetEmail) {
-      const userData = await getUserData(user.email);
-      user.displayName = userData?.data?.user.profile.displayName || '';
-      user.id = userData?.data?.user.id || '';
-      user.profileId = userData?.data?.user.profile.id || '';
-      user.nameId = userData?.data?.user.nameID || '';
-      user.agentId = userData?.data?.user.agent.id || '';
-      user.accountId = userData?.data?.user?.account?.id || '';
-    }
-
-    // If necessary, this block can update the `users` object. However, since
-    // `users` is directly referencing `usersSetEmail`, it will automatically be updated.
-  }
-
-
 
   public static async cleanUpBaseScenario(
     baseScenario: OrganizationWithSpaceModel
@@ -155,7 +135,7 @@ export class TestScenarioFactory {
       }
       if (spaceCommunityConfig.addAdmin) {
         await assignRoleToUser(
-          users.subspaceAdmin.id,
+          TestUserManager.users.subspaceAdmin.id,
           roleSetID,
           CommunityRoleType.Admin
         );
@@ -357,10 +337,10 @@ export class TestScenarioFactory {
     roleSetId: string
   ): Promise<void> {
     const usersIdsToAssign: string[] = [
-      users.subspaceAdmin.id,
-      users.subspaceMember.id,
-      users.subsubspaceAdmin.id,
-      users.subsubspaceMember.id,
+      TestUserManager.users.subspaceAdmin.id,
+      TestUserManager.users.subspaceMember.id,
+      TestUserManager.users.subsubspaceAdmin.id,
+      TestUserManager.users.subsubspaceMember.id,
     ];
     for (const userID of usersIdsToAssign) {
       await assignRoleToUser(userID, roleSetId, CommunityRoleType.Member);

@@ -3,7 +3,7 @@ import {
   createOrganization,
   deleteOrganization,
 } from '../organization/organization.request.params';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { assignUserAsOrganizationOwner, removeUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
@@ -35,7 +35,7 @@ describe('Organization Owner', () => {
     // Act
 
     const res = await assignUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationId
     );
 
@@ -55,12 +55,12 @@ describe('Organization Owner', () => {
 
     // Act
     const resOne = await assignUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationId
     );
 
     const resTwo = await assignUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationIdTwo
     );
 
@@ -80,16 +80,16 @@ describe('Organization Owner', () => {
 
   test('should remove user owner from organization', async () => {
     // Arrange
-    await assignUserAsOrganizationOwner(users.spaceMember.id, organizationId);
+    await assignUserAsOrganizationOwner(TestUserManager.users.spaceMember.id, organizationId);
 
     await assignUserAsOrganizationOwner(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       organizationId
     );
 
     // Act
     const res = await removeUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationId
     );
 
@@ -101,11 +101,11 @@ describe('Organization Owner', () => {
 
   test('should not remove the only owner of an organization', async () => {
     // Arrange
-    await assignUserAsOrganizationOwner(users.spaceMember.id, organizationId);
+    await assignUserAsOrganizationOwner(TestUserManager.users.spaceMember.id, organizationId);
 
     // Act
     const res = await removeUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationId
     );
 
@@ -118,7 +118,7 @@ describe('Organization Owner', () => {
   test('should not return user credentials for removing user not owner of an Organization', async () => {
     // Act
     const res = await removeUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationId
     );
 
@@ -130,16 +130,16 @@ describe('Organization Owner', () => {
 
   test('should throw error for assigning same organization owner twice', async () => {
     // Arrange
-    await assignUserAsOrganizationOwner(users.spaceMember.id, organizationId);
+    await assignUserAsOrganizationOwner(TestUserManager.users.spaceMember.id, organizationId);
 
     // Act
     const res = await assignUserAsOrganizationOwner(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       organizationId
     );
     // Assert
     expect(res?.error?.errors[0].message).toEqual(
-      `Agent (${users.spaceMember.agentId}) already has assigned credential: organization-owner`
+      `Agent (${TestUserManager.users.spaceMember.agentId}) already has assigned credential: organization-owner`
     );
   });
 });

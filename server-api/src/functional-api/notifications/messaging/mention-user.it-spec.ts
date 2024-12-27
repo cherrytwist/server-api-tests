@@ -3,7 +3,7 @@ import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.re
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { PreferenceType } from '@generated/alkemio-schema';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
@@ -70,42 +70,42 @@ beforeAll(async () => {
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await changePreferenceUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     PreferenceType.NotificationPostCommentCreated,
     'false'
   );
 
   preferencesConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationCommunicationMention,
     },
   ];
@@ -130,8 +130,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.GLOBAL_ADMIN
       );
@@ -144,8 +144,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.globalAdmin.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.globalAdmin.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -156,8 +156,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
-          users.nonSpaceMember.displayName,
-          users.nonSpaceMember.nameId
+          TestUserManager.users.nonSpaceMember.displayName,
+          TestUserManager.users.nonSpaceMember.nameId
         )} comment on discussion callout`,
         TestUser.SPACE_MEMBER
       );
@@ -170,8 +170,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.spaceMember.displayName),
-            toAddresses: [users.nonSpaceMember.email],
+            subject: receivers(TestUserManager.users.spaceMember.displayName),
+            toAddresses: [TestUserManager.users.nonSpaceMember.email],
           }),
         ])
       );
@@ -182,11 +182,11 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
-          users.nonSpaceMember.displayName,
-          users.nonSpaceMember.nameId
+          TestUserManager.users.nonSpaceMember.displayName,
+          TestUserManager.users.nonSpaceMember.nameId
         )}, ${mentionedUser(
-          users.spaceAdmin.displayName,
-          users.spaceAdmin.nameId
+          TestUserManager.users.spaceAdmin.displayName,
+          TestUserManager.users.spaceAdmin.nameId
         )}  comment on discussion callout`,
         TestUser.SPACE_MEMBER
       );
@@ -199,12 +199,12 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.spaceMember.displayName),
-            toAddresses: [users.nonSpaceMember.email],
+            subject: receivers(TestUserManager.users.spaceMember.displayName),
+            toAddresses: [TestUserManager.users.nonSpaceMember.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.spaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.spaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
         ])
       );
@@ -215,8 +215,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         baseScenario.space.collaboration.calloutPostCommentsId,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.NON_SPACE_MEMBER
       );
@@ -233,8 +233,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         baseScenario.subspace.collaboration.calloutPostCommentsId,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.GLOBAL_ADMIN
       );
@@ -247,8 +247,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.globalAdmin.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.globalAdmin.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -260,8 +260,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         baseScenario.subsubspace.collaboration.calloutPostCommentsId,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.GLOBAL_ADMIN
       );
@@ -274,8 +274,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.globalAdmin.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.globalAdmin.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -325,8 +325,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         postCommentsIdSpace,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.SPACE_ADMIN
       );
@@ -339,8 +339,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.spaceAdmin.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.spaceAdmin.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -351,8 +351,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         postCommentsIdSubspace,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.SUBSPACE_MEMBER
       );
@@ -365,8 +365,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -377,8 +377,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         postCommentsIdSubsubspace,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.SUBSUBSPACE_MEMBER
       );
@@ -392,8 +392,8 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.subsubspaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.subsubspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -410,8 +410,8 @@ describe('Notifications - Mention User', () => {
       await sendMessageToRoom(
         postCommentsIdSubsubspace,
         `${mentionedUser(
-          users.spaceMember.displayName,
-          users.spaceMember.nameId
+          TestUserManager.users.spaceMember.displayName,
+          TestUserManager.users.spaceMember.nameId
         )} comment on discussion callout`,
         TestUser.SUBSUBSPACE_MEMBER
       );

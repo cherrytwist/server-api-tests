@@ -1,7 +1,7 @@
 /**
  * This file contains functional tests for verifying the entitlements and licenses
  * assigned to users and spaces within the platform. The tests cover scenarios such as:
- * - Assigning and revoking platform roles to/from users.
+ * - Assigning and revoking platform roles to/from TestUserManager.users.
  * - Creating and deleting spaces.
  * - Assigning and revoking license plans to/from spaces and accounts.
  * - Verifying the entitlements and licenses through API queries.
@@ -12,7 +12,7 @@
  */
 
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createSpaceBasicData,
@@ -42,14 +42,14 @@ let spaceName = `space-name-${uniqueId}`;
 
 beforeAll(async () => {
   await assignPlatformRoleToUser(
-    users.nonSpaceMember.id,
+    TestUserManager.users.nonSpaceMember.id,
     PlatformRole.VcCampaign
   );
 });
 
 afterAll(async () => {
   await removePlatformRoleFromUser(
-    users.nonSpaceMember.id,
+    TestUserManager.users.nonSpaceMember.id,
     PlatformRole.VcCampaign
   );
   await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
@@ -67,7 +67,7 @@ describe('Functional tests - licenses updates', () => {
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.createSpace.id ?? '';

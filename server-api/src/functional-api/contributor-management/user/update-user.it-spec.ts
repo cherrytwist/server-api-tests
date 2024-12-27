@@ -7,7 +7,7 @@ import {
   updateUser,
 } from './user.request.params';
 import '@utils/array.matcher';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -76,7 +76,7 @@ describe('Update user', () => {
   test('should update user and be available in "users" query', async () => {
     // Act
     await updateUser(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       userPhone,
       {
         location: { country: 'test country', city: 'test city' },
@@ -85,7 +85,7 @@ describe('Update user', () => {
       TestUser.SPACE_ADMIN
     );
     const usersData = await getUsersData(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       TestUser.GLOBAL_ADMIN
     );
 
@@ -93,8 +93,8 @@ describe('Update user', () => {
     expect(usersData?.data?.users).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          email: users.spaceAdmin.email,
-          id: users.spaceAdmin.id,
+          email: TestUserManager.users.spaceAdmin.email,
+          id: TestUserManager.users.spaceAdmin.id,
           phone: userPhone,
         }),
       ])

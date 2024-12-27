@@ -3,7 +3,7 @@ import {
   getRoleSetUsersInMemberRole,
   getRoleSetMembersList,
 } from '../roleset.request.params';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { assignRoleToUser, removeRoleFromUser } from '../roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -35,19 +35,19 @@ beforeAll(async () => {
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
@@ -61,37 +61,37 @@ describe('Assign / Remove users to community', () => {
   describe('Assign users', () => {
     afterAll(async () => {
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -99,7 +99,7 @@ describe('Assign / Remove users to community', () => {
     test('Assign user as member to space', async () => {
       // Act
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -113,7 +113,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -122,7 +122,7 @@ describe('Assign / Remove users to community', () => {
     test('Assign user as member to subspace', async () => {
       // Act
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -137,7 +137,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -145,7 +145,7 @@ describe('Assign / Remove users to community', () => {
     test('Assign user as member to subsubspace', async () => {
       // Act
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -160,7 +160,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -169,7 +169,7 @@ describe('Assign / Remove users to community', () => {
     test('Assign user as lead to space', async () => {
       // Act
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -184,7 +184,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -192,7 +192,7 @@ describe('Assign / Remove users to community', () => {
     test('Assign user as lead to subspace', async () => {
       // Act
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -207,7 +207,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -215,7 +215,7 @@ describe('Assign / Remove users to community', () => {
     test('Assign user as lead to subsubspace', async () => {
       // Act
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -230,7 +230,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -240,37 +240,37 @@ describe('Assign / Remove users to community', () => {
   describe('Remove users', () => {
     beforeAll(async () => {
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -278,7 +278,7 @@ describe('Assign / Remove users to community', () => {
     test('Remove user as lead from subsubspace', async () => {
       // Act
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -293,7 +293,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -301,7 +301,7 @@ describe('Assign / Remove users to community', () => {
     test('Remove user as lead from subspace', async () => {
       // Act
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -316,7 +316,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -324,7 +324,7 @@ describe('Assign / Remove users to community', () => {
     test('Remove user as lead from space', async () => {
       // Act
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -339,7 +339,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -348,7 +348,7 @@ describe('Assign / Remove users to community', () => {
     test('Remove user as member from subsubspace', async () => {
       // Act
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -363,7 +363,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.not.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -371,7 +371,7 @@ describe('Assign / Remove users to community', () => {
     test('Remove user as member from subspace', async () => {
       // Act
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -386,7 +386,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.not.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -394,7 +394,7 @@ describe('Assign / Remove users to community', () => {
     test('Remove user as member from space', async () => {
       // Act
       await removeRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -409,7 +409,7 @@ describe('Assign / Remove users to community', () => {
       expect(data).toEqual(
         expect.not.arrayContaining([
           expect.objectContaining({
-            email: users.nonSpaceMember.email,
+            email: TestUserManager.users.nonSpaceMember.email,
           }),
         ])
       );
@@ -425,7 +425,7 @@ describe('Available users', () => {
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -441,7 +441,7 @@ describe('Available users', () => {
       expect(availableUsers).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: users.qaUser.id,
+            id: TestUserManager.users.qaUser.id,
           }),
         ])
       );
@@ -453,7 +453,7 @@ describe('Available users', () => {
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -469,7 +469,7 @@ describe('Available users', () => {
       expect(availableUsers).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: users.qaUser.id,
+            id: TestUserManager.users.qaUser.id,
           }),
         ])
       );
@@ -478,7 +478,7 @@ describe('Available users', () => {
   describe('Subspace available users', () => {
     beforeAll(async () => {
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -489,7 +489,7 @@ describe('Available users', () => {
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -505,7 +505,7 @@ describe('Available users', () => {
       expect(availableUsers).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: users.spaceMember.id,
+            id: TestUserManager.users.spaceMember.id,
           }),
         ])
       );
@@ -517,7 +517,7 @@ describe('Available users', () => {
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -533,7 +533,7 @@ describe('Available users', () => {
       expect(availableUsers).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: users.spaceMember.id,
+            id: TestUserManager.users.spaceMember.id,
           }),
         ])
       );
@@ -542,13 +542,13 @@ describe('Available users', () => {
   describe('Subsubspace available users', () => {
     beforeAll(async () => {
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -559,7 +559,7 @@ describe('Available users', () => {
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -575,7 +575,7 @@ describe('Available users', () => {
       expect(availableUsers).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: users.qaUser.id,
+            id: TestUserManager.users.qaUser.id,
           }),
         ])
       );
@@ -587,7 +587,7 @@ describe('Available users', () => {
       );
 
       await assignRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         baseScenario.subsubspace.community.roleSetId,
         CommunityRoleType.Lead
       );
@@ -603,7 +603,7 @@ describe('Available users', () => {
       expect(availableUsers).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: users.qaUser.id,
+            id: TestUserManager.users.qaUser.id,
           }),
         ])
       );

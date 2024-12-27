@@ -1,7 +1,7 @@
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   deleteInvitation,
   inviteContributors,
@@ -67,27 +67,27 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
   ];
@@ -100,17 +100,17 @@ afterAll(async () => {
 describe('Notifications - invitations', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
     await changePreferenceUser(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
@@ -130,7 +130,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.SPACE_ADMIN
     );
     const invitationsInfo =
@@ -149,7 +149,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.space.profile.displayName}`,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -159,7 +159,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.qaUser.id],
+      [TestUserManager.users.qaUser.id],
       TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
@@ -178,7 +178,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.space.profile.displayName}`,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -188,7 +188,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.subspace.community.roleSetId,
-      [users.qaUser.id],
+      [TestUserManager.users.qaUser.id],
       TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
@@ -207,7 +207,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.subspace.profile.displayName}`,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -217,7 +217,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.subspace.community.roleSetId,
-      [users.qaUser.id],
+      [TestUserManager.users.qaUser.id],
       TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
@@ -241,7 +241,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.subspace.community.roleSetId,
-      [users.spaceMember.id],
+      [TestUserManager.users.spaceMember.id],
       TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
@@ -260,7 +260,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.subspace.profile.displayName}`,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );
@@ -270,7 +270,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.subsubspace.community.roleSetId,
-      [users.qaUser.id],
+      [TestUserManager.users.qaUser.id],
       TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
@@ -289,7 +289,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.subsubspace.profile.displayName}`,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -297,7 +297,7 @@ describe('Notifications - invitations', () => {
   test("non space user doesn't receive invitation for SPACE community from space admin", async () => {
     // Arrange
     await changePreferenceUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
@@ -305,7 +305,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.SPACE_ADMIN
     );
     const invitationsInfo =
@@ -333,7 +333,7 @@ describe('Notifications - invitations', () => {
     // Act
     const invitationData = await inviteContributors(
       baseScenario.subspace.community.roleSetId,
-      [users.qaUser.displayName],
+      [TestUserManager.users.qaUser.displayName],
       TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =

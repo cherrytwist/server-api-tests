@@ -8,7 +8,7 @@ import {
   getPostData,
 } from './post.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
@@ -599,7 +599,7 @@ describe('Posts - Messages', () => {
           {
             id: msessageId,
             message: 'test message on subspace post',
-            sender: { id: users.subspaceAdmin.id },
+            sender: { id: TestUserManager.users.subspaceAdmin.id },
           },
         ],
       });
@@ -623,7 +623,7 @@ describe('Posts - Messages', () => {
           {
             id: msessageId,
             message: 'test message',
-            sender: { id: users.spaceMember.id },
+            sender: { id: TestUserManager.users.spaceMember.id },
           },
         ],
       });
@@ -661,7 +661,7 @@ describe('Posts - Messages', () => {
             {
               id: msessageId,
               message: 'test message',
-              sender: { id: users.globalAdmin.id },
+              sender: { id: TestUserManager.users.globalAdmin.id },
             },
           ],
         });

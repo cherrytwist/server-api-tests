@@ -5,7 +5,7 @@ import {
   deleteSpace,
   getSpaceData,
 } from '@functional-api/journey/space/space.request.params';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -42,7 +42,7 @@ describe('Limits on account resources creation', () => {
         const createSpace = await createSpaceBasicData(
           spaceName,
           spaceNameId,
-          users.globalAdmin.accountId,
+          TestUserManager.users.globalAdmin.accountId,
           TestUser.GLOBAL_ADMIN
         );
         localSpaceId = createSpace.data?.createSpace.id ?? '';
@@ -68,7 +68,7 @@ describe('Limits on account resources creation', () => {
         const createSpace = await createSpaceBasicData(
           spaceName,
           spaceName,
-          users.betaTester.accountId,
+          TestUserManager.users.betaTester.accountId,
           TestUser.GLOBAL_BETA_TESTER
         );
         localSpaceId = createSpace.data?.createSpace.id ?? '';
@@ -98,7 +98,7 @@ describe('Limits on account resources creation', () => {
         const createSpace = await createSpaceBasicData(
           spaceName,
           spaceName,
-          users.subsubspaceAdmin.accountId,
+          TestUserManager.users.subsubspaceAdmin.accountId,
           TestUser.SUBSPACE_ADMIN
         );
         localSpaceId = createSpace.data?.createSpace.id ?? '';

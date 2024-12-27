@@ -3,7 +3,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { deleteUser } from '@functional-api/contributor-management/user/user.request.params';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   createDiscussion,
   sendMessageToRoom,
@@ -67,48 +67,48 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
 
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
     },
 
@@ -154,12 +154,12 @@ afterAll(async () => {
 describe.skip('Notifications - discussions', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationForumDiscussionCreated,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
       'false'
     );
@@ -193,19 +193,19 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectTextAdmin,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [users.spaceAdmin.email],
+          toAddresses: [TestUserManager.users.spaceAdmin.email],
         }),
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );
@@ -258,19 +258,19 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: spaceDiscussionSubjectTextAdmin,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [users.spaceAdmin.email],
+          toAddresses: [TestUserManager.users.spaceAdmin.email],
         }),
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
           subject: spaceDiscussionSubjectText,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );
@@ -316,20 +316,20 @@ describe.skip('Notifications - discussions', () => {
 
     // Assert
     expect(getEmailsData[1]).toEqual(6);
-    // Note: users.globalAdmin.idEmail receives email twice, as it member and admin for the entity. Only ones is asserted as the subject of the mail is the same
+    // Note: TestUserManager.users.globalAdmin.idEmail receives email twice, as it member and admin for the entity. Only ones is asserted as the subject of the mail is the same
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           subject: subspaceDiscussionSubjectTextAdmin,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: subspaceDiscussionSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
           subject: subspaceDiscussionSubjectText,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );
@@ -351,7 +351,7 @@ describe.skip('Notifications - discussions', () => {
     );
   });
 
-  // Note: users.globalAdmin.idEmail receives email twice, as it member and admin for the entity. Only ones is asserted as the subject of the mail is the same
+  // Note: TestUserManager.users.globalAdmin.idEmail receives email twice, as it member and admin for the entity. Only ones is asserted as the subject of the mail is the same
   test('EM create subspace discussion and send message - GA(1), HA(1), CA(1), CM(4), get notifications', async () => {
     // Act
     const res = await createDiscussion(
@@ -375,15 +375,15 @@ describe.skip('Notifications - discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: subspaceDiscussionSubjectTextAdmin,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: subspaceDiscussionSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
           subject: subspaceDiscussionSubjectText,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );

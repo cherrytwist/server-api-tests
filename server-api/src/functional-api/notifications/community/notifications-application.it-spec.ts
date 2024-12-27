@@ -5,7 +5,7 @@ import {
   deleteApplication,
 } from '@functional-api/roleset/application/application.request.params';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
@@ -54,35 +54,35 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationApplicationReceived,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationApplicationReceived,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationApplicationReceived,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationApplicationSubmitted,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationApplicationReceived,
     },
   ];
@@ -95,22 +95,22 @@ afterAll(async () => {
 describe('Notifications - applications', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationApplicationSubmitted,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationApplicationReceived,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationApplicationSubmitted,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationApplicationReceived,
       'false'
     );
@@ -140,15 +140,15 @@ describe('Notifications - applications', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `${baseScenario.space.profile.displayName}: Application from non`,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.space.profile.displayName}: Application from non`,
-          toAddresses: [users.spaceAdmin.email],
+          toAddresses: [TestUserManager.users.spaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.space.profile.displayName} - Your Application to join was received!`,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -157,7 +157,7 @@ describe('Notifications - applications', () => {
   test('receive notification for non space user application to subspace- GA, EA, CA and Applicant', async () => {
     // Arrange
     await assignRoleToUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -180,15 +180,15 @@ describe('Notifications - applications', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `${baseScenario.subspace.profile.displayName}: Application from non`,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.subspace.profile.displayName}: Application from non`,
-          toAddresses: [users.subspaceAdmin.email],
+          toAddresses: [TestUserManager.users.subspaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.subspace.profile.displayName} - Your Application to join was received!`,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );

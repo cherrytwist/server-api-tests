@@ -1,8 +1,9 @@
 import { TestUser } from "@alkemio/tests-lib";
-import { TestUtil } from "@src/scenario/test.util";
+import { TestUserManager } from "@src/scenario/test.user.manager";
 
 export const buildConnectionParams = async (user: TestUser) => {
-  const token = (await TestUtil.Instance()).userTokenMap.get(user);
+  const testUserModel = TestUserManager.getUserModelByType(user);
+  const token = testUserModel.authToken;
 
   if (!token) {
     throw Error(`Unable to authenticate with user ${user}`);

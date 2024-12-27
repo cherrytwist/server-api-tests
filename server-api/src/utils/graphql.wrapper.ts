@@ -1,7 +1,7 @@
 //import * as Dom from 'graphql-request/dist/types.dom';
 import { TestUser } from '@alkemio/tests-lib';
-import { getTestUserToken } from '../scenario/getTestUserToken';
 import Headers from 'graphql-request';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 
 export type ErrorType = {
   response: {
@@ -31,7 +31,8 @@ export const graphqlErrorWrapper = async <TData>(
 ): Promise<GraphqlReturnWithError<TData>> => {
   let authToken = undefined;
   if (userRole) {
-    authToken = await getTestUserToken(userRole);
+    const userModel = TestUserManager.getUserModelByType(userRole);
+    authToken = userModel.authToken;
   }
   try {
     return await fn(authToken);

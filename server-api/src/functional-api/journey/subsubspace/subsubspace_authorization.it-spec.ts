@@ -2,7 +2,7 @@ import '@utils/array.matcher';
 import { createSubspace } from '../subspace/subspace.request.params';
 import { deleteSpace } from '../space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { CommunityRoleType } from '@generated/alkemio-schema';
 import {
   assignRoleToUserExtendedData,
@@ -76,7 +76,7 @@ describe('Subsubspace Admin', () => {
   test('should create subsubspace admin', async () => {
     // Act
     const res = await assignRoleToUserExtendedData(
-      users.subspaceMember.id,
+      TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
@@ -105,13 +105,13 @@ describe('Subsubspace Admin', () => {
 
     // Act
     const resOne = await assignRoleToUserExtendedData(
-      users.subspaceMember.id,
+      TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     const resTwo = await assignRoleToUserExtendedData(
-      users.subsubspaceMember.id,
+      TestUserManager.users.subsubspaceMember.id,
       subsubspaceRoleSetId2,
       CommunityRoleType.Admin
     );
@@ -139,19 +139,19 @@ describe('Subsubspace Admin', () => {
   test('should be able one subsubspace admin to remove another admin from subsubspace', async () => {
     // Arrange
     await assignRoleToUserExtendedData(
-      users.subspaceMember.id,
+      TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     await assignRoleToUserExtendedData(
-      users.subsubspaceMember.email,
+      TestUserManager.users.subsubspaceMember.email,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     const res = await removeRoleFromUserExtendedData(
-      users.subsubspaceMember.email,
+      TestUserManager.users.subsubspaceMember.email,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin,
       TestUser.SUBSPACE_MEMBER
@@ -171,14 +171,14 @@ describe('Subsubspace Admin', () => {
   test('should remove the only admin of an subsubspace', async () => {
     // Arrange
     await assignRoleToUserExtendedData(
-      users.subspaceMember.id,
+      TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin
     );
 
     // Act
     const res = await removeRoleFromUserExtendedData(
-      users.subsubspaceMember.email,
+      TestUserManager.users.subsubspaceMember.email,
       subsubspaceRoleSetId,
       CommunityRoleType.Admin,
       TestUser.SUBSPACE_MEMBER

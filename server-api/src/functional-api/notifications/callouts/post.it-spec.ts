@@ -6,7 +6,7 @@ import {
   createPostOnCallout,
   deletePost,
 } from '@functional-api/callout/post/post.request.params';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -79,71 +79,71 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
   ];
@@ -165,33 +165,33 @@ describe('Notifications - post', () => {
 
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
 
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
@@ -226,40 +226,40 @@ describe('Notifications - post', () => {
     await delay(6000);
     const mails = await getMailsData();
     expect(mails[0]).toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.globalAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.globalAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.spaceAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.spaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.globalAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.globalAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
     expect(mails[1]).toEqual(9);
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceMember.email
+        TestUserManager.users.subsubspaceMember.email
       )
     );
   });
@@ -283,39 +283,39 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(9);
 
     expect(mails[0]).toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.globalAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.globalAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.spaceAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.spaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.globalAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.globalAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceMember.email
+        TestUserManager.users.subsubspaceMember.email
       )
     );
   });
@@ -336,43 +336,43 @@ describe('Notifications - post', () => {
     await delay(6000);
     const mails = await getMailsData();
     expect(mails[0]).toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.globalAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.globalAdmin.email)
     );
 
     // Space admin does not reacive email
     expect(mails[0]).not.toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.spaceAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.spaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.globalAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.globalAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectAdmin, users.subspaceAdmin.email)
+      await templateMemberResult(postSubjectAdmin, TestUserManager.users.subspaceAdmin.email)
     );
 
     // Space member does not reacive email
     expect(mails[0]).not.toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
     expect(mails[1]).toEqual(7);
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceMember.email
+        TestUserManager.users.subsubspaceMember.email
       )
     );
   });
@@ -393,52 +393,52 @@ describe('Notifications - post', () => {
     await delay(6000);
     const mails = await getMailsData();
     expect(mails[0]).toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.globalAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.globalAdmin.email)
     );
 
     // Space admin does not reacive email
     expect(mails[0]).not.toEqual(
-      await templatedAdminResult(postSubjectAdmin, users.spaceAdmin.email)
+      await templatedAdminResult(postSubjectAdmin, TestUserManager.users.spaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectMember, users.globalAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.globalAdmin.email)
     );
 
     // Space admin does not reacive email
     expect(mails[0]).not.toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceAdmin.email)
     );
 
     // Space member does not reacive email
     expect(mails[0]).not.toEqual(
-      await templateMemberResult(postSubjectMember, users.spaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.spaceMember.email)
     );
 
     // Subspace admin does not reacive email
     expect(mails[0]).not.toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceAdmin.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceAdmin.email)
     );
 
     // Subspace member does not reacive email
     expect(mails[0]).not.toEqual(
-      await templateMemberResult(postSubjectMember, users.subspaceMember.email)
+      await templateMemberResult(postSubjectMember, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templateMemberResult(postSubjectAdmin, users.subsubspaceAdmin.email)
+      await templateMemberResult(postSubjectAdmin, TestUserManager.users.subsubspaceAdmin.email)
     );
 
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
 
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
     expect(mails[1]).toEqual(5);
@@ -446,7 +446,7 @@ describe('Notifications - post', () => {
     expect(mails[0]).toEqual(
       await templateMemberResult(
         postSubjectMember,
-        users.subsubspaceMember.email
+        TestUserManager.users.subsubspaceMember.email
       )
     );
   });

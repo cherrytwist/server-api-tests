@@ -2,7 +2,7 @@ import { updateUser } from '@functional-api/contributor-management/user/user.req
 import { TestUser } from '@alkemio/tests-lib';
 import '@utils/array.matcher';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { updateSubsubspaceLocation } from '../journey/subsubspace/subsubspace.request.params';
 import {
@@ -111,7 +111,7 @@ beforeAll(async () => {
 
   organizationNameText = `qa organizationNameText ${uniqueId}`;
 
-  await updateUser(users.qaUser.id, '+359777777771', {
+  await updateUser(TestUserManager.users.qaUser.id, '+359777777771', {
     location: { country: country, city: city },
   });
 
@@ -196,7 +196,7 @@ describe('Search', () => {
         score: 10,
         type: 'USER',
         user: {
-          id: users.qaUser.id,
+          id: TestUserManager.users.qaUser.id,
           profile: {
             displayName: `${userName}`,
           },
@@ -374,7 +374,7 @@ describe('Search', () => {
       score: 10,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },
@@ -409,7 +409,7 @@ describe('Search', () => {
       score: 10,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },
@@ -450,7 +450,7 @@ describe('Search', () => {
       score: 10,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },
@@ -524,7 +524,7 @@ describe('Search', () => {
       score: 10,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },
@@ -612,7 +612,7 @@ describe('Search', () => {
       score: 10,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },
@@ -648,7 +648,7 @@ describe('Search', () => {
       score: 30,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },
@@ -684,7 +684,7 @@ describe('Search', () => {
       score: 10,
       type: 'USER',
       user: {
-        id: users.qaUser.id,
+        id: TestUserManager.users.qaUser.id,
         profile: {
           displayName: `${userName}`,
         },

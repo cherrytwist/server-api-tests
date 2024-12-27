@@ -5,7 +5,7 @@ import { assignUserAsOrganizationOwner } from './organization-authorization-muta
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 
 const domain = 'alkem.io';
 
@@ -24,12 +24,12 @@ beforeAll(async () => {
   });
 
   await assignUserAsOrganizationOwner(
-    users.spaceMember.id,
+    TestUserManager.users.spaceMember.id,
     baseScenario.organization.id
   );
 
   await assignUserAsOrganizationOwner(
-    users.spaceAdmin.id,
+    TestUserManager.users.spaceAdmin.id,
     baseScenario.organization.id
   );
 });

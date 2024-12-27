@@ -20,7 +20,7 @@
  * and the platform roles are removed after the tests are executed.
  */
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   accountNoLicenses,
   accountVCCampaignLicenses,
@@ -57,7 +57,7 @@ describe('Get User Account Authorization and License privileges ', () => {
   test('No licenses assigned', async () => {
     // Arrange
     await removePlatformRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       PlatformRole.VcCampaign
     );
 
@@ -84,7 +84,7 @@ describe('Get User Account Authorization and License privileges ', () => {
   test('VC campaign licenses assigned', async () => {
     // Arrange
     await assignPlatformRoleToUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       PlatformRole.VcCampaign
     );
 
@@ -107,7 +107,7 @@ describe('Get User Account Authorization and License privileges ', () => {
     );
 
     await removePlatformRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       PlatformRole.VcCampaign
     );
   });
@@ -117,28 +117,28 @@ describe('Get User Account Authorization and License privileges ', () => {
       await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
       await deleteInnovationPack(innovationPackId, TestUser.GLOBAL_ADMIN);
       await removePlatformRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
     test('User with VC campaign licenses assigned and created Space, VC and Innovation Pack', async () => {
       // Arrange
       await assignPlatformRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
 
       const createSpace = await createSpaceAndGetData(
         spaceName,
         spaceName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.space.id ?? '';
 
       const vcData = await createVirtualContributorOnAccount(
         vcName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         spaceId,
         TestUser.NON_SPACE_MEMBER
       );
@@ -147,7 +147,7 @@ describe('Get User Account Authorization and License privileges ', () => {
       const packData = await createInnovationPack(
         packName,
         packName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';
@@ -180,7 +180,7 @@ describe('Get User Account Authorization and License privileges ', () => {
   test('Beta tester licenses assigned', async () => {
     // Arrange
     await assignPlatformRoleToUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       PlatformRole.BetaTester
     );
 
@@ -206,7 +206,7 @@ describe('Get User Account Authorization and License privileges ', () => {
     );
 
     await removePlatformRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       PlatformRole.BetaTester
     );
   });
@@ -216,28 +216,28 @@ describe('Get User Account Authorization and License privileges ', () => {
       await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
       await deleteInnovationPack(innovationPackId, TestUser.GLOBAL_ADMIN);
       await removePlatformRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.BetaTester
       );
     });
     test('User with Beta tester licenses assigned and created Space, VC and Innovation Pack', async () => {
       // Arrange
       await assignPlatformRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.BetaTester
       );
 
       const createSpace = await createSpaceAndGetData(
         spaceName,
         spaceName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.space.id ?? '';
 
       const vcData = await createVirtualContributorOnAccount(
         vcName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         spaceId,
         TestUser.NON_SPACE_MEMBER
       );
@@ -246,7 +246,7 @@ describe('Get User Account Authorization and License privileges ', () => {
       const packData = await createInnovationPack(
         packName,
         packName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       innovationPackId = packData?.data?.createInnovationPack?.id ?? '';

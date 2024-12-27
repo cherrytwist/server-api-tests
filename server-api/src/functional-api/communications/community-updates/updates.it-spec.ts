@@ -3,7 +3,7 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { delay } from '@alkemio/tests-lib';
 import { CommunityRoleType, SpacePrivacyMode } from '@generated/alkemio-schema';
@@ -43,7 +43,7 @@ describe('Communities', () => {
       });
 
       await assignRoleToUser(
-        users.spaceMember.id,
+        TestUserManager.users.spaceMember.id,
         baseScenario.space.community.roleSetId,
         CommunityRoleType.Member
       );
@@ -91,7 +91,7 @@ describe('Communities', () => {
       expect(retrievedMessage[0]).toEqual({
         id: baseScenario.space.communication.messageId,
         message: 'test',
-        sender: { id: users.globalAdmin.id },
+        sender: { id: TestUserManager.users.globalAdmin.id },
         reactions: [],
         threadID: null,
       });
@@ -100,14 +100,14 @@ describe('Communities', () => {
       expect(getMessageReaderMember[0]).toEqual({
         id: baseScenario.space.communication.messageId,
         message: 'test',
-        sender: { id: users.globalAdmin.id },
+        sender: { id: TestUserManager.users.globalAdmin.id },
         reactions: [],
         threadID: null,
       });
 
       await delay(600);
       expect(spaceDataReader.error?.errors[0].message).toContain(
-        `User (${users.nonSpaceMember.email}) does not have credentials that grant 'read' access `
+        `User (${TestUserManager.users.nonSpaceMember.email}) does not have credentials that grant 'read' access `
       );
     });
 
@@ -146,7 +146,7 @@ describe('Communities', () => {
       expect(retrievedMessage[0]).toEqual({
         id: baseScenario.space.communication.messageId,
         message: 'test',
-        sender: { id: users.globalAdmin.id },
+        sender: { id: TestUserManager.users.globalAdmin.id },
         reactions: [],
         threadID: null,
       });
@@ -154,7 +154,7 @@ describe('Communities', () => {
       expect(getMessageReaderMember[0]).toEqual({
         id: baseScenario.space.communication.messageId,
         message: 'test',
-        sender: { id: users.globalAdmin.id },
+        sender: { id: TestUserManager.users.globalAdmin.id },
         reactions: [],
         threadID: null,
       });
@@ -162,7 +162,7 @@ describe('Communities', () => {
       expect(spaceDataReaderNotMember[0]).toEqual({
         id: baseScenario.space.communication.messageId,
         message: 'test',
-        sender: { id: users.globalAdmin.id },
+        sender: { id: TestUserManager.users.globalAdmin.id },
         reactions: [],
         threadID: null,
       });
@@ -188,7 +188,7 @@ describe('Communities', () => {
       expect(retrievedMessage[0]).toEqual({
         id: baseScenario.space.communication.messageId,
         message: 'test',
-        sender: { id: users.globalAdmin.id },
+        sender: { id: TestUserManager.users.globalAdmin.id },
         reactions: [],
         threadID: null,
       });

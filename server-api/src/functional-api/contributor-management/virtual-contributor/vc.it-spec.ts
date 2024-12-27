@@ -13,7 +13,7 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
@@ -90,7 +90,7 @@ beforeAll(async () => {
   const responceVcSpace = await createSpaceAndGetData(
     spaceNameVC,
     spaceNameIdVC,
-    users.betaTester.accountId
+    TestUserManager.users.betaTester.accountId
   );
   const vcSpaceData = responceVcSpace?.data?.space;
   vcSpaceId = vcSpaceData?.id ?? '';
@@ -125,7 +125,7 @@ describe('Virtual Contributor', () => {
   });
 
   test('should not delete user who hosts an account', async () => {
-    const response = await deleteUser(users.betaTester.id);
+    const response = await deleteUser(TestUserManager.users.betaTester.id);
 
     // Assert
     expect(response.error?.errors[0].message).toContain(

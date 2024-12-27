@@ -6,7 +6,7 @@ import {
   meQuery,
 } from './application.request.params';
 import { updateSpaceSettings } from '../../journey/space/space.request.params';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   CommunityMembershipPolicy,
   CommunityRoleType,
@@ -67,7 +67,7 @@ afterAll(async () => {
 describe('Application', () => {
   afterEach(async () => {
     await removeRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -167,7 +167,7 @@ describe('Application', () => {
 
     // Assert
     expect(applicationDataTwo.error?.errors[0].message).toContain(
-      `Application not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.globalSupportAdmin.id} on RoleSet: ${baseScenario.space.community.roleSetId}.`
+      `Application not possible: An open application (ID: ${applicationId}) already exists for contributor ${TestUserManager.users.globalSupportAdmin.id} on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
   });
 
@@ -279,7 +279,7 @@ describe('Application', () => {
     applicationId = applicationData?.data?.applyForEntryRoleOnRoleSet?.id;
 
     // Act
-    await deleteUser(users.qaUser.id);
+    await deleteUser(TestUserManager.users.qaUser.id);
     await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
 
     const applicationsAfterCreateDelete =
@@ -297,7 +297,7 @@ describe('Application', () => {
 describe('Application-flows', () => {
   beforeAll(async () => {
     await assignRoleToUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -305,7 +305,7 @@ describe('Application-flows', () => {
 
   afterEach(async () => {
     await removeRoleFromUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -466,7 +466,7 @@ describe('Application-flows', () => {
     expect(isMember).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: users.globalSupportAdmin.id,
+          id: TestUserManager.users.globalSupportAdmin.id,
         }),
       ])
     );
@@ -499,7 +499,7 @@ describe('Application-flows', () => {
     expect(isMember).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: users.globalSupportAdmin.id,
+          id: TestUserManager.users.globalSupportAdmin.id,
         }),
       ])
     );

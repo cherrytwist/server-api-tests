@@ -1,3 +1,4 @@
+import { TestUser } from "@alkemio/tests-lib";
 
 export type UserModel = {
   id: string;
@@ -8,4 +9,5 @@ export type UserModel = {
   agentId: string;
   accountId: string;
   authToken: string;
+  type: TestUser;
 };

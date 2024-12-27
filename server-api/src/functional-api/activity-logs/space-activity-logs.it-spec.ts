@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   CalloutState,
   CalloutType,
@@ -108,7 +108,7 @@ describe('Activity logs - Space', () => {
     );
 
     await assignRoleToUser(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -126,8 +126,8 @@ describe('Activity logs - Space', () => {
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
           // eslint-disable-next-line quotes
-          description: `${users.spaceAdmin.id}`,
-          triggeredBy: { id: users.globalAdmin.id },
+          description: `${TestUserManager.users.spaceAdmin.id}`,
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -138,8 +138,8 @@ describe('Activity logs - Space', () => {
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
           // eslint-disable-next-line quotes
-          description: `${users.spaceMember.id}`,
-          triggeredBy: { id: users.spaceMember.id },
+          description: `${TestUserManager.users.spaceMember.id}`,
+          triggeredBy: { id: TestUserManager.users.spaceMember.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -150,8 +150,8 @@ describe('Activity logs - Space', () => {
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
           // eslint-disable-next-line quotes
-          description: `${users.globalAdmin.id}`,
-          triggeredBy: { id: users.globalAdmin.id },
+          description: `${TestUserManager.users.globalAdmin.id}`,
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -250,7 +250,7 @@ describe('Activity logs - Space', () => {
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
           description,
-          triggeredBy: { id: users.globalAdmin.id },
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type,
         }),
       ]);
@@ -307,12 +307,12 @@ describe('Activity logs - Space', () => {
 describe('Access to Activity logs - Space', () => {
   beforeAll(async () => {
     await assignRoleToUser(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Admin
     );
     await assignRoleToUser(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );

@@ -26,7 +26,7 @@
  */
 
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createSpaceBasicData,
@@ -45,7 +45,7 @@ describe('Functional tests - Space', () => {
   describe('VC Campaign user space creation', () => {
     beforeAll(async () => {
       await assignPlatformRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
@@ -63,7 +63,7 @@ describe('Functional tests - Space', () => {
 
     afterAll(async () => {
       const spaceData = await getAccountMainEntities(
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       const spaces = spaceData.data?.account?.spaces;
@@ -73,7 +73,7 @@ describe('Functional tests - Space', () => {
       }
 
       await removePlatformRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
@@ -93,7 +93,7 @@ describe('Functional tests - Space', () => {
         const createSpace = await createSpaceBasicData(
           spaceName,
           spaceName,
-          users.nonSpaceMember.accountId,
+          TestUserManager.users.nonSpaceMember.accountId,
           TestUser.NON_SPACE_MEMBER
         );
         spaceId = createSpace.data?.createSpace.id ?? '';
@@ -114,7 +114,7 @@ describe('Functional tests - Space', () => {
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.createSpace.id ?? '';
@@ -124,7 +124,7 @@ describe('Functional tests - Space', () => {
         response?.data?.me.user?.account?.license?.availableEntitlements?.sort()
       ).toEqual(withoutCreateSpace);
       expect(createSpace?.error?.errors?.[0].message).toEqual(
-        `Unable to create account-space-free on account: ${users.nonSpaceMember.accountId}. Entitlement limit of 3 of type account-space-free reached`
+        `Unable to create account-space-free on account: ${TestUserManager.users.nonSpaceMember.accountId}. Entitlement limit of 3 of type account-space-free reached`
       );
     });
 
@@ -136,7 +136,7 @@ describe('Functional tests - Space', () => {
       );
 
       const response = await getAccountMainEntities(
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       const spaceId0 = response.data?.account?.spaces?.[0].id ?? '';
@@ -148,7 +148,7 @@ describe('Functional tests - Space', () => {
       const createSpace = await createSpaceBasicData(
         spaceName,
         spaceName,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
       spaceId = createSpace.data?.createSpace.id ?? '';

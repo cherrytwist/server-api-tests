@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   CalloutState,
   CalloutType,
@@ -107,7 +107,7 @@ describe('Activity logs - Subspace', () => {
     await joinRoleSet(baseScenario.subspace.community.roleSetId, TestUser.SPACE_MEMBER);
 
     await assignRoleToUser(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -125,8 +125,8 @@ describe('Activity logs - Subspace', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.subspace.collaboration.id,
-          description: `${users.spaceAdmin.id}`,
-          triggeredBy: { id: users.globalAdmin.id },
+          description: `${TestUserManager.users.spaceAdmin.id}`,
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -136,8 +136,8 @@ describe('Activity logs - Subspace', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.subspace.collaboration.id,
-          description: `${users.spaceMember.id}`,
-          triggeredBy: { id: users.spaceMember.id },
+          description: `${TestUserManager.users.spaceMember.id}`,
+          triggeredBy: { id: TestUserManager.users.spaceMember.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -240,7 +240,7 @@ describe('Activity logs - Subspace', () => {
         expect.objectContaining({
           collaborationID: baseScenario.subspace.collaboration.id,
           description,
-          triggeredBy: { id: users.globalAdmin.id },
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type,
         }),
       ]);
@@ -297,7 +297,7 @@ describe('Activity logs - Subspace', () => {
 describe('Access to Activity logs - Subspace', () => {
   beforeAll(async () => {
     await assignRoleToUser(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       baseScenario.subspace.id,
       CommunityRoleType.Admin
     );

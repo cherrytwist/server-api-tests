@@ -1,4 +1,4 @@
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import {
   getRoleSetUserPrivilege,
   updateSpaceSettings,
@@ -72,19 +72,19 @@ beforeAll(async () => {
   });
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.subspace.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );

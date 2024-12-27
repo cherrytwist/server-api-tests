@@ -2,7 +2,7 @@
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { sendMessageToUser } from '@functional-api/communications/communication.params';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
 
@@ -19,13 +19,13 @@ const receivers = (senderDisplayName: string) => {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  receiver_userDisplayName = users.globalAdmin.displayName;
-  sender_userDisplayName = users.nonSpaceMember.displayName;
+  receiver_userDisplayName = TestUserManager.users.globalAdmin.displayName;
+  sender_userDisplayName = TestUserManager.users.nonSpaceMember.displayName;
 
   receiver = `${sender_userDisplayName} sent you a message!`;
   sender = `You have sent a message to ${receiver_userDisplayName}!`;
 
-  usersList = [users.globalAdmin.id,users.nonSpaceMember.id, users.qaUser.id];
+  usersList = [TestUserManager.users.globalAdmin.id,TestUserManager.users.nonSpaceMember.id, TestUserManager.users.qaUser.id];
 });
 
 describe('Notifications - user to user messages', () => {
@@ -41,7 +41,7 @@ describe('Notifications - user to user messages', () => {
   test("User 'A'(pref:true) send message to user 'B'(pref:true) - 2 messages are sent", async () => {
     // Act
     await sendMessageToUser(
-      [users.globalAdmin.id],
+      [TestUserManager.users.globalAdmin.id],
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -55,11 +55,11 @@ describe('Notifications - user to user messages', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: receiver,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: sender,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -69,7 +69,7 @@ describe('Notifications - user to user messages', () => {
   test.skip("User 'A'(pref:true) send message to 2 users: 'B' and 'C'(pref:true) - 3 messages are sent", async () => {
     // Act
     await sendMessageToUser(
-      [users.globalAdmin.id, users.qaUser.id],
+      [TestUserManager.users.globalAdmin.id, TestUserManager.users.qaUser.id],
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -82,16 +82,16 @@ describe('Notifications - user to user messages', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: receivers(users.nonSpaceMember.displayName),
-          toAddresses: [users.qaUser.email],
+          subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
-          subject: receivers(users.nonSpaceMember.displayName),
-          toAddresses: [users.globalAdmin.email],
+          subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: sender,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -101,13 +101,13 @@ describe('Notifications - user to user messages', () => {
   test.skip("User 'A'(pref:true) send message to 2 users: 'B'(pref:true) and 'C'(pref:false) - 2 messages are sent", async () => {
     // Arrange
     await updateUserSettingCommunicationMessage(
-      users.qaUser.id,
+      TestUserManager.users.qaUser.id,
       false
     );
 
     // Act
     await sendMessageToUser(
-      [users.globalAdmin.id, users.qaUser.id],
+      [TestUserManager.users.globalAdmin.id, TestUserManager.users.qaUser.id],
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -120,17 +120,17 @@ describe('Notifications - user to user messages', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: receivers(users.nonSpaceMember.displayName),
-          toAddresses: [users.globalAdmin.email],
+          subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: sender,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
     await updateUserSettingCommunicationMessage(
-      users.qaUser.id,
+      TestUserManager.users.qaUser.id,
       true
     );
   });
@@ -138,13 +138,13 @@ describe('Notifications - user to user messages', () => {
   test("User 'A'(pref:true) send message to user 'B'(pref:false) - 1 messages are sent", async () => {
     // Arrange
     await updateUserSettingCommunicationMessage(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       false
     );
 
     // Act
     await sendMessageToUser(
-      [users.globalAdmin.id],
+      [TestUserManager.users.globalAdmin.id],
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -158,7 +158,7 @@ describe('Notifications - user to user messages', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: sender,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -167,18 +167,18 @@ describe('Notifications - user to user messages', () => {
   test("User 'A'(pref:false) send message to user 'B'(pref:true) - 2 messages are sent", async () => {
     // Arrange
     await updateUserSettingCommunicationMessage(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       true
     );
 
     await updateUserSettingCommunicationMessage(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       false
     );
 
     // Act
     await sendMessageToUser(
-      [users.globalAdmin.id],
+      [TestUserManager.users.globalAdmin.id],
       'Test message',
       TestUser.NON_SPACE_MEMBER
     );
@@ -192,11 +192,11 @@ describe('Notifications - user to user messages', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: receiver,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: sender,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );

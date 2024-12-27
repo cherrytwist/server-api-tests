@@ -2,7 +2,7 @@ import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { createPostOnCallout } from '../callout/post/post.request.params';
 import { subscriptionRooms } from './subscrition-queries';
-import { users } from '@src/scenario/TestUser';
+import { TestUserManager } from '@src/scenario/test.user.manager';
 import { sendMessageToRoom } from '../communications/communication.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
@@ -42,7 +42,7 @@ const expectedDataFunc = async (
           data: {
             id: messageGaId,
             message: messageGAText,
-            sender: { id: users.globalAdmin.id },
+            sender: { id: TestUserManager.users.globalAdmin.id },
           },
         },
       },
@@ -53,7 +53,7 @@ const expectedDataFunc = async (
           data: {
             id: messageHaId,
             message: messageHAText,
-            sender: { id: users.spaceAdmin.id },
+            sender: { id: TestUserManager.users.spaceAdmin.id },
           },
         },
       },
@@ -64,7 +64,7 @@ const expectedDataFunc = async (
           data: {
             id: messageHmId,
             message: messageHMText,
-            sender: { id: users.spaceMember.id },
+            sender: { id: TestUserManager.users.spaceMember.id },
           },
         },
       },
