@@ -25,10 +25,10 @@ import { TestUser } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { users } from '@utils/queries/users-data';
 import { CommunityRoleType } from '@generated/graphql';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { TestSetupUtils } from '@src/scenario/TestSetupUtils';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -341,7 +341,7 @@ describe('Post templates - CRUD Authorization', () => {
       baseScenario.space.community.roleSetId
     );
     await assignRoleToUser(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Admin
     );

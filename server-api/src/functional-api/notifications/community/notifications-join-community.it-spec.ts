@@ -2,7 +2,7 @@ import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.re
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   joinRoleSet,
   assignRoleToUser,
@@ -66,39 +66,39 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationCommunityNewMember,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCommunityNewMember,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationCommunityNewMember,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityNewMember,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityNewMemberAdmin,
     },
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationCommunityNewMember,
     },
   ];
@@ -112,7 +112,7 @@ afterAll(async () => {
 describe('Notifications - member join community', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationCommunityNewMemberAdmin,
       'false'
     );
@@ -141,15 +141,15 @@ describe('Notifications - member join community', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: subjectAdminSpaceNon,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: subjectAdminSpaceNon,
-          toAddresses: [users.spaceAdmin.email],
+          toAddresses: [TestUserManager.users.spaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.space.profile.displayName} - Welcome to the Community!`,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -174,15 +174,15 @@ describe('Notifications - member join community', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: subjectAdminSubspace,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: subjectAdminSubspace,
-          toAddresses: [users.subspaceAdmin.email],
+          toAddresses: [TestUserManager.users.subspaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.subspace.profile.displayName} - Welcome to the Community!`,
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -192,7 +192,7 @@ describe('Notifications - member join community', () => {
   test('Admin adds user to Space community - GA, HA and Joiner receive notifications', async () => {
     // Act
     await assignRoleToUser(
-      users.qaUser.id,
+      TestUserManager.users.qaUser.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member,
       TestUser.GLOBAL_ADMIN
@@ -209,15 +209,15 @@ describe('Notifications - member join community', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: subjectAdminSpace,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: subjectAdminSpace,
-          toAddresses: [users.spaceAdmin.email],
+          toAddresses: [TestUserManager.users.spaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.space.profile.displayName} - Welcome to the Community!`,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -231,13 +231,13 @@ describe('Notifications - member join community', () => {
     );
 
     await removeRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.subspace.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await removeRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );

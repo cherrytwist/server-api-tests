@@ -26,7 +26,7 @@
  * - `afterAll` in 'Account license plus cleanup': Cleans up created resources (Space, Virtual Contributor, Innovation Pack) and revokes the ACCOUNT_LICENSE_PLUS license from the organization account.
  */
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   assignLicensePlanToAccount,
   getLicensePlanByName,
@@ -81,7 +81,7 @@ beforeAll(async () => {
   orgId = orgData?.id ?? '';
   orgAccountId = orgData?.account?.id ?? '';
 
-  await assignUserAsOrganizationAdmin(users.nonSpaceMember.id, orgId);
+  await assignUserAsOrganizationAdmin(TestUserManager.users.nonSpaceMember.id, orgId);
 });
 
 afterAll(async () => {

@@ -16,22 +16,30 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
 import { CalloutType, CommunityRoleType } from '@generated/graphql';
-import { CalloutVisibility } from '@generated/alkemio-schema';
+import { CalloutVisibility, PlatformRole } from '@generated/alkemio-schema';
 import { SpaceModel } from './models/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { users } from '@utils/queries/users-data';
 import {
   TestScenarioConfig,
   TestScenarioSpaceConfig,
 } from './config/test-scenario-config';
+import {
+  assignPlatformRoleToUser,
+  assignUserAsGlobalCommunityAdmin,
+  assignUserAsGlobalSupport,
+} from '@functional-api/platform/authorization-platform-mutation';
+import { TestUserManager } from './TestUserManager';
 
 export class TestScenarioFactory {
+
 
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const scenarioName = scenarioConfig.name;
+    await TestUserManager.populateUserModelMap();
+    await this.populateGlobalRoles();
     const baseScenario = await this.createOrganization(scenarioName);
     if (!scenarioConfig.space) {
       // nothing more to do, return
@@ -83,6 +91,22 @@ export class TestScenarioFactory {
     return baseScenario;
   }
 
+  private static async populateGlobalRoles(): Promise<void> {
+    // TODO: check the role already assigned to the user
+    await assignUserAsGlobalSupport(
+      TestUserManager.users.globalLicenseAdmin.id,
+      TestUser.GLOBAL_ADMIN
+    );
+    await assignUserAsGlobalCommunityAdmin(
+      TestUserManager.users.globalSupportAdmin.id,
+      TestUser.GLOBAL_ADMIN
+    );
+    await assignPlatformRoleToUser(
+      TestUserManager.users.betaTester.id,
+      PlatformRole.BetaTester
+    );
+  }
+
   public static async cleanUpBaseScenario(
     baseScenario: OrganizationWithSpaceModel
   ): Promise<void> {
@@ -111,7 +135,7 @@ export class TestScenarioFactory {
       }
       if (spaceCommunityConfig.addAdmin) {
         await assignRoleToUser(
-          users.subspaceAdmin.id,
+          TestUserManager.users.subspaceAdmin.id,
           roleSetID,
           CommunityRoleType.Admin
         );
@@ -135,12 +159,19 @@ export class TestScenarioFactory {
     const orgName = `${truncatedScenarioName}-${uniqueId}`;
     const orgNameId = this.validateAndClean(`${orgName}`);
     if (!orgNameId) {
-      throw new Error(`Unable to create organization: Invalid hostNameId: ${orgNameId}`);
+      throw new Error(
+        `Unable to create organization: Invalid hostNameId: ${orgNameId}`
+      );
     }
-    const responseOrg = await createOrganization(orgName, orgNameId.toLowerCase().slice(0, 24));
+    const responseOrg = await createOrganization(
+      orgName,
+      orgNameId.toLowerCase().slice(0, 24)
+    );
 
     if (!responseOrg.data?.createOrganization) {
-      throw new Error(`Failed to create organization: ${JSON.stringify(responseOrg.error)}`);
+      throw new Error(
+        `Failed to create organization: ${JSON.stringify(responseOrg.error)}`
+      );
     }
 
     model.organization.id = responseOrg.data?.createOrganization.id ?? '';
@@ -160,13 +191,13 @@ export class TestScenarioFactory {
 
   private static validateAndClean(input: string): string | null {
     // Remove all spaces from the string
-    const cleaned = input.replace(/\s+/g, "");
+    const cleaned = input.replace(/\s+/g, '');
 
     // Validate that the string contains only letters, numbers, and "-"
     const isValid = /^[a-zA-Z0-9-]+$/.test(cleaned);
 
     return isValid ? cleaned : null;
-}
+  }
 
   private static async createRootSpace(
     spaceModel: SpaceModel,
@@ -188,7 +219,9 @@ export class TestScenarioFactory {
     );
 
     if (!responseRootSpace.data?.space) {
-      throw new Error(`Failed to create root space: ${JSON.stringify(responseRootSpace.error)}`);
+      throw new Error(
+        `Failed to create root space: ${JSON.stringify(responseRootSpace.error)}`
+      );
     }
 
     const spaceData = responseRootSpace.data?.space;
@@ -304,10 +337,10 @@ export class TestScenarioFactory {
     roleSetId: string
   ): Promise<void> {
     const usersIdsToAssign: string[] = [
-      users.subspaceAdmin.id,
-      users.subspaceMember.id,
-      users.subsubspaceAdmin.id,
-      users.subsubspaceMember.id,
+      TestUserManager.users.subspaceAdmin.id,
+      TestUserManager.users.subspaceMember.id,
+      TestUserManager.users.subsubspaceAdmin.id,
+      TestUserManager.users.subsubspaceMember.id,
     ];
     for (const userID of usersIdsToAssign) {
       await assignRoleToUser(userID, roleSetId, CommunityRoleType.Member);
@@ -384,6 +417,4 @@ export class TestScenarioFactory {
       templateSetId: '',
     };
   }
-
-
 }

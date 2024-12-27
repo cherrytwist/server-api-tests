@@ -1,6 +1,6 @@
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   createDiscussion,
@@ -35,57 +35,57 @@ beforeAll(async () => {
 
   preferencesConfigDiscussions = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.globalLicenseAdmin.id,
+      userID: TestUserManager.users.globalLicenseAdmin.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationForumDiscussionCreated,
     },
   ];
 
   preferencesConfigComments = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
-      userID: users.globalLicenseAdmin.id,
+      userID: TestUserManager.users.globalLicenseAdmin.id,
       type: PreferenceType.NotificationForumDiscussionComment,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationForumDiscussionComment,
     },
   ];
 
   preferencesConfigCommentsReply = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationCommentReply,
     },
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationCommentReply,
     },
     {
-      userID: users.globalLicenseAdmin.id,
+      userID: TestUserManager.users.globalLicenseAdmin.id,
       type: PreferenceType.NotificationCommentReply,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationCommentReply,
     },
   ];
@@ -129,19 +129,19 @@ describe('Notifications - forum discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.globalLicenseAdmin.email],
+          toAddresses: [TestUserManager.users.globalLicenseAdmin.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );
@@ -166,19 +166,19 @@ describe('Notifications - forum discussions', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.globalLicenseAdmin.email],
+          toAddresses: [TestUserManager.users.globalLicenseAdmin.email],
         }),
         expect.objectContaining({
           subject: forumDiscussionSubjectText,
-          toAddresses: [users.spaceMember.email],
+          toAddresses: [TestUserManager.users.spaceMember.email],
         }),
       ])
     );
@@ -221,7 +221,7 @@ describe('Notifications - forum discussions comment', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentSubjectText,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
       ])
     );
@@ -250,7 +250,7 @@ describe('Notifications - forum discussions comment', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -279,7 +279,7 @@ describe('Notifications - forum discussions comment', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentSubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -306,7 +306,7 @@ describe('Notifications - forum discussions comment', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentSubjectText,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
       ])
     );
@@ -360,7 +360,7 @@ describe('Notifications - forum discussions comments reply', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentReplySubjectText,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
       ])
     );
@@ -402,7 +402,7 @@ describe('Notifications - forum discussions comments reply', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentReplySubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -444,7 +444,7 @@ describe('Notifications - forum discussions comments reply', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentReplySubjectText,
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -484,7 +484,7 @@ describe('Notifications - forum discussions comments reply', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: forumDiscussionCommentReplySubjectText,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
       ])
     );

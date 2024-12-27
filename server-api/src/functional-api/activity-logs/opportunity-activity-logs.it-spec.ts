@@ -1,6 +1,6 @@
 import '@utils/array.matcher';
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CalloutState,
   CalloutType,
@@ -111,7 +111,7 @@ describe('Activity logs - Subsubspace', () => {
   test('should return MEMBER_JOINED, when user assigned from Admin', async () => {
     // Arrange
     await assignRoleToUser(
-      users.subspaceMember.id,
+      TestUserManager.users.subspaceMember.id,
       baseScenario.subsubspace.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -129,8 +129,8 @@ describe('Activity logs - Subsubspace', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.subsubspace.collaboration.id,
-          description: `${users.subspaceMember.id}`,
-          triggeredBy: { id: users.globalAdmin.id },
+          description: `${TestUserManager.users.subspaceMember.id}`,
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -140,8 +140,8 @@ describe('Activity logs - Subsubspace', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.subsubspace.collaboration.id,
-          description: `${users.globalAdmin.id}`,
-          triggeredBy: { id: users.globalAdmin.id },
+          description: `${TestUserManager.users.globalAdmin.id}`,
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
         }),
       ])
@@ -242,7 +242,7 @@ describe('Activity logs - Subsubspace', () => {
         expect.objectContaining({
           collaborationID: baseScenario.subsubspace.collaboration.id,
           description,
-          triggeredBy: { id: users.globalAdmin.id },
+          triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type,
         }),
       ]);
@@ -299,7 +299,7 @@ describe('Activity logs - Subsubspace', () => {
 describe('Access to Activity logs - Subsubspace', () => {
   beforeAll(async () => {
     await assignRoleToUser(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       baseScenario.subsubspace.id,
       CommunityRoleType.Admin
     );

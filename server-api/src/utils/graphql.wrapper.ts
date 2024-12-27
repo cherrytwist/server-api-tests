@@ -1,7 +1,7 @@
 //import * as Dom from 'graphql-request/dist/types.dom';
 import { TestUser } from '@alkemio/tests-lib';
-import { getTestUserToken } from './getTestUserToken';
 import Headers from 'graphql-request';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 export type ErrorType = {
   response: {
@@ -31,21 +31,26 @@ export const graphqlErrorWrapper = async <TData>(
 ): Promise<GraphqlReturnWithError<TData>> => {
   let authToken = undefined;
   if (userRole) {
-    authToken = await getTestUserToken(userRole);
+    const userModel = TestUserManager.getUserModelByType(userRole);
+    authToken = userModel.authToken;
   }
   try {
     return await fn(authToken);
   } catch (error) {
     const err = error as ErrorType;
     if (!err.response || !err.response.errors) {
-      console.error(err);
       console.error(`Unable to complete call '${fn}'`);
+      console.error(`Returned error:`);
+      console.error(err);
       return {
         error: {
           errors: [{ message: 'Unable to complete call', code: 'UNKNOWN' }],
         },
       };
     } else {
+      for (const error of err.response.errors) {
+        console.error(`Error received: [${error.extensions.code}] - ${error.message}`);
+      }
       const badErrors = err.response.errors.filter(
         e => e.extensions.code !== 'BAD_USER_INPUT'
       );

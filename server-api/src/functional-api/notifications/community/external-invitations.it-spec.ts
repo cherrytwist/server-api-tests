@@ -2,7 +2,7 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   deleteExternalInvitation,
   inviteExternalUser,
@@ -71,27 +71,27 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
 
     {
-      userID: users.qaUser.id,
+      userID: TestUserManager.users.qaUser.id,
       type: PreferenceType.NotificationCommunityInvitationUser,
     },
   ];
@@ -104,13 +104,13 @@ afterAll(async () => {
 describe('Notifications - invitations', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
 
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
     );
@@ -158,7 +158,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.space.profile.displayName}`,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
       ])
     );
@@ -196,7 +196,7 @@ describe('Notifications - invitations', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `Invitation to join ${baseScenario.subspace.profile.displayName}`,
-          toAddresses: [users.subspaceAdmin.email],
+          toAddresses: [TestUserManager.users.subspaceAdmin.email],
         }),
       ])
     );

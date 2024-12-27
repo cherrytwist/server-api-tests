@@ -3,7 +3,7 @@ import { delay, TestUser } from '@alkemio/tests-lib';
 import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
-import { users } from '../../../utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
 import {
   removeRoleFromUser,
@@ -49,29 +49,29 @@ beforeAll(async () => {
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await removeRoleFromUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
-    users.spaceAdmin.id,
+    TestUserManager.users.spaceAdmin.id,
     baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignRoleToUser(
-    users.spaceMember.id,
+    TestUserManager.users.spaceMember.id,
     baseScenario.space.community.roleSetId,
     CommunityRoleType.Lead
   );
 
   await assignUserAsOrganizationAdmin(
-    users.spaceAdmin.id,
+    TestUserManager.users.spaceAdmin.id,
     baseScenario.organization.id
   );
 
-  usersList = [users.spaceAdmin.email, users.spaceMember.email];
+  usersList = [TestUserManager.users.spaceAdmin.email, TestUserManager.users.spaceMember.email];
 });
 
 afterAll(async () => {
@@ -112,16 +112,16 @@ describe('Notifications - send messages to Private space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.nonSpaceMember.email],
+            toAddresses: [TestUserManager.users.nonSpaceMember.email],
           }),
         ])
       );
@@ -143,16 +143,16 @@ describe('Notifications - send messages to Private space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.subspaceMember.email],
+            toAddresses: [TestUserManager.users.subspaceMember.email],
           }),
         ])
       );
@@ -185,16 +185,16 @@ describe('Notifications - send messages to Private space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.nonSpaceMember.email],
+            toAddresses: [TestUserManager.users.nonSpaceMember.email],
           }),
         ])
       );
@@ -216,16 +216,16 @@ describe('Notifications - send messages to Private space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.subspaceMember.email],
+            toAddresses: [TestUserManager.users.subspaceMember.email],
           }),
         ])
       );
@@ -266,16 +266,16 @@ describe('Notifications - messages to Public space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.nonSpaceMember.email],
+            toAddresses: [TestUserManager.users.nonSpaceMember.email],
           }),
         ])
       );
@@ -297,16 +297,16 @@ describe('Notifications - messages to Public space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.subspaceMember.email],
+            toAddresses: [TestUserManager.users.subspaceMember.email],
           }),
         ])
       );
@@ -339,16 +339,16 @@ describe('Notifications - messages to Public space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.nonSpaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.nonSpaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.nonSpaceMember.email],
+            toAddresses: [TestUserManager.users.nonSpaceMember.email],
           }),
         ])
       );
@@ -370,16 +370,16 @@ describe('Notifications - messages to Public space hosts', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceAdmin.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceAdmin.email],
           }),
           expect.objectContaining({
-            subject: receivers(users.subspaceMember.displayName),
-            toAddresses: [users.spaceMember.email],
+            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
           expect.objectContaining({
             subject: senders(baseScenario.space.profile.displayName),
-            toAddresses: [users.subspaceMember.email],
+            toAddresses: [TestUserManager.users.subspaceMember.email],
           }),
         ])
       );
@@ -396,12 +396,12 @@ describe('Notifications - messages to Public space NO hosts', () => {
     });
 
     await removeRoleFromUser(
-      users.spaceAdmin.id,
+      TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
     await removeRoleFromUser(
-      users.spaceMember.id,
+      TestUserManager.users.spaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Lead
     );
@@ -428,7 +428,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: senders(baseScenario.space.profile.displayName),
-          toAddresses: [users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.nonSpaceMember.email],
         }),
       ])
     );
@@ -451,7 +451,7 @@ describe('Notifications - messages to Public space NO hosts', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: await senders(baseScenario.space.profile.displayName),
-          toAddresses: [users.qaUser.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );

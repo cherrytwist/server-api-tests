@@ -6,7 +6,7 @@ import {
   createPostOnCallout,
   deletePost,
 } from '@functional-api/callout/post/post.request.params';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
@@ -73,106 +73,106 @@ beforeAll(async () => {
 
   preferencesPostConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
 
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCreated,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCreatedAdmin,
     },
   ];
 
   preferencesPostCommentsConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
   ];
@@ -195,33 +195,33 @@ describe('Notifications - post comments', () => {
 
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
 
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCommentCreated,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCreated,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
@@ -293,7 +293,7 @@ describe('Notifications - post comments', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: spacePostSubjectText,
-            toAddresses: [users.globalAdmin.email],
+            toAddresses: [TestUserManager.users.globalAdmin.email],
           }),
         ])
       );
@@ -352,7 +352,7 @@ describe('Notifications - post comments', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: spacePostSubjectText,
-            toAddresses: [users.spaceMember.email],
+            toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
       );
@@ -411,7 +411,7 @@ describe('Notifications - post comments', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: subspacePostSubjectText,
-            toAddresses: [users.subspaceMember.email],
+            toAddresses: [TestUserManager.users.subspaceMember.email],
           }),
         ])
       );
@@ -470,7 +470,7 @@ describe('Notifications - post comments', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: subsubspacePostSubjectText,
-            toAddresses: [users.subsubspaceMember.email],
+            toAddresses: [TestUserManager.users.subsubspaceMember.email],
           }),
         ])
       );

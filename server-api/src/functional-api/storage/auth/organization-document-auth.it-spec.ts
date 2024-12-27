@@ -15,7 +15,7 @@ import {
   sorted__create_read_update_delete_grant_fileUp_fileDel_platformAdmin,
   sorted__create_read_update_delete_grant_platformAdmin,
 } from '@common/constants/privileges';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { createReferenceOnProfile } from '../../references/references.request.params';
 import { assignUserToOrganization } from '../../roleset/roles-request.params';
 import {
@@ -66,17 +66,17 @@ beforeAll(async () => {
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignUserAsOrganizationAdmin(
-    users.subspaceAdmin.id,
+    TestUserManager.users.subspaceAdmin.id,
     baseScenario.organization.id
   );
 
   await assignUserAsOrganizationOwner(
-    users.spaceAdmin.id,
+    TestUserManager.users.spaceAdmin.id,
     baseScenario.organization.id
   );
 
   await assignUserToOrganization(
-    users.spaceMember.id,
+    TestUserManager.users.spaceMember.id,
     baseScenario.organization.id
   );
 });

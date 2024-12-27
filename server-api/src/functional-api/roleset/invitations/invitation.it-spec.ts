@@ -15,7 +15,7 @@ import {
   getSpaceData,
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { readPrivilege } from '@common/constants/privileges';
 import {
   removeRoleFromUser,
@@ -29,7 +29,7 @@ import {
 import { deleteUser } from '../../contributor-management/user/user.request.params';
 import { eventOnRoleSetInvitation } from '../roleset-events.request.params';
 import { TestUser } from '@alkemio/tests-lib';
-import { registerInAlkemioOrFail } from '@utils/register-in-alkemio-or-fail';
+import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
@@ -72,7 +72,7 @@ afterAll(async () => {
 describe('Invitations', () => {
   afterEach(async () => {
     await removeRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -85,7 +85,7 @@ describe('Invitations', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -111,7 +111,7 @@ describe('Invitations', () => {
     // Arrange
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -131,7 +131,7 @@ describe('Invitations', () => {
     // Creates invitation second time
     const invitationDataTwo = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -165,7 +165,7 @@ describe('Invitations', () => {
     // Arrange
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
@@ -190,7 +190,7 @@ describe('Invitations', () => {
     // Re-invite to avoid error when deleting in the test setup
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
@@ -221,7 +221,7 @@ describe('Invitations', () => {
     // Arrange
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -236,13 +236,13 @@ describe('Invitations', () => {
     // Act
     const invitationDataTwo = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
     // Assert
     expect(invitationDataTwo?.error?.errors[0].message).toContain(
-      `Invitation not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.community.roleSetId}.`
+      `Invitation not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${TestUserManager.users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
   });
 
@@ -250,7 +250,7 @@ describe('Invitations', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.qaUser.id],
+      [TestUserManager.users.qaUser.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -262,7 +262,7 @@ describe('Invitations', () => {
     }
     expect(invitationId.length).toEqual(36);
 
-    await deleteUser(users.qaUser.id);
+    await deleteUser(TestUserManager.users.qaUser.id);
     // Immediately re-register, will be a new user - do not want a failing test to leave QA user not registered
     await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
 
@@ -281,7 +281,7 @@ describe('Invitations', () => {
 describe('Invitations-flows', () => {
   afterEach(async () => {
     await removeRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -293,7 +293,7 @@ describe('Invitations-flows', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
@@ -326,7 +326,7 @@ describe('Invitations-flows', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
     invitationId = 'invitationIdNotRetrieved';
@@ -364,13 +364,13 @@ describe('Invitations-flows', () => {
   test('should throw error, when sending invitation to a member', async () => {
     // Arrange
     await assignRoleToUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
 
     await assignRoleToUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -378,13 +378,13 @@ describe('Invitations-flows', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
     // Assert
     expect(invitationData?.error?.errors[0].message).toContain(
-      `Invitation not possible: Contributor ${users.nonSpaceMember.id} is already a member of the RoleSet: ${baseScenario.space.community.roleSetId}.`
+      `Invitation not possible: Contributor ${TestUserManager.users.nonSpaceMember.id} is already a member of the RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
   });
 
@@ -403,13 +403,13 @@ describe('Invitations-flows', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
     // Assert
     expect(invitationData?.error?.errors[0].message).toContain(
-      `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${users.nonSpaceMember.id} on RoleSet: ${baseScenario.space.community.roleSetId}.`
+      `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${TestUserManager.users.nonSpaceMember.id} on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
     await deleteApplication(applicationId);
   });
@@ -418,7 +418,7 @@ describe('Invitations-flows', () => {
     // Arrange
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [users.nonSpaceMember.id],
+      [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -450,7 +450,7 @@ describe('Invitations-flows', () => {
       applicationsCountOrig
     );
     expect(res.error?.errors[0].message).toContain(
-      `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.community.roleSetId}.`
+      `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${TestUserManager.users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
   });
 });
@@ -465,7 +465,7 @@ describe('Invitations - Authorization', () => {
 
   afterEach(async () => {
     await removeRoleFromUser(
-      users.nonSpaceMember.id,
+      TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -485,7 +485,7 @@ describe('Invitations - Authorization', () => {
       async ({ user, text }) => {
         invitationData = await inviteContributors(
           baseScenario.space.community.roleSetId,
-          [users.nonSpaceMember.id],
+          [TestUserManager.users.nonSpaceMember.id],
           TestUser.GLOBAL_ADMIN
         );
         invitationId = 'invitationIdNotRetrieved';
@@ -517,7 +517,7 @@ describe('Invitations - Authorization', () => {
       async ({ user, text }) => {
         invitationData = await inviteContributors(
           baseScenario.space.community.roleSetId,
-          [users.nonSpaceMember.id],
+          [TestUserManager.users.nonSpaceMember.id],
           TestUser.GLOBAL_ADMIN
         );
         invitationId = 'invitationIdNotRetrieved';
@@ -551,7 +551,7 @@ describe('Invitations - Authorization', () => {
       async ({ user, state }) => {
         invitationData = await inviteContributors(
           baseScenario.space.community.roleSetId,
-          [users.nonSpaceMember.id],
+          [TestUserManager.users.nonSpaceMember.id],
           user
         );
 
@@ -584,7 +584,7 @@ describe('Invitations - Authorization', () => {
       async ({ user, text }) => {
         invitationData = await inviteContributors(
           baseScenario.space.community.roleSetId,
-          [users.nonSpaceMember.id],
+          [TestUserManager.users.nonSpaceMember.id],
           user
         );
 

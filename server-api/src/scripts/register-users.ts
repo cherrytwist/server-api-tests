@@ -1,21 +1,17 @@
 // This is critical to be able to use TypeScript aliases in Jest tests
 require('tsconfig-paths/register');
-import { UiText } from '@ory/kratos-client';
 import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
-import { testConfiguration } from './config/test.configuration';
-import { stringifyConfig } from './config/create-config-using-envvars';
-import { registerInKratosOrFail } from './scenario/registration/register-in-kratos-or-fail';
-import { verifyInKratosOrFail } from './scenario/registration/verify-in-kratos-or-fail';
+import { UiText } from '@ory/kratos-client';
+import { testConfiguration } from '@src/config/test.configuration';
+import { stringifyConfig } from '@src/config/create-config-using-envvars';
+import { registerInKratosOrFail } from '@src/scenario/registration/register-in-kratos-or-fail';
+import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-kratos-or-fail';
 
-module.exports = async () => {
-  console.log(`\nLaunching tests using configuration: ${stringifyConfig(testConfiguration)}`);
+const main = async () => {
+  const testConfig = testConfiguration;
+  console.log(`Test config: ${stringifyConfig(testConfig)}`);
 
-  if (!testConfiguration.registerUsers) return;
-
-  // get all user names to register
-  // exclude GLOBAL_ADMIN as he already is created and verified
-  // and it's used to create the the users
   const userNames = Object.values(TestUser).filter(
     x => x !== TestUser.GLOBAL_ADMIN
   );
@@ -32,12 +28,14 @@ module.exports = async () => {
   }
 };
 
+
+
 const getUserName = (userName: string): [string, string] => {
   const [first, last] = userName.split('.');
   return [first, last];
 };
 
-export const userRegisterFlow = async (userName: string) => {
+const userRegisterFlow = async (userName: string) => {
   const [firstName, lastName] = getUserName(userName);
   const email = `${userName}@alkem.io`;
   try {
@@ -73,3 +71,11 @@ export const userRegisterFlow = async (userName: string) => {
     }
   }
 };
+
+try {
+  main();
+} catch (error) {
+  console.error(error);
+}
+
+

@@ -9,7 +9,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   deleteReferenceOnProfile,
   createReferenceOnProfile,
@@ -56,7 +56,7 @@ describe('User - documents', () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
-      const visualData = await lookupProfileVisuals(users.qaUser.profileId);
+      const visualData = await lookupProfileVisuals(TestUserManager.users.qaUser.profileId);
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
         path.join(__dirname, 'files-to-upload', '190-410.jpg'),
@@ -65,7 +65,7 @@ describe('User - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        users.qaUser.profileId,
+        TestUserManager.users.qaUser.profileId,
         TestUser.QA_USER
       );
 
@@ -83,7 +83,7 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile visual document',
       async ({ userRole, privileges }) => {
-        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
@@ -100,7 +100,7 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -116,7 +116,7 @@ describe('User - documents', () => {
     });
     beforeAll(async () => {
       const refData = await createReferenceOnProfile(
-        users.qaUser.profileId,
+        TestUserManager.users.qaUser.profileId,
         TestUser.QA_USER
       );
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
@@ -127,7 +127,7 @@ describe('User - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        users.qaUser.profileId,
+        TestUserManager.users.qaUser.profileId,
         TestUser.GLOBAL_ADMIN
       );
       documentId =
@@ -144,7 +144,7 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user reference document',
       async ({ userRole, privileges }) => {
-        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
@@ -161,7 +161,7 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile reference storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -177,7 +177,7 @@ describe('User - documents', () => {
     });
     beforeAll(async () => {
       const getSpaceStorageId = await getProfileDocuments(
-        users.qaUser.profileId,
+        TestUserManager.users.qaUser.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -191,7 +191,7 @@ describe('User - documents', () => {
       );
 
       const getDocId = await getProfileDocuments(
-        users.qaUser.profileId,
+        TestUserManager.users.qaUser.profileId,
         TestUser.GLOBAL_ADMIN
       );
 
@@ -209,7 +209,7 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description visual document',
       async ({ userRole, privileges }) => {
-        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
@@ -226,7 +226,7 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description (storageBucket) document',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await getProfileDocuments(users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);

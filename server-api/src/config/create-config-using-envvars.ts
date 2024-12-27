@@ -25,7 +25,7 @@ export const createConfigUsingEnvVars = (): AlkemioTestConfig => {
       mailSlurper:
         process.env.MAIL_SLURPER_ENDPOINT || 'http://localhost:4437/mail',
       kratos: {
-        public: process.env.KRATOS_PUBLIC_API_URL ?? 'http://localhost:4434',
+        public: process.env.KRATOS_ENDPOINT ?? 'http://localhost:4434',
         private: process.env.KRATOS_PRIVATE_API_URL ?? 'http://localhost:4434',
       },
     },

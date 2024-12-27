@@ -8,7 +8,7 @@ import {
   deleteCallout,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { CalloutVisibility, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -83,42 +83,42 @@ beforeAll(async () => {
 
   preferencesConfigCallout = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
 
     {
-      userID: users.nonSpaceMember.id,
+      userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationCalloutPublished,
     },
   ];
@@ -141,12 +141,12 @@ describe('Notifications - post', () => {
 
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationCalloutPublished,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCalloutPublished,
       'false'
     );
@@ -174,32 +174,32 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(7);
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.globalAdmin.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.globalAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.spaceAdmin.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.spaceMember.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.subspaceAdmin.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.subspaceMember.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.subsubspaceMember.email
+        TestUserManager.users.subsubspaceMember.email
       )
     );
   });
@@ -300,32 +300,32 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(7);
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.globalAdmin.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.globalAdmin.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.spaceAdmin.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.spaceMember.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.subspaceAdmin.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, users.subspaceMember.email)
+      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.subsubspaceAdmin.email
+        TestUserManager.users.subsubspaceAdmin.email
       )
     );
     expect(mails[0]).toEqual(
       await templateResult(
         spaceCalloutSubjectText,
-        users.subsubspaceMember.email
+        TestUserManager.users.subsubspaceMember.email
       )
     );
   });
@@ -355,7 +355,7 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [users.globalAdmin.email],
+    //       toAddresses: [TestUserManager.users.globalAdmin.email],
     //     }),
     //   ])
     // );
@@ -364,7 +364,7 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [users.spaceAdmin.email],
+    //       toAddresses: [TestUserManager.users.spaceAdmin.email],
     //     }),
     //   ])
     // );
@@ -372,7 +372,7 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [users.qaUser.email],
+    //       toAddresses: [TestUserManager.users.qaUser.email],
     //     }),
     //   ])
     // );
@@ -380,7 +380,7 @@ describe('Notifications - post', () => {
     //   expect.arrayContaining([
     //     expect.objectContaining({
     //       subject: spaceCalloutSubjectText,
-    //       toAddresses: [users.spaceMember.email],
+    //       toAddresses: [TestUserManager.users.spaceMember.email],
     //     }),
     //   ])
     // );
@@ -434,29 +434,29 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(5);
 
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.globalAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.globalAdmin.email)
     );
 
     // Don't receive as Space Admin is not member of subspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.spaceAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.spaceAdmin.email)
     );
     // Don't receive as Space Member is not member of subspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.spaceMember.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.spaceMember.email)
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.subspaceAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.subspaceMember.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.subsubspaceAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.subsubspaceMember.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceMember.email)
     );
   });
 
@@ -505,32 +505,32 @@ describe('Notifications - post', () => {
 
     // GA - 1 mails as subsubspace member; as admin - 0
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.globalAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.globalAdmin.email)
     );
 
     // Don't receive as Space Admin is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.spaceAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.spaceAdmin.email)
     );
     // Don't receive as Space Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.spaceMember.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.spaceMember.email)
     );
 
     // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.subspaceAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subspaceAdmin.email)
     );
 
     // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, users.subspaceMember.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subspaceMember.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.subsubspaceAdmin.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceAdmin.email)
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, users.subsubspaceMember.email)
+      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceMember.email)
     );
   });
 

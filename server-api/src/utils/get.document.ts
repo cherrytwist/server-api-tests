@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { TestUtil } from './test.util';
 import { TestUser } from '@alkemio/tests-lib';
 import { testConfiguration } from '@src/config/test.configuration';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 export const getDocument = (documentId: string) => {
   return request(buildDocumentUrl(documentId)).get('');
@@ -11,7 +11,8 @@ export const getAuthDocument = async (documentId: string, user?: TestUser) => {
   if (!user) {
     return getDocument(documentId);
   }
-  const bearerToken = (await TestUtil.Instance()).userTokenMap.get(user);
+  const userModel = TestUserManager.getUserModelByType(user);
+  const bearerToken = userModel.authToken;
 
   if (!bearerToken) {
     throw console.error(`Could not authenticate user ${user}`);

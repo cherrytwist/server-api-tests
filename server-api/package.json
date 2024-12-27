@@ -57,11 +57,12 @@
     "test:documents": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.documents.js",
     "test:configuration": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.configuration.js",
     "innovation-pack-with-templates": "ts-node-dev ./src/functional-api/innovation-pack/innovation-pack-with-templates.ts",
-    "validate-base-scenario-setup": "ts-node-dev ./src/validate-base-scenario-setup.ts"
+    "validate-scenario-setup": "ts-node-dev ./src/scripts/validate-scenario-setup.ts",
+    "register-users": "ts-node-dev ./src/scripts/register-users.ts"
   },
   "dependencies": {
     "@alkemio/client-lib": "^0.32.0",
-    "@alkemio/tests-lib": "^0.1.3",
+    "@alkemio/tests-lib": "^0.1.4",
     "@ory/kratos-client": "^0.11.1",
     "axios": "^1.7.9",
     "cross-env": "^7.0.3",

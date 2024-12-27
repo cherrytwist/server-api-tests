@@ -2,7 +2,7 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
@@ -81,42 +81,42 @@ beforeAll(async () => {
 
   preferencesConfig = [
     {
-      userID: users.globalAdmin.id,
+      userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.spaceMember.id,
+      userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.subspaceMember.id,
+      userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.subsubspaceMember.id,
+      userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.spaceAdmin.id,
+      userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.subspaceAdmin.id,
+      userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
 
     {
-      userID: users.subsubspaceAdmin.id,
+      userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
     },
   ];
@@ -133,7 +133,7 @@ describe('Notifications - callout comments', () => {
 
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationDiscussionCommentCreated,
       'false'
     );
@@ -158,23 +158,23 @@ describe('Notifications - callout comments', () => {
 
     expect(mails[1]).toEqual(7);
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.globalAdmin.email])
+      await expectedDataSpace([TestUserManager.users.globalAdmin.email])
     );
-    expect(mails[0]).toEqual(await expectedDataSpace([users.spaceAdmin.email]));
+    expect(mails[0]).toEqual(await expectedDataSpace([TestUserManager.users.spaceAdmin.email]));
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.spaceMember.email])
-    );
-    expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subspaceAdmin.email])
+      await expectedDataSpace([TestUserManager.users.spaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subspaceMember.email])
+      await expectedDataSpace([TestUserManager.users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subsubspaceAdmin.email])
+      await expectedDataSpace([TestUserManager.users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subsubspaceMember.email])
+      await expectedDataSpace([TestUserManager.users.subsubspaceAdmin.email])
+    );
+    expect(mails[0]).toEqual(
+      await expectedDataSpace([TestUserManager.users.subsubspaceMember.email])
     );
   });
 
@@ -192,23 +192,23 @@ describe('Notifications - callout comments', () => {
 
     expect(mails[1]).toEqual(7);
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.globalAdmin.email])
+      await expectedDataSpace([TestUserManager.users.globalAdmin.email])
     );
-    expect(mails[0]).toEqual(await expectedDataSpace([users.spaceAdmin.email]));
+    expect(mails[0]).toEqual(await expectedDataSpace([TestUserManager.users.spaceAdmin.email]));
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.spaceMember.email])
-    );
-    expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subspaceAdmin.email])
+      await expectedDataSpace([TestUserManager.users.spaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subspaceMember.email])
+      await expectedDataSpace([TestUserManager.users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subsubspaceAdmin.email])
+      await expectedDataSpace([TestUserManager.users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataSpace([users.subsubspaceMember.email])
+      await expectedDataSpace([TestUserManager.users.subsubspaceAdmin.email])
+    );
+    expect(mails[0]).toEqual(
+      await expectedDataSpace([TestUserManager.users.subsubspaceMember.email])
     );
   });
 
@@ -225,27 +225,27 @@ describe('Notifications - callout comments', () => {
 
     expect(mails[1]).toEqual(5);
 
-    expect(mails[0]).toEqual(await expectedDataChal([users.globalAdmin.email]));
+    expect(mails[0]).toEqual(await expectedDataChal([TestUserManager.users.globalAdmin.email]));
     // HA don't get notification as is member only of HUB
     expect(mails[0]).not.toEqual(
-      await expectedDataChal([users.spaceAdmin.email])
+      await expectedDataChal([TestUserManager.users.spaceAdmin.email])
     );
     // Space member does not reacive email
 
     expect(mails[0]).not.toEqual(
-      await expectedDataChal([users.spaceMember.email])
+      await expectedDataChal([TestUserManager.users.spaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.subspaceAdmin.email])
+      await expectedDataChal([TestUserManager.users.subspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.subspaceMember.email])
+      await expectedDataChal([TestUserManager.users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.subsubspaceAdmin.email])
+      await expectedDataChal([TestUserManager.users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataChal([users.subsubspaceMember.email])
+      await expectedDataChal([TestUserManager.users.subsubspaceMember.email])
     );
   });
 
@@ -261,28 +261,28 @@ describe('Notifications - callout comments', () => {
     const mails = await getMailsData();
 
     expect(mails[1]).toEqual(3);
-    expect(mails[0]).toEqual(await expectedDataOpp([users.globalAdmin.email]));
+    expect(mails[0]).toEqual(await expectedDataOpp([TestUserManager.users.globalAdmin.email]));
     // HA don't get notification as is member only of HUB
     expect(mails[0]).not.toEqual(
-      await expectedDataOpp([users.spaceAdmin.email])
+      await expectedDataOpp([TestUserManager.users.spaceAdmin.email])
     );
     // Space member does not reacive email
     expect(mails[0]).not.toEqual(
-      await expectedDataOpp([users.spaceMember.email])
+      await expectedDataOpp([TestUserManager.users.spaceMember.email])
     );
     // Subspace admin does not reacive email
     expect(mails[0]).not.toEqual(
-      await expectedDataOpp([users.subspaceAdmin.email])
+      await expectedDataOpp([TestUserManager.users.subspaceAdmin.email])
     );
     // Subspace member does not reacive email
     expect(mails[0]).not.toEqual(
-      await expectedDataOpp([users.subspaceMember.email])
+      await expectedDataOpp([TestUserManager.users.subspaceMember.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataOpp([users.subsubspaceAdmin.email])
+      await expectedDataOpp([TestUserManager.users.subsubspaceAdmin.email])
     );
     expect(mails[0]).toEqual(
-      await expectedDataOpp([users.subsubspaceMember.email])
+      await expectedDataOpp([TestUserManager.users.subsubspaceMember.email])
     );
   });
 

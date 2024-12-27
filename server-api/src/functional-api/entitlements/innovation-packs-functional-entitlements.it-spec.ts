@@ -4,7 +4,7 @@
  * This test suite verifies the creation and deletion of innovation packs by a VC Campaign user.
  *
  * The tests include:
- * - Assigning and removing platform roles to/from users.
+ * - Assigning and removing platform roles to/from TestUserManager.users.
  * - Creating innovation packs with different names.
  * - Verifying entitlements before and after creating innovation packs.
  * - Handling errors when creating innovation packs over the license limit.
@@ -23,7 +23,7 @@
  */
 
 import { TestUser } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { getMyEntitlementsQuery } from './entitlements-request.params';
 import {
   createInnovationPack,
@@ -41,7 +41,7 @@ const packName = `packname-${uniqueId}`;
 describe('Functional tests - Innovation Pack', () => {
   afterEach(async () => {
     const spaceData = await getAccountMainEntities(
-      users.nonSpaceMember.accountId,
+      TestUserManager.users.nonSpaceMember.accountId,
       TestUser.NON_SPACE_MEMBER
     );
     const packs = spaceData.data?.account?.innovationPacks;
@@ -53,7 +53,7 @@ describe('Functional tests - Innovation Pack', () => {
   describe('VC Campaign user innovation pack creation', () => {
     beforeAll(async () => {
       await assignPlatformRoleToUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
@@ -71,7 +71,7 @@ describe('Functional tests - Innovation Pack', () => {
 
     afterAll(async () => {
       await removePlatformRoleFromUser(
-        users.nonSpaceMember.id,
+        TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
     });
@@ -91,7 +91,7 @@ describe('Functional tests - Innovation Pack', () => {
         const createPack = await createInnovationPack(
           packName,
           packName,
-          users.nonSpaceMember.accountId,
+          TestUserManager.users.nonSpaceMember.accountId,
           TestUser.NON_SPACE_MEMBER
         );
         packId = createPack?.data?.createInnovationPack?.id ?? '';
@@ -112,7 +112,7 @@ describe('Functional tests - Innovation Pack', () => {
         const a = await createInnovationPack(
           `setup-pack-${i}-${uniqueId}`,
           `setup-pack-${i}-${uniqueId}`,
-          users.nonSpaceMember.accountId,
+          TestUserManager.users.nonSpaceMember.accountId,
           TestUser.NON_SPACE_MEMBER
         );
       }
@@ -122,7 +122,7 @@ describe('Functional tests - Innovation Pack', () => {
       const createPack = await createInnovationPack(
         `excess-pack-${uniqueId}`,
         `excess-pack-${uniqueId}`,
-        users.nonSpaceMember.accountId,
+        TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
 
@@ -132,7 +132,7 @@ describe('Functional tests - Innovation Pack', () => {
         response?.data?.me.user?.account?.license?.availableEntitlements?.sort()
       ).toEqual(withoutPack);
       expect(createPack?.error?.errors?.[0].message).toEqual(
-        `Unable to create account-innovation-pack on account: ${users.nonSpaceMember.accountId}. Entitlement limit of 3 of type account-innovation-pack reached`
+        `Unable to create account-innovation-pack on account: ${TestUserManager.users.nonSpaceMember.accountId}. Entitlement limit of 3 of type account-innovation-pack reached`
       );
     });
   });

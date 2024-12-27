@@ -7,7 +7,7 @@ import {
   getCollaborationCalloutsData,
 } from '@functional-api/callout/callouts.request.params';
 import { delay } from '@alkemio/tests-lib';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { TestScenarioFactory } from './TestScenarioFactory';
 
 export class TestSetupUtils {
@@ -15,7 +15,7 @@ export class TestSetupUtils {
     await TestScenarioFactory.assignUsersToMemberRole(roleSetId);
 
     await assignRoleToUser(
-      users.subspaceAdmin.id,
+      TestUserManager.users.subspaceAdmin.id,
       roleSetId,
       CommunityRoleType.Admin
     );

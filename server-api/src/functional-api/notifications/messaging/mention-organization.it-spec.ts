@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { users } from '../../../utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
@@ -73,12 +73,12 @@ beforeAll(async () => {
   });
 
   await assignUserAsOrganizationAdmin(
-    users.qaUser.id,
+    TestUserManager.users.qaUser.id,
     baseScenario.organization.id
   );
 
   await changePreferenceUser(
-    users.globalAdmin.id,
+    TestUserManager.users.globalAdmin.id,
     PreferenceType.NotificationPostCommentCreated,
     'false'
   );
@@ -129,17 +129,17 @@ describe('Notifications - Mention Organization', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: receivers(
-              users.globalAdmin.displayName,
+              TestUserManager.users.globalAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.qaUser.email],
+            toAddresses: [TestUserManager.users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
-              users.globalAdmin.displayName,
+              TestUserManager.users.globalAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.globalAdmin.email],
+            toAddresses: [TestUserManager.users.globalAdmin.email],
           }),
         ])
       );
@@ -165,17 +165,17 @@ describe('Notifications - Mention Organization', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: receivers(
-              users.spaceMember.displayName,
+              TestUserManager.users.spaceMember.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.qaUser.email],
+            toAddresses: [TestUserManager.users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
-              users.spaceMember.displayName,
+              TestUserManager.users.spaceMember.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.globalAdmin.email],
+            toAddresses: [TestUserManager.users.globalAdmin.email],
           }),
         ])
       );
@@ -201,17 +201,17 @@ describe('Notifications - Mention Organization', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: receivers(
-              users.globalAdmin.displayName,
+              TestUserManager.users.globalAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.qaUser.email],
+            toAddresses: [TestUserManager.users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
-              users.globalAdmin.displayName,
+              TestUserManager.users.globalAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.globalAdmin.email],
+            toAddresses: [TestUserManager.users.globalAdmin.email],
           }),
         ])
       );
@@ -238,17 +238,17 @@ describe('Notifications - Mention Organization', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: receivers(
-              users.globalAdmin.displayName,
+              TestUserManager.users.globalAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.qaUser.email],
+            toAddresses: [TestUserManager.users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
-              users.globalAdmin.displayName,
+              TestUserManager.users.globalAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.globalAdmin.email],
+            toAddresses: [TestUserManager.users.globalAdmin.email],
           }),
         ])
       );
@@ -294,17 +294,17 @@ describe('Notifications - Mention Organization', () => {
         expect.arrayContaining([
           expect.objectContaining({
             subject: receivers(
-              users.spaceAdmin.displayName,
+              TestUserManager.users.spaceAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.qaUser.email],
+            toAddresses: [TestUserManager.users.qaUser.email],
           }),
           expect.objectContaining({
             subject: receivers(
-              users.spaceAdmin.displayName,
+              TestUserManager.users.spaceAdmin.displayName,
               baseScenario.organization.profile.displayName
             ),
-            toAddresses: [users.globalAdmin.email],
+            toAddresses: [TestUserManager.users.globalAdmin.email],
           }),
         ])
       );

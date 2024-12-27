@@ -4,7 +4,7 @@ import {
 } from '@functional-api/contributor-management/user/user.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
-import { users } from '@utils/queries/users-data';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { delay } from '@alkemio/tests-lib';
@@ -24,32 +24,32 @@ beforeAll(async () => {
 describe('Notifications - User registration', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
-      users.notificationsAdmin.id,
+      TestUserManager.users.notificationsAdmin.id,
       PreferenceType.NotificationUserRemoved,
       'false'
     );
     await changePreferenceUser(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       PreferenceType.NotificationUserRemoved,
       'false'
     );
     await changePreferenceUser(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'true'
     );
     await changePreferenceUser(
-      users.globalLicenseAdmin.id,
+      TestUserManager.users.globalLicenseAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'true'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'true'
     );
@@ -80,12 +80,12 @@ describe('Notifications - User registration', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `New user registration on Alkemio: ${userName}`,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
 
         expect.objectContaining({
           subject: `New user registration on Alkemio: ${userName}`,
-          toAddresses: [users.globalLicenseAdmin.email],
+          toAddresses: [TestUserManager.users.globalLicenseAdmin.email],
         }),
 
         expect.objectContaining({
@@ -98,17 +98,17 @@ describe('Notifications - User registration', () => {
   test('User sign up - GA(0), New User(1) get notifications', async () => {
     // Arrange
     await changePreferenceUser(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
-      users.globalLicenseAdmin.id,
+      TestUserManager.users.globalLicenseAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
-      users.globalSupportAdmin.id,
+      TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationUserSignUp,
       'false'
     );
@@ -139,7 +139,7 @@ describe('Notifications - User removal', () => {
   test('User removed - GA(1) get notifications', async () => {
     // Arrange
     await changePreferenceUser(
-      users.globalAdmin.id,
+      TestUserManager.users.globalAdmin.id,
       PreferenceType.NotificationUserRemoved,
       'true'
     );
@@ -163,7 +163,7 @@ describe('Notifications - User removal', () => {
       expect.arrayContaining([
         expect.objectContaining({
           subject: `User profile deleted from the Alkemio platform: ${userName}`,
-          toAddresses: [users.globalAdmin.email],
+          toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
       ])
     );

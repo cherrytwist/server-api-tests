@@ -1,8 +1,8 @@
 import request from 'supertest';
-import { getMails } from '../mailslurper.rest.requests';
 import { Configuration, IdentityApi, FrontendApi } from '@ory/kratos-client';
 import { testConfiguration } from '@src/config/test.configuration';
 import { delay } from '@alkemio/tests-lib';
+import { getMails } from '@utils/mailslurper.rest.requests';
 
 /***
  * Verification flow on v0.8.0-alpha3
