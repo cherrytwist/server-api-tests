@@ -4,7 +4,6 @@ import '@utils/array.matcher';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { createPostOnCallout } from '../callout/post/post.request.params';
-import { updateSubsubspaceLocation } from '../journey/subsubspace/subsubspace.request.params';
 import {
   searchContributions,
   searchContributor,
@@ -136,7 +135,7 @@ beforeAll(async () => {
     city,
     TestUser.GLOBAL_ADMIN
   );
-  await updateSubsubspaceLocation(
+  await updateSpaceLocation(
     baseScenario.subsubspace.id,
     country,
     city,

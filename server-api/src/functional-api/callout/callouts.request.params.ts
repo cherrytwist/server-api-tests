@@ -54,8 +54,8 @@ export const defaultWhiteboard = {
   },
 };
 
-export const createCalloutOnCollaboration = async (
-  collaborationID: string,
+export const createCalloutOnCalloutsSet = async (
+  calloutsSetID: string,
   options?: {
     framing?: {
       profile: {
@@ -81,10 +81,10 @@ export const createCalloutOnCollaboration = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.CreateCalloutOnCollaboration(
+    graphqlClient.CreateCalloutOnCalloutsSet(
       {
         calloutData: {
-          collaborationID,
+          calloutsSetID,
           ...defaultCallout,
           ...options,
           enableComments:
@@ -99,8 +99,8 @@ export const createCalloutOnCollaboration = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const getCollaborationCalloutsData = async (
-  collaborationId: string,
+export const getCalloutsData = async (
+  calloutsSetId: string,
   groups?: string[],
   calloutIds?: string[],
   role = TestUser.GLOBAL_ADMIN
@@ -109,7 +109,7 @@ export const getCollaborationCalloutsData = async (
   const callback = (authToken: string | undefined) =>
     graphqlClient.GetCallouts(
       {
-        collaborationId,
+        calloutsSetId,
         groups,
         calloutIds,
       },
@@ -139,26 +139,8 @@ export const getCalloutDetails = async (
   return graphqlErrorWrapper(callback, role);
 };
 
-export const getCallouts = async (
-  collaborationId: string,
-  role = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.GetCallouts(
-      {
-        collaborationId,
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
-
-  return graphqlErrorWrapper(callback, role);
-};
-
-export const createWhiteboardCalloutOnCollaboration = async (
-  collaborationID: string,
+export const createWhiteboardCalloutOnCalloutsSet = async (
+  calloutsSetID: string,
   options?: {
     framing: {
       profile?: {
@@ -178,10 +160,10 @@ export const createWhiteboardCalloutOnCollaboration = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.CreateCalloutOnCollaboration(
+    graphqlClient.CreateCalloutOnCalloutsSet(
       {
         calloutData: {
-          collaborationID,
+          calloutsSetID,
           ...defaultWhiteboard,
           ...options,
           framing: {

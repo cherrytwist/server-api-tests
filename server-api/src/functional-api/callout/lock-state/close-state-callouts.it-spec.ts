@@ -2,7 +2,7 @@
 import '@utils/array.matcher';
 import {
   deleteCallout,
-  createCalloutOnCollaboration,
+  createCalloutOnCalloutsSet,
   updateCallout,
   updateCalloutVisibility,
 } from '../callouts.request.params';
@@ -84,13 +84,13 @@ describe('Callouts - Close State', () => {
   });
   test('Close callout that has not been published', async () => {
     // Act
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.id,
       {
         framing: { profile: { displayName: 'check' } },
       }
     );
-    calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCallout(calloutId, TestUser.GLOBAL_ADMIN, {
       contributionPolicy: {
@@ -102,7 +102,7 @@ describe('Callouts - Close State', () => {
       baseScenario.space.id,
       calloutId
     );
-    const data = postsData.data?.space.collaboration?.callouts?.[0];
+    const data = postsData.data?.space.collaboration?.calloutsSet.callouts?.[0];
 
     // Assert
     expect(data?.contributionPolicy.state).toEqual(CalloutState.Closed);
@@ -110,10 +110,10 @@ describe('Callouts - Close State', () => {
 
   test('Close callout that has been published', async () => {
     // Act
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.id
     );
-    calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
 
@@ -126,7 +126,7 @@ describe('Callouts - Close State', () => {
       baseScenario.space.id,
       calloutId
     );
-    const data = postsData.data?.space.collaboration?.callouts?.[0];
+    const data = postsData.data?.space.collaboration?.calloutsSet.callouts?.[0];
 
     // Assert
     expect(data?.contributionPolicy.state).toEqual(CalloutState.Closed);

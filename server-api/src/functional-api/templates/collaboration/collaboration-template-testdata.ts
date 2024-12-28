@@ -1,52 +1,10 @@
-import {
-  CalloutGroupName,
-  CalloutState,
-  CalloutType,
-  CreateCalloutInput,
-  InnovationFlowState,
-  TagsetReservedName,
-  CreateCollaborationInput,
-} from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
-
-export const lifecycleDefaultDefinition: InnovationFlowState[] = [
-  {
-    displayName: 'prepare',
-    description: 'The innovation is being prepared.',
-  },
-  {
-    displayName: 'in progress',
-    description: 'The innovation is in progress.',
-  },
-  {
-    displayName: 'summary',
-    description: 'The summary of the flow results.',
-  },
-  { displayName: 'done', description: 'The flow is completed.' },
-];
 
 export const templateDefaultInfo = {
   displayName: `Template title ${uniqueId}`,
   description: 'Template description',
 };
-
-// Updates
-export const lifecycleDefinitionUpdate: InnovationFlowState[] = [
-  {
-    displayName: 'prepare updated',
-    description: 'The innovation is being prepared.',
-  },
-  {
-    displayName: 'in progress updated',
-    description: 'The innovation is in progress.',
-  },
-  {
-    displayName: 'summary updated',
-    description: 'The summary of the flow results.',
-  },
-  { displayName: 'done updated', description: 'The flow is completed.' },
-];
 
 export const templateInfoUpdate = {
   displayName: 'Template title update',
@@ -54,48 +12,7 @@ export const templateInfoUpdate = {
 };
 
 // Defaults
-
-export const bootstrapSpaceCallouts: CreateCalloutInput[] = [
-  {
-    nameID: 'welcome',
-    type: CalloutType.Post,
-    contributionPolicy: {
-      state: CalloutState.Open,
-    },
-    sortOrder: 1,
-    groupName: CalloutGroupName.Home,
-    framing: {
-      profile: {
-        displayName: '👋 Welcome to your space!',
-        description: 'An empty space for you to configure!.',
-        tagsets: [
-          {
-            name: TagsetReservedName.FlowState,
-            tags: ['Home'],
-          },
-        ],
-      },
-    },
-  },
-];
-
-export const createCollaborationInputData: CreateCollaborationInput = {
-  calloutsData: bootstrapSpaceCallouts,
-  innovationFlowData: {
-    profile: {
-      displayName: `Template title ${uniqueId}`,
-      description: 'Template description',
-    },
-    states: lifecycleDefaultDefinition,
-  },
-};
-
 export const emptyLifecycleDefaultDefinition = '{}';
-
-export const emptyTemplateInfo = {
-  displayName: '',
-  description: '',
-};
 
 // Error messages
 export const errorInvalidType =

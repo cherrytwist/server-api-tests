@@ -16,7 +16,7 @@ import {
 } from '@functional-api/journey/space/space.request.params';
 import { getActivityLogOnCollaboration } from './activity-log-params';
 import {
-  createCalloutOnCollaboration,
+  createCalloutOnCalloutsSet,
   deleteCallout,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
@@ -88,10 +88,10 @@ describe('Activity logs - Subspace', () => {
 
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.subspace.collaboration.id
     );
-    calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(
       baseScenario.subspace.collaboration.id,
@@ -148,10 +148,10 @@ describe('Activity logs - Subspace', () => {
 
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.subspace.collaboration.id
     );
-    calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
 
@@ -172,7 +172,7 @@ describe('Activity logs - Subspace', () => {
     );
     messageRes?.data?.sendMessageToRoom.id;
 
-    const resDiscussion = await createCalloutOnCollaboration(
+    const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.subspace.collaboration.id,
       {
         framing: {
@@ -188,9 +188,9 @@ describe('Activity logs - Subspace', () => {
       }
     );
     const calloutIdDiscussion =
-      resDiscussion?.data?.createCalloutOnCollaboration.id ?? '';
+      resDiscussion?.data?.createCalloutOnCalloutsSet.id ?? '';
     const discussionCalloutCommentsId =
-      resDiscussion?.data?.createCalloutOnCollaboration?.comments?.id ?? '';
+      resDiscussion?.data?.createCalloutOnCalloutsSet?.comments?.id ?? '';
 
     await updateCalloutVisibility(
       calloutIdDiscussion,
@@ -202,7 +202,7 @@ describe('Activity logs - Subspace', () => {
       'comment on discussion callout'
     );
 
-    const resWhiteboard = await createCalloutOnCollaboration(
+    const resWhiteboard = await createCalloutOnCalloutsSet(
       baseScenario.subspace.collaboration.id,
       {
         framing: {
@@ -218,7 +218,7 @@ describe('Activity logs - Subspace', () => {
       }
     );
     const calloutIdWhiteboard =
-      resWhiteboard?.data?.createCalloutOnCollaboration.id ?? '';
+      resWhiteboard?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(
       calloutIdWhiteboard,

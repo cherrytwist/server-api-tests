@@ -31,6 +31,7 @@ export const createSpaceBasicData = async (
           },
           collaborationData: {
             addTutorialCallouts: true,
+            calloutsSetData: {},
           },
           accountID,
          // licensePlanID,

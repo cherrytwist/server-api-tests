@@ -339,12 +339,12 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const linkCallout = await createLinkCollectionCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'link11',
         'Link collection Callout1',
         TestUser.GLOBAL_ADMIN
       );
-      calloutId = linkCallout.data?.createCalloutOnCollaboration?.id ?? '';
+      calloutId = linkCallout.data?.createCalloutOnCalloutsSet?.id ?? '';
 
       const refData = await createLinkOnCallout(calloutId);
       refId = refData?.data?.createContributionOnCallout?.link?.id ?? '';
@@ -424,13 +424,13 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'post11',
         'Post collection Callout1',
         TestUser.GLOBAL_ADMIN
       );
 
-      calloutId = callout.data?.createCalloutOnCollaboration?.id ?? '';
+      calloutId = callout.data?.createCalloutOnCalloutsSet?.id ?? '';
 
       const postData = await createPostCardOnCallout(calloutId);
       const postDataBase = postData.data?.createContributionOnCallout?.post;
@@ -521,12 +521,12 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const calloutData = await createPostCollectionCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'post12',
         'Post collection Callout12',
         TestUser.GLOBAL_ADMIN
       );
-      calloutId = calloutData.data?.createCalloutOnCollaboration?.id ?? '';
+      calloutId = calloutData.data?.createCalloutOnCalloutsSet?.id ?? '';
 
       const postData = await createPostCardOnCallout(calloutId);
       const postDataBase = postData.data?.createContributionOnCallout?.post;
@@ -619,13 +619,13 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const hu = await createWhiteboardCollectionCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'whiteboard11',
         'Whiteboard collection Callout1',
         TestUser.GLOBAL_ADMIN
       );
 
-      calloutId = hu.data?.createCalloutOnCollaboration?.id ?? '';
+      calloutId = hu.data?.createCalloutOnCalloutsSet?.id ?? '';
 
       const whiteboardData = await createWhiteboardOnCallout(calloutId);
       const whiteboardDataBase =
@@ -716,12 +716,12 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'post3',
         'Post collection Callout3',
         TestUser.GLOBAL_ADMIN
       );
-      const calloutData = callout?.data?.createCalloutOnCollaboration;
+      const calloutData = callout?.data?.createCalloutOnCalloutsSet;
       calloutId = calloutData?.id ?? '';
       const calloutProfileId = calloutData?.framing?.profile?.id ?? '';
 
@@ -799,13 +799,13 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createPostCollectionCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'post4',
         'Post collection Callout4',
         TestUser.GLOBAL_ADMIN
       );
 
-      const calloutData = callout?.data?.createCalloutOnCollaboration;
+      const calloutData = callout?.data?.createCalloutOnCalloutsSet;
       calloutId = calloutData?.id ?? '';
       const calloutStorageBucketId =
         calloutData?.framing?.profile?.storageBucket?.id ?? '';
@@ -880,13 +880,13 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'whiteboard1',
         'Whiteboard Callout1',
         TestUser.GLOBAL_ADMIN
       );
 
-      const calloutData = callout?.data?.createCalloutOnCollaboration;
+      const calloutData = callout?.data?.createCalloutOnCalloutsSet;
       calloutId = calloutData?.id ?? '';
       const calloutStorageBucketId =
         calloutData?.framing?.whiteboard?.profile.storageBucket?.id ?? '';
@@ -962,13 +962,13 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     });
     beforeAll(async () => {
       const callout = await createWhiteboardCallout(
-        baseScenario.subspace.collaboration.id,
+        baseScenario.subspace.collaboration.calloutsSetId,
         'whiteboard2',
         'Whiteboard Callout2',
         TestUser.GLOBAL_ADMIN
       );
 
-      const calloutData = callout?.data?.createCalloutOnCollaboration;
+      const calloutData = callout?.data?.createCalloutOnCalloutsSet;
       calloutId = calloutData?.id ?? '';
       const calloutStorageBucketId =
         calloutData?.framing?.whiteboard?.profile.storageBucket?.id ?? '';

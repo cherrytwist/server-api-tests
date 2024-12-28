@@ -96,7 +96,7 @@ describe('Posts - Create', () => {
       TestUser.SPACE_MEMBER
     );
     const data =
-      postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+      postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId
       )?.post;
 
@@ -234,7 +234,7 @@ describe('Posts - Update', () => {
       TestUser.SPACE_ADMIN
     );
     const data =
-      postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+      postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === postDataUpdate?.id
       )?.post;
 
@@ -257,7 +257,7 @@ describe('Posts - Update', () => {
       baseScenario.space.collaboration.calloutPostId
     );
     const data =
-      postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+      postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === postDataUpdate?.id
       )?.post;
 
@@ -295,7 +295,7 @@ test('HM should update post created on space callout from HM', async () => {
     TestUser.SPACE_MEMBER
   );
   const data =
-    postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+    postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
       c => c.post && c.post.id === spacePostIdEM
     )?.post;
 

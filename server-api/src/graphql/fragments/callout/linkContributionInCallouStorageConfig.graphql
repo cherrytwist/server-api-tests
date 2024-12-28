@@ -1,12 +1,15 @@
 fragment LinkContributionInCalloutOnCollaborationWithStorageConfig on Collaboration {
   id
-  callouts(IDs: [$calloutId]) {
-    id
-    contributions(filter: { linkIDs: [$linkId] }) {
-      link {
-        id
-        profile {
-          ...ProfileStorageConfig
+  calloutsSet {
+    callouts(IDs: [$calloutId]) {
+      id
+      contributions(filter: { linkIDs: [$linkId] }) {
+        link {
+          id
+          profile {
+            ...ProfileStorageConfig
+            __typename
+          }
           __typename
         }
         __typename

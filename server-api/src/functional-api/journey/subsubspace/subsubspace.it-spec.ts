@@ -4,7 +4,6 @@ import {
   createSubspace,
   getSubspaceData,
 } from '../subspace/subspace.request.params';
-import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
@@ -166,7 +165,7 @@ describe('Opportunities', () => {
     subsubspaceId =
       responseCreateSubsubspaceOnSubspaceOne?.data?.createSubspace.id ?? '';
 
-    const responseCreateSubsubspaceOnSubspaceTwo = await createSubsubspace(
+    const responseCreateSubsubspaceOnSubspaceTwo = await createSubspace(
       subsubspaceName,
       `${subsubspaceNameId}new`,
       additionalSubspaceId

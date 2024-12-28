@@ -56,6 +56,7 @@ export const createSubspace = async (
           subspaceNameId,
           parentId
         ),
+
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -92,6 +93,7 @@ export const subspaceVariablesData = (
     },
     collaborationData: {
       addTutorialCallouts: true,
+      calloutsSetData: {},
     },
   };
 

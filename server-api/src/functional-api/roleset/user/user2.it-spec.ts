@@ -5,7 +5,6 @@ import {
   deleteSpace,
   getUserRoleSpacesVisibility,
 } from '../../journey/space/space.request.params';
-import { createSubsubspace } from '../../journey/subsubspace/subsubspace.request.params';
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
 import {
@@ -195,7 +194,7 @@ describe('User roles', () => {
       chId2 = chRes2Data?.id ?? '';
       subspaceRoleSetId2 = chRes2Data?.community?.roleSet.id ?? '';
 
-      const oppRes = await createSubsubspace(
+      const oppRes = await createSubspace(
         subsubspaceName + '1',
         subsubspaceName + '1',
         chId
@@ -205,7 +204,7 @@ describe('User roles', () => {
       oppId = oppResData?.id ?? '';
       subsubspaceRoleSetId = oppResData?.community?.roleSet.id ?? '';
 
-      const oppRes2 = await createSubsubspace(
+      const oppRes2 = await createSubspace(
         subsubspaceName + '2',
         subsubspaceName + '2',
         chId2
@@ -215,7 +214,7 @@ describe('User roles', () => {
       oppId2 = oppRes2Data?.id ?? '';
       subsubspaceRoleSetId2 = oppRes2Data?.community?.roleSet.id ?? '';
 
-      const oppRes3 = await createSubsubspace(
+      const oppRes3 = await createSubspace(
         subsubspaceName + '3',
         subsubspaceName + '3',
         chId2

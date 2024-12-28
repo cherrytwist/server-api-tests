@@ -14,7 +14,7 @@ import {
   updateSpaceSettings,
 } from '../journey/space/space.request.params';
 import {
-  createCalloutOnCollaboration,
+  createCalloutOnCalloutsSet,
   deleteCallout,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
@@ -84,10 +84,10 @@ describe('Activity logs - Space', () => {
 
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.id
     );
-    calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(
       baseScenario.space.collaboration.id,
@@ -161,10 +161,10 @@ describe('Activity logs - Space', () => {
   // To be updated with the changes related to whiteboard callouts
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.id
     );
-    calloutId = res.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
 
@@ -185,7 +185,7 @@ describe('Activity logs - Space', () => {
     );
     messageRes?.data?.sendMessageToRoom.id;
 
-    const resDiscussion = await createCalloutOnCollaboration(
+    const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.id,
       {
         framing: {
@@ -201,7 +201,7 @@ describe('Activity logs - Space', () => {
       }
     );
     const calloutIdDiscussion =
-      resDiscussion.data?.createCalloutOnCollaboration.id ?? '';
+      resDiscussion.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(
       calloutIdDiscussion,
@@ -213,7 +213,7 @@ describe('Activity logs - Space', () => {
       'comment on discussion callout'
     );
 
-    const resWhiteboard = await createCalloutOnCollaboration(
+    const resWhiteboard = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.id,
       {
         framing: {
@@ -229,7 +229,7 @@ describe('Activity logs - Space', () => {
       }
     );
     const calloutIdWhiteboard =
-      resWhiteboard.data?.createCalloutOnCollaboration.id ?? '';
+      resWhiteboard.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(
       calloutIdWhiteboard,
