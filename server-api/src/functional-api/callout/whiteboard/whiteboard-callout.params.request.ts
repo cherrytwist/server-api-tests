@@ -4,17 +4,17 @@ import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 
 export const createWhiteboardCallout = async (
-  collaborationID: string,
+  calloutsSetID: string,
   nameID: string,
   displayName: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.CreateCalloutOnCollaboration(
+    graphqlClient.CreateCalloutOnCalloutsSet(
       {
         calloutData: {
-          collaborationID,
+          calloutsSetID,
           nameID,
           type: CalloutType.Whiteboard,
 

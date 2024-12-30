@@ -1,14 +1,13 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 import { deleteSpace } from '../journey/space/space.request.params';
-import { createSubsubspace } from '@src/graphql/mutations/journeys/subsubspace';
 import { subscriptionSubsubspaceCreated } from './subscrition-queries';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -81,14 +80,14 @@ describe('Create subsubspace subscription', () => {
 
   it('receive newly created opportunities', async () => {
     // Create subsubspace
-    const resOne = await createSubsubspace(
+    const resOne = await createSubspace(
       subsubspaceDisplayName1,
       subsubspaceDisplayName1,
       baseScenario.subspace.id
     );
     subsubspaceIdOne = resOne?.data?.createSubspace.id ?? '';
 
-    const resTwo = await createSubsubspace(
+    const resTwo = await createSubspace(
       subsubspaceDisplayName2,
       subsubspaceDisplayName2,
       baseScenario.subspace.id,

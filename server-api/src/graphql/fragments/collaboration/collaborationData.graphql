@@ -1,7 +1,10 @@
 fragment CollaborationData on Collaboration {
   id
-  callouts {
-    ...CalloutData
+  calloutsSet {
+    id
+    callouts {
+      ...CalloutData
+    }
   }
   authorization {
     myPrivileges

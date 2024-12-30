@@ -1,12 +1,15 @@
 fragment WhiteboardInCalloutOnCollaborationWithStorageConfig on Collaboration {
   id
-  callouts(IDs: [$calloutId]) {
-    id
-    contributions(filter: { whiteboardIDs: [$whiteboardId] }) {
-      whiteboard {
-        id
-        profile {
-          ...ProfileStorageConfig
+  calloutsSet {
+    callouts(IDs: [$calloutId]) {
+      id
+      contributions(filter: { whiteboardIDs: [$whiteboardId] }) {
+        whiteboard {
+          id
+          profile {
+            ...ProfileStorageConfig
+            __typename
+          }
           __typename
         }
         __typename

@@ -1,6 +1,6 @@
 import {
-  createCalloutOnCollaboration,
-  createWhiteboardCalloutOnCollaboration,
+  createCalloutOnCalloutsSet,
+  createWhiteboardCalloutOnCalloutsSet,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
 import { OrganizationWithSpaceModel } from './models/OrganizationWithSpaceModel';
@@ -250,6 +250,7 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
+    spaceModel.collaboration.calloutsSetId = spaceData?.collaboration.calloutsSet?.id ?? '';
 
     return spaceModel;
   }
@@ -258,7 +259,7 @@ export class TestScenarioFactory {
     spaceModel: SpaceModel,
     scenarioName: string
   ): Promise<SpaceModel> {
-    const callForPostCalloutData = await createCalloutOnCollaboration(
+    const callForPostCalloutData = await createCalloutOnCalloutsSet(
       spaceModel.collaboration.id,
       {
         framing: {
@@ -272,15 +273,15 @@ export class TestScenarioFactory {
     );
 
     spaceModel.collaboration.calloutPostCollectionId =
-      callForPostCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
+      callForPostCalloutData?.data?.createCalloutOnCalloutsSet?.id ?? '';
 
     await updateCalloutVisibility(
       spaceModel.collaboration.calloutPostCollectionId,
       CalloutVisibility.Published
     );
 
-    const whiteboardCalloutData = await createWhiteboardCalloutOnCollaboration(
-      spaceModel.collaboration.id,
+    const whiteboardCalloutData = await createWhiteboardCalloutOnCalloutsSet(
+      spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -294,14 +295,14 @@ export class TestScenarioFactory {
     );
 
     spaceModel.collaboration.calloutWhiteboardId =
-      whiteboardCalloutData?.data?.createCalloutOnCollaboration?.id ?? '';
+      whiteboardCalloutData?.data?.createCalloutOnCalloutsSet?.id ?? '';
 
     await updateCalloutVisibility(
       spaceModel.collaboration.calloutWhiteboardId,
       CalloutVisibility.Published
     );
 
-    const creatPostCallout = await createCalloutOnCollaboration(
+    const creatPostCallout = await createCalloutOnCalloutsSet(
       spaceModel.collaboration.id,
       {
         framing: {
@@ -309,7 +310,7 @@ export class TestScenarioFactory {
         },
       }
     );
-    const postCalloutData = creatPostCallout.data?.createCalloutOnCollaboration;
+    const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
 
     spaceModel.collaboration.calloutPostId = postCalloutData?.id ?? '';
     spaceModel.collaboration.calloutPostCommentsId =
@@ -420,6 +421,7 @@ export class TestScenarioFactory {
       },
       collaboration: {
         id: '',
+        calloutsSetId: '',
         calloutPostCollectionId: '',
         calloutWhiteboardId: '',
         calloutPostId: '',

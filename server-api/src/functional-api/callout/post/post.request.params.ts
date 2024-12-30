@@ -152,7 +152,7 @@ export const postDataPerSpaceCallout = async (
     spaceCalloutId
   );
   const spacePosts =
-    responseQuery?.data?.space?.collaboration?.callouts?.[0]?.contributions?.filter(
+    responseQuery?.data?.space?.collaboration?.calloutsSet.callouts?.[0]?.contributions?.filter(
       (c: { post?: any }) => c.post !== null
     ) ?? [];
   return spacePosts;

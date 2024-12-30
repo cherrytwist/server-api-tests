@@ -12,7 +12,7 @@ import {
 } from '@generated/alkemio-schema';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import {
-  createCalloutOnCollaboration,
+  createCalloutOnCalloutsSet,
   deleteCallout,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
@@ -93,11 +93,11 @@ describe('Activity logs - Subsubspace', () => {
 
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: callDN } } }
     );
-    calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(
       baseScenario.subsubspace.collaboration.id,
@@ -151,11 +151,11 @@ describe('Activity logs - Subsubspace', () => {
   // To be updated with the changes related to whiteboard callouts
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
-    const res = await createCalloutOnCollaboration(
+    const res = await createCalloutOnCalloutsSet(
       baseScenario.subsubspace.collaboration.id,
       { framing: { profile: { displayName: callDN } } }
     );
-    calloutId = res?.data?.createCalloutOnCollaboration.id ?? '';
+    calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
 
@@ -176,7 +176,7 @@ describe('Activity logs - Subsubspace', () => {
     );
     messageRes?.data?.sendMessageToRoom.id;
 
-    const resDiscussion = await createCalloutOnCollaboration(
+    const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.subsubspace.collaboration.id,
       {
         framing: {
@@ -192,7 +192,7 @@ describe('Activity logs - Subsubspace', () => {
       }
     );
     const calloutIdDiscussion =
-      resDiscussion?.data?.createCalloutOnCollaboration.id ?? '';
+      resDiscussion?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(
       calloutIdDiscussion,
@@ -204,7 +204,7 @@ describe('Activity logs - Subsubspace', () => {
       'comment on discussion callout'
     );
 
-    const resWhiteboard = await createCalloutOnCollaboration(
+    const resWhiteboard = await createCalloutOnCalloutsSet(
       baseScenario.subsubspace.collaboration.id,
       {
         framing: {
@@ -220,7 +220,7 @@ describe('Activity logs - Subsubspace', () => {
       }
     );
     const calloutIdWhiteboard =
-      resWhiteboard?.data?.createCalloutOnCollaboration.id ?? '';
+      resWhiteboard?.data?.createCalloutOnCalloutsSet.id ?? '';
 
     await updateCalloutVisibility(
       calloutIdWhiteboard,

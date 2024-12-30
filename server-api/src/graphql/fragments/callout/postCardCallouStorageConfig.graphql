@@ -1,14 +1,17 @@
 fragment PostCardInCalloutOnCollaborationWithStorageConfig on Collaboration {
   id
-  callouts(IDs: [$calloutId]) {
-    id
-    contributions(filter: { postIDs: [$postId] }) {
-      post {
-        id
-        profile {
-          ...ProfileStorageConfig
-          references {
-            ...ReferenceData
+  calloutsSet {
+    callouts(IDs: [$calloutId]) {
+      id
+      contributions(filter: { postIDs: [$postId] }) {
+        post {
+          id
+          profile {
+            ...ProfileStorageConfig
+            references {
+              ...ReferenceData
+            }
+            __typename
           }
           __typename
         }

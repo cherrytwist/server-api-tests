@@ -4,7 +4,7 @@ import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { CommunityRoleType } from '@generated/graphql';
 import {
   getCalloutDetails,
-  getCollaborationCalloutsData,
+  getCalloutsData,
 } from '@functional-api/callout/callouts.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -86,16 +86,16 @@ export class TestSetupUtils {
   }
 
   public static async getDefaultSpaceCalloutByNameId(
-    collaborationId: string,
+    calloutsSetId: string,
     nameID: string
   ) {
     delay(100);
-    const calloutsPerSpace = await getCollaborationCalloutsData(
-      (collaborationId = collaborationId)
+    const calloutsPerSpace = await getCalloutsData(
+      calloutsSetId
     );
 
     const allCallouts =
-      calloutsPerSpace.data?.lookup.collaboration?.callouts ?? [];
+      calloutsPerSpace.data?.lookup.calloutsSet?.callouts ?? [];
     const filteredCallout = allCallouts.filter(
       callout => callout.nameID.includes(nameID) || callout.id === nameID
     );

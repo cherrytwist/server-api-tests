@@ -198,7 +198,7 @@ describe('Post templates - Utilization in posts', () => {
         baseScenario.space.collaboration.calloutPostId
       );
       const data =
-        postsData.data?.space.collaboration?.callouts?.[0].contributions?.find(
+        postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
           c => c.post && c.post.id === spacePostId
         )?.post;
 
@@ -268,7 +268,7 @@ describe('Post templates - Utilization in posts', () => {
         baseScenario.space.collaboration.calloutPostId
       );
       const data =
-        postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
+        postsData.data?.space?.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
           c => c.post && c.post.id === spacePostId
         )?.post;
 
@@ -290,7 +290,7 @@ describe('Post templates - Utilization in posts', () => {
         baseScenario.space.collaboration.calloutPostId
       );
       const data =
-        postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
+        postsData.data?.space?.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
           c => c.post && c.post.id === spacePostId
         )?.post;
 
@@ -325,7 +325,7 @@ describe('Post templates - Utilization in posts', () => {
         baseScenario.space.collaboration.calloutPostId
       );
       const data =
-        postsData.data?.space?.collaboration?.callouts?.[0].contributions?.find(
+        postsData.data?.space?.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
           c => c.post && c.post.id === spacePostId
         )?.post;
 

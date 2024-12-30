@@ -4,7 +4,7 @@ import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.re
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
-  createWhiteboardCalloutOnCollaboration,
+  createWhiteboardCalloutOnCalloutsSet,
   updateCalloutVisibility,
 } from '@functional-api/callout/callouts.request.params';
 import { createWhiteboardOnCallout } from '@functional-api/callout/call-for-whiteboards/whiteboard-collection-callout.params.request';
@@ -80,8 +80,8 @@ beforeAll(async () => {
   baseScenario =
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  const resSpace = await createWhiteboardCalloutOnCollaboration(
-    baseScenario.space.collaboration.id,
+  const resSpace = await createWhiteboardCalloutOnCalloutsSet(
+    baseScenario.space.collaboration.calloutsSetId,
     {
       framing: {
         profile: {
@@ -94,15 +94,15 @@ beforeAll(async () => {
     TestUser.GLOBAL_ADMIN
   );
   whiteboardCollectionSpaceCalloutId =
-    resSpace?.data?.createCalloutOnCollaboration.id ?? '';
+    resSpace?.data?.createCalloutOnCalloutsSet.id ?? '';
 
   await updateCalloutVisibility(
     whiteboardCollectionSpaceCalloutId,
     CalloutVisibility.Published
   );
 
-  const resSubspace = await createWhiteboardCalloutOnCollaboration(
-    baseScenario.subspace.collaboration.id,
+  const resSubspace = await createWhiteboardCalloutOnCalloutsSet(
+    baseScenario.subspace.collaboration.calloutsSetId,
     {
       framing: {
         profile: {
@@ -115,15 +115,15 @@ beforeAll(async () => {
     TestUser.GLOBAL_ADMIN
   );
   whiteboardCollectionSubspaceCalloutId =
-    resSubspace?.data?.createCalloutOnCollaboration.id ?? '';
+    resSubspace?.data?.createCalloutOnCalloutsSet.id ?? '';
 
   await updateCalloutVisibility(
     whiteboardCollectionSubspaceCalloutId,
     CalloutVisibility.Published
   );
 
-  const resSubsubspace = await createWhiteboardCalloutOnCollaboration(
-    baseScenario.subsubspace.collaboration.id,
+  const resSubsubspace = await createWhiteboardCalloutOnCalloutsSet(
+    baseScenario.subsubspace.collaboration.calloutsSetId,
     {
       framing: {
         profile: {
@@ -136,7 +136,7 @@ beforeAll(async () => {
     TestUser.GLOBAL_ADMIN
   );
   whiteboardCollectionSubsubspaceCalloutId =
-    resSubsubspace?.data?.createCalloutOnCollaboration.id ?? '';
+    resSubsubspace?.data?.createCalloutOnCalloutsSet.id ?? '';
 
   await updateCalloutVisibility(
     whiteboardCollectionSubsubspaceCalloutId,

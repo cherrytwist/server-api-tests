@@ -12,6 +12,7 @@ export type SpaceModel = {
   },
   collaboration: {
     id: string;
+    calloutsSetId: string;
     calloutPostCollectionId: string;
     calloutWhiteboardId: string;
     calloutPostId: string;
