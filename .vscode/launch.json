@@ -13,7 +13,7 @@
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.e2e.js"
+        "${workspaceRoot}/src/config/jest.config.e2e.js"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -27,7 +27,7 @@
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.it.js"
+        "${workspaceRoot}/src/config/jest.config.it.js"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -47,15 +47,22 @@
       "internalConsoleOptions": "neverOpen"
     },
     {
-      "name": "Debug Specific Suite",
+      "name": "Debug Specific Server API Suite",
       "type": "node",
       "request": "launch",
+      "envFile": "${workspaceFolder}/server-api/.env",
+      "cwd": "${workspaceFolder}/server-api",
+      "runtimeExecutable": "node",
+      "env": {
+        "NODE_ENV": "test"
+      },
       "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
+        "${workspaceFolder}/server-api/node_modules/jest/bin/jest.js",
         "--runInBand",
+        "--forceExit",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.roleset.js invitation.ts-spec.ts"
+        "./config/jest.config.contributor-management.js",
+        "organization-settings"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -64,7 +71,7 @@
       "name": "Debug Register Users",
       "type": "node",
       "request": "launch",
-      "args": ["${workspaceFolder}/test/utils/register-user.ts"],
+      "args": ["${workspaceFolder}/src/utils/register-user.ts"],
       "envFile": "${workspaceFolder}/.env",
       "runtimeArgs": [
         "-r",
@@ -73,6 +80,42 @@
         "tsconfig-paths/register"
       ],
       "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Debug Scenario Setup",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/server-api/src/scripts/validate-base-scenario-setup.ts"],
+      "envFile": "${workspaceFolder}/server-api/.env",
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "cwd": "${workspaceRoot}/server-api",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Debug Register Users",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/server-api/src/scripts/register-users.ts"],
+      "envFile": "${workspaceFolder}/server-api/.env",
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "cwd": "${workspaceRoot}/server-api",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
       "internalConsoleOptions": "neverOpen"
     }
   ]

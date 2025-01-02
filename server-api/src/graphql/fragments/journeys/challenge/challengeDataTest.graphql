@@ -1,0 +1,29 @@
+# fragment SubspaceData on Subspace {
+#   id
+#   nameID
+#   profile {
+#     ...ProfileData
+#   }
+#   authorization {
+#     ...AuthorizationData
+#   }
+
+#   community {
+#     ...CommunityData
+#   }
+#   collaboration {
+#     ...CollaborationData
+#   }
+
+#   context {
+#     ...ContextData
+#   }
+
+#   opportunities {
+#     ...SubsubspaceData
+#   }
+
+#   settings {
+#     ...SettingsData
+#   }
+# }

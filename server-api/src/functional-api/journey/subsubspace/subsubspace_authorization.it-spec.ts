@@ -1,0 +1,197 @@
+import '@utils/array.matcher';
+import { createSubspace } from '../subspace/subspace.request.params';
+import { deleteSpace } from '../space/space.request.params';
+import { TestUser } from '@alkemio/tests-lib';
+import { TestUserManager } from '@src/scenario/TestUserManager';
+import { CommunityRoleType } from '@generated/alkemio-schema';
+import {
+  assignRoleToUserExtendedData,
+  removeRoleFromUserExtendedData,
+} from '../../roleset/roles-request.params';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+
+const uniqueId = UniqueIDGenerator.getID();
+
+const credentialsType = 'SPACE_ADMIN';
+const subsubspaceName = `op-dname${uniqueId}`;
+const subsubspaceNameId = `op-nameid${uniqueId}`;
+let subsubspaceId = '';
+let subsubspaceRoleSetId = '';
+
+let baseScenario: OrganizationWithSpaceModel;
+
+const scenarioConfig: TestScenarioConfig = {
+  name: 'subsubspace-authorization',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: {
+        addMembers: true,
+        addAdmin: true,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+      },
+    },
+  },
+};
+
+beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+});
+
+beforeEach(async () => {
+  const responseCreateSubsubspaceOnSubspace = await createSubspace(
+    subsubspaceName,
+    subsubspaceNameId,
+    baseScenario.subspace.id
+  );
+
+  const oppData = responseCreateSubsubspaceOnSubspace?.data?.createSubspace;
+
+  subsubspaceId = oppData?.id ?? '';
+  subsubspaceRoleSetId = oppData?.community?.roleSet.id ?? '';
+});
+
+afterEach(async () => {
+  await deleteSpace(subsubspaceId);
+});
+
+afterAll(async () => {
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
+});
+
+describe('Subsubspace Admin', () => {
+  test('should create subsubspace admin', async () => {
+    // Act
+    const res = await assignRoleToUserExtendedData(
+      TestUserManager.users.subspaceMember.id,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin
+    );
+
+    // Assert
+    expect(res?.data?.assignRoleToUser?.agent?.credentials).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          resourceID: subsubspaceId,
+          type: credentialsType,
+        }),
+      ])
+    );
+  });
+
+  test('should add same user as admin of 2 opportunities', async () => {
+    // Arrange
+    const responseOppTwo = await createSubspace(
+      `oppdname-${uniqueId}`,
+      `oppnameid-${uniqueId}`,
+      baseScenario.subspace.id
+    );
+    const oppDataTwo = responseOppTwo?.data?.createSubspace;
+    const subsubspaceIdTwo = oppDataTwo?.id ?? '';
+    const subsubspaceRoleSetId2 = oppDataTwo?.community?.roleSet.id ?? '';
+
+    // Act
+    const resOne = await assignRoleToUserExtendedData(
+      TestUserManager.users.subspaceMember.id,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin
+    );
+
+    const resTwo = await assignRoleToUserExtendedData(
+      TestUserManager.users.subsubspaceMember.id,
+      subsubspaceRoleSetId2,
+      CommunityRoleType.Admin
+    );
+
+    // Assert
+    expect(resOne?.data?.assignRoleToUser?.agent?.credentials).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          resourceID: subsubspaceId,
+          type: credentialsType,
+        }),
+      ])
+    );
+    expect(resTwo?.data?.assignRoleToUser?.agent?.credentials).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          resourceID: subsubspaceIdTwo,
+          type: credentialsType,
+        }),
+      ])
+    );
+    await deleteSpace(subsubspaceIdTwo);
+  });
+
+  test('should be able one subsubspace admin to remove another admin from subsubspace', async () => {
+    // Arrange
+    await assignRoleToUserExtendedData(
+      TestUserManager.users.subspaceMember.id,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin
+    );
+
+    await assignRoleToUserExtendedData(
+      TestUserManager.users.subsubspaceMember.email,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin
+    );
+
+    const res = await removeRoleFromUserExtendedData(
+      TestUserManager.users.subsubspaceMember.email,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin,
+      TestUser.SUBSPACE_MEMBER
+    );
+
+    // Assert
+    expect(res?.data?.removeRoleFromUser?.agent?.credentials).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          resourceID: subsubspaceId,
+          type: credentialsType,
+        }),
+      ])
+    );
+  });
+
+  test('should remove the only admin of an subsubspace', async () => {
+    // Arrange
+    await assignRoleToUserExtendedData(
+      TestUserManager.users.subspaceMember.id,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin
+    );
+
+    // Act
+    const res = await removeRoleFromUserExtendedData(
+      TestUserManager.users.subsubspaceMember.email,
+      subsubspaceRoleSetId,
+      CommunityRoleType.Admin,
+      TestUser.SUBSPACE_MEMBER
+    );
+
+    // Assert
+    expect(res?.data?.removeRoleFromUser?.agent?.credentials).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          resourceID: subsubspaceId,
+          type: credentialsType,
+        }),
+      ])
+    );
+  });
+});
