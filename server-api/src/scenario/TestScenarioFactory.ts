@@ -258,6 +258,7 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
+    console.log('calloutsSet ID', spaceData?.collaboration.calloutsSet?.id ?? '');
     spaceModel.collaboration.calloutsSetId =
       spaceData?.collaboration.calloutsSet?.id ?? '';
 
@@ -269,7 +270,7 @@ export class TestScenarioFactory {
     scenarioName: string
   ): Promise<SpaceModel> {
     const callForPostCalloutData = await createCalloutOnCalloutsSet(
-      spaceModel.collaboration.id,
+      spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -312,7 +313,7 @@ export class TestScenarioFactory {
     );
 
     const creatPostCallout = await createCalloutOnCalloutsSet(
-      spaceModel.collaboration.id,
+      spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: { displayName: 'Space Post Callout' },
