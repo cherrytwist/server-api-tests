@@ -49,10 +49,9 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  await deleteSpace('eco1');
+  // await deleteSpace('eco1');
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
@@ -115,7 +114,7 @@ describe('User roles', () => {
     expect(spacesData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: spaceNameId,
+          nameID: baseScenario.space.nameId,
           roles: expect.arrayContaining(availableRoles),
         }),
       ])
@@ -297,7 +296,10 @@ describe('User roles', () => {
         CommunityRoleType.Lead
       );
 
-      await assignUserToOrganization(TestUserManager.users.nonSpaceMember.id, orgId);
+      await assignUserToOrganization(
+        TestUserManager.users.nonSpaceMember.id,
+        orgId
+      );
     });
     afterAll(async () => {
       await deleteSpace(oppId);

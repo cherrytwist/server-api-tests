@@ -212,6 +212,8 @@ export class TestScenarioFactory {
     }
 
     model.organization.id = responseOrg.data?.createOrganization.id ?? '';
+    model.organization.nameId =
+      responseOrg.data?.createOrganization.nameID ?? '';
     model.organization.agentId =
       responseOrg.data?.createOrganization.agent.id ?? '';
     model.organization.accountId =

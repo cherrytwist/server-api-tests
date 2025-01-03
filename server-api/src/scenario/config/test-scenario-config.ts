@@ -1,6 +1,6 @@
 export interface TestScenarioConfig {
   name: string;
-  organization?: {}; // Just a placeholder for now, not used
+  organization?: TestScenarioOrganizationConfig;
   space?: TestScenarioSpaceConfig;
 }
 
