@@ -33,7 +33,7 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization-verification',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   const res = await createOrganization(organizationName, hostNameId);
   const orgData = res.data?.createOrganization;
   organizationId = orgData?.id ?? '';

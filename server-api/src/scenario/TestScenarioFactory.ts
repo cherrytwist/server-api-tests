@@ -30,6 +30,15 @@ import { assignPlatformRoleToUser } from '@functional-api/platform/authorization
 import { logElapsedTime } from '@utils/profiling';
 
 export class TestScenarioFactory {
+  public static async createBaseScenarioEmpty(
+    scenarioConfig: TestScenarioConfig
+  ) {
+    const start = performance.now();
+    await TestUserManager.populateUserModelMap();
+    const result = scenarioConfig;
+    logElapsedTime('createBaseScenario', start);
+    return result;
+  }
 
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
@@ -38,7 +47,6 @@ export class TestScenarioFactory {
     const result = await this.createBaseScenarioPrivate(scenarioConfig);
     logElapsedTime('createBaseScenario', start);
     return result;
-
   }
 
   public static async createBaseScenarioPrivate(
@@ -250,7 +258,8 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
-    spaceModel.collaboration.calloutsSetId = spaceData?.collaboration.calloutsSet?.id ?? '';
+    spaceModel.collaboration.calloutsSetId =
+      spaceData?.collaboration.calloutsSet?.id ?? '';
 
     return spaceModel;
   }

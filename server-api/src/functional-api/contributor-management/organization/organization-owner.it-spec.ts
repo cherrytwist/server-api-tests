@@ -37,7 +37,7 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization-owner',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 beforeEach(async () => {
   const request = await createOrganization(organizationName, hostNameId);

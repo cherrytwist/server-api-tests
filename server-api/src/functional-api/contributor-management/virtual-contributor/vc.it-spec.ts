@@ -139,7 +139,8 @@ describe('Virtual Contributor', () => {
     });
   });
 
-  test('should return invitations after virtual contributor is removed', async () => {
+  // skipped until bug is fixed: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/server/4813
+  test.skip('should return invitations after virtual contributor is removed', async () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,

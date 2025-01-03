@@ -1,3 +1,15 @@
+/**
+ * This file contains integration tests for creating user accounts within the platform.
+ * It includes tests for creating users with specific details and verifying the creation process.
+ * The tests cover scenarios such as:
+ * - Creating a user with a unique display name.
+ * - Verifying that the user is created successfully and the profile data matches the input.
+ * - Handling errors when attempting to create a user with a duplicate name.
+ * - Cleaning up by deleting the created users after tests.
+ *
+ * The tests ensure that the user creation process works as expected,
+ * and that the API responses match the expected values.
+ */
 import {
   createUser,
   deleteUser,
@@ -18,7 +30,7 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'user-create',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 
 beforeEach(() => {
