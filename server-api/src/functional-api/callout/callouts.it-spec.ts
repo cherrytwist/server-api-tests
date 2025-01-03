@@ -29,16 +29,18 @@ const scenarioConfig: TestScenarioConfig = {
       addCallouts: true,
     },
     community: { addAdmin: true, addMembers: true },
-    // subspace: {
-    //   collaboration: {
-    //     addCallouts: true,
-    //   },
-    //   subspace: {
-    //     collaboration: {
-    //       addCallouts: true,
-    //     },
-    //   },
-    // },
+    subspace: {
+      collaboration: {
+        addCallouts: true,
+      },
+      community: { addAdmin: true, addMembers: true },
+      subspace: {
+        collaboration: {
+          addCallouts: true,
+        },
+        community: { addAdmin: true, addMembers: true },
+      },
+    },
   },
 };
 
@@ -196,7 +198,7 @@ describe('Callouts - CRUD', () => {
   // });
 });
 
-describe.only('Callouts - AUTH Space', () => {
+describe('Callouts - AUTH Space', () => {
   describe('DDT user privileges to create callout', () => {
     afterEach(async () => {
       await deleteCallout(calloutId);
@@ -211,7 +213,7 @@ describe.only('Callouts - AUTH Space', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.space.collaboration.calloutsSetId,
+          baseScenario.subspace.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );

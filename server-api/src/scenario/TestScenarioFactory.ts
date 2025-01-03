@@ -364,8 +364,10 @@ export class TestScenarioFactory {
     targetModel.communication.updatesId =
       subspaceData?.community?.communication?.updates.id ?? '';
     targetModel.collaboration.id = subspaceData?.collaboration?.id ?? '';
+    targetModel.collaboration.calloutsSetId = subspaceData?.collaboration.calloutsSet?.id ?? '';
     targetModel.contextId = subspaceData?.context?.id ?? '';
     targetModel.profile.id = subspaceData?.profile?.id ?? '';
+
 
     return targetModel;
   }
