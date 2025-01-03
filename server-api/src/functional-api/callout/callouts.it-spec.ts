@@ -28,22 +28,22 @@ const scenarioConfig: TestScenarioConfig = {
     collaboration: {
       addCallouts: true,
     },
-    subspace: {
-      collaboration: {
-        addCallouts: true,
-      },
-      subspace: {
-        collaboration: {
-          addCallouts: true,
-        },
-      },
-    },
+    community: { addAdmin: true, addMembers: true },
+    // subspace: {
+    //   collaboration: {
+    //     addCallouts: true,
+    //   },
+    //   subspace: {
+    //     collaboration: {
+    //       addCallouts: true,
+    //     },
+    //   },
+    // },
   },
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -55,82 +55,87 @@ beforeEach(async () => {
 });
 
 describe('Callouts - CRUD', () => {
-  afterEach(async () => {
-    await deleteCallout(calloutId);
-  });
-  test('should create callout on space coollaboration', async () => {
-    // Act
-    const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id
-    );
-    const calloutDataCreate = res.data?.createCalloutOnCalloutsSet;
-    calloutId = calloutDataCreate?.id ?? '';
-
-    const postsData = await getDataPerSpaceCallout(
-      baseScenario.space.id,
-      calloutId
-    );
-    const data = postsData?.data?.space.collaboration?.calloutsSet.callouts?.[0];
-
-    // Assert
-    expect(data).toEqual(calloutDataCreate);
-  });
-
-  test('should update callout on space coollaboration', async () => {
-    // Act
-    const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
-      {
-        framing: {
-          profile: { displayName: calloutDisplayName },
-        },
-      }
-    );
-    calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
-
-    const resUpdate = await updateCallout(calloutId, TestUser.GLOBAL_ADMIN, {
-      framing: {
-        profile: {
-          displayName: calloutDisplayName + 'update',
-          description: 'calloutDescription update',
-        },
-      },
-      contributionPolicy: {
-        state: CalloutState.Archived,
-      },
+  describe('', () => {
+    afterEach(async () => {
+      await deleteCallout(calloutId);
     });
-    const calloutReq = await getDataPerSpaceCallout(
-      baseScenario.space.id,
-      calloutId
-    );
-    const calloutData = calloutReq.data?.space.collaboration?.calloutsSet.callouts?.[0];
+    test('should create callout on space coollaboration', async () => {
+      // Act
+      const res = await createCalloutOnCalloutsSet(
+        baseScenario.space.collaboration.calloutsSetId
+      );
+      const calloutDataCreate = res.data?.createCalloutOnCalloutsSet;
+      calloutId = calloutDataCreate?.id ?? '';
 
-    // Assert
-    expect(calloutData).toEqual(resUpdate?.data?.updateCallout);
-  });
+      const postsData = await getDataPerSpaceCallout(
+        baseScenario.space.id,
+        calloutId
+      );
+      const data =
+        postsData?.data?.space.collaboration?.calloutsSet.callouts?.[0];
 
-  test('should update callout visibility to Published', async () => {
-    // Act
-    const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id
-    );
-    calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
+      // Assert
+      expect(data).toEqual(calloutDataCreate);
+    });
 
-    await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
+    test('should update callout on space coollaboration', async () => {
+      // Act
+      const res = await createCalloutOnCalloutsSet(
+        baseScenario.space.collaboration.calloutsSetId,
+        {
+          framing: {
+            profile: { displayName: calloutDisplayName },
+          },
+        }
+      );
+      calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
-    const calloutReq = await getDataPerSpaceCallout(
-      baseScenario.space.id,
-      calloutId
-    );
-    const calloutData = calloutReq.data?.space.collaboration?.calloutsSet.callouts?.[0];
-    // Assert
-    expect(calloutData?.visibility).toEqual(CalloutVisibility.Published);
+      const resUpdate = await updateCallout(calloutId, TestUser.GLOBAL_ADMIN, {
+        framing: {
+          profile: {
+            displayName: calloutDisplayName + 'update',
+            description: 'calloutDescription update',
+          },
+        },
+        contributionPolicy: {
+          state: CalloutState.Archived,
+        },
+      });
+      const calloutReq = await getDataPerSpaceCallout(
+        baseScenario.space.id,
+        calloutId
+      );
+      const calloutData =
+        calloutReq.data?.space.collaboration?.calloutsSet.callouts?.[0];
+
+      // Assert
+      expect(calloutData).toEqual(resUpdate?.data?.updateCallout);
+    });
+
+    test('should update callout visibility to Published', async () => {
+      // Act
+      const res = await createCalloutOnCalloutsSet(
+        baseScenario.space.collaboration.calloutsSetId
+      );
+      calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
+
+      await updateCalloutVisibility(calloutId, CalloutVisibility.Published);
+
+      const calloutReq = await getDataPerSpaceCallout(
+        baseScenario.space.id,
+        calloutId
+      );
+      const calloutData =
+        calloutReq.data?.space.collaboration?.calloutsSet.callouts?.[0];
+      // Assert
+      expect(calloutData?.visibility).toEqual(CalloutVisibility.Published);
+    });
   });
 
   test('should delete callout on space coollaboration', async () => {
     // Arrange
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id
+      baseScenario.space.collaboration.calloutsSetId
     );
     calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
     const resCalloutDataBefore = await getCalloutsData(
@@ -144,8 +149,7 @@ describe('Callouts - CRUD', () => {
     const resCalloutData = await getCalloutsData(
       baseScenario.space.collaboration.calloutsSetId
     );
-    const calloutData =
-      resCalloutData.data?.lookup.calloutsSet?.callouts ?? [];
+    const calloutData = resCalloutData.data?.lookup.calloutsSet?.callouts ?? [];
 
     // Assert
     expect(calloutData.length).toEqual(calloutDataBefore.length - 1);
@@ -192,7 +196,7 @@ describe('Callouts - CRUD', () => {
   // });
 });
 
-describe('Callouts - AUTH Space', () => {
+describe.only('Callouts - AUTH Space', () => {
   describe('DDT user privileges to create callout', () => {
     afterEach(async () => {
       await deleteCallout(calloutId);
@@ -207,7 +211,7 @@ describe('Callouts - AUTH Space', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.space.collaboration.id,
+          baseScenario.space.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );
@@ -230,7 +234,7 @@ describe('Callouts - AUTH Space', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.space.collaboration.id,
+          baseScenario.space.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );
@@ -255,7 +259,7 @@ describe('Callouts - AUTH Space', () => {
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.space.collaboration.id
+          baseScenario.space.collaboration.calloutsSetId
         );
         calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -291,7 +295,7 @@ describe('Callouts - AUTH Space', () => {
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.space.collaboration.id
+          baseScenario.space.collaboration.calloutsSetId
         );
         calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -321,7 +325,7 @@ describe('Callouts - AUTH Subspace', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subspace.collaboration.id,
+          baseScenario.subspace.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );
@@ -344,7 +348,7 @@ describe('Callouts - AUTH Subspace', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subspace.collaboration.id,
+          baseScenario.subspace.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );
@@ -369,7 +373,7 @@ describe('Callouts - AUTH Subspace', () => {
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subspace.collaboration.id
+          baseScenario.subspace.collaboration.calloutsSetId
         );
         calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -405,7 +409,7 @@ describe('Callouts - AUTH Subspace', () => {
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subspace.collaboration.id
+          baseScenario.subspace.collaboration.calloutsSetId
         );
         calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -438,7 +442,7 @@ describe('Callouts - AUTH Subsubspace', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subsubspace.collaboration.id,
+          baseScenario.subsubspace.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );
@@ -460,7 +464,7 @@ describe('Callouts - AUTH Subsubspace', () => {
       async ({ userRole, message }) => {
         // Act
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subsubspace.collaboration.id,
+          baseScenario.subsubspace.collaboration.calloutsSetId,
           { type: CalloutType.Post },
           userRole
         );
@@ -488,7 +492,7 @@ describe('Callouts - AUTH Subsubspace', () => {
       'User: "$userRole" get message: "$message", who intend to update callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subsubspace.collaboration.id
+          baseScenario.subsubspace.collaboration.calloutsSetId
         );
         calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -528,7 +532,7 @@ describe('Callouts - AUTH Subsubspace', () => {
       'User: "$userRole" get message: "$message", who intend to delete callout',
       async ({ userRole, message }) => {
         const res = await createCalloutOnCalloutsSet(
-          baseScenario.subsubspace.collaboration.id
+          baseScenario.subsubspace.collaboration.calloutsSetId
         );
         calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 

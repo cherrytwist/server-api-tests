@@ -154,17 +154,20 @@ export class TestScenarioFactory {
     scenarioName: string
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
+    console.log('roleSetID trqbwa da e tova', spaceModel.community);
     const spaceCommunityConfig = spaceConfig.community;
     if (spaceCommunityConfig) {
       if (spaceCommunityConfig.addMembers) {
-        await this.assignUsersToMemberRole(roleSetID);
+        const a = await this.assignUsersToMemberRole(roleSetID);
+        //console.log('дай ми това инфо уеее', a.error);
       }
       if (spaceCommunityConfig.addAdmin) {
-        await assignRoleToUser(
-          TestUserManager.users.subspaceAdmin.id,
+        const a = await assignRoleToUser(
+          TestUserManager.users.spaceAdmin.id,
           roleSetID,
           CommunityRoleType.Admin
         );
+        console.log('дай ми това инфо уеее', a.error);
       }
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
@@ -258,9 +261,14 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
-    console.log('calloutsSet ID', spaceData?.collaboration.calloutsSet?.id ?? '');
+    console.log(
+      'calloutsSet ID',
+      spaceData?.collaboration.calloutsSet?.id ?? ''
+    );
     spaceModel.collaboration.calloutsSetId =
       spaceData?.collaboration.calloutsSet?.id ?? '';
+    spaceModel.community.id = spaceData?.community?.id ?? '';
+    spaceModel.community.roleSetId = spaceData?.community?.roleSet?.id ?? '';
 
     return spaceModel;
   }
@@ -366,6 +374,9 @@ export class TestScenarioFactory {
     roleSetId: string
   ): Promise<void> {
     const usersIdsToAssign: string[] = [
+      TestUserManager.users.spaceAdmin.id,
+      TestUserManager.users.spaceMember.id,
+
       TestUserManager.users.subspaceAdmin.id,
       TestUserManager.users.subspaceMember.id,
       TestUserManager.users.subsubspaceAdmin.id,
