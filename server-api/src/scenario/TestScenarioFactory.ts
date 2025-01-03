@@ -70,7 +70,8 @@ export class TestScenarioFactory {
     await this.populateSpace(
       scenarioConfig.space,
       baseScenario.space,
-      scenarioName
+      scenarioName,
+      TestUserManager.users.spaceAdmin
     );
 
     const subspace = scenarioConfig.space.subspace;
@@ -84,7 +85,12 @@ export class TestScenarioFactory {
       scenarioName,
       baseScenario.subspace
     );
-    await this.populateSpace(subspace, baseScenario.subspace, scenarioName);
+    await this.populateSpace(
+      subspace,
+      baseScenario.subspace,
+      scenarioName,
+      TestUserManager.users.subspaceAdmin
+    );
 
     const subsubspace = subspace.subspace;
     if (!subsubspace) {
@@ -100,7 +106,8 @@ export class TestScenarioFactory {
     await this.populateSpace(
       subsubspace,
       baseScenario.subsubspace,
-      scenarioName
+      scenarioName,
+      TestUserManager.users.subsubspaceAdmin
     );
 
     return baseScenario;
@@ -151,7 +158,8 @@ export class TestScenarioFactory {
   private static async populateSpace(
     spaceConfig: TestScenarioSpaceConfig,
     spaceModel: SpaceModel,
-    scenarioName: string
+    scenarioName: string,
+    communityAdmin: UserModel
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
     console.log('roleSetID trqbwa da e tova', spaceModel.community);
@@ -163,7 +171,7 @@ export class TestScenarioFactory {
       }
       if (spaceCommunityConfig.addAdmin) {
         const a = await assignRoleToUser(
-          TestUserManager.users.spaceAdmin.id,
+          communityAdmin.id,
           roleSetID,
           CommunityRoleType.Admin
         );
@@ -364,10 +372,10 @@ export class TestScenarioFactory {
     targetModel.communication.updatesId =
       subspaceData?.community?.communication?.updates.id ?? '';
     targetModel.collaboration.id = subspaceData?.collaboration?.id ?? '';
-    targetModel.collaboration.calloutsSetId = subspaceData?.collaboration.calloutsSet?.id ?? '';
+    targetModel.collaboration.calloutsSetId =
+      subspaceData?.collaboration.calloutsSet?.id ?? '';
     targetModel.contextId = subspaceData?.context?.id ?? '';
     targetModel.profile.id = subspaceData?.profile?.id ?? '';
-
 
     return targetModel;
   }
