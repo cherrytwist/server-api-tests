@@ -8,7 +8,10 @@ import {
 } from './user.request.params';
 import '@utils/array.matcher';
 import { TestUserManager } from '@src/scenario/TestUserManager';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
@@ -20,6 +23,14 @@ let userEmail = '';
 let phoneAfterUpdate = '';
 let userData: any;
 let userDataCreate: any;
+
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'organization-owner',
+};
+beforeAll(async () => {
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
+});
 
 describe('Update user', () => {
   beforeEach(async () => {

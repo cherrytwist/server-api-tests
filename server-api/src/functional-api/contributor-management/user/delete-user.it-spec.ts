@@ -1,11 +1,22 @@
 import '@utils/array.matcher';
 import { createUser, deleteUser, getUserData } from './user.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
 let userId: string;
 let userData;
+
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'organization-owner',
+};
+beforeAll(async () => {
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
+});
 
 beforeEach(async () => {
   userName = `testuser${uniqueId}`;

@@ -79,9 +79,9 @@ export class TestUserManager {
         'subsubspace.member@alkem.io'
       ),
       qaUser: TestUserManager.getUserModelByEmail('qa.user@alkem.io'),
-      notificationsAdmin: TestUserManager.getUserModelByEmail(
-        'subspace.member@alkem.io' // TODO: notifications seems to not be properly setup
-      ),
+      // notificationsAdmin: TestUserManager.getUserModelByEmail(
+      //   'notifications@alkem.io' // TODO: notifications seems to not be properly setup
+      // ),
       nonSpaceMember: TestUserManager.getUserModelByEmail('non.space@alkem.io'),
       betaTester: TestUserManager.getUserModelByEmail('beta.tester@alkem.io'),
     };
@@ -89,6 +89,7 @@ export class TestUserManager {
 
   public static getUserModelByEmail(userEmail: string): UserModel {
     const userModel = this.userModelMapEmail.get(userEmail);
+   // console.log('userModel', userModel);
     if (!userModel) {
       throw new Error(`UserModel with email ${userEmail} not found`);
     }
@@ -97,6 +98,8 @@ export class TestUserManager {
 
   public static getUserModelByType(userType: TestUser): UserModel {
     const userModel = this.userModelMapType.get(userType);
+    //console.log('userModel', userModel);
+
     if (!userModel) {
       throw new Error(`UserModel with type ${userType} not found`);
     }
@@ -106,9 +109,7 @@ export class TestUserManager {
   private static async populateUserModelFromApi(
     userModel: UserModel
   ): Promise<void> {
-    const userData = await this.getUserData(
-      userModel.authToken
-    );
+    const userData = await this.getUserData(userModel.authToken);
     const userInfo = userData?.data?.me.user;
     userModel.displayName = userInfo?.profile.displayName || '';
     userModel.id = userInfo?.id || '';
@@ -124,8 +125,7 @@ export class TestUserManager {
   private static async getUserData(authToken: string) {
     const graphqlClient = getGraphqlClient();
     const result = graphqlClient.getMyUserInfo(
-      {
-      },
+      {},
       {
         authorization: `Bearer ${authToken}`,
       }
