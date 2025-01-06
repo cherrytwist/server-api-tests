@@ -144,15 +144,19 @@ export class TestScenarioFactory {
     baseScenario: OrganizationWithSpaceModel
   ): Promise<void> {
     if (baseScenario.subsubspace.id.length > 0) {
-      await deleteSpace(baseScenario.subsubspace.id);
+      const a = await deleteSpace(baseScenario.subsubspace.id);
+      console.log('subsubspace deleted', a.data);
     }
     if (baseScenario.subspace.id.length > 0) {
-      await deleteSpace(baseScenario.subspace.id);
+      const b = await deleteSpace(baseScenario.subspace.id);
+      console.log('subspace deleted', b.data);
     }
     if (baseScenario.space.id.length > 0) {
-      await deleteSpace(baseScenario.space.id);
+      const c = await deleteSpace(baseScenario.space.id);
+      console.log('subspace deleted', c.data);
     }
-    await deleteOrganization(baseScenario.organization.id);
+    const d = await deleteOrganization(baseScenario.organization.id);
+    console.log('org deleted', d.data);
   }
 
   private static async populateSpace(
@@ -162,20 +166,17 @@ export class TestScenarioFactory {
     communityAdmin: UserModel
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
-    console.log('roleSetID trqbwa da e tova', spaceModel.community);
     const spaceCommunityConfig = spaceConfig.community;
     if (spaceCommunityConfig) {
       if (spaceCommunityConfig.addMembers) {
-        const a = await this.assignUsersToMemberRole(roleSetID);
-        //console.log('дай ми това инфо уеее', a.error);
+        await this.assignUsersToMemberRole(roleSetID);
       }
       if (spaceCommunityConfig.addAdmin) {
-        const a = await assignRoleToUser(
+        await assignRoleToUser(
           communityAdmin.id,
           roleSetID,
           CommunityRoleType.Admin
         );
-        console.log('дай ми това инфо уеее', a.error);
       }
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
@@ -271,10 +272,7 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
-    console.log(
-      'calloutsSet ID',
-      spaceData?.collaboration.calloutsSet?.id ?? ''
-    );
+
     spaceModel.collaboration.calloutsSetId =
       spaceData?.collaboration.calloutsSet?.id ?? '';
     spaceModel.community.id = spaceData?.community?.id ?? '';
@@ -336,6 +334,7 @@ export class TestScenarioFactory {
         framing: {
           profile: { displayName: 'Space Post Callout' },
         },
+        type: CalloutType.Post,
       }
     );
     const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
