@@ -41,10 +41,15 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
-import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
+import {
+  assignPlatformRoleToUser,
+  removePlatformRoleFromUser,
+} from '@functional-api/platform/authorization-platform-mutation';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
@@ -52,6 +57,14 @@ const vcName = `vcname1-${uniqueId}`;
 let vcId = '';
 let innovationPackId = '';
 const packName = `packname-${uniqueId}`;
+
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'user-entitlements',
+};
+
+beforeAll(async () => {
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+});
 
 describe('Get User Account Authorization and License privileges ', () => {
   test('No licenses assigned', async () => {

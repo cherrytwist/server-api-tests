@@ -30,13 +30,21 @@ import {
   deleteInnovationPack,
 } from '@functional-api/innovation-pack/innovation_pack.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
-import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
+import {
+  assignPlatformRoleToUser,
+  removePlatformRoleFromUser,
+} from '@functional-api/platform/authorization-platform-mutation';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let packId = '';
 const packName = `packname-${uniqueId}`;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'innovation-pack-functional-entitlements',
+};
 
 describe('Functional tests - Innovation Pack', () => {
   afterEach(async () => {
@@ -52,6 +60,7 @@ describe('Functional tests - Innovation Pack', () => {
   });
   describe('VC Campaign user innovation pack creation', () => {
     beforeAll(async () => {
+      await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
       await assignPlatformRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
@@ -85,7 +94,9 @@ describe('Functional tests - Innovation Pack', () => {
       'User: VC campaign has license $availableEntitlements to creates an innovation pack with name: $packName',
       async ({ packName, availableEntitlements, error }) => {
         // Arrange
-        const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
+        const response = await getMyEntitlementsQuery(
+          TestUser.NON_SPACE_MEMBER
+        );
 
         // Act
         const createPack = await createInnovationPack(

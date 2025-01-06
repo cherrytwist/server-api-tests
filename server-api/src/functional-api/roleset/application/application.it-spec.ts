@@ -274,7 +274,7 @@ describe('Application', () => {
   });
 
   // Skip until implemented a solution to stabalize test suites triggered after user deletion
-  test.skip('should return applications after user is removed', async () => {
+  test('should return applications after user is removed', async () => {
     // Arrange
     const applicationsBeforeCreateDelete =
       await getRoleSetInvitationsApplications(
