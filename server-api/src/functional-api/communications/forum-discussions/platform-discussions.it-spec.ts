@@ -30,7 +30,7 @@ const errorAuthDiscussionMessageDelete =
 
 let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
-  name: 'organization-owner',
+  name: 'platform-discussions',
 };
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);

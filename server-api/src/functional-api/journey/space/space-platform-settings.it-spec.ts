@@ -38,16 +38,19 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'space-platform-settings',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
+    community: { addAdmin: true, addMembers: true },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
+      community: { addAdmin: true, addMembers: true },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
+        community: { addAdmin: true, addMembers: true },
       },
     },
   },
@@ -55,14 +58,14 @@ const scenarioConfig: TestScenarioConfig = {
 
 describe('Update space platform settings', () => {
   beforeAll(async () => {
-    baseScenario =
-      await TestScenarioFactory.createBaseScenario(
-        scenarioConfig
-      );
+    baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-    await updateSpaceSettings(baseScenario.space.id, {
-      privacy: { mode: SpacePrivacyMode.Private },
+   const a = await updateSpaceSettings(baseScenario.space.id, {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
     });
+    console.log('moje li da pomaga supporta?',a.data);
   });
 
   afterAll(async () => {

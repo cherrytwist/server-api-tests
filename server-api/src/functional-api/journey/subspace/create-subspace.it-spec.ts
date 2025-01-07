@@ -34,7 +34,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-create',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
   }
 }

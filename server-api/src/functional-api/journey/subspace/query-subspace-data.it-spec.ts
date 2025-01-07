@@ -34,7 +34,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-data-access',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
   }
 }

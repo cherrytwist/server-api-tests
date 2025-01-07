@@ -22,7 +22,7 @@ let messageId = '';
 
 let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
-  name: 'organization-owner',
+  name: 'reactions',
 };
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);

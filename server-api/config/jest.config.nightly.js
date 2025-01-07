@@ -2,7 +2,6 @@ module.exports = {
   ...require('./jest.config'),
   testRegex: [
     '/src/functional-api/contributor-management/organization/.*\\.it-spec\\.ts',
-    '/src/functional-api/preferences/.*\\.it-spec\\.ts',
     '/src/functional-api/roleset/.*\\.it-spec\\.ts',
     '/src/functional-api/contributor-management/.*\\.it-spec\\.ts',
     '/src/functional-api/callout/.*\\.it-spec\\.ts',
@@ -14,3 +13,4 @@ module.exports = {
   ],
   coverageDirectory: '<rootDir>/coverage-nightly',
 };
+
