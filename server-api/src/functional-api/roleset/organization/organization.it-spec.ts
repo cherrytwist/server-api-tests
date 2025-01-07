@@ -13,7 +13,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'organization',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
   },
 };

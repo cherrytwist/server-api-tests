@@ -61,10 +61,11 @@ describe('Functional tests - Innovation Pack', () => {
   describe('VC Campaign user innovation pack creation', () => {
     beforeAll(async () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-      await assignPlatformRoleToUser(
+      const a = await assignPlatformRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
+      console.log('im li greshki',a.error)
     });
     const allPrivileges = [
       'ACCOUNT_SPACE_FREE',
