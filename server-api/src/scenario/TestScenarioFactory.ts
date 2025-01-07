@@ -114,15 +114,16 @@ export class TestScenarioFactory {
   }
 
   private static async populateGlobalRoles(): Promise<void> {
-    await this.checkAndAssignPlatformRoleToUser(
+    const a = await this.checkAndAssignPlatformRoleToUser(
       TestUserManager.users.globalLicenseAdmin,
       PlatformRole.LicenseManager
     );
-
-    await this.checkAndAssignPlatformRoleToUser(
+    console.log('globalLicenseAdmin', a);
+    const b = await this.checkAndAssignPlatformRoleToUser(
       TestUserManager.users.globalSupportAdmin,
       PlatformRole.Support
     );
+    console.log('globalLicenseAdmin', a);
 
     await this.checkAndAssignPlatformRoleToUser(
       TestUserManager.users.betaTester,
@@ -136,7 +137,8 @@ export class TestScenarioFactory {
   ): Promise<void> {
     const alreadyHasRole = userModel.platformRoles.includes(role);
     if (!alreadyHasRole) {
-      await assignPlatformRoleToUser(userModel.id, role);
+      const a = await assignPlatformRoleToUser(userModel.id, role);
+      console.log('assignPlatformRoleToUser', a.data);
     }
   }
 
@@ -273,11 +275,13 @@ export class TestScenarioFactory {
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
     spaceModel.communication.updatesId =
-    spaceData?.community?.communication?.updates.id ?? '';
+      spaceData?.community?.communication?.updates.id ?? '';
     spaceModel.collaboration.calloutsSetId =
       spaceData?.collaboration.calloutsSet?.id ?? '';
     spaceModel.community.id = spaceData?.community?.id ?? '';
     spaceModel.community.roleSetId = spaceData?.community?.roleSet?.id ?? '';
+    spaceModel.templateSetId =
+      spaceData?.templatesManager?.templatesSet?.id ?? '';
 
     return spaceModel;
   }
