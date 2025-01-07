@@ -42,17 +42,17 @@ const scenarioConfig: TestScenarioConfig = {
     collaboration: {
       addCallouts: true,
     },
+    community: { addAdmin: true, addMembers: true },
     subspace: {
       collaboration: {
         addCallouts: true,
       },
-    }
-  }
-}
+    },
+  },
+};
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: {
@@ -89,7 +89,7 @@ describe('Activity logs - Subspace', () => {
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subspace.collaboration.id
+      baseScenario.subspace.collaboration.calloutsSetId
     );
     calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -104,7 +104,10 @@ describe('Activity logs - Subspace', () => {
 
   test('should return MEMBER_JOINED, when user assigned from Admin or individually joined', async () => {
     // Arrange
-    await joinRoleSet(baseScenario.subspace.community.roleSetId, TestUser.SPACE_MEMBER);
+    await joinRoleSet(
+      baseScenario.subspace.community.roleSetId,
+      TestUser.SPACE_MEMBER
+    );
 
     await assignRoleToUser(
       TestUserManager.users.spaceAdmin.id,
@@ -149,7 +152,7 @@ describe('Activity logs - Subspace', () => {
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subspace.collaboration.id
+      baseScenario.subspace.collaboration.calloutsSetId
     );
     calloutId = res?.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -173,7 +176,7 @@ describe('Activity logs - Subspace', () => {
     messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCalloutsSet(
-      baseScenario.subspace.collaboration.id,
+      baseScenario.subspace.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -203,7 +206,7 @@ describe('Activity logs - Subspace', () => {
     );
 
     const resWhiteboard = await createCalloutOnCalloutsSet(
-      baseScenario.subspace.collaboration.id,
+      baseScenario.subspace.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -314,13 +317,13 @@ describe('Access to Activity logs - Subspace', () => {
     });
     // Arrange
     test.each`
-      userRole                 | message
-      ${TestUser.GLOBAL_ADMIN} | ${baseScenario.subspace.collaboration.id}
-      ${TestUser.SPACE_ADMIN}  | ${baseScenario.subspace.collaboration.id}
-      ${TestUser.SPACE_MEMBER} | ${baseScenario.subspace.collaboration.id}
+      userRole
+      ${TestUser.GLOBAL_ADMIN}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Subspace activity logs of a Private space',
-      async ({ userRole, message }) => {
+      async ({ userRole }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
           baseScenario.subspace.collaboration.id,
@@ -331,7 +334,7 @@ describe('Access to Activity logs - Subspace', () => {
         // Assert
         expect(
           resActivity.data?.activityLogOnCollaboration[0]?.collaborationID
-        ).toContain(message);
+        ).toContain(baseScenario.subspace.collaboration.id);
       }
     );
 
@@ -365,14 +368,14 @@ describe('Access to Activity logs - Subspace', () => {
     });
     // Arrange
     test.each`
-      userRole                     | message
-      ${TestUser.GLOBAL_ADMIN}     | ${baseScenario.subspace.collaboration.id}
-      ${TestUser.SPACE_ADMIN}      | ${baseScenario.subspace.collaboration.id}
-      ${TestUser.SPACE_MEMBER}     | ${baseScenario.subspace.collaboration.id}
-      ${TestUser.NON_SPACE_MEMBER} | ${baseScenario.subspace.collaboration.id}
+      userRole
+      ${TestUser.GLOBAL_ADMIN}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
+      ${TestUser.NON_SPACE_MEMBER}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public Subspace activity logs of a Public space',
-      async ({ userRole, message }) => {
+      async ({ userRole }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
           baseScenario.subspace.collaboration.id,
@@ -383,7 +386,7 @@ describe('Access to Activity logs - Subspace', () => {
         // Assert
         expect(
           resActivity.data?.activityLogOnCollaboration[0]?.collaborationID
-        ).toContain(message);
+        ).toContain(baseScenario.subspace.collaboration.id);
       }
     );
   });
