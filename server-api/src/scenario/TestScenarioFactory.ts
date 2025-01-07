@@ -272,7 +272,8 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
-
+    spaceModel.communication.updatesId =
+    spaceData?.community?.communication?.updates.id ?? '';
     spaceModel.collaboration.calloutsSetId =
       spaceData?.collaboration.calloutsSet?.id ?? '';
     spaceModel.community.id = spaceData?.community?.id ?? '';
