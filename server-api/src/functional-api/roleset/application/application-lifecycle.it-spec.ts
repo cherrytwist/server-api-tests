@@ -1,6 +1,5 @@
 import '@utils/array.matcher';
 import {
-  deleteSpace,
   getSpaceData,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';

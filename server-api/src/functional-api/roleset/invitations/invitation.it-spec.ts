@@ -42,7 +42,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'access-invitations',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,

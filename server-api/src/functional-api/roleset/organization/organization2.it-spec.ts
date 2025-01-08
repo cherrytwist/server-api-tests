@@ -32,8 +32,6 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  //await deleteSpace('eco1');
-
   baseScenario =
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 

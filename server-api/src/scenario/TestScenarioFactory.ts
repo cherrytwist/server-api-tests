@@ -117,16 +117,15 @@ export class TestScenarioFactory {
   }
 
   private static async populateGlobalRoles(): Promise<void> {
-    const a = await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignPlatformRoleToUser(
       TestUserManager.users.globalLicenseAdmin,
       PlatformRole.LicenseManager
     );
-    console.log('globalLicenseAdmin', a);
-    const b = await this.checkAndAssignPlatformRoleToUser(
+
+    await this.checkAndAssignPlatformRoleToUser(
       TestUserManager.users.globalSupportAdmin,
       PlatformRole.Support
     );
-    console.log('globalLicenseAdmin', a);
 
     await this.checkAndAssignPlatformRoleToUser(
       TestUserManager.users.betaTester,
@@ -140,8 +139,7 @@ export class TestScenarioFactory {
   ): Promise<void> {
     const alreadyHasRole = userModel.platformRoles.includes(role);
     if (!alreadyHasRole) {
-      const a = await assignPlatformRoleToUser(userModel.id, role);
-      console.log('assignPlatformRoleToUser', a.data);
+      await assignPlatformRoleToUser(userModel.id, role);
     }
   }
 

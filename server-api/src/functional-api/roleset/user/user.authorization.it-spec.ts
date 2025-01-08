@@ -90,9 +90,9 @@ beforeAll(async () => {
   );
 });
 
-// afterAll(async () => {
-//   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
-// });
+afterAll(async () => {
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
+});
 
 describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
   describe('DDT role privilege to assign member to space', () => {

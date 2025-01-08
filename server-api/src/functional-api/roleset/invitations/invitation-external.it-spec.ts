@@ -32,7 +32,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'invitation-external',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,

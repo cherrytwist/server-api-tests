@@ -15,17 +15,14 @@ const scenarioConfig: TestScenarioConfig = {
     collaboration: {
       addCallouts: false,
     },
-    //community: { addAdmin: true, addMembers: true },
     subspace: {
       collaboration: {
         addCallouts: false,
       },
-      //community: { addAdmin: true, addMembers: true },
       subspace: {
         collaboration: {
           addCallouts: false,
         },
-        //community: { addAdmin: true, addMembers: true },
       },
     },
   },
