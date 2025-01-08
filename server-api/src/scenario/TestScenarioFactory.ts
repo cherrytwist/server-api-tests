@@ -71,7 +71,8 @@ export class TestScenarioFactory {
       scenarioConfig.space,
       baseScenario.space,
       scenarioName,
-      TestUserManager.users.spaceAdmin
+      TestUserManager.users.spaceAdmin,
+      0
     );
 
     const subspace = scenarioConfig.space.subspace;
@@ -89,7 +90,8 @@ export class TestScenarioFactory {
       subspace,
       baseScenario.subspace,
       scenarioName,
-      TestUserManager.users.subspaceAdmin
+      TestUserManager.users.subspaceAdmin,
+      1
     );
 
     const subsubspace = subspace.subspace;
@@ -107,7 +109,8 @@ export class TestScenarioFactory {
       subsubspace,
       baseScenario.subsubspace,
       scenarioName,
-      TestUserManager.users.subsubspaceAdmin
+      TestUserManager.users.subsubspaceAdmin,
+      2
     );
 
     return baseScenario;
@@ -165,13 +168,14 @@ export class TestScenarioFactory {
     spaceConfig: TestScenarioSpaceConfig,
     spaceModel: SpaceModel,
     scenarioName: string,
-    communityAdmin: UserModel
+    communityAdmin: UserModel,
+    spaceLevel: 0 | 1 | 2
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
     const spaceCommunityConfig = spaceConfig.community;
     if (spaceCommunityConfig) {
       if (spaceCommunityConfig.addMembers) {
-        await this.assignUsersToMemberRole(roleSetID);
+        await this.assignUsersToMemberRole(roleSetID, spaceLevel);
       }
       if (spaceCommunityConfig.addAdmin) {
         await assignRoleToUser(
@@ -387,17 +391,21 @@ export class TestScenarioFactory {
   }
 
   public static async assignUsersToMemberRole(
-    roleSetId: string
+    roleSetId: string,
+    spaceLevel: 0 | 1 | 2
   ): Promise<void> {
-    const usersIdsToAssign: string[] = [
-      TestUserManager.users.spaceAdmin.id,
-      TestUserManager.users.spaceMember.id,
-
-      TestUserManager.users.subspaceAdmin.id,
-      TestUserManager.users.subspaceMember.id,
-      TestUserManager.users.subsubspaceAdmin.id,
-      TestUserManager.users.subsubspaceMember.id,
-    ];
+    const usersIdsToAssign: string[] = [];
+    switch (spaceLevel) {
+      case 0:
+        usersIdsToAssign.push(TestUserManager.users.spaceAdmin.id);
+        usersIdsToAssign.push(TestUserManager.users.spaceMember.id);
+      case 1:
+        usersIdsToAssign.push(TestUserManager.users.subspaceAdmin.id);
+        usersIdsToAssign.push(TestUserManager.users.subspaceMember.id);
+      case 2:
+        usersIdsToAssign.push(TestUserManager.users.subsubspaceAdmin.id);
+        usersIdsToAssign.push(TestUserManager.users.subsubspaceMember.id);
+    }
     for (const userID of usersIdsToAssign) {
       await assignRoleToUser(userID, roleSetId, CommunityRoleType.Member);
     }

@@ -29,8 +29,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
@@ -359,13 +358,16 @@ describe('Assign / Remove users to community', () => {
 describe('Assign different users as lead to same community', () => {
   beforeAll(async () => {
     await TestSetupUtils.assignUsersToRoles(
-      baseScenario.space.community.roleSetId
+      baseScenario.space.community.roleSetId,
+      0
     );
     await TestSetupUtils.assignUsersToRoles(
-      baseScenario.subspace.community.roleSetId
+      baseScenario.subspace.community.roleSetId,
+      1
     );
     await TestSetupUtils.assignUsersToRoles(
-      baseScenario.subsubspace.community.roleSetId
+      baseScenario.subsubspace.community.roleSetId,
+      2
     );
 
     await assignRoleToUser(

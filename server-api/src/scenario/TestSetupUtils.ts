@@ -11,8 +11,11 @@ import { TestUserManager } from '@src/scenario/TestUserManager';
 import { TestScenarioFactory } from './TestScenarioFactory';
 
 export class TestSetupUtils {
-  public static async assignUsersToRoles(roleSetId: string): Promise<void> {
-    await TestScenarioFactory.assignUsersToMemberRole(roleSetId);
+  public static async assignUsersToRoles(
+    roleSetId: string,
+    spaceLevel: 0 | 1 | 2
+  ): Promise<void> {
+    await TestScenarioFactory.assignUsersToMemberRole(roleSetId, spaceLevel);
 
     await assignRoleToUser(
       TestUserManager.users.subspaceAdmin.id,
@@ -90,9 +93,7 @@ export class TestSetupUtils {
     nameID: string
   ) {
     delay(100);
-    const calloutsPerSpace = await getCalloutsData(
-      calloutsSetId
-    );
+    const calloutsPerSpace = await getCalloutsData(calloutsSetId);
 
     const allCallouts =
       calloutsPerSpace.data?.lookup.calloutsSet?.callouts ?? [];
