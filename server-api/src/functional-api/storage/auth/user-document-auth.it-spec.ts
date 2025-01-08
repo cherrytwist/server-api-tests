@@ -23,31 +23,19 @@ import {
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
 let refId = '';
 let documentId = '';
 
-let baseScenario: OrganizationWithSpaceModel;
+let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'storage-user-document-auth',
-  space: {
-    collaboration: {
-      addCallouts: true,
-    },
-    community: {
-      addAdmin: true,
-      addMembers: true,
-    },
-  },
 };
 
 beforeAll(async () => {
   baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
-});
-
-afterAll(async () => {
-  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
+    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 
 describe('User - documents', () => {
@@ -56,7 +44,9 @@ describe('User - documents', () => {
       await deleteDocument(documentId);
     });
     beforeAll(async () => {
-      const visualData = await lookupProfileVisuals(TestUserManager.users.qaUser.profileId);
+      const visualData = await lookupProfileVisuals(
+        TestUserManager.users.qaUser.profileId
+      );
       const visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
       await uploadImageOnVisual(
         path.join(__dirname, 'files-to-upload', '190-410.jpg'),
@@ -83,7 +73,10 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile visual document',
       async ({ userRole, privileges }) => {
-        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(
+          TestUserManager.users.qaUser.profileId,
+          userRole
+        );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
@@ -100,7 +93,10 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(
+          TestUserManager.users.qaUser.profileId,
+          userRole
+        );
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -144,7 +140,10 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user reference document',
       async ({ userRole, privileges }) => {
-        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(
+          TestUserManager.users.qaUser.profileId,
+          userRole
+        );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
@@ -161,7 +160,10 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user profile reference storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(
+          TestUserManager.users.qaUser.profileId,
+          userRole
+        );
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);
@@ -209,7 +211,10 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description visual document',
       async ({ userRole, privileges }) => {
-        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(
+          TestUserManager.users.qaUser.profileId,
+          userRole
+        );
         const data = res.data?.lookup?.profile?.storageBucket?.documents[0];
         const dataAuthorization = data?.authorization;
 
@@ -226,7 +231,10 @@ describe('User - documents', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to user description (storageBucket) document',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await getProfileDocuments(TestUserManager.users.qaUser.profileId, userRole);
+        const res = await getProfileDocuments(
+          TestUserManager.users.qaUser.profileId,
+          userRole
+        );
         const data = res.data?.lookup?.profile?.storageBucket;
 
         expect(data?.authorization?.myPrivileges?.sort()).toEqual(privileges);

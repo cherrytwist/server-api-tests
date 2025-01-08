@@ -32,7 +32,7 @@ let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'organization-document-auth',
+  name: 'storage-organization-document-auth',
 };
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);

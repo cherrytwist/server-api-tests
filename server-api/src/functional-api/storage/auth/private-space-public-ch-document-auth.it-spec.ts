@@ -55,7 +55,7 @@ let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'doc-private-space-public-subspace',
+  name: 'storage-private-space-public-subspace-document-auth',
   space: {
     collaboration: {
       addCallouts: true,
@@ -76,8 +76,7 @@ const scenarioConfig: TestScenarioConfig = {
   },
 };
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpacePlatformSettings(
     baseScenario.space.id,
