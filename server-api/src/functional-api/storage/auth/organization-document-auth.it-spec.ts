@@ -32,38 +32,10 @@ let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'callouts',
-  space: {
-    collaboration: {
-      addCallouts: true,
-    },
-    community: {
-      addAdmin: true,
-      addMembers: true,
-    },
-    subspace: {
-      collaboration: {
-        addCallouts: true,
-      },
-      community: {
-        addAdmin: true,
-        addMembers: true,
-      },
-      subspace: {
-        collaboration: {
-          addCallouts: true,
-        },
-        community: {
-          addAdmin: true,
-          addMembers: true,
-        },
-      },
-    },
-  },
+  name: 'organization-document-auth',
 };
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignUserAsOrganizationAdmin(
     TestUserManager.users.subspaceAdmin.id,
