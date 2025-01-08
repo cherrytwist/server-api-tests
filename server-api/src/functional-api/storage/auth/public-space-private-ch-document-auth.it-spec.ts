@@ -552,12 +552,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                            | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                          | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                          | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                          | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -646,12 +646,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                                           | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -737,12 +737,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                            | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                          | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                          | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                          | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -816,13 +816,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                            | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                          | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                          | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                          | ${undefined}
-      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
@@ -894,12 +893,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                                           | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -973,12 +972,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                                           | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
