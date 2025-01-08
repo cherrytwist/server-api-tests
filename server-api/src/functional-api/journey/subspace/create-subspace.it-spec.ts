@@ -81,6 +81,7 @@ describe('Create subspace', () => {
       (await getSubspaceData(baseScenario.space.id, additionalSubspaceId))
         .data?.space.subspace
     );
+    await deleteSpace(additionalSubspaceId);
   });
 
   test('should remove a subspace', async () => {

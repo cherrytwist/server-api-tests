@@ -34,7 +34,6 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-;
 const uniqueId = UniqueIDGenerator.getID();
 
 let invitationId = '';
@@ -60,14 +59,15 @@ const scenarioConfig: TestScenarioConfig = {
     collaboration: {
       addCallouts: true,
     },
-  }
-}
+  },
+};
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  const vcLicensePlan = await getLicensePlanByName('FEATURE_VIRTUAL_CONTRIBUTORS');
+  const vcLicensePlan = await getLicensePlanByName(
+    'FEATURE_VIRTUAL_CONTRIBUTORS'
+  );
   vcLicensePlanId = vcLicensePlan[0].id;
 
   await updateSpaceSettings(baseScenario.space.id, {
@@ -79,7 +79,10 @@ beforeAll(async () => {
     },
   });
 
-  await assignLicensePlanToAccount(baseScenario.organization.accountId, vcLicensePlanId);
+  await assignLicensePlanToAccount(
+    baseScenario.organization.accountId,
+    vcLicensePlanId
+  );
 
   await updateSpacePlatformSettings(
     baseScenario.space.id,
@@ -120,7 +123,10 @@ afterAll(async () => {
 
 describe('Virtual Contributor', () => {
   afterEach(async () => {
-    await removeVirtualContributorFromRoleSet(baseScenario.space.community.roleSetId, vcId);
+    await removeVirtualContributorFromRoleSet(
+      baseScenario.space.community.roleSetId,
+      vcId
+    );
     await deleteInvitation(invitationId);
   });
 
@@ -131,16 +137,9 @@ describe('Virtual Contributor', () => {
     expect(response.error?.errors[0].message).toContain(
       'Unable to delete User: account contains one or more resources'
     );
-
-    await createUser({
-      firstName: 'beta',
-      lastName: 'tester',
-      email: 'beta.tester@alkem.io',
-    });
   });
 
-  // skipped until bug is fixed: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/server/4813
-  test.skip('should return invitations after virtual contributor is removed', async () => {
+  test('should return invitations after virtual contributor is removed', async () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
@@ -165,7 +164,7 @@ describe('Virtual Contributor', () => {
     ).toHaveLength(0);
   });
 
-  test.skip('query virtual contributor data', async () => {
+  test('query virtual contributor data', async () => {
     // Act
     const vcData = await createVirtualContributorOnAccount(
       vcName,

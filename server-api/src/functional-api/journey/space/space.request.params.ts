@@ -57,6 +57,7 @@ export const createSpaceAndGetData = async (
     accountID,
     role
   );
+
   const spaceId = response?.data?.createSpace.id ?? '';
   await updateSpaceSettings(spaceId, {
     privacy: { allowPlatformSupportAsAdmin: true },

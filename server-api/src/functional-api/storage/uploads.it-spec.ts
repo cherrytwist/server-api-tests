@@ -1,7 +1,5 @@
 /* eslint-disable quotes */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-const uniqueId = UniqueIDGenerator.getID();
-import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
 import {
   deleteDocument,
   getOrgReferenceUri,
@@ -15,7 +13,6 @@ import {
   createInnovationHub,
   deleteInnovationHub,
 } from '../innovation-hub/innovation-hub-params';
-import { createOrganization } from '../contributor-management/organization/organization.request.params';
 import {
   createReferenceOnProfile,
   deleteReferenceOnProfile,
@@ -29,6 +26,8 @@ import { getAuthDocument } from '@utils/get.document';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { lookupProfileVisuals } from '@functional-api/lookup/lookup-request.params';
+const uniqueId = UniqueIDGenerator.getID();
 
 let refId = '';
 let visualId = '';
@@ -45,9 +44,11 @@ function getLastPartOfUrl(url: string): string {
 
 async function getReferenceUri(orgId: string): Promise<string> {
   const orgData = await getOrgReferenceUri(orgId);
-  const referenceUri =
-    orgData?.data?.organization?.profile?.references?.[0].uri ?? '';
-  return referenceUri;
+  const referencesUri = orgData?.data?.organization?.profile?.references ?? [];
+  const referenceUri = referencesUri.filter(referenceUri =>
+    referenceUri.uri.includes('/api/private/rest/storage/document')
+  );
+  return referenceUri[0]?.uri ?? '';
 }
 
 async function getVisualUri(orgId: string): Promise<string> {
@@ -92,13 +93,12 @@ describe('Upload document', () => {
     await deleteReferenceOnProfile(refId);
   });
 
-  afterEach(async () => {
-    await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
-  });
-
   describe('DDT upload all file types', () => {
     afterEach(async () => {
-      await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+      if (documentId && documentId.length === 36) {
+        await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+        documentId = '';
+      }
     });
 
     // Arrange
@@ -143,21 +143,23 @@ describe('Upload document', () => {
   });
 
   test('upload same file twice', async () => {
-    await uploadFileOnRef(
+    const ref1 = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId
     );
+    const documentEndPoint1 = ref1.data?.uploadFileOnReference?.uri;
 
-    const res = await uploadFileOnRef(
+    const ref2 = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId
     );
+    const documentEndPoint2 = ref2.data?.uploadFileOnReference?.uri ?? '';
 
-    documentEndPoint = res.data?.uploadFileOnReference?.uri;
-    documentId = getLastPartOfUrl(documentEndPoint);
+    documentId = getLastPartOfUrl(documentEndPoint2);
     referenceUri = await getReferenceUri(baseScenario.organization.id);
 
-    expect(referenceUri).toEqual(documentEndPoint);
+    expect(referenceUri).toEqual(documentEndPoint1);
+    expect(referenceUri).toEqual(documentEndPoint2);
   });
 
   test('delete pdf file', async () => {
@@ -192,8 +194,7 @@ describe('Upload document', () => {
     expect(documentAccess.status).toEqual(200);
   });
 
-  // Skipped until bug: #3857 is fixed
-  test.skip('fail to read file after document deletion', async () => {
+  test('fail to read file after document deletion', async () => {
     const res = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId
@@ -229,10 +230,9 @@ describe('Upload document', () => {
     expect(documentAccess.status).toEqual(200);
   });
 
-  // ToDo - add visual / document with size bigger than 15 mb
-  test.skip('upload file bigger than 15 MB', async () => {
+  test('upload file bigger than 15 MB', async () => {
     const res = await uploadFileOnRef(
-      path.join(__dirname, 'files-to-upload', 'big_file.jpg'),
+      path.join(__dirname, 'files-to-upload', '19mb.png'),
       refId
     );
     referenceUri = await getReferenceUri(baseScenario.organization.id);
@@ -274,9 +274,18 @@ describe('Upload document', () => {
   });
 });
 
-describe('Upload visual', () => {
+describe('Upload visual tests', () => {
+  beforeAll(async () => {
+    const visualData = await lookupProfileVisuals(
+      baseScenario.organization.profile.id
+    );
+    visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
+  });
   afterEach(async () => {
-    await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+    if (documentId && documentId.length === 36) {
+      await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+      documentId = '';
+    }
   });
 
   test('upload visual', async () => {
@@ -340,17 +349,17 @@ describe('Upload visual', () => {
 });
 
 describe('Upload visual to innovation space', () => {
+  const spaceName = 'space-name' + uniqueId;
   let innovationHubVisualId = '`';
   let spaceId = '';
   beforeAll(async () => {
     const resSpace = await createSpaceAndGetData(
-      baseScenario.space.id,
-      baseScenario.space.nameId,
+      spaceName,
+      spaceName,
       baseScenario.organization.accountId
     );
     const spaceData = resSpace?.data?.space;
     spaceId = spaceData?.id ?? '';
-    //const spaceAccountId = spaceData?.account.id ?? '';
 
     const innovationHubData = await createInnovationHub(
       baseScenario.organization.accountId
