@@ -128,8 +128,8 @@ describe('Private Space - Public Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${undefined}                               | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                               | ${undefined}
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}
@@ -152,8 +152,8 @@ describe('Private Space - Public Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                | parentEntityType
-      ${undefined}                 | ${undefined}                                              | ${undefined}     | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                              | ${undefined}     | ${undefined}
+      ${undefined}                 | ${undefined}                                              | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                              | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}                                               | ${'CHALLENGE'}
@@ -277,8 +277,8 @@ describe('Private Space - Public Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${undefined}                               | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                               | ${undefined}
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant}
       ${TestUser.SPACE_MEMBER}     | ${['READ']}
