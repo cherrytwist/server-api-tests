@@ -55,7 +55,7 @@ let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'storage-private-space-public-subspace-document-auth',
+  name: 'storage-auth-private-space-public-subspace-document',
   space: {
     collaboration: {
       addCallouts: true,

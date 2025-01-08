@@ -30,7 +30,7 @@ let documentId = '';
 
 let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'storage-user-document-auth',
+  name: 'storage-auth-user-document',
 };
 
 beforeAll(async () => {

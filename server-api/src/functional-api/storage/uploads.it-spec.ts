@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
 import {
@@ -26,15 +26,11 @@ import {
 } from '../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { getAuthDocument } from '@utils/get.document';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-let orgProfileId = '';
 let refId = '';
-let orgId = '';
-let orgAccountId = '';
 let visualId = '';
 let documentEndPoint: any;
 let documentId = '';
@@ -66,22 +62,29 @@ async function getVisualUriInnoSpace(innovationHubId: string): Promise<string> {
     orgData?.data?.platform?.innovationHub?.profile.visuals[0].uri ?? '';
   return visualUri;
 }
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'storage-files-to-upload',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  },
+};
 
 beforeAll(async () => {
-  const res = await createOrganization(organizationName, hostNameId);
-  const orgData = res?.data?.createOrganization;
-  orgId = orgData?.id ?? '';
-  orgAccountId = orgData?.account?.id ?? '';
-  orgProfileId = orgData?.profile?.id ?? '';
-  const ref = orgData?.profile?.references?.[0].id ?? '';
-  await deleteReferenceOnProfile(ref);
-  visualId = orgData?.profile?.visuals?.[0].id ?? '';
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
-afterAll(async () => await deleteOrganization(orgId));
+
+afterAll(async () => {
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
+});
 
 describe('Upload document', () => {
   beforeAll(async () => {
-    const createRef = await createReferenceOnProfile(orgProfileId);
+    const createRef = await createReferenceOnProfile(
+      baseScenario.organization.profile.id
+    );
     refId = createRef?.data?.createReferenceOnProfile.id ?? '';
   });
 
@@ -119,7 +122,7 @@ describe('Upload document', () => {
         documentEndPoint = res.data?.uploadFileOnReference?.uri;
 
         documentId = getLastPartOfUrl(documentEndPoint);
-        referenceUri = await getReferenceUri(orgId);
+        referenceUri = await getReferenceUri(baseScenario.organization.id);
 
         expect(referenceUri).toEqual(documentEndPoint);
       }
@@ -134,7 +137,7 @@ describe('Upload document', () => {
 
     documentEndPoint = res.data?.uploadFileOnReference?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(referenceUri).toEqual(documentEndPoint);
   });
@@ -152,7 +155,7 @@ describe('Upload document', () => {
 
     documentEndPoint = res.data?.uploadFileOnReference?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(referenceUri).toEqual(documentEndPoint);
   });
@@ -207,7 +210,10 @@ describe('Upload document', () => {
   });
 
   test('read uploaded file after related reference is removed', async () => {
-    const refData = await createReferenceOnProfile(orgProfileId, 'test2');
+    const refData = await createReferenceOnProfile(
+      baseScenario.organization.profile.id,
+      'test2'
+    );
     const refId2 = refData?.data?.createReferenceOnProfile?.id ?? '';
     const res = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
@@ -229,7 +235,7 @@ describe('Upload document', () => {
       path.join(__dirname, 'files-to-upload', 'big_file.jpg'),
       refId
     );
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(res?.errors).toEqual(
       expect.arrayContaining([
@@ -245,7 +251,7 @@ describe('Upload document', () => {
       path.join(__dirname, 'files-to-upload', 'file-sql.sql'),
       refId
     );
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(JSON.stringify(res?.errors)).toContain(
       'Upload on reference or link failed!'
@@ -280,7 +286,7 @@ describe('Upload visual', () => {
     );
     documentEndPoint = res.data?.uploadImageOnVisual?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    visualUri = await getVisualUri(orgId);
+    visualUri = await getVisualUri(baseScenario.organization.id);
     expect(visualUri).toEqual(documentEndPoint);
   });
 
@@ -296,7 +302,7 @@ describe('Upload visual', () => {
     );
     documentEndPoint = res?.data?.uploadImageOnVisual?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    visualUri = await getVisualUri(orgId);
+    visualUri = await getVisualUri(baseScenario.organization.id);
     expect(visualUri).toEqual(documentEndPoint);
   });
 
@@ -338,15 +344,17 @@ describe('Upload visual to innovation space', () => {
   let spaceId = '';
   beforeAll(async () => {
     const resSpace = await createSpaceAndGetData(
-      spaceName,
-      spaceNameId,
-      orgAccountId
+      baseScenario.space.id,
+      baseScenario.space.nameId,
+      baseScenario.organization.accountId
     );
     const spaceData = resSpace?.data?.space;
     spaceId = spaceData?.id ?? '';
     //const spaceAccountId = spaceData?.account.id ?? '';
 
-    const innovationHubData = await createInnovationHub(orgAccountId);
+    const innovationHubData = await createInnovationHub(
+      baseScenario.organization.accountId
+    );
     const innovationHubInfo = innovationHubData?.data?.createInnovationHub;
     innovationHubVisualId = innovationHubInfo?.profile.visuals[0].id ?? '';
     innovationHubId = innovationHubInfo?.id ?? '';
