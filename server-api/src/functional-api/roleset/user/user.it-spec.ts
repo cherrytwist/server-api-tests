@@ -15,15 +15,15 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'user',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
       },
     }

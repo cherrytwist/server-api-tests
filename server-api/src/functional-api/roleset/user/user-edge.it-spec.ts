@@ -13,15 +13,15 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'user-edge',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
       },
     },

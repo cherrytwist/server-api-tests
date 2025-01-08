@@ -25,7 +25,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'access-user-authorizations',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,
@@ -33,7 +33,7 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       community: {
         addAdmin: true,
@@ -41,7 +41,7 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
         community: {
           addAdmin: true,
@@ -90,9 +90,9 @@ beforeAll(async () => {
   );
 });
 
-afterAll(async () => {
-  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
-});
+// afterAll(async () => {
+//   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
+// });
 
 describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
   describe('DDT role privilege to assign member to space', () => {
@@ -101,7 +101,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     test.each`
       user                             | myPrivileges
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_MEMBER}         | ${sorted__read_applyToCommunity}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__read_applyToCommunity_invite_addVC}
@@ -129,7 +129,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     test.each`
       user                             | myPrivileges
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_MEMBER}         | ${['COMMUNITY_APPLY']}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
@@ -157,7 +157,7 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
     test.each`
       user                             | myPrivileges
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_MEMBER}         | ${['COMMUNITY_APPLY']}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
