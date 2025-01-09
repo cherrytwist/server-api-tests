@@ -106,7 +106,9 @@
     "typescript": "~5.7.2"
   },
   "husky": {
-
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "engines": {
     "node": ">=20.9.0",
