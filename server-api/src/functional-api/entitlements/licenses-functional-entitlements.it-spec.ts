@@ -29,18 +29,26 @@ import {
   accountVCCampaignLicenses1SpaceVCPack,
 } from './entitlements-data';
 
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
 } from '@functional-api/platform/authorization-platform-mutation';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
 
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'license-functional-entitlements',
+};
+
 beforeAll(async () => {
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   await assignPlatformRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     PlatformRole.VcCampaign

@@ -16,15 +16,15 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-activity',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
       },
     },
@@ -32,8 +32,6 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  await deleteSpace('eco1');
-
   baseScenario =
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 

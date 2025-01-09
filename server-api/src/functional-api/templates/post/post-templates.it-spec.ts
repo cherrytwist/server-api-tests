@@ -61,8 +61,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -338,7 +337,8 @@ describe('Post templates - Utilization in posts', () => {
 describe('Post templates - CRUD Authorization', () => {
   beforeAll(async () => {
     await TestSetupUtils.assignUsersToRoles(
-      baseScenario.space.community.roleSetId
+      baseScenario.space.community.roleSetId,
+      0
     );
     await assignRoleToUser(
       TestUserManager.users.spaceAdmin.id,

@@ -30,6 +30,15 @@ import { assignPlatformRoleToUser } from '@functional-api/platform/authorization
 import { logElapsedTime } from '@utils/profiling';
 
 export class TestScenarioFactory {
+  public static async createBaseScenarioEmpty(
+    scenarioConfig: TestScenarioConfig
+  ) {
+    const start = performance.now();
+    await TestUserManager.populateUserModelMap();
+    const result = scenarioConfig;
+    logElapsedTime('createBaseScenario', start);
+    return result;
+  }
 
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
@@ -38,7 +47,6 @@ export class TestScenarioFactory {
     const result = await this.createBaseScenarioPrivate(scenarioConfig);
     logElapsedTime('createBaseScenario', start);
     return result;
-
   }
 
   public static async createBaseScenarioPrivate(
@@ -62,7 +70,9 @@ export class TestScenarioFactory {
     await this.populateSpace(
       scenarioConfig.space,
       baseScenario.space,
-      scenarioName
+      scenarioName,
+      TestUserManager.users.spaceAdmin,
+      0
     );
 
     const subspace = scenarioConfig.space.subspace;
@@ -76,7 +86,13 @@ export class TestScenarioFactory {
       scenarioName,
       baseScenario.subspace
     );
-    await this.populateSpace(subspace, baseScenario.subspace, scenarioName);
+    await this.populateSpace(
+      subspace,
+      baseScenario.subspace,
+      scenarioName,
+      TestUserManager.users.subspaceAdmin,
+      1
+    );
 
     const subsubspace = subspace.subspace;
     if (!subsubspace) {
@@ -92,7 +108,9 @@ export class TestScenarioFactory {
     await this.populateSpace(
       subsubspace,
       baseScenario.subsubspace,
-      scenarioName
+      scenarioName,
+      TestUserManager.users.subsubspaceAdmin,
+      2
     );
 
     return baseScenario;
@@ -129,31 +147,37 @@ export class TestScenarioFactory {
     baseScenario: OrganizationWithSpaceModel
   ): Promise<void> {
     if (baseScenario.subsubspace.id.length > 0) {
-      await deleteSpace(baseScenario.subsubspace.id);
+      const a = await deleteSpace(baseScenario.subsubspace.id);
+      console.log('subsubspace deleted', a.data);
     }
     if (baseScenario.subspace.id.length > 0) {
-      await deleteSpace(baseScenario.subspace.id);
+      const b = await deleteSpace(baseScenario.subspace.id);
+      console.log('subspace deleted', b.data);
     }
     if (baseScenario.space.id.length > 0) {
-      await deleteSpace(baseScenario.space.id);
+      const c = await deleteSpace(baseScenario.space.id);
+      console.log('subspace deleted', c.data);
     }
-    await deleteOrganization(baseScenario.organization.id);
+    const d = await deleteOrganization(baseScenario.organization.id);
+    console.log('org deleted', d.data);
   }
 
   private static async populateSpace(
     spaceConfig: TestScenarioSpaceConfig,
     spaceModel: SpaceModel,
-    scenarioName: string
+    scenarioName: string,
+    communityAdmin: UserModel,
+    spaceLevel: 0 | 1 | 2
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
     const spaceCommunityConfig = spaceConfig.community;
     if (spaceCommunityConfig) {
       if (spaceCommunityConfig.addMembers) {
-        await this.assignUsersToMemberRole(roleSetID);
+        await this.assignUsersToMemberRole(roleSetID, spaceLevel);
       }
       if (spaceCommunityConfig.addAdmin) {
         await assignRoleToUser(
-          TestUserManager.users.subspaceAdmin.id,
+          communityAdmin.id,
           roleSetID,
           CommunityRoleType.Admin
         );
@@ -193,6 +217,8 @@ export class TestScenarioFactory {
     }
 
     model.organization.id = responseOrg.data?.createOrganization.id ?? '';
+    model.organization.nameId =
+      responseOrg.data?.createOrganization.nameID ?? '';
     model.organization.agentId =
       responseOrg.data?.createOrganization.agent.id ?? '';
     model.organization.accountId =
@@ -250,7 +276,14 @@ export class TestScenarioFactory {
       displayName: spaceData?.profile?.displayName ?? '',
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
-    spaceModel.collaboration.calloutsSetId = spaceData?.collaboration.calloutsSet?.id ?? '';
+    spaceModel.communication.updatesId =
+      spaceData?.community?.communication?.updates.id ?? '';
+    spaceModel.collaboration.calloutsSetId =
+      spaceData?.collaboration.calloutsSet?.id ?? '';
+    spaceModel.community.id = spaceData?.community?.id ?? '';
+    spaceModel.community.roleSetId = spaceData?.community?.roleSet?.id ?? '';
+    spaceModel.templateSetId =
+      spaceData?.templatesManager?.templatesSet?.id ?? '';
 
     return spaceModel;
   }
@@ -260,7 +293,7 @@ export class TestScenarioFactory {
     scenarioName: string
   ): Promise<SpaceModel> {
     const callForPostCalloutData = await createCalloutOnCalloutsSet(
-      spaceModel.collaboration.id,
+      spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -303,11 +336,12 @@ export class TestScenarioFactory {
     );
 
     const creatPostCallout = await createCalloutOnCalloutsSet(
-      spaceModel.collaboration.id,
+      spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: { displayName: 'Space Post Callout' },
         },
+        type: CalloutType.Post,
       }
     );
     const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
@@ -346,6 +380,8 @@ export class TestScenarioFactory {
     targetModel.communication.updatesId =
       subspaceData?.community?.communication?.updates.id ?? '';
     targetModel.collaboration.id = subspaceData?.collaboration?.id ?? '';
+    targetModel.collaboration.calloutsSetId =
+      subspaceData?.collaboration.calloutsSet?.id ?? '';
     targetModel.contextId = subspaceData?.context?.id ?? '';
     targetModel.profile.id = subspaceData?.profile?.id ?? '';
 
@@ -353,14 +389,21 @@ export class TestScenarioFactory {
   }
 
   public static async assignUsersToMemberRole(
-    roleSetId: string
+    roleSetId: string,
+    spaceLevel: 0 | 1 | 2
   ): Promise<void> {
-    const usersIdsToAssign: string[] = [
-      TestUserManager.users.subspaceAdmin.id,
-      TestUserManager.users.subspaceMember.id,
-      TestUserManager.users.subsubspaceAdmin.id,
-      TestUserManager.users.subsubspaceMember.id,
-    ];
+    const usersIdsToAssign: string[] = [];
+    switch (spaceLevel) {
+      case 0:
+        usersIdsToAssign.push(TestUserManager.users.spaceAdmin.id);
+        usersIdsToAssign.push(TestUserManager.users.spaceMember.id);
+      case 1:
+        usersIdsToAssign.push(TestUserManager.users.subspaceAdmin.id);
+        usersIdsToAssign.push(TestUserManager.users.subspaceMember.id);
+      case 2:
+        usersIdsToAssign.push(TestUserManager.users.subsubspaceAdmin.id);
+        usersIdsToAssign.push(TestUserManager.users.subsubspaceMember.id);
+    }
     for (const userID of usersIdsToAssign) {
       await assignRoleToUser(userID, roleSetId, CommunityRoleType.Member);
     }

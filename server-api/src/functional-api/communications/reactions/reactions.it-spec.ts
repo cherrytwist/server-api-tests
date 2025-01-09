@@ -11,13 +11,21 @@ import {
   sendMessageToRoom,
 } from '../communication.params';
 import { addReaction, removeReaction } from './reactions.request.params';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let platformDiscussionId = '';
 let discussionId = '';
 let discussionCommentsId = '';
 let messageId = '';
 
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'reactions',
+};
 beforeAll(async () => {
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   const res = await getPlatformForumData();
   platformDiscussionId = res?.data?.platform.forum.id ?? '';
 });

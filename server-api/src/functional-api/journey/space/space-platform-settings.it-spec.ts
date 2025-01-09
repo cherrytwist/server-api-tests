@@ -38,16 +38,19 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'space-platform-settings',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
+    community: { addAdmin: true, addMembers: true },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
+      community: { addAdmin: true, addMembers: true },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
+        community: { addAdmin: true, addMembers: true },
       },
     },
   },
@@ -55,14 +58,14 @@ const scenarioConfig: TestScenarioConfig = {
 
 describe('Update space platform settings', () => {
   beforeAll(async () => {
-    baseScenario =
-      await TestScenarioFactory.createBaseScenario(
-        scenarioConfig
-      );
+    baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-    await updateSpaceSettings(baseScenario.space.id, {
-      privacy: { mode: SpacePrivacyMode.Private },
+   const a = await updateSpaceSettings(baseScenario.space.id, {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
     });
+    console.log('moje li da pomaga supporta?',a.data);
   });
 
   afterAll(async () => {
@@ -124,8 +127,8 @@ describe('Update space platform settings', () => {
       test.each`
         user                             | spaceMyPrivileges
         ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${[]}
+        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_LICENSE_ADMIN} | ${[]}
         ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_createSubspace}
         ${TestUser.SPACE_MEMBER}         | ${readPrivilege}
         ${TestUser.NON_SPACE_MEMBER}     | ${[]}
@@ -163,8 +166,8 @@ describe('Update space platform settings', () => {
       test.each`
         user                             | spaceMyPrivileges
         ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${readPrivilege}
+        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_LICENSE_ADMIN} | ${readPrivilege}
         ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_createSubspace}
         ${TestUser.SPACE_MEMBER}         | ${readPrivilege}
         ${TestUser.NON_SPACE_MEMBER}     | ${readPrivilege}

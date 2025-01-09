@@ -1,4 +1,3 @@
-
 /**
  * This test suite verifies the organization account authorization and license privileges.
  * It includes tests for scenarios with no licenses assigned, with account licenses assigned,
@@ -55,10 +54,11 @@ import {
   deleteOrganization,
 } from '@functional-api/contributor-management/organization/organization.request.params';
 
-
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let spaceId = '';
 let orgId = '';
@@ -72,7 +72,13 @@ let orgAccountId = '';
 const vcName = `vcname1-${uniqueId}`;
 const packName = `packname-${uniqueId}`;
 
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'organization-functional-entitlements',
+};
+
 beforeAll(async () => {
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+
   const licencePlanPlus = await getLicensePlanByName('ACCOUNT_LICENSE_PLUS');
   accountLicensePlusId = licencePlanPlus[0].id;
 
@@ -81,7 +87,10 @@ beforeAll(async () => {
   orgId = orgData?.id ?? '';
   orgAccountId = orgData?.account?.id ?? '';
 
-  await assignUserAsOrganizationAdmin(TestUserManager.users.nonSpaceMember.id, orgId);
+  await assignUserAsOrganizationAdmin(
+    TestUserManager.users.nonSpaceMember.id,
+    orgId
+  );
 });
 
 afterAll(async () => {

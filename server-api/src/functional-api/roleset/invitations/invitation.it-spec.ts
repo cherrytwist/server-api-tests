@@ -42,7 +42,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'access-invitations',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,
@@ -52,8 +52,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
@@ -250,7 +249,7 @@ describe('Invitations', () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
-      [TestUserManager.users.qaUser.id],
+      [TestUserManager.users.betaTester.id],
       TestUser.GLOBAL_ADMIN
     );
 
@@ -262,9 +261,7 @@ describe('Invitations', () => {
     }
     expect(invitationId.length).toEqual(36);
 
-    await deleteUser(TestUserManager.users.qaUser.id);
-    // Immediately re-register, will be a new user - do not want a failing test to leave QA user not registered
-    await registerInAlkemioOrFail('qa', 'user', 'qa.user@alkem.io');
+    await deleteUser(TestUserManager.users.betaTester.id);
 
     const invitationsDataCommunity = await getRoleSetInvitationsApplications(
       baseScenario.space.community.roleSetId
@@ -275,6 +272,8 @@ describe('Invitations', () => {
     expect(
       invitationsDataCommunity?.data?.lookup?.roleSet?.invitations
     ).toEqual([]);
+    // Immediately re-register, will be a new user - do not want a failing test to leave QA user not registered
+    await registerInAlkemioOrFail('beta', 'tester', 'beta.tester@alkem.io');
   });
 });
 
@@ -439,8 +438,9 @@ describe('Invitations-flows', () => {
     expect(invitationId.length).toEqual(36);
 
     // Act
-    const res = await createApplication(baseScenario.space.community.roleSetId);
+    const res = await createApplication(baseScenario.space.community.roleSetId, TestUser.NON_SPACE_MEMBER);
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
+    console.log('vrushtash li danni?',res.data)
 
     const membershipData = userAppsData?.data?.me;
 
@@ -478,7 +478,7 @@ describe('Invitations - Authorization', () => {
       user                             | text
       ${TestUser.NON_SPACE_MEMBER}     | ${accepted}
       ${TestUser.GLOBAL_ADMIN}         | ${invited}
-      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${invited}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${invited}
       ${TestUser.SPACE_ADMIN}          | ${invited}
     `(
       'User: "$user", should get: "$text" to update invitation of another user',
@@ -544,7 +544,7 @@ describe('Invitations - Authorization', () => {
     test.each`
       user                             | state
       ${TestUser.GLOBAL_ADMIN}         | ${invited}
-      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${invited}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${invited}
       ${TestUser.SPACE_ADMIN}          | ${invited}
     `(
       'User: "$user", should get: "$text" to create invitation to another user',
@@ -575,7 +575,7 @@ describe('Invitations - Authorization', () => {
     //
     test.each`
       user                             | text
-      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${authErrorCreateInvitationMessage}
+      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${authErrorCreateInvitationMessage}
       ${TestUser.SPACE_MEMBER}         | ${authErrorCreateInvitationMessage}
       ${TestUser.QA_USER}              | ${authErrorCreateInvitationMessage}
       ${TestUser.NON_SPACE_MEMBER}     | ${authErrorCreateInvitationMessage}

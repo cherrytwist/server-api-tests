@@ -1,3 +1,15 @@
+/**
+ * This file contains integration tests for creating user accounts within the platform.
+ * It includes tests for creating users with specific details and verifying the creation process.
+ * The tests cover scenarios such as:
+ * - Creating a user with a unique display name.
+ * - Verifying that the user is created successfully and the profile data matches the input.
+ * - Handling errors when attempting to create a user with a duplicate name.
+ * - Cleaning up by deleting the created users after tests.
+ *
+ * The tests ensure that the user creation process works as expected,
+ * and that the API responses match the expected values.
+ */
 import {
   createUser,
   deleteUser,
@@ -5,11 +17,21 @@ import {
 } from './user.request.params';
 import '@utils/array.matcher';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
 let userId = '';
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'user-create',
+};
+beforeAll(async () => {
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+});
 
 beforeEach(() => {
   userName = `testuser${uniqueId}`;

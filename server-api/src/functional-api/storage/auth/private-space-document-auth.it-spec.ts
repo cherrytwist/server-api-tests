@@ -54,7 +54,7 @@ let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'document-private-space',
+  name: 'storage-auth-private-space-document',
   space: {
     collaboration: {
       addCallouts: true,
@@ -67,8 +67,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: { mode: SpacePrivacyMode.Private },

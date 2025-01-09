@@ -32,13 +32,23 @@ import {
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
 import { PlatformRole } from '@generated/graphql';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
-;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import {
+  assignPlatformRoleToUser,
+  removePlatformRoleFromUser,
+} from '@functional-api/platform/authorization-platform-mutation';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 const uniqueId = UniqueIDGenerator.getID();
 
 const spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;
 let vcId = '';
+
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'vc-functional-entitlements',
+};
 
 describe('Functional tests - VC', () => {
   afterEach(async () => {
@@ -49,7 +59,8 @@ describe('Functional tests - VC', () => {
     const vcs = spaceData.data?.account?.virtualContributors;
     for (const vc of vcs || []) {
       const vcId = vc.id;
-      await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
+     const a = await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
+     console.log('delete vc 1',a.data);
     }
 
     const spaces = spaceData.data?.account?.spaces;
@@ -60,6 +71,7 @@ describe('Functional tests - VC', () => {
   });
   describe('VC Campaign user vc creation', () => {
     beforeAll(async () => {
+      await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
       await assignPlatformRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
@@ -94,7 +106,9 @@ describe('Functional tests - VC', () => {
       'User: VC campaign has license $availableEntitlements to creates a vc with name: $vcName',
       async ({ vcName, availableEntitlements, error }) => {
         // Arrange
-        const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
+        const response = await getMyEntitlementsQuery(
+          TestUser.NON_SPACE_MEMBER
+        );
 
         const createSpace = await createSpaceBasicData(
           vcName,

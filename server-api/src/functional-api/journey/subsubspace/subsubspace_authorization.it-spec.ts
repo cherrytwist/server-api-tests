@@ -27,11 +27,15 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subsubspace-authorization',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
+    },
+    community: {
+      addMembers: true,
+      addAdmin: true,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       community: {
         addMembers: true,
@@ -39,7 +43,7 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
       },
     },
@@ -47,8 +51,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 beforeEach(async () => {

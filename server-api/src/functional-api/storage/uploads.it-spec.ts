@@ -1,7 +1,5 @@
 /* eslint-disable quotes */
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
-import { deleteOrganization } from '../contributor-management/organization/organization.request.params';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
   deleteDocument,
   getOrgReferenceUri,
@@ -15,7 +13,6 @@ import {
   createInnovationHub,
   deleteInnovationHub,
 } from '../innovation-hub/innovation-hub-params';
-import { createOrganization } from '../contributor-management/organization/organization.request.params';
 import {
   createReferenceOnProfile,
   deleteReferenceOnProfile,
@@ -26,15 +23,13 @@ import {
 } from '../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { getAuthDocument } from '@utils/get.document';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { lookupProfileVisuals } from '@functional-api/lookup/lookup-request.params';
+const uniqueId = UniqueIDGenerator.getID();
 
-const organizationName = 'org-name' + uniqueId;
-const hostNameId = 'org-nameid' + uniqueId;
-const spaceName = 'com-eco-name' + uniqueId;
-const spaceNameId = 'com-eco-nameid' + uniqueId;
-let orgProfileId = '';
 let refId = '';
-let orgId = '';
-let orgAccountId = '';
 let visualId = '';
 let documentEndPoint: any;
 let documentId = '';
@@ -49,9 +44,11 @@ function getLastPartOfUrl(url: string): string {
 
 async function getReferenceUri(orgId: string): Promise<string> {
   const orgData = await getOrgReferenceUri(orgId);
-  const referenceUri =
-    orgData?.data?.organization?.profile?.references?.[0].uri ?? '';
-  return referenceUri;
+  const referencesUri = orgData?.data?.organization?.profile?.references ?? [];
+  const referenceUri = referencesUri.filter(referenceUri =>
+    referenceUri.uri.includes('/api/private/rest/storage/document')
+  );
+  return referenceUri[0]?.uri ?? '';
 }
 
 async function getVisualUri(orgId: string): Promise<string> {
@@ -66,22 +63,29 @@ async function getVisualUriInnoSpace(innovationHubId: string): Promise<string> {
     orgData?.data?.platform?.innovationHub?.profile.visuals[0].uri ?? '';
   return visualUri;
 }
+let baseScenario: OrganizationWithSpaceModel;
+const scenarioConfig: TestScenarioConfig = {
+  name: 'storage-files-to-upload',
+  space: {
+    collaboration: {
+      addCallouts: true,
+    },
+  },
+};
 
 beforeAll(async () => {
-  const res = await createOrganization(organizationName, hostNameId);
-  const orgData = res?.data?.createOrganization;
-  orgId = orgData?.id ?? '';
-  orgAccountId = orgData?.account?.id ?? '';
-  orgProfileId = orgData?.profile?.id ?? '';
-  const ref = orgData?.profile?.references?.[0].id ?? '';
-  await deleteReferenceOnProfile(ref);
-  visualId = orgData?.profile?.visuals?.[0].id ?? '';
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
-afterAll(async () => await deleteOrganization(orgId));
+
+afterAll(async () => {
+  await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
+});
 
 describe('Upload document', () => {
   beforeAll(async () => {
-    const createRef = await createReferenceOnProfile(orgProfileId);
+    const createRef = await createReferenceOnProfile(
+      baseScenario.organization.profile.id
+    );
     refId = createRef?.data?.createReferenceOnProfile.id ?? '';
   });
 
@@ -89,13 +93,12 @@ describe('Upload document', () => {
     await deleteReferenceOnProfile(refId);
   });
 
-  afterEach(async () => {
-    await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
-  });
-
   describe('DDT upload all file types', () => {
     afterEach(async () => {
-      await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+      if (documentId && documentId.length === 36) {
+        await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+        documentId = '';
+      }
     });
 
     // Arrange
@@ -119,7 +122,7 @@ describe('Upload document', () => {
         documentEndPoint = res.data?.uploadFileOnReference?.uri;
 
         documentId = getLastPartOfUrl(documentEndPoint);
-        referenceUri = await getReferenceUri(orgId);
+        referenceUri = await getReferenceUri(baseScenario.organization.id);
 
         expect(referenceUri).toEqual(documentEndPoint);
       }
@@ -134,27 +137,29 @@ describe('Upload document', () => {
 
     documentEndPoint = res.data?.uploadFileOnReference?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(referenceUri).toEqual(documentEndPoint);
   });
 
   test('upload same file twice', async () => {
-    await uploadFileOnRef(
+    const ref1 = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId
     );
+    const documentEndPoint1 = ref1.data?.uploadFileOnReference?.uri;
 
-    const res = await uploadFileOnRef(
+    const ref2 = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId
     );
+    const documentEndPoint2 = ref2.data?.uploadFileOnReference?.uri ?? '';
 
-    documentEndPoint = res.data?.uploadFileOnReference?.uri;
-    documentId = getLastPartOfUrl(documentEndPoint);
-    referenceUri = await getReferenceUri(orgId);
+    documentId = getLastPartOfUrl(documentEndPoint2);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
-    expect(referenceUri).toEqual(documentEndPoint);
+    expect(referenceUri).toEqual(documentEndPoint1);
+    expect(referenceUri).toEqual(documentEndPoint2);
   });
 
   test('delete pdf file', async () => {
@@ -189,8 +194,7 @@ describe('Upload document', () => {
     expect(documentAccess.status).toEqual(200);
   });
 
-  // Skipped until bug: #3857 is fixed
-  test.skip('fail to read file after document deletion', async () => {
+  test('fail to read file after document deletion', async () => {
     const res = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId
@@ -207,7 +211,10 @@ describe('Upload document', () => {
   });
 
   test('read uploaded file after related reference is removed', async () => {
-    const refData = await createReferenceOnProfile(orgProfileId, 'test2');
+    const refData = await createReferenceOnProfile(
+      baseScenario.organization.profile.id,
+      'test2'
+    );
     const refId2 = refData?.data?.createReferenceOnProfile?.id ?? '';
     const res = await uploadFileOnRef(
       path.join(__dirname, 'files-to-upload', 'image.png'),
@@ -223,13 +230,12 @@ describe('Upload document', () => {
     expect(documentAccess.status).toEqual(200);
   });
 
-  // ToDo - add visual / document with size bigger than 15 mb
-  test.skip('upload file bigger than 15 MB', async () => {
+  test('upload file bigger than 15 MB', async () => {
     const res = await uploadFileOnRef(
-      path.join(__dirname, 'files-to-upload', 'big_file.jpg'),
+      path.join(__dirname, 'files-to-upload', '19mb.png'),
       refId
     );
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(res?.errors).toEqual(
       expect.arrayContaining([
@@ -245,7 +251,7 @@ describe('Upload document', () => {
       path.join(__dirname, 'files-to-upload', 'file-sql.sql'),
       refId
     );
-    referenceUri = await getReferenceUri(orgId);
+    referenceUri = await getReferenceUri(baseScenario.organization.id);
 
     expect(JSON.stringify(res?.errors)).toContain(
       'Upload on reference or link failed!'
@@ -268,9 +274,18 @@ describe('Upload document', () => {
   });
 });
 
-describe('Upload visual', () => {
+describe('Upload visual tests', () => {
+  beforeAll(async () => {
+    const visualData = await lookupProfileVisuals(
+      baseScenario.organization.profile.id
+    );
+    visualId = visualData.data?.lookup.profile?.visuals[0].id ?? '';
+  });
   afterEach(async () => {
-    await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+    if (documentId && documentId.length === 36) {
+      await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
+      documentId = '';
+    }
   });
 
   test('upload visual', async () => {
@@ -280,7 +295,7 @@ describe('Upload visual', () => {
     );
     documentEndPoint = res.data?.uploadImageOnVisual?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    visualUri = await getVisualUri(orgId);
+    visualUri = await getVisualUri(baseScenario.organization.id);
     expect(visualUri).toEqual(documentEndPoint);
   });
 
@@ -296,7 +311,7 @@ describe('Upload visual', () => {
     );
     documentEndPoint = res?.data?.uploadImageOnVisual?.uri;
     documentId = getLastPartOfUrl(documentEndPoint);
-    visualUri = await getVisualUri(orgId);
+    visualUri = await getVisualUri(baseScenario.organization.id);
     expect(visualUri).toEqual(documentEndPoint);
   });
 
@@ -334,19 +349,21 @@ describe('Upload visual', () => {
 });
 
 describe('Upload visual to innovation space', () => {
+  const spaceName = 'space-name' + uniqueId;
   let innovationHubVisualId = '`';
   let spaceId = '';
   beforeAll(async () => {
     const resSpace = await createSpaceAndGetData(
       spaceName,
-      spaceNameId,
-      orgAccountId
+      spaceName,
+      baseScenario.organization.accountId
     );
     const spaceData = resSpace?.data?.space;
     spaceId = spaceData?.id ?? '';
-    //const spaceAccountId = spaceData?.account.id ?? '';
 
-    const innovationHubData = await createInnovationHub(orgAccountId);
+    const innovationHubData = await createInnovationHub(
+      baseScenario.organization.accountId
+    );
     const innovationHubInfo = innovationHubData?.data?.createInnovationHub;
     innovationHubVisualId = innovationHubInfo?.profile.visuals[0].id ?? '';
     innovationHubId = innovationHubInfo?.id ?? '';

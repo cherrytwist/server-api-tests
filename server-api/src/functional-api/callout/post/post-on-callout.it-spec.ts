@@ -44,22 +44,24 @@ const scenarioConfig: TestScenarioConfig = {
     collaboration: {
       addCallouts: true,
     },
+    community: { addAdmin: true, addMembers: true },
     subspace: {
       collaboration: {
         addCallouts: true,
       },
+      community: { addAdmin: true, addMembers: true },
       subspace: {
         collaboration: {
           addCallouts: true,
         },
+        community: { addAdmin: true, addMembers: true },
       },
     },
   },
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -67,7 +69,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  postNameID = `post-name-id-${uniqueId}`;
+  postNameID = `post-n-id-${uniqueId}`;
   postDisplayName = `post-d-name-${uniqueId}`;
 });
 
@@ -80,11 +82,12 @@ describe('Posts - Create', () => {
   test('HM should create post on space callout', async () => {
     // Act
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SPACE_MEMBER
     );
+    console.log('resPostonSpace', resPostonSpace.data);
     const postDataCreate =
       resPostonSpace.data?.createContributionOnCallout.post;
     spacePostId =
@@ -92,9 +95,10 @@ describe('Posts - Create', () => {
 
     const postsData = await getDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       TestUser.SPACE_MEMBER
     );
+    console.log('postsData info', postsData.data?.space.collaboration?.calloutsSet.callouts?.[0]);
     const data =
       postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId
@@ -107,9 +111,8 @@ describe('Posts - Create', () => {
   test('GA should create post on space callout without setting nameId', async () => {
     // Act
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
-      { displayName: postDisplayName },
-      postNameID
+      baseScenario.space.collaboration.calloutPostCollectionId,
+      { displayName: postDisplayName }
     );
 
     spacePostId =
@@ -118,17 +121,19 @@ describe('Posts - Create', () => {
       resPostonSpace.data?.createContributionOnCallout.post?.nameID;
 
     // Assert
-    expect(spacePostNameId).toContain(postNameID);
+    expect(spacePostNameId).toContain(postDisplayName);
   });
 
   test('NON-SM should NOT create post on space callout', async () => {
     // Act
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.NON_SPACE_MEMBER
     );
+    console.log('resPostonSpace', resPostonSpace.error);
+    console.log(spaceCalloutId)
 
     // Assert
     expect(JSON.stringify(resPostonSpace)).toContain(
@@ -139,7 +144,7 @@ describe('Posts - Create', () => {
   test('ChA should create post on subspace callout', async () => {
     // Act
     const resPostonSubspace = await createPostOnCallout(
-      baseScenario.subspace.collaboration.calloutPostId,
+      baseScenario.subspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID + 'ch',
       TestUser.SUBSPACE_ADMIN
@@ -159,7 +164,7 @@ describe('Posts - Create', () => {
   test('GA should create post on subsubspace callout', async () => {
     // Act
     const resPostonSubsubspace = await createPostOnCallout(
-      baseScenario.subsubspace.collaboration.calloutPostId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID + 'op'
     );
@@ -179,7 +184,7 @@ describe('Posts - Create', () => {
 describe('Posts - Update', () => {
   beforeAll(async () => {
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'forUpdates' },
       `post-name-id-up-${uniqueId}`
     );
@@ -230,7 +235,7 @@ describe('Posts - Update', () => {
     // Act
     const postsData = await getDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       TestUser.SPACE_ADMIN
     );
     const data =
@@ -254,7 +259,7 @@ describe('Posts - Update', () => {
     // Act
     const postsData = await getDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId
+      baseScenario.space.collaboration.calloutPostCollectionId
     );
     const data =
       postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
@@ -269,7 +274,7 @@ describe('Posts - Update', () => {
 test('HM should update post created on space callout from HM', async () => {
   // Arrange
   const resPostonSpaceEM = await createPostOnCallout(
-    baseScenario.space.collaboration.calloutPostId,
+    baseScenario.space.collaboration.calloutPostCollectionId,
     { displayName: postDisplayName + 'HM' },
     postNameID,
     TestUser.SPACE_MEMBER
@@ -291,7 +296,7 @@ test('HM should update post created on space callout from HM', async () => {
   // Act
   const postsData = await getDataPerSpaceCallout(
     baseScenario.space.id,
-    baseScenario.space.collaboration.calloutPostId,
+    baseScenario.space.collaboration.calloutPostCollectionId,
     TestUser.SPACE_MEMBER
   );
   const data =
@@ -309,7 +314,7 @@ describe('Posts - Delete', () => {
   test('HM should NOT delete post created on space callout from GA', async () => {
     // Arrange
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID
     );
@@ -322,7 +327,7 @@ describe('Posts - Delete', () => {
 
     const postsData = await postDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId
+      baseScenario.space.collaboration.calloutPostCollectionId
     );
 
     // Assert
@@ -336,7 +341,7 @@ describe('Posts - Delete', () => {
   test('HM should delete post created on space callout from Himself', async () => {
     // Arrange
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SPACE_MEMBER
@@ -349,7 +354,7 @@ describe('Posts - Delete', () => {
     await deletePost(spacePostId, TestUser.SPACE_MEMBER);
     const postsData = await postDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId
+      baseScenario.space.collaboration.calloutPostCollectionId
     );
 
     // Assert
@@ -359,7 +364,7 @@ describe('Posts - Delete', () => {
   test('HM should delete post created on space callout from EM', async () => {
     // Arrange
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SPACE_MEMBER
@@ -371,7 +376,7 @@ describe('Posts - Delete', () => {
     await deletePost(spacePostId, TestUser.GLOBAL_ADMIN);
     const postsData = await postDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId
+      baseScenario.space.collaboration.calloutPostCollectionId
     );
     // Assert
     expect(postsData).toHaveLength(0);
@@ -380,7 +385,7 @@ describe('Posts - Delete', () => {
   test('NON-EM should NOT delete post created on space callout created from HM', async () => {
     // Arrange
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName },
       postNameID,
       TestUser.SPACE_MEMBER
@@ -397,7 +402,7 @@ describe('Posts - Delete', () => {
 
     const postsData = await postDataPerSpaceCallout(
       baseScenario.space.id,
-      baseScenario.space.collaboration.calloutPostId
+      baseScenario.space.collaboration.calloutPostCollectionId
     );
     // Assert
     expect(responseRemove.error?.errors[0].code).toContain('FORBIDDEN_POLICY');
@@ -408,7 +413,7 @@ describe('Posts - Delete', () => {
   test('ChA should delete post created on subspace callout from GA', async () => {
     // Arrange
     const resPostonSubspace = await createPostOnCallout(
-      baseScenario.subspace.collaboration.calloutPostId,
+      baseScenario.subspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch'
     );
@@ -428,7 +433,7 @@ describe('Posts - Delete', () => {
   test('HA should delete post created on subspace callout from ChA', async () => {
     // Arrange
     const resPostonSubspace = await createPostOnCallout(
-      baseScenario.subspace.collaboration.calloutPostId,
+      baseScenario.subspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch',
       TestUser.SUBSPACE_ADMIN
@@ -450,7 +455,7 @@ describe('Posts - Delete', () => {
   test('ChA should delete post created on subsubspace callout from OM', async () => {
     // Act
     const resPostonSubsubspace = await createPostOnCallout(
-      baseScenario.subsubspace.collaboration.calloutPostId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'opm' },
       postNameID + 'opm',
       TestUser.SUBSUBSPACE_MEMBER
@@ -471,7 +476,7 @@ describe('Posts - Delete', () => {
   test('ChM should not delete post created on subspace callout from ChA', async () => {
     // Arrange
     const resPostonSubspace = await createPostOnCallout(
-      baseScenario.subspace.collaboration.calloutPostId,
+      baseScenario.subspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'ch',
       TestUser.SUBSPACE_ADMIN
@@ -499,7 +504,7 @@ describe('Posts - Delete', () => {
   test('OM should delete own post on subsubspace callout', async () => {
     // Act
     const resPostonSubsubspace = await createPostOnCallout(
-      baseScenario.subsubspace.collaboration.calloutPostId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
       TestUser.SUBSUBSPACE_MEMBER
@@ -520,7 +525,7 @@ describe('Posts - Delete', () => {
   test('GA should delete own post on subsubspace callout', async () => {
     // Act
     const resPostonSubsubspace = await createPostOnCallout(
-      baseScenario.subsubspace.collaboration.calloutPostId,
+      baseScenario.subsubspace.collaboration.calloutPostCollectionId,
       { displayName: postDisplayName + 'ch' },
       postNameID + 'op',
       TestUser.GLOBAL_ADMIN
@@ -543,7 +548,7 @@ describe('Posts - Messages', () => {
   describe('Send Message - Post created by GA on Space callout', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.collaboration.calloutPostId,
+        baseScenario.space.collaboration.calloutPostCollectionId,
         { displayName: `asp-nspace-mess-${uniqueId}` },
         `asp-dspace-mess-${uniqueId}`
       );
@@ -555,7 +560,7 @@ describe('Posts - Messages', () => {
         '';
 
       const resPostonSubspace = await createPostOnCallout(
-        baseScenario.subspace.collaboration.calloutPostId,
+        baseScenario.subspace.collaboration.calloutPostCollectionId,
         { displayName: `asp-nchal-mess-${uniqueId}` },
         `asp-dchal-mess-${uniqueId}`
       );
@@ -684,7 +689,7 @@ describe('Posts - Messages', () => {
   describe('Delete Message - Post created by HM on Space callout', () => {
     beforeAll(async () => {
       const resPostonSpace = await createPostOnCallout(
-        baseScenario.space.collaboration.calloutPostId,
+        baseScenario.space.collaboration.calloutPostCollectionId,
         { displayName: `em-asp-d-space-mess-${uniqueId}` },
         `em-asp-n-spa-mess-${uniqueId}`,
         TestUser.SPACE_MEMBER
@@ -781,7 +786,7 @@ describe('Posts - References', () => {
 
   beforeAll(async () => {
     const resPostonSpace = await createPostOnCallout(
-      baseScenario.space.collaboration.calloutPostId,
+      baseScenario.space.collaboration.calloutPostCollectionId,
 
       { displayName: 'test' },
       `asp-n-id-up-${uniqueId}`

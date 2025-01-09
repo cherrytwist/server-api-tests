@@ -1,11 +1,34 @@
+/**
+ * This file contains integration tests for deleting user accounts within the platform.
+ * It includes tests for creating users, deleting them, and verifying the deletion process.
+ * The tests cover scenarios such as:
+ * - Creating a user with a unique name ID.
+ * - Deleting the created user and verifying the deletion.
+ * - Handling errors when attempting to delete an already deleted user.
+ * - Handling errors when attempting to delete a non-existing user.
+ *
+ * The tests ensure that the user deletion process works as expected,
+ * and that the API responses match the expected values.
+ */
 import '@utils/array.matcher';
 import { createUser, deleteUser, getUserData } from './user.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+;
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
 let userId: string;
 let userData;
+
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'delete-user',
+};
+beforeAll(async () => {
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+});
 
 beforeEach(async () => {
   userName = `testuser${uniqueId}`;

@@ -10,9 +10,7 @@ import {
   SpacePrivacyMode,
   CommunityMembershipPolicy,
 } from '@generated/alkemio-schema';
-import {
-  updateSpaceSettings,
-} from '../journey/space/space.request.params';
+import { updateSpaceSettings } from '../journey/space/space.request.params';
 import {
   createCalloutOnCalloutsSet,
   deleteCallout,
@@ -46,8 +44,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: {
@@ -85,8 +82,9 @@ describe('Activity logs - Space', () => {
   test('should NOT return CALLOUT_PUBLISHED, when created', async () => {
     // Arrange
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id
+      baseScenario.space.collaboration.calloutsSetId
     );
+    console.log('res', res.error);
     calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(
@@ -162,7 +160,7 @@ describe('Activity logs - Space', () => {
   test.skip('should return CALLOUT_PUBLISHED, POST_CREATED, POST_COMMENT, DISCUSSION_COMMENT, WHITEBOARD_CREATED', async () => {
     // Arrange
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id
+      baseScenario.space.collaboration.calloutsSetId
     );
     calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
@@ -186,7 +184,7 @@ describe('Activity logs - Space', () => {
     messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -214,7 +212,7 @@ describe('Activity logs - Space', () => {
     );
 
     const resWhiteboard = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
@@ -240,7 +238,7 @@ describe('Activity logs - Space', () => {
 
     // Act
     const resActivity = await getActivityLogOnCollaboration(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       7
     );
 
@@ -326,13 +324,13 @@ describe('Access to Activity logs - Space', () => {
     });
     // Arrange
     test.each`
-      userRole                 | message
-      ${TestUser.GLOBAL_ADMIN} | ${baseScenario.space.collaboration.id}
-      ${TestUser.SPACE_ADMIN}  | ${baseScenario.space.collaboration.id}
-      ${TestUser.SPACE_MEMBER} | ${baseScenario.space.collaboration.id}
+      userRole
+      ${TestUser.GLOBAL_ADMIN}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
     `(
       'User: "$userRole" get message: "$message", when intend to access Private space activity logs',
-      async ({ userRole, message }) => {
+      async ({ userRole }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
           baseScenario.space.collaboration.id,
@@ -343,7 +341,7 @@ describe('Access to Activity logs - Space', () => {
         // Assert
         expect(
           resActivity.data?.activityLogOnCollaboration[0]?.collaborationID
-        ).toContain(message);
+        ).toContain(baseScenario.space.collaboration.id);
       }
     );
 
@@ -376,11 +374,11 @@ describe('Access to Activity logs - Space', () => {
     });
     // Arrange
     test.each`
-      userRole                     | message
-      ${TestUser.GLOBAL_ADMIN}     | ${baseScenario.space.collaboration.id}
-      ${TestUser.SPACE_ADMIN}      | ${baseScenario.space.collaboration.id}
-      ${TestUser.SPACE_MEMBER}     | ${baseScenario.space.collaboration.id}
-      ${TestUser.NON_SPACE_MEMBER} | ${baseScenario.space.collaboration.id}
+      userRole
+      ${TestUser.GLOBAL_ADMIN}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
+      ${TestUser.NON_SPACE_MEMBER}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public space activity logs',
       async ({ userRole, message }) => {
@@ -394,7 +392,7 @@ describe('Access to Activity logs - Space', () => {
         // Assert
         expect(
           resActivity.data?.activityLogOnCollaboration[0]?.collaborationID
-        ).toContain(message);
+        ).toContain(baseScenario.space.collaboration.id);
       }
     );
   });

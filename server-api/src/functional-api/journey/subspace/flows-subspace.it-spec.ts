@@ -18,7 +18,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-flows',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
   }
 }

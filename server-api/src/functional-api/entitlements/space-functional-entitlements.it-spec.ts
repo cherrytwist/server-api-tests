@@ -33,17 +33,27 @@ import {
   deleteSpace,
 } from '@functional-api/journey/space/space.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { PlatformRole } from '@generated/graphql';
-import { assignPlatformRoleToUser, removePlatformRoleFromUser } from '@functional-api/platform/authorization-platform-mutation';
+import {
+  assignPlatformRoleToUser,
+  removePlatformRoleFromUser,
+} from '@functional-api/platform/authorization-platform-mutation';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let spaceId = '';
 let spaceName = `space-name-${uniqueId}`;
 
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'space-functional-entitlements',
+};
+
 describe('Functional tests - Space', () => {
   describe('VC Campaign user space creation', () => {
     beforeAll(async () => {
+      await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
       await assignPlatformRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
@@ -87,7 +97,9 @@ describe('Functional tests - Space', () => {
       'User: VC campaign has license $availableEntitlements to creates a space with name: $spaceName',
       async ({ spaceName, availableEntitlements, error }) => {
         // Arrange
-        const response = await getMyEntitlementsQuery(TestUser.NON_SPACE_MEMBER);
+        const response = await getMyEntitlementsQuery(
+          TestUser.NON_SPACE_MEMBER
+        );
 
         // Act
         const createSpace = await createSpaceBasicData(

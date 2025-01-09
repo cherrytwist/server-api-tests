@@ -23,12 +23,12 @@ const scenarioConfig: TestScenarioConfig = {
     collaboration: {
       addCallouts: true,
     },
+    community: { addAdmin: true, addMembers: true },
   },
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {

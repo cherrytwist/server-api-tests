@@ -18,10 +18,10 @@ export interface AlkemioTestConfig {
       email: string;
       password: string;
     };
-    user: {
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
+    // user: {
+    //   firstName: string;
+    //   lastName: string;
+    //   email: string;
+    // };
   };
 }

@@ -21,7 +21,6 @@ import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWit
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
-const spaceNameId = '111' + uniqueId;
 const spaceName2 = '222' + uniqueId;
 const spaceNameId2 = '222' + uniqueId;
 const subsubspaceName = 'urole-opp';
@@ -33,15 +32,15 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'organization2',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
       },
     },
@@ -49,10 +48,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  await deleteSpace('eco1');
-
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
@@ -103,7 +99,6 @@ afterAll(async () => {
 describe('User roles', () => {
   test('user role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
-
     const res = await getUserRoleSpacesVisibility(
       TestUserManager.users.nonSpaceMember.id,
       SpaceVisibility.Active
@@ -115,13 +110,12 @@ describe('User roles', () => {
     expect(spacesData).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          nameID: spaceNameId,
+          nameID: baseScenario.space.nameId,
           roles: expect.arrayContaining(availableRoles),
         }),
       ])
     );
 
-    //toDo - Evgeni, review this. Maybe a bug.
     expect(spacesData?.[0].subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -297,7 +291,10 @@ describe('User roles', () => {
         CommunityRoleType.Lead
       );
 
-      await assignUserToOrganization(TestUserManager.users.nonSpaceMember.id, orgId);
+      await assignUserToOrganization(
+        TestUserManager.users.nonSpaceMember.id,
+        orgId
+      );
     });
     afterAll(async () => {
       await deleteSpace(oppId);
@@ -314,9 +311,10 @@ describe('User roles', () => {
         TestUserManager.users.nonSpaceMember.id,
         SpaceVisibility.Active
       );
+
       const spacesData = res?.data?.rolesUser.spaces;
       const spaceData1 = res?.data?.rolesUser.spaces.find(
-        space => space.nameID === spaceNameId
+        space => space.nameID === baseScenario.space.nameId
       );
       const spaceData2 = res?.data?.rolesUser.spaces.find(
         space => space.nameID === spaceNameId2
@@ -328,7 +326,7 @@ describe('User roles', () => {
       expect(spacesData).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            nameID: spaceNameId,
+            nameID: baseScenario.space.nameId,
             roles: expect.arrayContaining(availableRoles),
           }),
           expect.objectContaining({

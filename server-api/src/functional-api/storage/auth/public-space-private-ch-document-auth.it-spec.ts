@@ -53,7 +53,7 @@ let documentId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'callouts',
+  name: 'storage-auth-public-space-private-subspace-document',
   space: {
     collaboration: {
       addCallouts: true,
@@ -84,8 +84,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpacePlatformSettings(
     baseScenario.space.id,
@@ -484,11 +483,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${undefined}                                                         | ${undefined}     | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}     | ${undefined}
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
@@ -553,12 +552,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                            | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                          | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                          | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                          | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -579,11 +578,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${undefined}                                                         | ${undefined}     | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}     | ${undefined}
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
@@ -647,12 +646,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                                           | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -674,11 +673,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                                         | parentEntityType
-      ${undefined}                 | ${undefined}                                                                       | ${undefined}     | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}     | ${undefined}
+      ${undefined}                 | ${undefined}                                                                       | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
@@ -738,12 +737,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                            | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                          | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                          | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                          | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -761,11 +760,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${undefined}                                                         | ${undefined}         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}         | ${undefined}
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
@@ -817,13 +816,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                            | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                          | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                          | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                          | ${undefined}
-      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
@@ -839,11 +837,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${undefined}                                                         | ${undefined}         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}         | ${undefined}
+      ${undefined}                 | ${undefined}                                                         | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
@@ -895,12 +893,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                                           | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
@@ -917,11 +915,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                                         | parentEntityType
-      ${undefined}                 | ${undefined}                                                                       | ${undefined}     | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}     | ${undefined}
+      ${undefined}                 | ${undefined}                                                                       | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
@@ -974,12 +972,12 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     // Arrange
     test.each`
-      userRole                     | privileges                                                           | anonymousReadAccess
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      userRole                     | privileges
+      ${undefined}                 | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(

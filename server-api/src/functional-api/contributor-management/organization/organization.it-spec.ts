@@ -1,10 +1,24 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+/**
+ * This file contains integration tests for the organization management functionality.
+ * It includes tests for creating and deleting organizations within the platform.
+ * The tests cover scenarios such as:
+ * - Creating an organization with specific details like name, domain, website, and contact email.
+ * - Verifying the successful creation of an organization.
+ * - Cleaning up by deleting the created organization after tests.
+ *
+ * The tests ensure that the organization creation and deletion processes work as expected,
+ * and that the API responses match the expected values.
+ */
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import {
   createOrganization,
   deleteOrganization,
   updateOrganization,
 } from './organization.request.params';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
 const legalEntityName = 'Legal alkemio';
 const domain = 'alkem.io';
@@ -13,8 +27,16 @@ const contactEmail = 'contact@alkem.io';
 const organizationName = `org-name + ${uniqueId}`;
 const hostNameId = 'org-nameid' + uniqueId;
 let orgId = '';
+
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'organization',
+};
 beforeAll(async () => {
+  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+
   const res = await createOrganization(organizationName, hostNameId);
+  console.log('res', res);
 
   orgId = res.data?.createOrganization?.id ?? '';
 });
@@ -139,7 +161,7 @@ describe('Organization', () => {
     });
 
     test('should FAIL on unknown id', async () => {
-      const mockId = 'mockid';
+      const mockId = '29d8b951-667e-429a-9e0e-89c6376ff08d';
       const res = await deleteOrganization(mockId);
 
       expect(res.error?.errors[0].message).toBe(

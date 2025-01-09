@@ -4,7 +4,7 @@ import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 
 export const createApplication = async (
   roleSetID: string,
-  userRole: TestUser = TestUser.NON_SPACE_MEMBER
+  userRole: TestUser = TestUser.QA_USER
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>

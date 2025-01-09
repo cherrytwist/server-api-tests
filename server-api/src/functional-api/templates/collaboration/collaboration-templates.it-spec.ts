@@ -27,15 +27,11 @@ const scenarioConfig: TestScenarioConfig = {
       collaboration: {
         addCallouts: true,
       },
-      subspace: {
-        collaboration: {
-          addCallouts: true,
-        },
-        community: {
-          addAdmin: true,
-          addMembers: true,
-        },
+      community: {
+        addAdmin: true,
+        addMembers: true,
       },
+
     },
   },
 };

@@ -13,14 +13,23 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'organization',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
+    },
+    subspace: {
+      collaboration: {
+        addCallouts: false,
+      },
+      subspace: {
+        collaboration: {
+          addCallouts: false,
+        },
+      },
     },
   },
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -33,35 +42,36 @@ describe('Assign / Remove organization to community', () => {
       await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.subsubspace.community.roleSetId,
-        CommunityRoleType.Member
+        CommunityRoleType.Lead
       );
       await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.subspace.community.roleSetId,
-        CommunityRoleType.Member
+        CommunityRoleType.Lead
       );
 
       await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.space.community.roleSetId,
-        CommunityRoleType.Member
+        CommunityRoleType.Lead
       );
 
       await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.subsubspace.community.roleSetId,
-        CommunityRoleType.Lead
+        CommunityRoleType.Member
       );
-      await removeRoleFromOrganization(
+      const a = await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.subspace.community.roleSetId,
-        CommunityRoleType.Lead
+        CommunityRoleType.Member
       );
+      console.log('why dont you remove the org', a.error);
 
       await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.space.community.roleSetId,
-        CommunityRoleType.Lead
+        CommunityRoleType.Member
       );
     });
     test('Assign organization as member to space', async () => {
@@ -89,11 +99,12 @@ describe('Assign / Remove organization to community', () => {
     });
     test('Assign organization as member to subspace', async () => {
       // Act
-      await assignRoleToOrganization(
+      const a = await assignRoleToOrganization(
         baseScenario.organization.id,
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
+      console.log('why dont you assign the org', a.error);
 
       const roleSetMembers = await getRoleSetMembersList(
         baseScenario.subspace.community.roleSetId
