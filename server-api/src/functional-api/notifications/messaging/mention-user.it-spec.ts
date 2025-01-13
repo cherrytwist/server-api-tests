@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
@@ -12,6 +15,8 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { testConfiguration } from '@src/config/test.configuration';
+export let preferencesPostCreatedConfig: any[] = [];
+export let preferencesPostCommentsCreatedConfig: any[] = [];
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -39,10 +44,10 @@ const scenarioConfig: TestScenarioConfig = {
       addCallouts: true,
     },
     community: {
-        addAdmin: true,
-        addMembers: true,
-      },
-      subspace: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
       collaboration: {
         addCallouts: true,
       },
@@ -66,8 +71,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await changePreferenceUser(
     TestUserManager.users.globalAdmin.id,
@@ -110,10 +114,133 @@ beforeAll(async () => {
     },
   ];
 
-  preferencesConfig.forEach(
+  preferencesPostCreatedConfig = [
+    {
+      userID: TestUserManager.users.globalAdmin.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.globalAdmin.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+
+    {
+      userID: TestUserManager.users.spaceMember.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.spaceMember.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+
+    {
+      userID: TestUserManager.users.subspaceMember.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.subspaceMember.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+
+    {
+      userID: TestUserManager.users.subsubspaceMember.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.subsubspaceMember.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+
+    {
+      userID: TestUserManager.users.spaceAdmin.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.spaceAdmin.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+    {
+      userID: TestUserManager.users.subspaceAdmin.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.subspaceAdmin.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+    {
+      userID: TestUserManager.users.subsubspaceAdmin.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.subsubspaceAdmin.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+    {
+      userID: TestUserManager.users.nonSpaceMember.id,
+      type: PreferenceType.NotificationPostCreated,
+    },
+    {
+      userID: TestUserManager.users.nonSpaceMember.id,
+      type: PreferenceType.NotificationPostCreatedAdmin,
+    },
+  ];
+
+  preferencesPostCommentsCreatedConfig = [
+    {
+      userID: TestUserManager.users.globalAdmin.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.spaceMember.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.subspaceMember.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.subsubspaceMember.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.spaceAdmin.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.subspaceAdmin.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.subsubspaceAdmin.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+    {
+      userID: TestUserManager.users.nonSpaceMember.id,
+      type: PreferenceType.NotificationPostCommentCreated,
+    },
+  ];
+
+  preferencesConfig.forEach(async config => {
+    const a = await changePreferenceUser(config.userID, config.type, 'true');
+    //console.log(a.data);
+  });
+  preferencesPostCreatedConfig.forEach(async config => {
+    const a = await changePreferenceUser(config.userID, config.type, 'false');
+    //console.log(a.data);
+  });
+
+  preferencesPostCommentsCreatedConfig.forEach(
     async config =>
-      await changePreferenceUser(config.userID, config.type, 'true')
+      await changePreferenceUser(config.userID, config.type, 'false')
   );
+  // preferencesDiscussionCommentCreatedConfig.forEach(
+  //   async config =>
+  //     await changePreferenceUser(config.userID, config.type, 'false')
+  // );
+  // preferencesPostOnCallForPostCreatedConfig.forEach(
+  //   async config =>
+  //     await changePreferenceUser(config.userID, config.type, 'false')
+  // );
 });
 
 afterAll(async () => {
@@ -136,7 +263,6 @@ describe('Notifications - Mention User', () => {
         TestUser.GLOBAL_ADMIN
       );
       await delay(3000);
-
       const getEmailsData = await getMailsData();
 
       // Assert
@@ -304,8 +430,8 @@ describe('Notifications - Mention User', () => {
         TestUser.SUBSPACE_MEMBER
       );
       postCommentsIdSubspace =
-        resPostonSubspace.data?.createContributionOnCallout.post?.comments
-          .id ?? '';
+        resPostonSubspace.data?.createContributionOnCallout.post?.comments.id ??
+        '';
 
       const resPostonOpp = await createPostOnCallout(
         baseScenario.subsubspace.collaboration.calloutPostCollectionId,
@@ -365,7 +491,9 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(TestUserManager.users.subspaceMember.displayName),
+            subject: receivers(
+              TestUserManager.users.subspaceMember.displayName
+            ),
             toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])
@@ -392,7 +520,9 @@ describe('Notifications - Mention User', () => {
       expect(getEmailsData[0]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            subject: receivers(TestUserManager.users.subsubspaceMember.displayName),
+            subject: receivers(
+              TestUserManager.users.subsubspaceMember.displayName
+            ),
             toAddresses: [TestUserManager.users.spaceMember.email],
           }),
         ])

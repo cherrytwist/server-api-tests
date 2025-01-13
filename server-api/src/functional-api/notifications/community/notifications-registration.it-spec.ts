@@ -1,21 +1,34 @@
 import {
   createUser,
   deleteUser,
+  getUserData,
 } from '@functional-api/contributor-management/user/user.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
 import { delay } from '@alkemio/tests-lib';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 const uniqueId = UniqueIDGenerator.getID();
 
 let userName = '';
 let userId = '';
 let userEmail = '';
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'notifications-forum-discussion',
+};
 
 beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   await deleteMailSlurperMails();
   userName = `testuser${uniqueId}`;
   userEmail = `${uniqueId}@test.com`;
@@ -23,14 +36,16 @@ beforeAll(async () => {
 
 describe('Notifications - User registration', () => {
   beforeAll(async () => {
+    const notificationsUserId = await getUserData('notifications@alkem.io');
+    const notificationsAdminUserId = notificationsUserId?.data?.user?.id ?? '';
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationUserSignUp,
+      notificationsAdminUserId,
+      PreferenceType.NotificationUserRemoved,
       'false'
     );
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationUserRemoved,
+      notificationsAdminUserId,
+      PreferenceType.NotificationUserSignUp,
       'false'
     );
     await changePreferenceUser(
@@ -85,7 +100,7 @@ describe('Notifications - User registration', () => {
 
         expect.objectContaining({
           subject: `New user registration on Alkemio: ${userName}`,
-          toAddresses: [TestUserManager.users.globalLicenseAdmin.email],
+          toAddresses: [TestUserManager.users.globalSupportAdmin.email],
         }),
 
         expect.objectContaining({

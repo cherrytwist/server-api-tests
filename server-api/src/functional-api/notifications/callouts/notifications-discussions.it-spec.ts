@@ -153,17 +153,6 @@ afterAll(async () => {
 // skipping the tests as they need to be updated
 describe.skip('Notifications - discussions', () => {
   beforeAll(async () => {
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationForumDiscussionCreated,
-      'false'
-    );
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationCommunicationDiscussionCreatedAdmin,
-      'false'
-    );
-
     for (const config of preferencesConfig)
       await changePreferenceUser(config.userID, config.type, 'true');
   });

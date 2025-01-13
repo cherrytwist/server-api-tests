@@ -1,22 +1,34 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToUser } from '@functional-api/communications/communication.params';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let receiver_userDisplayName = '';
 let sender_userDisplayName = '';
 let usersList: any[] = [];
 let receiver = '';
 let sender = '';
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'user-to-user-messages',
+};
 
 const receivers = (senderDisplayName: string) => {
   return `${senderDisplayName} sent you a message!`;
 };
 
 beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   await deleteMailSlurperMails();
 
   receiver_userDisplayName = TestUserManager.users.globalAdmin.displayName;
@@ -25,7 +37,11 @@ beforeAll(async () => {
   receiver = `${sender_userDisplayName} sent you a message!`;
   sender = `You have sent a message to ${receiver_userDisplayName}!`;
 
-  usersList = [TestUserManager.users.globalAdmin.id,TestUserManager.users.nonSpaceMember.id, TestUserManager.users.qaUser.id];
+  usersList = [
+    TestUserManager.users.globalAdmin.id,
+    TestUserManager.users.nonSpaceMember.id,
+    TestUserManager.users.qaUser.id,
+  ];
 });
 
 describe('Notifications - user to user messages', () => {

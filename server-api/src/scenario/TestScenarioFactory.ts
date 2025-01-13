@@ -384,6 +384,7 @@ export class TestScenarioFactory {
       subspaceData?.collaboration.calloutsSet?.id ?? '';
     targetModel.contextId = subspaceData?.context?.id ?? '';
     targetModel.profile.id = subspaceData?.profile?.id ?? '';
+    targetModel.profile.displayName = subspaceData?.profile?.displayName ?? '';
 
     return targetModel;
   }

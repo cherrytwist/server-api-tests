@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
@@ -31,7 +34,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-community-leads-subspace',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,
@@ -39,7 +42,7 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       community: {
         addAdmin: true,
@@ -51,9 +54,7 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
-
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateOrganization(baseScenario.organization.id, {
     legalEntityName: 'legalEntityName',
