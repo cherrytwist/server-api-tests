@@ -1,4 +1,7 @@
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import {
   createApplication,
@@ -16,6 +19,7 @@ import { changePreferenceUser } from '@functional-api/contributor-management/use
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
 
 let preferencesConfig: any[] = [];
 
@@ -45,8 +49,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: { policy: CommunityMembershipPolicy.Applications },
@@ -94,13 +97,15 @@ afterAll(async () => {
 
 describe('Notifications - applications', () => {
   beforeAll(async () => {
+    const notificationsUserId = await getUserData('notifications@alkem.io');
+    const notificationsAdminUserId = notificationsUserId?.data?.user?.id ?? '';
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
+      notificationsAdminUserId,
       PreferenceType.NotificationApplicationSubmitted,
       'false'
     );
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
+      notificationsAdminUserId,
       PreferenceType.NotificationApplicationReceived,
       'false'
     );
@@ -139,16 +144,16 @@ describe('Notifications - applications', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `${baseScenario.space.profile.displayName}: Application from non`,
+          subject: `${baseScenario.space.profile.displayName}: Application from qa`,
           toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${baseScenario.space.profile.displayName}: Application from non`,
+          subject: `${baseScenario.space.profile.displayName}: Application from qa`,
           toAddresses: [TestUserManager.users.spaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.space.profile.displayName} - Your Application to join was received!`,
-          toAddresses: [TestUserManager.users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );
@@ -157,7 +162,7 @@ describe('Notifications - applications', () => {
   test('receive notification for non space user application to subspace- GA, EA, CA and Applicant', async () => {
     // Arrange
     await assignRoleToUser(
-      TestUserManager.users.nonSpaceMember.id,
+      TestUserManager.users.qaUser.id,
       baseScenario.space.community.roleSetId,
       CommunityRoleType.Member
     );
@@ -179,16 +184,16 @@ describe('Notifications - applications', () => {
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: `${baseScenario.subspace.profile.displayName}: Application from non`,
+          subject: `${baseScenario.subspace.profile.displayName}: Application from qa`,
           toAddresses: [TestUserManager.users.globalAdmin.email],
         }),
         expect.objectContaining({
-          subject: `${baseScenario.subspace.profile.displayName}: Application from non`,
+          subject: `${baseScenario.subspace.profile.displayName}: Application from qa`,
           toAddresses: [TestUserManager.users.subspaceAdmin.email],
         }),
         expect.objectContaining({
           subject: `${baseScenario.subspace.profile.displayName} - Your Application to join was received!`,
-          toAddresses: [TestUserManager.users.nonSpaceMember.email],
+          toAddresses: [TestUserManager.users.qaUser.email],
         }),
       ])
     );

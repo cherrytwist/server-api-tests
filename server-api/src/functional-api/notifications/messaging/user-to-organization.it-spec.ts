@@ -1,4 +1,7 @@
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -17,10 +20,10 @@ let sender = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'messaging-user-to-organization',
+  name: 'user-to-user-messages',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,
@@ -30,10 +33,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  await deleteMailSlurperMails();
-
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await assignUserAsOrganizationAdmin(
     TestUserManager.users.spaceAdmin.id,
@@ -155,7 +155,10 @@ describe('Notifications - user to organization messages', () => {
       PreferenceType.NotificationOrganizationMessage,
       'true'
     );
-    await updateUserSettingCommunicationMessage(TestUserManager.users.spaceAdmin.id, false);
+    await updateUserSettingCommunicationMessage(
+      TestUserManager.users.spaceAdmin.id,
+      false
+    );
     // Act
     await sendMessageToOrganization(
       baseScenario.organization.id,

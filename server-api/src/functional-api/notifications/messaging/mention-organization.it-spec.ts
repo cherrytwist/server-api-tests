@@ -12,7 +12,10 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { testConfiguration } from '@src/config/test.configuration';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 
 const uniqueId = UniqueIDGenerator.getID();
 let postCommentsIdSpace = '';
@@ -62,8 +65,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateOrganization(baseScenario.organization.id, {
     legalEntityName: 'legalEntityName',
@@ -78,31 +80,28 @@ beforeAll(async () => {
   );
 
   await changePreferenceUser(
+    TestUserManager.users.qaUser.id,
+    PreferenceType.NotificationOrganizationMention,
+    'true'
+  );
+
+  await changePreferenceUser(
+    TestUserManager.users.globalAdmin.id,
+    PreferenceType.NotificationOrganizationMention,
+    'true'
+  );
+
+  await changePreferenceUser(
     TestUserManager.users.globalAdmin.id,
     PreferenceType.NotificationPostCommentCreated,
     'false'
   );
-
-  // preferencesConfig = [
-  //   {
-  //     organizationID: baseScenario.organization.id,
-  //     type: PreferenceType.NotificationOrganizationMention,
-  //   },
-  // ];
-
-  // preferencesConfig.forEach(
-  //   async config =>
-  //     await changePreferenceOrganization(
-  //       config.organizationID,
-  //       config.type,
-  //       'true'
-  //     )
-  // );
 });
 
 afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
+
 describe('Notifications - Mention Organization', () => {
   beforeEach(async () => {
     await deleteMailSlurperMails();
@@ -312,14 +311,17 @@ describe('Notifications - Mention Organization', () => {
 
     test('HA mention Organization in Subsubspace post (preference disabled) - 2 notification to Organization admins are sent', async () => {
       // Arrange
-      // preferencesConfig.forEach(
-      //   async config =>
-      //     await changePreferenceOrganization(
-      //       config.organizationID,
-      //       config.type,
-      //       'false'
-      //     )
-      // );
+      await changePreferenceUser(
+        TestUserManager.users.qaUser.id,
+        PreferenceType.NotificationOrganizationMention,
+        'false'
+      );
+
+      await changePreferenceUser(
+        TestUserManager.users.globalAdmin.id,
+        PreferenceType.NotificationOrganizationMention,
+        'false'
+      );
 
       // Act
       await sendMessageToRoom(
@@ -336,7 +338,7 @@ describe('Notifications - Mention Organization', () => {
       const getEmailsData = await getMailsData();
 
       // Assert
-      expect(getEmailsData[1]).toEqual(2);
+      expect(getEmailsData[1]).toEqual(0);
     });
   });
 

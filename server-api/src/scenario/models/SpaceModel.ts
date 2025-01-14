@@ -1,4 +1,4 @@
-import { ProfileModel } from "./ProfileModel";
+import { ProfileModel } from './ProfileModel';
 
 export type SpaceModel = {
   id: string;
@@ -9,7 +9,7 @@ export type SpaceModel = {
     id: string;
     roleSetId: string;
     applicationId: string;
-  },
+  };
   collaboration: {
     id: string;
     calloutsSetId: string;
@@ -17,7 +17,7 @@ export type SpaceModel = {
     calloutWhiteboardId: string;
     calloutPostId: string;
     calloutPostCommentsId: string;
-  },
+  };
   contextId: string;
   communication: {
     id: string;

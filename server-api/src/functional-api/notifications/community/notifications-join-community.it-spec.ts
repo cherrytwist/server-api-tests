@@ -1,4 +1,7 @@
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
@@ -17,6 +20,7 @@ import { changePreferenceUser } from '@functional-api/contributor-management/use
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { getUserData } from '@functional-api/contributor-management/user/user.request.params';
 
 let preferencesConfig: any[] = [];
 
@@ -45,9 +49,7 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   await deleteMailSlurperMails();
-
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
@@ -108,11 +110,12 @@ afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
-// Skip until clear the behavior
 describe('Notifications - member join community', () => {
   beforeAll(async () => {
+    const notificationsUserId = await getUserData('notifications@alkem.io');
+    const notificationsAdminUserId = notificationsUserId?.data?.user?.id ?? '';
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
+      notificationsAdminUserId,
       PreferenceType.NotificationCommunityNewMemberAdmin,
       'false'
     );
@@ -124,7 +127,6 @@ describe('Notifications - member join community', () => {
   beforeEach(async () => {
     await deleteMailSlurperMails();
   });
-  // skip until bug is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/notifications/333
   test('Non-space member join a Space - GA, HA and Joiner receive notifications', async () => {
     // Act
     await joinRoleSet(
@@ -155,7 +157,6 @@ describe('Notifications - member join community', () => {
     );
   });
 
-  // skip until bug is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/notifications/333
   test('Non-space member join a Subspace - GA, HA, CA and Joiner receive notifications', async () => {
     // Act
     await joinRoleSet(
@@ -188,7 +189,6 @@ describe('Notifications - member join community', () => {
     );
   });
 
-  // skip until bug is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/notifications/333
   test('Admin adds user to Space community - GA, HA and Joiner receive notifications', async () => {
     // Act
     await assignRoleToUser(

@@ -104,12 +104,6 @@ afterAll(async () => {
 describe('Notifications - invitations', () => {
   beforeAll(async () => {
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationCommunityInvitationUser,
-      'false'
-    );
-
-    await changePreferenceUser(
       TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,
       'false'
@@ -164,7 +158,7 @@ describe('Notifications - invitations', () => {
     );
   });
 
-  test.only('subspace admin (sender) and external user receive notifications', async () => {
+  test('subspace admin (sender) and external user receive notifications', async () => {
     // Act
     const emailExternalUser = `external${uniqueId}@alkem.io`;
     const message = 'Hello, feel free to join our community!';

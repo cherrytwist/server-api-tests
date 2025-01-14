@@ -1,4 +1,7 @@
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -99,11 +102,6 @@ afterAll(async () => {
 
 describe('Notifications - invitations', () => {
   beforeAll(async () => {
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationCommunityInvitationUser,
-      'false'
-    );
     await changePreferenceUser(
       TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunityInvitationUser,

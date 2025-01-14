@@ -147,16 +147,6 @@ afterAll(async () => {
 // Skip tests due to bug: #193
 describe.skip('Notifications - updates', () => {
   beforeAll(async () => {
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationCommunicationUpdates,
-      'false'
-    );
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationCommunicationUpdateSentAdmin,
-      'false'
-    );
 
     await changePreferenceUser(
       TestUserManager.users.globalSupportAdmin.id,

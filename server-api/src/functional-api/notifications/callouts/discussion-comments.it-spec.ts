@@ -15,13 +15,12 @@ const uniqueId = UniqueIDGenerator.getID();
 const spaceName = 'not-up-eco-name' + uniqueId;
 const subspaceName = `chName${uniqueId}`;
 const subsubspaceName = `opName${uniqueId}`;
-let preferencesConfig: any[] = [];
-const postSubjectTextMember = `${spaceName} - New comment received on Callout \u0026#34;Space Post Callout\u0026#34;, have a look!`;
+export let preferencesDiscussionCommentCreatedConfig: any[] = [];
 
 const expectedDataSpace = async (toAddresses: any[]) => {
   return expect.arrayContaining([
     expect.objectContaining({
-      subject: postSubjectTextMember,
+      subject: `${baseScenario.space.profile.displayName} - New comment received on Callout \u0026#34;Space Post Callout\u0026#34;, have a look!`,
       toAddresses,
     }),
   ]);
@@ -30,7 +29,7 @@ const expectedDataSpace = async (toAddresses: any[]) => {
 const expectedDataChal = async (toAddresses: any[]) => {
   return expect.arrayContaining([
     expect.objectContaining({
-      subject: `${subspaceName} - New comment received on Callout \u0026#34;Subspace Post Callout\u0026#34;, have a look!`,
+      subject: `${baseScenario.subspace.profile.displayName} - New comment received on Callout \u0026#34;Space Post Callout\u0026#34;, have a look!`,
       toAddresses,
     }),
   ]);
@@ -39,7 +38,7 @@ const expectedDataChal = async (toAddresses: any[]) => {
 const expectedDataOpp = async (toAddresses: any[]) => {
   return expect.arrayContaining([
     expect.objectContaining({
-      subject: `${subsubspaceName} - New comment received on Callout \u0026#34;Subsubspace Post Callout\u0026#34;, have a look!`,
+      subject: `${baseScenario.subsubspace.profile.displayName} - New comment received on Callout \u0026#34;Space Post Callout\u0026#34;, have a look!`,
       toAddresses,
     }),
   ]);
@@ -47,10 +46,14 @@ const expectedDataOpp = async (toAddresses: any[]) => {
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'subspace-activity',
+  name: 'discussion-comments-notification',
   space: {
     collaboration: {
       addCallouts: true,
+    },
+    community: {
+      addMembers: true,
+      addAdmin: true,
     },
     subspace: {
       collaboration: {
@@ -79,7 +82,7 @@ beforeAll(async () => {
   baseScenario =
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  preferencesConfig = [
+  preferencesDiscussionCommentCreatedConfig = [
     {
       userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationDiscussionCommentCreated,
@@ -132,20 +135,13 @@ describe('Notifications - callout comments', () => {
   });
 
   beforeAll(async () => {
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationDiscussionCommentCreated,
-      'false'
-    );
-
-    preferencesConfig.forEach(
+    preferencesDiscussionCommentCreatedConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'true')
     );
   });
 
-  // ToDo: fix test
-  test.skip('GA create space callout comment - HM(7) get notifications', async () => {
+  test('GA create space callout comment - HM(7) get notifications', async () => {
     // Act
     await sendMessageToRoom(
       baseScenario.space.collaboration.calloutPostCommentsId,
@@ -178,8 +174,7 @@ describe('Notifications - callout comments', () => {
     );
   });
 
-  // ToDo: fix test
-  test.skip('HA create space callout comment - HM(7) get notifications', async () => {
+  test('HA create space callout comment - HM(7) get notifications', async () => {
     // Act
     await sendMessageToRoom(
       baseScenario.space.collaboration.calloutPostCommentsId,
@@ -287,7 +282,7 @@ describe('Notifications - callout comments', () => {
   });
 
   test('OA create subsubspace callout comment - 0 notifications - all roles with notifications disabled', async () => {
-    preferencesConfig.forEach(
+    preferencesDiscussionCommentCreatedConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
     );
