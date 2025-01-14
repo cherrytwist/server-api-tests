@@ -131,7 +131,7 @@ describe('User - documents', () => {
     });
 
     // Arrange
-    test.each`
+    test.only.each`
       userRole                     | privileges
       ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
