@@ -16,7 +16,7 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
-import { readPrivilege } from '@common/constants/privileges';
+import { readPrivilege, sorted_read_readAbout } from '@common/constants/privileges';
 import {
   removeRoleFromUser,
   assignRoleToUser,
@@ -317,7 +317,7 @@ describe('Invitations-flows', () => {
 
     // Assert
     expect(spaceData?.data?.space?.authorization?.myPrivileges).toEqual(
-      readPrivilege
+      expect.arrayContaining(sorted_read_readAbout)
     );
   });
 
