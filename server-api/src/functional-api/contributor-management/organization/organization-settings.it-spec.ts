@@ -234,7 +234,6 @@ describe('Organization settings', () => {
         const organizationMembers =
           organizationData?.data?.organization.associates;
         const associates = organizationMembers?.map((m) => m.email) || [];
-        console.log(`associates: ${associates}`);
 
         // Assert
         expect(associates).toHaveLength(origMembersCount + 1);

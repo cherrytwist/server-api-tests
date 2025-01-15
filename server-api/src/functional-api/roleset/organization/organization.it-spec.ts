@@ -66,7 +66,6 @@ describe('Assign / Remove organization to community', () => {
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
-      console.log('why dont you remove the org', a.error);
 
       await removeRoleFromOrganization(
         baseScenario.organization.id,
@@ -104,7 +103,6 @@ describe('Assign / Remove organization to community', () => {
         baseScenario.subspace.community.roleSetId,
         CommunityRoleType.Member
       );
-      console.log('why dont you assign the org', a.error);
 
       const roleSetMembers = await getRoleSetMembersList(
         baseScenario.subspace.community.roleSetId

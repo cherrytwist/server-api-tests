@@ -57,7 +57,6 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-  console.log('qa user agentId', TestUserManager.users.qaUser.agentId);
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
       mode: SpacePrivacyMode.Public,

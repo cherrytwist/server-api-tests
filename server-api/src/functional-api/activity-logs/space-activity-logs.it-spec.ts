@@ -84,7 +84,6 @@ describe('Activity logs - Space', () => {
     const res = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.calloutsSetId
     );
-    console.log('res', res.error);
     calloutId = res.data?.createCalloutOnCalloutsSet.id ?? '';
 
     const resActivity = await getActivityLogOnCollaboration(

@@ -440,7 +440,6 @@ describe('Invitations-flows', () => {
     // Act
     const res = await createApplication(baseScenario.space.community.roleSetId, TestUser.NON_SPACE_MEMBER);
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
-    console.log('vrushtash li danni?',res.data)
 
     const membershipData = userAppsData?.data?.me;
 
