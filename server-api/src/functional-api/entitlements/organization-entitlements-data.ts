@@ -5,7 +5,7 @@ export const organizationAccountNoLicenses = {
   },
   license: {
     type: 'ACCOUNT',
-    authorization: { myPrivileges: ['READ', 'CREATE', 'UPDATE', 'DELETE'] },
+    authorization: { myPrivileges: ['CREATE', 'READ',  'UPDATE', 'DELETE'] },
     availableEntitlements: [],
     entitlements: [
       {
@@ -77,7 +77,7 @@ export const organizationAccountLicensePlus = {
   },
   license: {
     type: 'ACCOUNT',
-    authorization: { myPrivileges: ['READ', 'CREATE', 'UPDATE', 'DELETE'] },
+    authorization: { myPrivileges: ['CREATE', 'READ',  'UPDATE', 'DELETE'] },
     availableEntitlements: [
       'ACCOUNT_SPACE_FREE',
       'ACCOUNT_INNOVATION_HUB',
@@ -154,7 +154,7 @@ export const organizationAccountLicensePlus1SpaceVCPack = {
   },
   license: {
     type: 'ACCOUNT',
-    authorization: { myPrivileges: ['READ', 'CREATE', 'UPDATE', 'DELETE'] },
+    authorization: { myPrivileges: ['CREATE', 'READ',  'UPDATE', 'DELETE'] },
     availableEntitlements: [
       'ACCOUNT_SPACE_FREE',
       'ACCOUNT_INNOVATION_HUB',
@@ -217,7 +217,7 @@ export const organizationAccountLicensePlus1SpaceVCPack = {
       license: {
         type: 'SPACE',
         authorization: {
-          myPrivileges: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'GRANT'],
+          myPrivileges: ['READ', 'READ_ABOUT', 'CREATE', 'UPDATE', 'DELETE', 'GRANT'],
         },
         entitlements: [
           {
