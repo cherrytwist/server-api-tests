@@ -52,7 +52,7 @@ export const getRecoveryCode = async (): Promise<[
       const recoveryCode: string = match[0];
       return recoveryCode;
     } else {
-      console.log('Recovery code not found.');
+      console.error('Recovery code not found.');
     }
 
     return recoveryCode;

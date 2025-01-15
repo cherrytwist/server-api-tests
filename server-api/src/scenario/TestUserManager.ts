@@ -36,7 +36,7 @@ export class TestUserManager {
     // Finally ensure the exposed users field is populated
     this.populateUsers();
 
-    logElapsedTime('populateUserModels', start);
+    // logElapsedTime('populateUserModels', start);
   }
 
   private static createUserModel(email: string, testUser: TestUser): UserModel {

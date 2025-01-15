@@ -48,11 +48,9 @@ export const graphqlErrorWrapper = async <TData>(
         },
       };
     } else {
-      for (const error of err.response.errors) {
-        console.error(`Error received: [${error.extensions.code}] - ${error.message}`);
-      }
+
       const badErrors = err.response.errors.filter(
-        e => e.extensions.code !== 'BAD_USER_INPUT'
+        e => e.extensions.code !== 'BAD_USER_INPUT' && e.extensions.code !== 'FORBIDDEN_POLICY'
       );
       if (badErrors.length > 0) {
         console.error(badErrors);

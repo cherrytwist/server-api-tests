@@ -10,7 +10,6 @@ import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-krato
 
 const main = async () => {
   const testConfig = testConfiguration;
-  console.log(`Test config: ${stringifyConfig(testConfig)}`);
 
   const userNames = Object.values(TestUser).filter(
     x => x !== TestUser.GLOBAL_ADMIN

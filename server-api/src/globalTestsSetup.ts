@@ -9,7 +9,7 @@ import { registerInKratosOrFail } from './scenario/registration/register-in-krat
 import { verifyInKratosOrFail } from './scenario/registration/verify-in-kratos-or-fail';
 
 module.exports = async () => {
-  console.log(`\nLaunching tests using configuration: ${stringifyConfig(testConfiguration)}`);
+  console.info(`\nLaunching tests using configuration: ${stringifyConfig(testConfiguration)}`);
 
   if (!testConfiguration.registerUsers) return;
 
