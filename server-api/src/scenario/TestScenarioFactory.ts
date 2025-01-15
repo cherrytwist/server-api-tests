@@ -148,18 +148,14 @@ export class TestScenarioFactory {
   ): Promise<void> {
     if (baseScenario.subsubspace.id.length > 0) {
       const a = await deleteSpace(baseScenario.subsubspace.id);
-      console.log('subsubspace deleted', a.data);
     }
     if (baseScenario.subspace.id.length > 0) {
       const b = await deleteSpace(baseScenario.subspace.id);
-      console.log('subspace deleted', b.data);
     }
     if (baseScenario.space.id.length > 0) {
       const c = await deleteSpace(baseScenario.space.id);
-      console.log('subspace deleted', c.data);
     }
     const d = await deleteOrganization(baseScenario.organization.id);
-    console.log('org deleted', d.data);
   }
 
   private static async populateSpace(

@@ -222,11 +222,9 @@ beforeAll(async () => {
 
   preferencesConfig.forEach(async config => {
     const a = await changePreferenceUser(config.userID, config.type, 'true');
-    //console.log(a.data);
   });
   preferencesPostCreatedConfig.forEach(async config => {
     const a = await changePreferenceUser(config.userID, config.type, 'false');
-    //console.log(a.data);
   });
 
   preferencesPostCommentsCreatedConfig.forEach(

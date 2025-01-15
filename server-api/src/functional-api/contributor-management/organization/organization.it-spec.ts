@@ -36,7 +36,6 @@ beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 
   const res = await createOrganization(organizationName, hostNameId);
-  console.log('res', res);
 
   orgId = res.data?.createOrganization?.id ?? '';
 });

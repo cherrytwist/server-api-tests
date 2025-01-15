@@ -65,7 +65,6 @@ describe('Functional tests - Innovation Pack', () => {
         TestUserManager.users.nonSpaceMember.id,
         PlatformRole.VcCampaign
       );
-      console.log('im li greshki',a.error)
     });
     const allPrivileges = [
       'ACCOUNT_SPACE_FREE',

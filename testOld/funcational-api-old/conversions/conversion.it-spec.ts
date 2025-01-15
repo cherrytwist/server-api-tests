@@ -252,25 +252,6 @@ describe.skip('Conversions', () => {
     // delete newSpaceDataTagsetOpp['id'];
     // //delete oppDataTagset['id'];
 
-    // console.log(newSpaceDataCommunity);
-    // console.log(chalDataCommunity);
-    // console.log(newSpaceDataAuthorization);
-    // console.log(chalDataAuthorization);
-    // console.log(newSpaceDataOpportunities);
-    // console.log(chalDataOpportunities);
-    // console.log(newSpaceDataApplication);
-    // console.log(chalDataApplication);
-    // console.log(newSpaceDataPreferences);
-    // console.log(chalDataPreferences);
-    // console.log(newSpaceDataTagset);
-    // console.log(chalDataTagset);
-    // console.log(newSpaceDataTemplates);
-    // console.log(chalDataTemplates);
-    // console.log([newSpaceDataHost]);
-    // console.log(chalDataLeadOrg);
-    //console.log(newSpaceDataNameId);
-    // console.log(chalDataNameId);
-
     const newSpaceId = res?.data?.convertChallengeToSpace.id ?? '';
     const newChallengeId =
       res?.data?.convertChallengeToSpace?.challenges?.[0].id ?? '';
@@ -378,23 +359,6 @@ describe.skip('Conversions', () => {
 
     //delete newSpaceDataTagset['id'];
     //delete chalDataTagset['id'];
-
-    // console.log(newSpaceDataCommunity);
-    // console.log(chalDataCommunity);
-    // console.log(newSpaceDataAuthorization);
-    // console.log(chalDataAuthorization);
-    // console.log(newSpaceDataOpportunities);
-    // console.log(chalDataOpportunities);
-    // console.log(newSpaceDataApplication);
-    // console.log(chalDataApplication);
-    // console.log(newSpaceDataPreferences);
-    // console.log(chalDataPreferences);
-    // console.log(newSpaceDataTagset);
-    // console.log(chalDataTagset);
-    // console.log(newSpaceDataTemplates);
-    // console.log(chalDataTemplates);
-    // console.log([newSpaceDataHost]);
-    // console.log(chalDataLeadOrg);
 
     const newSpaceId = convertedChallengeData?.id ?? '';
 
