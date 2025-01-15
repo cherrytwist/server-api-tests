@@ -36,4 +36,4 @@ module.exports = {
 };
 
 
-console.log('Global Setup Path:', require.resolve('../src/testSetup.ts'));
+console.info('Global Setup Path:', require.resolve('../src/testSetup.ts'));
