@@ -87,7 +87,6 @@ describe('Posts - Create', () => {
       postNameID,
       TestUser.SPACE_MEMBER
     );
-    console.log('resPostonSpace', resPostonSpace.data);
     const postDataCreate =
       resPostonSpace.data?.createContributionOnCallout.post;
     spacePostId =
@@ -98,7 +97,6 @@ describe('Posts - Create', () => {
       baseScenario.space.collaboration.calloutPostCollectionId,
       TestUser.SPACE_MEMBER
     );
-    console.log('postsData info', postsData.data?.space.collaboration?.calloutsSet.callouts?.[0]);
     const data =
       postsData.data?.space.collaboration?.calloutsSet.callouts?.[0].contributions?.find(
         c => c.post && c.post.id === spacePostId
@@ -132,8 +130,6 @@ describe('Posts - Create', () => {
       postNameID,
       TestUser.NON_SPACE_MEMBER
     );
-    console.log('resPostonSpace', resPostonSpace.error);
-    console.log(spaceCalloutId)
 
     // Assert
     expect(JSON.stringify(resPostonSpace)).toContain(

@@ -1,7 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import {
   createCalloutOnCalloutsSet,
@@ -16,13 +19,7 @@ import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWit
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
-
-const spaceName = 'not-up-eco-name' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `opName${uniqueId}`;
-
 let preferencesConfigCallout: any[] = [];
-
 let calloutDisplayName = '';
 let calloutId = '';
 
@@ -49,14 +46,18 @@ const templateResult = async (entityName: string, userEmail: string) => {
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'callouts',
+  name: 'callouts-notifications',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
+    },
+    community: {
+      addAdmin: true,
+      addMembers: true,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       community: {
         addAdmin: true,
@@ -64,7 +65,7 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
         community: {
           addAdmin: true,
@@ -78,8 +79,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesConfigCallout = [
     {
@@ -141,26 +141,20 @@ describe('Notifications - post', () => {
 
   beforeAll(async () => {
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationCalloutPublished,
-      'false'
-    );
-    await changePreferenceUser(
       TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCalloutPublished,
       'false'
     );
 
-    preferencesConfigCallout.forEach(
-      async config =>
-        await changePreferenceUser(config.userID, config.type, 'true')
-    );
+    preferencesConfigCallout.forEach(async config => {
+       await changePreferenceUser(config.userID, config.type, 'true');
+    });
   });
   test('GA PUBLISH space callout - HM(7) get notifications', async () => {
-    const spaceCalloutSubjectText = `${spaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+    const spaceCalloutSubjectText = `${baseScenario.space.profile.displayName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.GLOBAL_ADMIN
     );
@@ -174,21 +168,36 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(7);
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.globalAdmin.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceAdmin.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceMember.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceAdmin.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceMember.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
       await templateResult(
@@ -207,7 +216,7 @@ describe('Notifications - post', () => {
   test("GA PUBLISH space callout with 'sendNotification':'false' - HM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.GLOBAL_ADMIN
     );
@@ -227,11 +236,10 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(0);
   });
 
-  // ToDo: fix test
-  test.skip('GA create DRAFT -> PUBLISHED -> DRAFT -> PUBLISHED space callout - HM(7) get notifications on PUBLISH event only', async () => {
+  test('GA create DRAFT -> PUBLISHED -> DRAFT -> PUBLISHED space callout - HM(7) get notifications on PUBLISH event only', async () => {
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
       TestUser.GLOBAL_ADMIN
@@ -277,12 +285,11 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(14);
   });
 
-  //ToDo: Fix test
-  test.skip('HA create PUBLISHED space callout type: POST - HM(7) get notifications', async () => {
-    const spaceCalloutSubjectText = `${spaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+  test('HA create PUBLISHED space callout type: POST - HM(7) get notifications', async () => {
+    const spaceCalloutSubjectText = `${baseScenario.space.profile.displayName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
       TestUser.SPACE_ADMIN
@@ -300,21 +307,36 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(7);
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.globalAdmin.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceAdmin.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.spaceMember.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceAdmin.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(spaceCalloutSubjectText, TestUserManager.users.subspaceMember.email)
+      await templateResult(
+        spaceCalloutSubjectText,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
       await templateResult(
@@ -332,10 +354,9 @@ describe('Notifications - post', () => {
 
   // Skip until is updated the mechanism for whiteboard callout creation
   test.skip('HA create PUBLISHED space callout type: WHITEBOARD - HM(7) get notifications', async () => {
-    const spaceCalloutSubjectText = `${spaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.space.collaboration.id,
+      baseScenario.space.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
 
       TestUser.SPACE_ADMIN
@@ -413,10 +434,10 @@ describe('Notifications - post', () => {
   });
 
   test('HA create PUBLISHED subspace callout type: POST - CM(5) get notifications', async () => {
-    const calloutSubjectText = `${subspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+    const calloutSubjectText = `${baseScenario.subspace.profile.displayName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subspace.collaboration.id,
+      baseScenario.subspace.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SPACE_ADMIN
     );
@@ -434,36 +455,57 @@ describe('Notifications - post', () => {
     expect(mails[1]).toEqual(5);
 
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.globalAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     // Don't receive as Space Admin is not member of subspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.spaceAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     // Don't receive as Space Member is not member of subspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.spaceMember.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subspaceAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subspaceMember.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subsubspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceMember.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subsubspaceMember.email
+      )
     );
   });
 
   test("HA create PUBLISHED subspace callout type: POST with 'sendNotification':'false' - CM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subspace.collaboration.id,
+      baseScenario.subspace.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SPACE_ADMIN
     );
@@ -484,10 +526,10 @@ describe('Notifications - post', () => {
   });
 
   test('OA create PUBLISHED subsubspace callout type: POST - OM(4) get notifications', async () => {
-    const calloutSubjectText = `${subsubspaceName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
+    const calloutSubjectText = `${baseScenario.subsubspace.profile.displayName} - New post is published &#34;${calloutDisplayName}&#34;, have a look!`;
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subsubspace.collaboration.id,
+      baseScenario.subsubspace.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -505,39 +547,60 @@ describe('Notifications - post', () => {
 
     // GA - 1 mails as subsubspace member; as admin - 0
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.globalAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     // Don't receive as Space Admin is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.spaceAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     // Don't receive as Space Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.spaceMember.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subspaceAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
 
     // Don't receive as Subspace Member is not member of subsubspace
     expect(mails[0]).not.toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subspaceMember.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceAdmin.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subsubspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templateResult(calloutSubjectText, TestUserManager.users.subsubspaceMember.email)
+      await templateResult(
+        calloutSubjectText,
+        TestUserManager.users.subsubspaceMember.email
+      )
     );
   });
 
   test("OA create PUBLISHED subsubspace callout type: POST with 'sendNotification':'false' - OM(0) get notifications", async () => {
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subsubspace.collaboration.id,
+      baseScenario.subsubspace.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );
@@ -563,7 +626,7 @@ describe('Notifications - post', () => {
     );
     // Act
     const res = await createCalloutOnCalloutsSet(
-      baseScenario.subsubspace.collaboration.id,
+      baseScenario.subsubspace.collaboration.calloutsSetId,
       { framing: { profile: { displayName: calloutDisplayName } } },
       TestUser.SUBSUBSPACE_ADMIN
     );

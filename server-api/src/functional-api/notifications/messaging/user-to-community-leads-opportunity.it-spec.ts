@@ -15,7 +15,10 @@ import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-manag
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 
 const senders = (communityName: string) => {
   return `You have sent a message to ${communityName} community`;
@@ -30,7 +33,7 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-to-community-leads-subsubspace',
   space: {
     collaboration: {
-      addCallouts: true,
+      addCallouts: false,
     },
     community: {
       addAdmin: true,
@@ -38,7 +41,7 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addCallouts: false,
       },
       community: {
         addAdmin: true,
@@ -46,7 +49,7 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addCallouts: false,
         },
         community: {
           addAdmin: true,
@@ -60,8 +63,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: {
@@ -115,7 +117,7 @@ describe('Notifications - send messages to Private Space, Subsubspace Community 
     await deleteMailSlurperMails();
   });
 
-  test.only('NOT space member sends message to Subsubspace community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
+  test('NOT space member sends message to Subsubspace community (2 User Leads, 1 Org Lead) - 3 messages sent', async () => {
     // Act
     await sendMessageToCommunityLeads(
       baseScenario.subsubspace.community.id,
@@ -162,11 +164,15 @@ describe('Notifications - send messages to Private Space, Subsubspace Community 
     expect(getEmailsData[0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: receivers(TestUserManager.users.subsubspaceMember.displayName),
+          subject: receivers(
+            TestUserManager.users.subsubspaceMember.displayName
+          ),
           toAddresses: [TestUserManager.users.subsubspaceMember.email],
         }),
         expect.objectContaining({
-          subject: receivers(TestUserManager.users.subsubspaceMember.displayName),
+          subject: receivers(
+            TestUserManager.users.subsubspaceMember.displayName
+          ),
           toAddresses: [TestUserManager.users.subsubspaceAdmin.email],
         }),
         expect.objectContaining({

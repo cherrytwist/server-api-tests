@@ -312,14 +312,12 @@ describe.skip('Callout - Close State - User Privileges Discussions', () => {
           state: CalloutState.Closed,
         },
       });
-      console.log('a shte go obnovi li?', a.data);
     };
 
     const spaceCallout = await TestSetupUtils.getDefaultSpaceCalloutByNameId(
       baseScenario.space.collaboration.calloutsSetId,
       baseScenario.space.collaboration.calloutPostCommentsId
     );
-    console.log('spaceCallout da vidim kakvo shte vurne', spaceCallout.data);
 
     spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
     spaceCalloutCommentsId =
@@ -381,7 +379,6 @@ describe.skip('Callout - Close State - User Privileges Discussions', () => {
             'comment on discussion callout',
             userRole
           );
-          console.log('res', res.error?.errors[0].code);
 
           // Assert
           expect(res.error?.errors[0].code).toContain(code);

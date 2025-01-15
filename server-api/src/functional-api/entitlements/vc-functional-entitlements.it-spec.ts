@@ -60,7 +60,6 @@ describe('Functional tests - VC', () => {
     for (const vc of vcs || []) {
       const vcId = vc.id;
      const a = await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
-     console.log('delete vc 1',a.data);
     }
 
     const spaces = spaceData.data?.account?.spaces;

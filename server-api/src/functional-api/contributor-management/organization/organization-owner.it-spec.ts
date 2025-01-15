@@ -74,7 +74,6 @@ describe('Organization Owner', () => {
       `OrgTwoOwnerOne-${uniqueId}`,
       `orgtwoownerone-${uniqueId}`
     );
-    console.log('responseOrgTwo', responseOrgTwo);
     const organizationIdTwo = responseOrgTwo.data?.createOrganization?.id ?? '';
 
     // Act

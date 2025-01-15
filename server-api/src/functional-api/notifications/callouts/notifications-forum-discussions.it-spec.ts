@@ -1,4 +1,7 @@
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { TestUser } from '@alkemio/tests-lib';
@@ -12,6 +15,9 @@ import { sendMessageReplyToRoom } from '@functional-api/communications/replies/r
 import { ForumDiscussionCategory } from '@generated/alkemio-schema';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { PreferenceType } from '@generated/graphql';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
+import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let preferencesConfigDiscussions: any[] = [];
 let preferencesConfigComments: any[] = [];
@@ -27,8 +33,15 @@ let platformCommunicationId = '';
 let discussionId = '';
 let discussionCommentId = '';
 let messageId = '';
+let baseScenario: EmptyModel;
+const scenarioConfig: TestScenarioNoPreCreationConfig = {
+  name: 'notifications-forum-discussion',
+};
 
 beforeAll(async () => {
+  baseScenario =
+    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+
   await deleteMailSlurperMails();
   const res = await getPlatformForumData();
   platformCommunicationId = res?.data?.platform.forum.id ?? '';

@@ -65,7 +65,6 @@ describe('Update space platform settings', () => {
         mode: SpacePrivacyMode.Private,
       },
     });
-    console.log('moje li da pomaga supporta?',a.data);
   });
 
   afterAll(async () => {

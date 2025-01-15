@@ -89,7 +89,6 @@ export class TestUserManager {
 
   public static getUserModelByEmail(userEmail: string): UserModel {
     const userModel = this.userModelMapEmail.get(userEmail);
-   // console.log('userModel', userModel);
     if (!userModel) {
       throw new Error(`UserModel with email ${userEmail} not found`);
     }
@@ -98,7 +97,6 @@ export class TestUserManager {
 
   public static getUserModelByType(userType: TestUser): UserModel {
     const userModel = this.userModelMapType.get(userType);
-    //console.log('userModel', userModel);
 
     if (!userModel) {
       throw new Error(`UserModel with type ${userType} not found`);

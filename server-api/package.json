@@ -69,7 +69,6 @@
     "fs": "^0.0.1-security",
     "graphql": "^16.10.0",
     "graphql-type-json": "^0.3.2",
-    "graphql-upload": "^17.0.0",
     "graphql-ws": "^5.8.2",
     "ws": "^8.18.0"
   },
@@ -111,7 +110,10 @@
     }
   },
   "engines": {
-    "node": ">=20.9.0",
+    "node": ">=17.9.1",
     "npm": ">=10"
+  },
+  "volta": {
+    "node": "17.9.1"
   }
 }

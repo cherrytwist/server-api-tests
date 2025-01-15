@@ -1,6 +1,9 @@
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import {
   createPostOnCallout,
@@ -30,12 +33,12 @@ let postCommentsIdSpace = '';
 let postCommentsIdSubspace = '';
 let postCommentsIdSubsubspace = '';
 let messageId = '';
-let preferencesPostConfig: any[] = [];
-let preferencesPostCommentsConfig: any[] = [];
+export let preferencesPostCreatedConfig: any[] = [];
+export let preferencesPostCommentsCreatedConfig: any[] = [];
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'notifications-post-comments',
+  name: 'post-comments-notifications',
   space: {
     collaboration: {
       addCallouts: true,
@@ -68,10 +71,9 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  preferencesPostConfig = [
+  preferencesPostCreatedConfig = [
     {
       userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCreated,
@@ -142,7 +144,7 @@ beforeAll(async () => {
     },
   ];
 
-  preferencesPostCommentsConfig = [
+  preferencesPostCommentsCreatedConfig = [
     {
       userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
@@ -176,6 +178,7 @@ beforeAll(async () => {
       type: PreferenceType.NotificationPostCommentCreated,
     },
   ];
+  await deleteMailSlurperMails();
 });
 
 afterAll(async () => {
@@ -195,22 +198,6 @@ describe('Notifications - post comments', () => {
 
   beforeAll(async () => {
     await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationPostCommentCreated,
-      'false'
-    );
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationPostCreated,
-      'false'
-    );
-    await changePreferenceUser(
-      TestUserManager.users.notificationsAdmin.id,
-      PreferenceType.NotificationPostCreatedAdmin,
-      'false'
-    );
-
-    await changePreferenceUser(
       TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationPostCommentCreated,
       'false'
@@ -225,15 +212,16 @@ describe('Notifications - post comments', () => {
       PreferenceType.NotificationPostCreatedAdmin,
       'false'
     );
-    preferencesPostConfig.forEach(
+    preferencesPostCreatedConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
     );
 
-    preferencesPostCommentsConfig.forEach(
+    preferencesPostCommentsCreatedConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'true')
     );
+    await deleteMailSlurperMails();
   });
 
   afterEach(async () => {
@@ -277,7 +265,7 @@ describe('Notifications - post comments', () => {
     });
 
     test('HM create comment - GA(1) get notifications', async () => {
-      const spacePostSubjectText = `${spaceName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
+      const spacePostSubjectText = `${baseScenario.space.profile.displayName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
       // Act
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
@@ -336,7 +324,7 @@ describe('Notifications - post comments', () => {
     });
 
     test('HA create comment - HM(1) get notifications', async () => {
-      const spacePostSubjectText = `${spaceName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
+      const spacePostSubjectText = `${baseScenario.space.profile.displayName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
       // Act
       const messageRes = await sendMessageToRoom(
         postCommentsIdSpace,
@@ -395,7 +383,7 @@ describe('Notifications - post comments', () => {
     });
 
     test('CA create comment - CM(1) get notifications', async () => {
-      const subspacePostSubjectText = `${subspaceName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
+      const subspacePostSubjectText = `${baseScenario.subspace.profile.displayName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
       // Act
       const messageRes = await sendMessageToRoom(
         postCommentsIdSubspace,
@@ -454,7 +442,7 @@ describe('Notifications - post comments', () => {
     });
 
     test('CA create comment - OM(1) get notifications', async () => {
-      const subsubspacePostSubjectText = `${subsubspaceName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
+      const subsubspacePostSubjectText = `${baseScenario.subsubspace.profile.displayName} - New comment received on your Post &#34;${postDisplayName}&#34;, have a look!`;
       // Act
       const messageRes = await sendMessageToRoom(
         postCommentsIdSubsubspace,
@@ -480,7 +468,7 @@ describe('Notifications - post comments', () => {
   });
 
   test('OA create post on subsubspace and comment - 0 notifications - all roles with notifications disabled', async () => {
-    preferencesPostCommentsConfig.forEach(
+    preferencesPostCommentsCreatedConfig.forEach(
       async config =>
         await changePreferenceUser(config.userID, config.type, 'false')
     );
