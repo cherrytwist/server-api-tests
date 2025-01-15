@@ -1,14 +1,16 @@
 export const readPrivilege = ['READ'];
+export const readAboutPrivilege = ['READ_ABOUT'];
+export const sorted_read_readAbout = [...readPrivilege, ...readAboutPrivilege];
 export const sorted__create_read_update_delete = [
   'CREATE',
-  ...readPrivilege,
+  ...sorted_read_readAbout,
   'UPDATE',
   'DELETE',
 ].sort();
 export const sorted__create_read_update_delete_grant = [
   'CREATE',
   'GRANT',
-  ...readPrivilege,
+  ...sorted_read_readAbout,
   'UPDATE',
   'DELETE',
 ].sort();
@@ -16,7 +18,7 @@ export const sorted__create_read_update_delete_grant = [
 export const sorted__create_read_update_delete_grant_platformAdmin = [
   'CREATE',
   'GRANT',
-  ...readPrivilege,
+  ...sorted_read_readAbout,
   'UPDATE',
   'DELETE',
   'PLATFORM_ADMIN',
