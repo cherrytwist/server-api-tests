@@ -540,6 +540,11 @@ export const sorted__create_read_update_delete_grant_createSubspace = [
   'CREATE_SUBSPACE',
 ].sort();
 
+export const sorted__create_read_readAbout_update_delete_grant_createSubspace = [
+  ...sorted__create_read_readAbout_update_delete_grant,
+  'CREATE_SUBSPACE',
+].sort();
+
 export const sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin = [
   ...sorted__create_read_update_delete_grant,
   'AUTHORIZATION_RESET',
@@ -549,6 +554,12 @@ export const sorted__create_read_update_delete_grant_authorizationReset_createSu
 
 export const sorted__create_read_update_delete_grant_createSubspace_platformAdmin = [
   ...sorted__create_read_update_delete_grant,
+  'CREATE_SUBSPACE',
+  'PLATFORM_ADMIN',
+].sort();
+
+export const sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin = [
+  ...sorted__create_read_readAbout_update_delete_grant,
   'CREATE_SUBSPACE',
   'PLATFORM_ADMIN',
 ].sort();
