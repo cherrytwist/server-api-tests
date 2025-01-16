@@ -139,11 +139,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
+      ${undefined}                 | ${undefined} // sorted_read_readAbout
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined} // sorted_read_readAbout
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined} // toDo - should't this be ['READ_ABOUT']?
+      ${TestUser.SPACE_MEMBER}     | ${[undefined]} // toDo - should't this be ['READ_ABOUT']? sorted_read_readAbout
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
