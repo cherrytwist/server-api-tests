@@ -18,8 +18,10 @@ import {
   sorted__create_read_update_delete_grant_createSubspace,
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
   sorted__create_read_update_delete_grant_createSubspace_platformAdmin,
-  readAboutPrivilege,
   sorted_read_readAbout,
+  readAboutPrivilege,
+  sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin,
+  sorted__create_read_readAbout_update_delete_grant_createSubspace,
 } from '@common/constants/privileges';
 import { SpacePrivacyMode, SpaceVisibility } from '@generated/alkemio-schema';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
@@ -127,10 +129,10 @@ describe('Update space platform settings', () => {
       // Arrange
       test.each`
         user                             | spaceMyPrivileges
-        ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin}
         ${TestUser.GLOBAL_LICENSE_ADMIN} | ${readAboutPrivilege}
-        ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_createSubspace}
+        ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_readAbout_update_delete_grant_createSubspace}
         ${TestUser.SPACE_MEMBER}         | ${sorted_read_readAbout}
         ${TestUser.NON_SPACE_MEMBER}     | ${readAboutPrivilege}
       `(
@@ -166,10 +168,10 @@ describe('Update space platform settings', () => {
 
       test.each`
         user                             | spaceMyPrivileges
-        ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
-        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin}
+        ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin}
         ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted_read_readAbout}
-        ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_createSubspace}
+        ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_readAbout_update_delete_grant_createSubspace}
         ${TestUser.SPACE_MEMBER}         | ${sorted_read_readAbout}
         ${TestUser.NON_SPACE_MEMBER}     | ${sorted_read_readAbout}
       `(
