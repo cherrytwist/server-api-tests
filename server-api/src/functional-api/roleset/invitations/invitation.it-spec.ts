@@ -23,7 +23,7 @@ import {
 } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
@@ -73,7 +73,7 @@ describe('Invitations', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     if (invitationId && invitationId.length === 36) {
       await deleteInvitation(invitationId);
@@ -282,7 +282,7 @@ describe('Invitations-flows', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await deleteInvitation(invitationId);
@@ -365,13 +365,13 @@ describe('Invitations-flows', () => {
     await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     // Act
@@ -466,7 +466,7 @@ describe('Invitations - Authorization', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await deleteInvitation(invitationId);

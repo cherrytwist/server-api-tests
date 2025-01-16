@@ -6,7 +6,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { delay } from '@alkemio/tests-lib';
-import { CommunityRoleType, SpacePrivacyMode } from '@generated/alkemio-schema';
+import { RoleName, SpacePrivacyMode } from '@generated/alkemio-schema';
 import {
   removeMessageOnRoom,
   sendMessageToRoom,
@@ -45,7 +45,7 @@ describe('Communities', () => {
       await assignRoleToUser(
         TestUserManager.users.spaceMember.id,
         baseScenario.space.community.roleSetId,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       const res = await sendMessageToRoom(

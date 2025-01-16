@@ -15,8 +15,8 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
-import { CalloutType, CommunityRoleType } from '@generated/graphql';
-import { CalloutVisibility, PlatformRole } from '@generated/alkemio-schema';
+import { CalloutType, RoleName } from '@generated/graphql';
+import { CalloutVisibility } from '@generated/alkemio-schema';
 import { SpaceModel } from './models/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
@@ -117,27 +117,27 @@ export class TestScenarioFactory {
   }
 
   private static async populateGlobalRoles(): Promise<void> {
-    await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignRoleNameToUser(
       TestUserManager.users.globalLicenseAdmin,
-      PlatformRole.LicenseManager
+      RoleName.GlobalLicenseManager
     );
 
-    await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignRoleNameToUser(
       TestUserManager.users.globalSupportAdmin,
-      PlatformRole.Support
+      RoleName.GlobalSupport
     );
 
-    await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignRoleNameToUser(
       TestUserManager.users.betaTester,
-      PlatformRole.BetaTester
+      RoleName.PlatformBetaTester
     );
   }
 
-  private static async checkAndAssignPlatformRoleToUser(
+  private static async checkAndAssignRoleNameToUser(
     userModel: UserModel,
-    role: PlatformRole
+    role: RoleName
   ): Promise<void> {
-    const alreadyHasRole = userModel.platformRoles.includes(role);
+    const alreadyHasRole = userModel.RoleNames.includes(role);
     if (!alreadyHasRole) {
       await assignPlatformRoleToUser(userModel.id, role);
     }
@@ -175,7 +175,7 @@ export class TestScenarioFactory {
         await assignRoleToUser(
           communityAdmin.id,
           roleSetID,
-          CommunityRoleType.Admin
+          RoleName.Admin
         );
       }
     }
@@ -402,7 +402,7 @@ export class TestScenarioFactory {
         usersIdsToAssign.push(TestUserManager.users.subsubspaceMember.id);
     }
     for (const userID of usersIdsToAssign) {
-      await assignRoleToUser(userID, roleSetId, CommunityRoleType.Member);
+      await assignRoleToUser(userID, roleSetId, RoleName.Member);
     }
   }
 

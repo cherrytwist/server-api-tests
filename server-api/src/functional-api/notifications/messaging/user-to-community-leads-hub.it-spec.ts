@@ -6,7 +6,7 @@ import {
   removeRoleFromUser,
   assignRoleToUser,
 } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
+import { RoleName, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { updateUserSettingCommunicationMessage } from '@functional-api/contributor-management/user/user.request.params';
@@ -50,19 +50,19 @@ beforeAll(async () => {
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.spaceAdmin.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.spaceMember.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignUserAsOrganizationAdmin(
@@ -432,12 +432,12 @@ describe('Notifications - messages to Public space NO hosts', () => {
     await removeRoleFromUser(
       TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
     await removeRoleFromUser(
       TestUserManager.users.spaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
   });
 

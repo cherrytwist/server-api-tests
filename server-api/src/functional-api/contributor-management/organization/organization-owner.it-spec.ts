@@ -121,7 +121,7 @@ describe('Organization Owner', () => {
 
     // Assert
     expect(
-      res?.data?.removeOrganizationRoleFromUser?.agent?.credentials
+      res?.data?.removeRoleFromUser?.agent?.credentials
     ).not.toContainObject(responseData);
   });
 
@@ -153,7 +153,7 @@ describe('Organization Owner', () => {
 
     // Assert
     expect(
-      res?.data?.removeOrganizationRoleFromUser?.agent?.credentials
+      res?.data?.removeRoleFromUser?.agent?.credentials
     ).not.toContainObject(responseData);
   });
 

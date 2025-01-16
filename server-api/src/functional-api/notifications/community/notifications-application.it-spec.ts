@@ -12,7 +12,7 @@ import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
 } from '@generated/alkemio-schema';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
@@ -164,7 +164,7 @@ describe('Notifications - applications', () => {
     await assignRoleToUser(
       TestUserManager.users.qaUser.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await updateSpaceSettings(baseScenario.subspace.id, {

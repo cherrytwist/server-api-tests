@@ -13,7 +13,7 @@ import {
 import { removeRoleFromUser } from '../roles-request.params';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -74,19 +74,19 @@ beforeAll(async () => {
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 });
 

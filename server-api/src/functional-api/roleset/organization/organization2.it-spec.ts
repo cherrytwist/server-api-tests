@@ -1,9 +1,9 @@
 import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   assignRoleToOrganization,
-  getOrganizationRole,
+  getRoleName,
 } from '../roles-request.params';
-import { CommunityRoleType } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
@@ -38,37 +38,37 @@ beforeAll(async () => {
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 });
 
@@ -79,7 +79,7 @@ afterAll(async () => {
 describe('Organization role', () => {
   test('Organization role - assignment to 1 Organization, Space, Subspace, Subsubspace', async () => {
     // Act
-    const res = await getOrganizationRole(baseScenario.organization.id);
+    const res = await getRoleName(baseScenario.organization.id);
     const spacesData = res?.data?.rolesOrganization.spaces ?? [];
 
     // Assert

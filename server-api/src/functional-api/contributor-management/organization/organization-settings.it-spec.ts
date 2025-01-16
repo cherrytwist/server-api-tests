@@ -120,7 +120,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
         expect(organizationMembers).toHaveLength(1);
@@ -149,7 +149,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
         expect(organizationMembers).toHaveLength(1);
@@ -178,7 +178,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
 
@@ -221,7 +221,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const origOrganizationMembers =
-          origOrgData?.data?.organization.associates;
+          origOrgData?.data?.organization.roleSet.usersInRole;
         const origMembersCount = origOrganizationMembers?.length ?? -999;
 
         // Act
@@ -232,7 +232,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
         const associates = organizationMembers?.map((m) => m.email) || [];
 
         // Assert
@@ -262,7 +262,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
         expect(organizationMembers).toHaveLength(1);
@@ -291,7 +291,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
 

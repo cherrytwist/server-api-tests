@@ -9,7 +9,7 @@ import { updateSpaceSettings } from '../../journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
@@ -76,7 +76,7 @@ describe('Application', () => {
     await removeRoleFromUser(
       TestUserManager.users.qaUser.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     if (applicationId && applicationId.length === 36) {
@@ -312,7 +312,7 @@ describe('Application-flows', () => {
     await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
   });
 
@@ -320,7 +320,7 @@ describe('Application-flows', () => {
     await removeRoleFromUser(
       TestUserManager.users.qaUser.id,
       baseScenario.subspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     if (subspaceApplicationId.length === 36) {
       await deleteApplication(subspaceApplicationId);

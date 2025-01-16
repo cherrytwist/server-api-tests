@@ -10,7 +10,7 @@ import {
   removeRoleFromOrganization,
 } from '@functional-api/roleset/roles-request.params';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
+import { RoleName, SpacePrivacyMode } from '@generated/graphql';
 import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
@@ -81,19 +81,19 @@ beforeAll(async () => {
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.subsubspaceMember.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.subsubspaceAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignUserAsOrganizationAdmin(
@@ -104,7 +104,7 @@ beforeAll(async () => {
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 });
 
@@ -189,19 +189,19 @@ describe('Notifications - send messages to Private Space, Public Subspace, Subsu
     await removeRoleFromUser(
       TestUserManager.users.subsubspaceMember.id,
       baseScenario.subsubspace.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await removeRoleFromUser(
       TestUserManager.users.subsubspaceAdmin.id,
       baseScenario.subsubspace.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await removeRoleFromOrganization(
       baseScenario.organization.id,
       baseScenario.subsubspace.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
   });
 

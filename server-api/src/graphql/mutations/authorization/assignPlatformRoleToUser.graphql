@@ -1,5 +1,5 @@
-mutation assignPlatformRoleToUser($input: AssignRoleOnRoleSetToUserInput!) {
-  assignPlatformRoleToUser(roleData: $input) {
+mutation assignRoleNameToUser($input: AssignRoleOnRoleSetToUserInput!) {
+  assignRoleNameToUser(roleData: $input) {
     id
     email
   }

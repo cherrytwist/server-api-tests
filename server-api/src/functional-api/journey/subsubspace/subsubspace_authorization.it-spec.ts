@@ -3,7 +3,7 @@ import { createSubspace } from '../subspace/subspace.request.params';
 import { deleteSpace } from '../space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
-import { CommunityRoleType } from '@generated/alkemio-schema';
+import { RoleName } from '@generated/alkemio-schema';
 import {
   assignRoleToUserExtendedData,
   removeRoleFromUserExtendedData,
@@ -81,7 +81,7 @@ describe('Subsubspace Admin', () => {
     const res = await assignRoleToUserExtendedData(
       TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
 
     // Assert
@@ -110,13 +110,13 @@ describe('Subsubspace Admin', () => {
     const resOne = await assignRoleToUserExtendedData(
       TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
 
     const resTwo = await assignRoleToUserExtendedData(
       TestUserManager.users.subsubspaceMember.id,
       subsubspaceRoleSetId2,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
 
     // Assert
@@ -144,19 +144,19 @@ describe('Subsubspace Admin', () => {
     await assignRoleToUserExtendedData(
       TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
 
     await assignRoleToUserExtendedData(
       TestUserManager.users.subsubspaceMember.email,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
 
     const res = await removeRoleFromUserExtendedData(
       TestUserManager.users.subsubspaceMember.email,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin,
+      RoleName.Admin,
       TestUser.SUBSPACE_MEMBER
     );
 
@@ -176,14 +176,14 @@ describe('Subsubspace Admin', () => {
     await assignRoleToUserExtendedData(
       TestUserManager.users.subspaceMember.id,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
 
     // Act
     const res = await removeRoleFromUserExtendedData(
       TestUserManager.users.subsubspaceMember.email,
       subsubspaceRoleSetId,
-      CommunityRoleType.Admin,
+      RoleName.Admin,
       TestUser.SUBSPACE_MEMBER
     );
 

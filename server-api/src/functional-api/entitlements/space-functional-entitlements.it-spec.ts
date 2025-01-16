@@ -11,7 +11,7 @@
  *
  * The tests use the following utilities and queries:
  *
- * - `assignPlatformRoleToUser` and `removePlatformRoleFromUser` for managing user roles.
+ * - `assignRoleNameToUser` and `removeRoleNameFromUser` for managing user roles.
  * - `getMyEntitlementsQuery` for fetching user entitlements.
  * - `createSpaceBasicData` and `deleteSpace` for managing spaces.
  * - `getAccountMainEntities` for retrieving account-related data.
@@ -35,7 +35,7 @@ import {
 import { getAccountMainEntities } from '../account/account.params.request';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
-import { PlatformRole } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import {
   assignPlatformRoleToUser,
   removePlatformRoleFromUser,
@@ -56,7 +56,7 @@ describe('Functional tests - Space', () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
       await assignPlatformRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
     const allPrivileges = [
@@ -72,11 +72,11 @@ describe('Functional tests - Space', () => {
     ].sort();
 
     afterAll(async () => {
-      const spaceData = await getAccountMainEntities(
+      const accountData = await getAccountMainEntities(
         TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
-      const spaces = spaceData.data?.account?.spaces;
+      const spaces = accountData.data?.lookup.account?.spaces;
       for (const space of spaces || []) {
         const spaceId = space.id;
         await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
@@ -84,7 +84,7 @@ describe('Functional tests - Space', () => {
 
       await removePlatformRoleFromUser(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
 
@@ -151,7 +151,7 @@ describe('Functional tests - Space', () => {
         TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
-      const spaceId0 = response.data?.account?.spaces?.[0].id ?? '';
+      const spaceId0 = response.data?.lookup.account?.spaces?.[0].id ?? '';
       // Act
       const a = await deleteSpace(spaceId0, TestUser.GLOBAL_ADMIN);
       const responseAfter = await getMyEntitlementsQuery(

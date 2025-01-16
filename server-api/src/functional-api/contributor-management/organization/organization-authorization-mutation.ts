@@ -1,7 +1,7 @@
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { OrganizationRole } from '@generated/alkemio-schema';
+import { RoleName } from '@generated/alkemio-schema';
 
 export const grantCredentialToUserVariablesData = (
   userID: string,
@@ -37,17 +37,17 @@ export const revokeCredentialFromUserVariablesData = (
 
 export const assignUserAsOrganizationOwner = async (
   userID: string,
-  organizationID: string,
+  roleSetID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.assignRoleToUser(
+    graphqlClient.AssignRoleToUserExtendedData(
       {
         roleData: {
-          userID,
-          organizationID,
-          role: OrganizationRole.Owner,
+          contributorID: userID,
+          roleSetID,
+          role: RoleName.Owner,
         },
       },
       {
@@ -59,18 +59,18 @@ export const assignUserAsOrganizationOwner = async (
 };
 
 export const assignUserAsOrganizationAdmin = async (
-  userID: string,
-  organizationID: string,
+  contributorID: string,
+  roleSetID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.assignRoleToUser(
+    graphqlClient.AssignRoleToUserExtendedData(
       {
         roleData: {
-          userID,
-          organizationID,
-          role: OrganizationRole.Admin,
+          contributorID,
+          roleSetID,
+          role: RoleName.Admin,
         },
       },
       {
@@ -82,18 +82,18 @@ export const assignUserAsOrganizationAdmin = async (
 };
 
 export const removeUserAsOrganizationOwner = async (
-  userID: string,
-  organizationID: string,
+  contributorID: string,
+  roleSetID: string,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.removeOrganizationRoleFromUser(
+    graphqlClient.RemoveRoleFromUserExtendedData(
       {
         roleData: {
-          userID,
-          organizationID,
-          role: OrganizationRole.Owner,
+          contributorID,
+          roleSetID,
+          role: RoleName.Owner,
         },
       },
       {

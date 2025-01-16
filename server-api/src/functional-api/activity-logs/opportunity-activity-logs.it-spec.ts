@@ -4,7 +4,7 @@ import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CalloutState,
   CalloutType,
-  CommunityRoleType,
+  RoleName,
   ActivityEventType,
   CalloutVisibility,
   CommunityMembershipPolicy,
@@ -114,7 +114,7 @@ describe('Activity logs - Subsubspace', () => {
     await assignRoleToUser(
       TestUserManager.users.subspaceMember.id,
       baseScenario.subsubspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     // Act
@@ -302,7 +302,7 @@ describe('Access to Activity logs - Subsubspace', () => {
     await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
       baseScenario.subsubspace.id,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
   });
 

@@ -31,7 +31,7 @@ import {
   deleteVirtualContributorOnAccount,
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { PlatformRole } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
   assignPlatformRoleToUser,
@@ -56,13 +56,13 @@ describe('Functional tests - VC', () => {
       TestUserManager.users.nonSpaceMember.accountId,
       TestUser.NON_SPACE_MEMBER
     );
-    const vcs = spaceData.data?.account?.virtualContributors;
+    const vcs = spaceData.data?.lookup.account?.virtualContributors;
     for (const vc of vcs || []) {
       const vcId = vc.id;
      const a = await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
     }
 
-    const spaces = spaceData.data?.account?.spaces;
+    const spaces = spaceData.data?.lookup.account?.spaces;
     for (const space of spaces || []) {
       const spaceId = space.id;
       await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
@@ -73,7 +73,7 @@ describe('Functional tests - VC', () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
       await assignPlatformRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
     const allPrivileges = [
@@ -92,7 +92,7 @@ describe('Functional tests - VC', () => {
     afterAll(async () => {
       await removePlatformRoleFromUser(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
 

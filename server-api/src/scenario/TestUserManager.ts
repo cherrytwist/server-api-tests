@@ -50,7 +50,7 @@ export class TestUserManager {
       accountId: '',
       authToken: '',
       type: testUser,
-      platformRoles: [],
+      RoleNames: [],
     };
     return result;
   }
@@ -116,8 +116,8 @@ export class TestUserManager {
     userModel.agentId = userInfo?.agent.id || '';
     userModel.accountId = userInfo?.account?.id || '';
 
-    const platformRoles = userData?.data?.platform?.myRoles || [];
-    userModel.platformRoles = platformRoles;
+    const RoleNames = userData?.data?.platform?.roleSet.myRoles || [];
+    userModel.RoleNames = RoleNames;
   }
 
   private static async getUserData(authToken: string) {

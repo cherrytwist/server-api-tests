@@ -1,7 +1,7 @@
 import { createUser } from '@functional-api/contributor-management/user/user.request.params';
 import { OrganizationWithSpaceModel } from './models/OrganizationWithSpaceModel';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import {
   getCalloutDetails,
   getCalloutsData,
@@ -20,7 +20,7 @@ export class TestSetupUtils {
     await assignRoleToUser(
       TestUserManager.users.subspaceAdmin.id,
       roleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
   }
 
@@ -55,36 +55,36 @@ export class TestSetupUtils {
     await assignRoleToUser(
       spaceMemberId,
       orgSpaceModel.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     await assignRoleToUser(
       subspaceMemberId,
       orgSpaceModel.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     await assignRoleToUser(
       subsubspaceMemberId,
       orgSpaceModel.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     // Assign users to Subspace community
     await assignRoleToUser(
       subsubspaceMemberId,
       orgSpaceModel.subspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     await assignRoleToUser(
       subspaceMemberId,
       orgSpaceModel.subspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     // Assign users to Subsubspace community
     await assignRoleToUser(
       subsubspaceMemberId,
       orgSpaceModel.subsubspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
   }
 
