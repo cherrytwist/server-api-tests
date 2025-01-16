@@ -1,4 +1,4 @@
-query getOrganizationData($organizationId: UUID_NAMEID!) {
+query getOrganizationData($organizationId: UUID!) {
   organization(ID: $organizationId) {
     ...OrganizationData
   }

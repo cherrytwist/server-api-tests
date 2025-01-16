@@ -42,9 +42,9 @@ export const assignUserAsOrganizationOwner = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.assignOrganizationRoleToUser(
+    graphqlClient.assignRoleToUser(
       {
-        membershipData: {
+        roleData: {
           userID,
           organizationID,
           role: OrganizationRole.Owner,
@@ -65,9 +65,9 @@ export const assignUserAsOrganizationAdmin = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.assignOrganizationRoleToUser(
+    graphqlClient.assignRoleToUser(
       {
-        membershipData: {
+        roleData: {
           userID,
           organizationID,
           role: OrganizationRole.Admin,
@@ -90,7 +90,7 @@ export const removeUserAsOrganizationOwner = async (
   const callback = (authToken: string | undefined) =>
     graphqlClient.removeOrganizationRoleFromUser(
       {
-        membershipData: {
+        roleData: {
           userID,
           organizationID,
           role: OrganizationRole.Owner,

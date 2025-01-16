@@ -240,9 +240,9 @@ export const assignUserToOrganization = async (
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.assignOrganizationRoleToUser(
+    graphqlClient.assignRoleToUser(
       {
-        membershipData: {
+        roleData: {
           userID,
           organizationID,
           role: OrganizationRole.Associate,

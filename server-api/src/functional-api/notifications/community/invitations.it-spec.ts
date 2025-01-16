@@ -132,7 +132,7 @@ describe('Notifications - invitations', () => {
       TestUser.SPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -161,7 +161,7 @@ describe('Notifications - invitations', () => {
       TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -190,7 +190,7 @@ describe('Notifications - invitations', () => {
       TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -219,7 +219,7 @@ describe('Notifications - invitations', () => {
       TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -243,7 +243,7 @@ describe('Notifications - invitations', () => {
       TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -272,7 +272,7 @@ describe('Notifications - invitations', () => {
       TestUser.SUBSUBSPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -307,7 +307,7 @@ describe('Notifications - invitations', () => {
       TestUser.SPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;
@@ -335,7 +335,7 @@ describe('Notifications - invitations', () => {
       TestUser.SUBSPACE_ADMIN
     );
     const invitationsInfo =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     invitationId = 'invitationsInfoNotRetrieved';
     if (invitationsInfo && invitationsInfo.length > 0) {
       invitationId = invitationsInfo[0].id;

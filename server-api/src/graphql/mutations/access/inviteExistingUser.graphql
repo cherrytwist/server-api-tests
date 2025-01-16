@@ -3,7 +3,7 @@ mutation InviteContributors(
   $contributorIds: [UUID!]!
   $message: String
 ) {
-  inviteContributorsForRoleSetMembership(
+  inviteContributorsEntryRoleOnRoleSet(
     invitationData: {
       roleSetID: $roleSetId
       invitedContributors: $contributorIds

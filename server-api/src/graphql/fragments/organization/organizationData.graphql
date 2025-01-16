@@ -14,8 +14,10 @@ fragment OrganizationData on Organization {
   groups {
     ...GroupData
   }
-  associates {
-    ...MemberData
+  roleSet {
+    usersInRole(role: ASSOCIATE) {
+      ...MemberData
+    }
   }
   profile {
     ...ProfileDataUser

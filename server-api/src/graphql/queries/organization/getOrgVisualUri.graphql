@@ -1,4 +1,4 @@
-query GetOrgVisualUri($organizationId: UUID_NAMEID!) {
+query GetOrgVisualUri($organizationId: UUID!) {
   organization(ID: $organizationId) {
     nameID
     profile {

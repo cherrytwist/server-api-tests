@@ -1,4 +1,4 @@
-query GetOrgVisualUriInnovationHub($ID: UUID_NAMEID!) {
+query GetOrgVisualUriInnovationHub($ID: UUID!) {
   platform {
     innovationHub(id: $ID) {
       profile {

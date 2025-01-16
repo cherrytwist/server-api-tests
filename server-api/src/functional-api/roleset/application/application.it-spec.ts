@@ -362,7 +362,7 @@ describe('Application-flows', () => {
 
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
-    const membershipData = userAppsData?.data?.me?.communityApplications;
+    const roleData = userAppsData?.data?.me?.communityApplications;
     const subspaceAppOb = [
       expect.objectContaining({
         application: expect.objectContaining({
@@ -377,11 +377,11 @@ describe('Application-flows', () => {
       }),
     ];
 
-    const filteredMembershipData =
-      membershipData?.filter(app => app.application.state == 'new') ?? [];
+    const filteredroleData =
+      roleData?.filter(app => app.application.state == 'new') ?? [];
 
     // Assert
-    expect(filteredMembershipData).toEqual(
+    expect(filteredroleData).toEqual(
       expect.arrayContaining(subspaceAppOb)
     );
   });
@@ -403,7 +403,7 @@ describe('Application-flows', () => {
     await eventOnRoleSetApplication(applicationId, 'REJECT');
 
     const userAppsDataAfter = await meQuery(TestUser.NON_SPACE_MEMBER);
-    const membershipDataAfter =
+    const roleDataAfter =
       userAppsDataAfter?.data?.me?.communityApplications;
 
     const subspaceAppOb = [
@@ -417,7 +417,7 @@ describe('Application-flows', () => {
     ];
 
     // Assert
-    expect(membershipDataAfter).not.toContain(subspaceAppOb);
+    expect(roleDataAfter).not.toContain(subspaceAppOb);
 
     // Unset the subspaceApplicationId so that afterEach does not try to delete it again
     subspaceApplicationId = '';
