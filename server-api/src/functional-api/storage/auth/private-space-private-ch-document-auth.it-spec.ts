@@ -372,7 +372,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -397,7 +397,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -457,7 +457,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -483,7 +483,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                             | ${'POST'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace post collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -552,7 +552,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -577,7 +577,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'POST'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}               | ${'POST'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'POST'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space post collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -645,7 +645,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for whiteboard of call for whiteboards callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -671,7 +671,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                                           | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace whiteboard collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -735,7 +735,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -757,7 +757,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace link collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -813,7 +813,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -834,7 +834,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute} | ${'CALLOUT_FRAMING'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                             | ${'CALLOUT_FRAMING'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                             | ${'CALLOUT_FRAMING'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to subspace space link collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -890,7 +890,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for whiteboard callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -911,7 +911,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
       ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                             | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace whiteboard callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -964,11 +964,11 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       userRole                     | privileges
       ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_contribute_updateContentt}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_contribute}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
-      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_contribute}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ', 'READ_ABOUT']}
+      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'READ']}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for whiteboardRt callout (storageBucket) document',
       async ({ userRole, privileges }) => {
@@ -982,14 +982,14 @@ describe('Private Space - Private Subspace - visual on profile', () => {
     );
 
     test.each`
-      userRole                     | privileges                                                                                   | parentEntityType
-      ${undefined}                 | ${undefined}                                                                                 | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                                 | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                                 | ${undefined}
-      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ', 'READ_ABOUT']}                                       | ${'WHITEBOARD'}
+      userRole                     | privileges                                                                         | parentEntityType
+      ${undefined}                 | ${undefined}                                                                       | ${undefined}
+      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                                       | ${undefined}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent} | ${'WHITEBOARD'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                                       | ${undefined}
+      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_fileUp_fileDel_contribute}               | ${'WHITEBOARD'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${['CONTRIBUTE', 'FILE_UPLOAD', 'READ']}                                           | ${'WHITEBOARD'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace whiteboardRt callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
