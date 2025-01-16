@@ -15,9 +15,7 @@ import {
 } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   readPrivilege,
-  sorted__create_read_update_delete_grant_createSubspace,
   sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin,
-  sorted__create_read_update_delete_grant_createSubspace_platformAdmin,
   sorted_read_readAbout,
   readAboutPrivilege,
   sorted__create_read_readAbout_update_delete_grant_createSubspace_platformAdmin,

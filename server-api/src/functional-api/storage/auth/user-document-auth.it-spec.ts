@@ -21,7 +21,6 @@ import {
   sorted__create_read_update_delete_readUserPii,
 } from '@common/constants/privileges';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
-import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
