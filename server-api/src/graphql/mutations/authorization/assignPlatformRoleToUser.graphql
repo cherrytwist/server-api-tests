@@ -1,6 +1,0 @@
-mutation assignRoleNameToUser($input: AssignRoleOnRoleSetToUserInput!) {
-  assignRoleNameToUser(roleData: $input) {
-    id
-    email
-  }
-}

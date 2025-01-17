@@ -33,11 +33,10 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import { RoleName } from '@generated/graphql';
 import {
-  assignPlatformRoleToUser,
-  removePlatformRoleFromUser,
+  assignPlatformRole,
+  removePlatformRole,
 } from '@functional-api/platform/authorization-platform-mutation';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let spaceId = '';
@@ -49,14 +48,14 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
 
 beforeAll(async () => {
   await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-  await assignPlatformRoleToUser(
+  await assignPlatformRole(
     TestUserManager.users.nonSpaceMember.id,
     RoleName.PlatformVcCampaign
   );
 });
 
 afterAll(async () => {
-  await removePlatformRoleFromUser(
+  await removePlatformRole(
     TestUserManager.users.nonSpaceMember.id,
     RoleName.PlatformVcCampaign
   );

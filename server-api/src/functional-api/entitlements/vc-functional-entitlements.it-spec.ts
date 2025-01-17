@@ -34,8 +34,8 @@ import { getAccountMainEntities } from '../account/account.params.request';
 import { RoleName } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
-  assignPlatformRoleToUser,
-  removePlatformRoleFromUser,
+  assignPlatformRole,
+  removePlatformRole,
 } from '@functional-api/platform/authorization-platform-mutation';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { EmptyModel } from '@src/scenario/models/EmptyModel';
@@ -71,7 +71,7 @@ describe('Functional tests - VC', () => {
   describe('VC Campaign user vc creation', () => {
     beforeAll(async () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-      await assignPlatformRoleToUser(
+      await assignPlatformRole(
         TestUserManager.users.nonSpaceMember.id,
         RoleName.PlatformVcCampaign
       );
@@ -90,7 +90,7 @@ describe('Functional tests - VC', () => {
     ].sort();
 
     afterAll(async () => {
-      await removePlatformRoleFromUser(
+      await removePlatformRole(
         TestUserManager.users.nonSpaceMember.id,
         RoleName.PlatformVcCampaign
       );

@@ -4,16 +4,16 @@ import { graphqlRequestAuth } from '@utils/graphql.request';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 
-export const assignPlatformRoleToUser = async (
+export const assignPlatformRole = async (
   contributorID: string,
   roleName: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.assignRoleNameToUser(
+    graphqlClient.assignPlatformRoleToUser(
       {
-        input: { contributorID, role: roleName },
+        roleData: { contributorID, role: roleName },
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -23,16 +23,16 @@ export const assignPlatformRoleToUser = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const removePlatformRoleFromUser = async (
+export const removePlatformRole = async (
   contributorID: string,
   roleName: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
-    graphqlClient.removeRoleNameFromUser(
+    graphqlClient.removePlatformRoleFromUser(
       {
-        input: { contributorID, role: roleName },
+        roleData: { contributorID, role: roleName },
       },
       {
         authorization: `Bearer ${authToken}`,

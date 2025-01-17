@@ -1,6 +1,0 @@
-mutation removeRoleNameFromUser($input: RemoveRoleOnRoleSetFromUserInput!) {
-  removeRoleNameFromUser(roleData: $input) {
-    id
-    email
-  }
-}

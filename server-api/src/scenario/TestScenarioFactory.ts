@@ -26,7 +26,7 @@ import {
 } from './config/test-scenario-config';
 import { TestUserManager } from './TestUserManager';
 import { UserModel } from './models/UserModel';
-import { assignPlatformRoleToUser } from '@functional-api/platform/authorization-platform-mutation';
+import { assignPlatformRole } from '@functional-api/platform/authorization-platform-mutation';
 import { logElapsedTime } from '@utils/profiling';
 
 export class TestScenarioFactory {
@@ -139,7 +139,7 @@ export class TestScenarioFactory {
   ): Promise<void> {
     const alreadyHasRole = userModel.RoleNames.includes(role);
     if (!alreadyHasRole) {
-      await assignPlatformRoleToUser(userModel.id, role);
+      await assignPlatformRole(userModel.id, role);
     }
   }
 
