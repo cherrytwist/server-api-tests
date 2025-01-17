@@ -37,7 +37,7 @@ export const graphqlErrorWrapper = async <TData>(
   } catch (error) {
     const err = error as ErrorType;
     const badErrors = err.response.errors.filter(
-      e => e.extensions.code !== 'BAD_USER_INPUT'
+      e => e.extensions.code !== 'BAD_USER_INPUT' && e.extensions.code !== 'FORBIDDEN_POLICY'
     );
     if (badErrors.length > 0) {
       console.error(badErrors);
