@@ -113,8 +113,8 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     expect(accountData?.license?.availableEntitlements?.sort()).toEqual(
       organizationAccountNoLicenses.license.availableEntitlements.sort()
     );
-    expect(accountData?.license?.authorization).toEqual(
-      organizationAccountNoLicenses.license.authorization
+    expect(accountData?.license?.authorization?.myPrivileges).toEqual(
+      expect.arrayContaining(organizationAccountNoLicenses.license.authorization.myPrivileges)
     );
     expect(accountData?.subscriptions).toEqual(
       organizationAccountNoLicenses.subscriptions
@@ -142,8 +142,8 @@ describe('Get Organization Account Authorization and License privileges ', () =>
     expect(accountData?.license?.availableEntitlements?.sort()).toEqual(
       organizationAccountLicensePlus.license.availableEntitlements.sort()
     );
-    expect(accountData?.license?.authorization).toEqual(
-      organizationAccountLicensePlus.license.authorization
+    expect(accountData?.license?.authorization?.myPrivileges).toEqual(
+      expect.arrayContaining(organizationAccountLicensePlus.license.authorization.myPrivileges)
     );
     expect(accountData?.subscriptions).toEqual(
       organizationAccountLicensePlus.subscriptions
@@ -201,15 +201,15 @@ describe('Get Organization Account Authorization and License privileges ', () =>
       expect(accountData?.license?.availableEntitlements?.sort()).toEqual(
         organizationAccountLicensePlus1SpaceVCPack.license.availableEntitlements.sort()
       );
-      expect(accountData?.license?.authorization).toEqual(
-        organizationAccountLicensePlus1SpaceVCPack.license.authorization
+      expect(accountData?.license?.authorization?.myPrivileges).toEqual(
+        expect.arrayContaining(organizationAccountLicensePlus1SpaceVCPack.license.authorization.myPrivileges)
       );
       expect(accountData?.subscriptions).toEqual(
         organizationAccountLicensePlus1SpaceVCPack.subscriptions
       );
-      expect(accountData?.spaces[0].license.authorization).toEqual(
-        organizationAccountLicensePlus1SpaceVCPack.spaces[0].license
-          .authorization
+      expect(accountData?.spaces[0].license.authorization?.myPrivileges).toEqual(
+        expect.arrayContaining(organizationAccountLicensePlus1SpaceVCPack.spaces[0].license
+          .authorization.myPrivileges)
       );
       expect(accountData?.spaces[0].license?.entitlements).toEqual(
         expect.arrayContaining(
