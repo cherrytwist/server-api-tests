@@ -17,7 +17,6 @@ const scenarioConfig: TestScenarioConfig = {
 
 const main = async () => {
   const testConfig = testConfiguration;
-  console.log(`Test config: ${stringifyConfig(testConfig)}`);
 
   const userNames = Object.values(TestUser).filter(
       x => x !== TestUser.GLOBAL_ADMIN
@@ -36,7 +35,7 @@ const main = async () => {
 
   const baseScenario =
     await TestScenarioFactory.createBaseScenario(scenarioConfig);
-  console.log(`Base scenario: ${JSON.stringify(baseScenario, null, 2)}`);
+  console.info(`Base scenario: ${JSON.stringify(baseScenario, null, 2)}`);
 };
 
 const getUserName = (userName: string): [string, string] => {
