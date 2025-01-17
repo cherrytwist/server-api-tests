@@ -36,7 +36,7 @@ export class TestScenarioFactory {
     const start = performance.now();
     await TestUserManager.populateUserModelMap();
     const result = scenarioConfig;
-    logElapsedTime('createBaseScenario', start);
+    // logElapsedTime('createBaseScenario', start);
     return result;
   }
 
@@ -45,7 +45,7 @@ export class TestScenarioFactory {
   ): Promise<OrganizationWithSpaceModel> {
     const start = performance.now();
     const result = await this.createBaseScenarioPrivate(scenarioConfig);
-    logElapsedTime('createBaseScenario', start);
+    // logElapsedTime('createBaseScenario', start);
     return result;
   }
 
