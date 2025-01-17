@@ -16,10 +16,8 @@ import {
 import {
   sorted__create_read_readAbout_update_delete_grant,
   sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel,
-  sorted__create_read_update_delete_grant,
   sorted__create_read_update_delete_grant_contribute,
   sorted__create_read_update_delete_grant_contribute_updateContentt,
-  sorted__create_read_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent,
   sorted_read_readAbout,
@@ -139,11 +137,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${undefined} // sorted_read_readAbout
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined} // sorted_read_readAbout
+      ${undefined}                 | ${sorted_read_readAbout}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined} // toDo - should't this be ['READ_ABOUT']? sorted_read_readAbout
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
@@ -164,11 +162,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${undefined}                 | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined} // toDo - should't this be ['READ_ABOUT']?
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
     `(
@@ -212,11 +210,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
+      ${undefined}                 | ${sorted_read_readAbout}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
@@ -237,13 +235,13 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${undefined}                                                         | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                         | ${undefined}
+      ${undefined}                 | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                         | ${undefined} // toDo - should't this be ['READ_ABOUT']?
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SUBSPACE_MEMBER}     | ${sorted_read_readAbout}                                          | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace profile storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -291,11 +289,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}
+      ${undefined}                 | ${sorted_read_readAbout}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined} // toDo - should't this be ['READ_ABOUT']?
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
@@ -316,11 +314,11 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                          | parentEntityType
-      ${undefined}                 | ${undefined}                                                        | ${undefined}
-      ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                        | ${undefined}
+      ${undefined}                 | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                        | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
     `(

@@ -16,16 +16,10 @@ import {
 import {
   readAboutPrivilege,
   sorted__create_read_readAbout_update_delete_grant,
-  sorted__create_read_readAbout_update_delete_grant_contribute,
-  sorted__create_read_readAbout_update_delete_grant_contribute_updateContentt,
   sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel,
-  sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel_contribute,
-  sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel_contribute_updateContent,
-  sorted__create_read_update_delete_grant,
   sorted__create_read_update_delete_grant_contribute,
   sorted__create_read_update_delete_grant_contribute_updateContent,
   sorted__create_read_update_delete_grant_contribute_updateContentt,
-  sorted__create_read_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent,
   sorted_read_readAbout,
@@ -140,7 +134,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
@@ -163,7 +157,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                        | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                        | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
     `(
@@ -210,7 +204,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
@@ -235,7 +229,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                        | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                        | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
     `(
@@ -288,7 +282,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}
     `(
@@ -313,7 +307,7 @@ describe('Private Space - Private Subspace - visual on profile', () => {
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}                                                           | ${undefined}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}    | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}    | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${undefined}                                                           | ${undefined}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                               | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}    | ${'CHALLENGE'}
       ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                               | ${'CHALLENGE'}
     `(
