@@ -86,25 +86,25 @@ describe('Full Challenge Deletion', () => {
     await assignRoleToUser(
       users.notificationsAdmin.email,
       entitiesId.challenge.communityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     await assignRoleToUser(
       users.notificationsAdmin.email,
       entitiesId.challenge.communityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Assign organization as challenge community member and lead
     await assignRoleToOrganization(
       entitiesId.challenge.communityId,
       entitiesId.organization.id,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToOrganization(
       entitiesId.challenge.communityId,
       entitiesId.organization.id,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Act

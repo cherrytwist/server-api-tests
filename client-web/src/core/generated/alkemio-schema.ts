@@ -741,32 +741,32 @@ export type AssignLicensePlanToSpace = {
   spaceID: Scalars['UUID']['input'];
 };
 
-export type AssignOrganizationRoleToUserInput = {
+export type AssignRoleOnRoleSetToUserInput = {
   organizationID: Scalars['UUID']['input'];
-  role: OrganizationRole;
+  role: RoleName;
   userID: Scalars['UUID']['input'];
 };
 
-export type AssignPlatformRoleToUserInput = {
-  role: PlatformRole;
+export type AssignRoleOnRoleSetToUserInput = {
+  role: RoleName;
   userID: Scalars['UUID']['input'];
 };
 
 export type AssignRoleOnRoleSetToOrganizationInput = {
   contributorID: Scalars['UUID']['input'];
-  role: CommunityRoleType;
+  role: RoleName;
   roleSetID: Scalars['UUID']['input'];
 };
 
 export type AssignRoleOnRoleSetToUserInput = {
   contributorID: Scalars['UUID']['input'];
-  role: CommunityRoleType;
+  role: RoleName;
   roleSetID: Scalars['UUID']['input'];
 };
 
 export type AssignRoleOnRoleSetToVirtualContributorInput = {
   contributorID: Scalars['UUID']['input'];
-  role: CommunityRoleType;
+  role: RoleName;
   roleSetID: Scalars['UUID']['input'];
 };
 
@@ -1481,7 +1481,7 @@ export enum CommunityRoleImplicit {
   SubspaceAdmin = 'SUBSPACE_ADMIN',
 }
 
-export enum CommunityRoleType {
+export enum RoleName {
   Admin = 'ADMIN',
   Lead = 'LEAD',
   Member = 'MEMBER',
@@ -1904,7 +1904,7 @@ export type CreatePlatformInvitationForRoleInput = {
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  platformRole: PlatformRole;
+  RoleName: RoleName;
   welcomeMessage?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2705,7 +2705,7 @@ export type Invitation = {
   createdBy: User;
   createdDate: Scalars['DateTime']['output'];
   /** An additional role to assign to the Contributor, in addition to the entry Role. */
-  extraRole?: Maybe<CommunityRoleType>;
+  extraRole?: Maybe<RoleName>;
   /** The ID of the entity */
   id: Scalars['UUID']['output'];
   /** Whether to also add the invited contributor to the parent community. */
@@ -2728,7 +2728,7 @@ export type InvitationEventInput = {
 
 export type InviteForEntryRoleOnRoleSetInput = {
   /** An additional role to assign to the Contributors, in addition to the entry Role. */
-  extraRole?: InputMaybe<CommunityRoleType>;
+  extraRole?: InputMaybe<RoleName>;
   /** The identifiers for the contributors being invited. */
   invitedContributors: Array<Scalars['UUID']['input']>;
   roleSetID: Scalars['UUID']['input'];
@@ -2740,7 +2740,7 @@ export type InviteNewContributorForRoleOnRoleSetInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   /** An additional role to assign to the Contributors, in addition to the entry Role. */
-  roleSetExtraRole?: InputMaybe<CommunityRoleType>;
+  roleSetExtraRole?: InputMaybe<RoleName>;
   roleSetID: Scalars['UUID']['input'];
   welcomeMessage?: InputMaybe<Scalars['String']['input']>;
 };
@@ -3497,9 +3497,9 @@ export type Mutation = {
   /** Assign the specified LicensePlan to a Space. */
   assignLicensePlanToSpace: Space;
   /** Assigns an Organization Role to user. */
-  assignOrganizationRoleToUser: User;
+  assignRoleToUser: User;
   /** Assigns a platform role to a User. */
-  assignPlatformRoleToUser: User;
+  assignRoleNameToUser: User;
   /** Assigns an Organization a Role in the specified Community. */
   assignRoleToOrganization: Organization;
   /** Assigns a User to a role in the specified Community. */
@@ -3637,7 +3637,7 @@ export type Mutation = {
   /** Resets the interaction with the chat engine. */
   ingest: Scalars['Boolean']['output'];
   /** Invite an existing Contriburor to join the specified Community as a member. */
-  inviteContributorsForRoleSetMembership: Array<Invitation>;
+  inviteContributorsEntryRoleOnRoleSet: Array<Invitation>;
   /** Invite a User to join the platform and the specified RoleSet as a member. */
   inviteUserToPlatformAndRoleSet: PlatformInvitation;
   /** Invite a User to join the platform in a particular Platform role e.g. BetaTester */
@@ -3659,9 +3659,9 @@ export type Mutation = {
   /** Removes a message. */
   removeMessageOnRoom: Scalars['MessageID']['output'];
   /** Removes Organization Role from user. */
-  removeOrganizationRoleFromUser: User;
+  removeRoleNameFromUser: User;
   /** Removes a User from a platform role. */
-  removePlatformRoleFromUser: User;
+  removeRoleNameFromUser: User;
   /** Remove a reaction on a message from the specified Room. */
   removeReactionToMessageInRoom: Scalars['Boolean']['output'];
   /** Removes an Organization from a Role in the specified Community. */
@@ -3860,12 +3860,12 @@ export type MutationAssignLicensePlanToSpaceArgs = {
   planData: AssignLicensePlanToSpace;
 };
 
-export type MutationAssignOrganizationRoleToUserArgs = {
-  membershipData: AssignOrganizationRoleToUserInput;
+export type MutationassignRoleToUserArgs = {
+  roleData: AssignRoleOnRoleSetToUserInput;
 };
 
-export type MutationAssignPlatformRoleToUserArgs = {
-  membershipData: AssignPlatformRoleToUserInput;
+export type MutationAssignRoleNameToUserArgs = {
+  roleData: AssignRoleOnRoleSetToUserInput;
 };
 
 export type MutationAssignRoleToOrganizationArgs = {
@@ -3881,7 +3881,7 @@ export type MutationAssignRoleToVirtualContributorArgs = {
 };
 
 export type MutationAssignUserToGroupArgs = {
-  membershipData: AssignUserGroupMemberInput;
+  roleData: AssignUserGroupMemberInput;
 };
 
 export type MutationAuthorizationPolicyResetOnAccountArgs = {
@@ -4113,7 +4113,7 @@ export type MutationGrantCredentialToUserArgs = {
   grantCredentialData: GrantAuthorizationCredentialInput;
 };
 
-export type MutationInviteContributorsForRoleSetMembershipArgs = {
+export type MutationinviteContributorsEntryRoleOnRoleSetArgs = {
   invitationData: InviteForEntryRoleOnRoleSetInput;
 };
 
@@ -4153,12 +4153,12 @@ export type MutationRemoveMessageOnRoomArgs = {
   messageData: RoomRemoveMessageInput;
 };
 
-export type MutationRemoveOrganizationRoleFromUserArgs = {
-  membershipData: RemoveOrganizationRoleFromUserInput;
+export type MutationRemoveRoleNameFromUserArgs = {
+  roleData: RemoveRoleNameFromUserInput;
 };
 
-export type MutationRemovePlatformRoleFromUserArgs = {
-  membershipData: RemovePlatformRoleFromUserInput;
+export type MutationRemoveRoleNameFromUserArgs = {
+  roleData: RemoveRoleOnRoleSetFromUserInput;
 };
 
 export type MutationRemoveReactionToMessageInRoomArgs = {
@@ -4178,7 +4178,7 @@ export type MutationRemoveRoleFromVirtualContributorArgs = {
 };
 
 export type MutationRemoveUserFromGroupArgs = {
-  membershipData: RemoveUserGroupMemberInput;
+  roleData: RemoveUserGroupMemberInput;
 };
 
 export type MutationRevokeCredentialFromOrganizationArgs = {
@@ -4509,7 +4509,7 @@ export type Organization = Contributor &
     /** Metrics about the activity within this Organization. */
     metrics?: Maybe<Array<Nvp>>;
     /** The roles on this Organization for the currently logged in user. */
-    myRoles?: Maybe<Array<OrganizationRole>>;
+    myRoles?: Maybe<Array<RoleName>>;
     /** A name identifier of the Contributor, unique within a given scope. */
     nameID: Scalars['NameID']['output'];
     /** All Users that are owners of this Organization. */
@@ -4544,7 +4544,7 @@ export type OrganizationFilterInput = {
   website?: InputMaybe<Scalars['String']['input']>;
 };
 
-export enum OrganizationRole {
+export enum RoleName {
   Admin = 'ADMIN',
   Associate = 'ASSOCIATE',
   Owner = 'OWNER',
@@ -4655,7 +4655,7 @@ export type Platform = {
   /** Alkemio Services Metadata. */
   metadata: Metadata;
   /** The roles on the Platform for the currently logged in user. */
-  myRoles: Array<PlatformRole>;
+  myRoles: Array<RoleName>;
   /** Invitations to join roles for users not yet on the Alkemio platform. */
   platformInvitations: Array<PlatformInvitation>;
   /** The StorageAggregator with documents in use by Users + Organizations on the Platform. */
@@ -4703,11 +4703,11 @@ export type PlatformInvitation = {
   id: Scalars['UUID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   /** The platform role the user will receive when they sign up */
-  platformRole?: Maybe<PlatformRole>;
+  RoleName?: Maybe<RoleName>;
   /** Whether a new user profile has been created. */
   profileCreated: Scalars['Boolean']['output'];
   /** An additional role to assign to the Contributor, in addition to the entry Role. */
-  roleSetExtraRole?: Maybe<CommunityRoleType>;
+  roleSetExtraRole?: Maybe<RoleName>;
   /** Whether to also add the invited user to the parent community. */
   roleSetInvitedToParent: Scalars['Boolean']['output'];
   /** The date at which the entity was last updated. */
@@ -4768,7 +4768,7 @@ export type PlatformLocations = {
   tips: Scalars['String']['output'];
 };
 
-export enum PlatformRole {
+export enum RoleName {
   BetaTester = 'BETA_TESTER',
   CommunityReader = 'COMMUNITY_READER',
   GlobalAdmin = 'GLOBAL_ADMIN',
@@ -5271,32 +5271,32 @@ export type RemoveCommunityGuidelinesContentInput = {
   communityGuidelinesID: Scalars['UUID']['input'];
 };
 
-export type RemoveOrganizationRoleFromUserInput = {
+export type RemoveRoleNameFromUserInput = {
   organizationID: Scalars['UUID']['input'];
-  role: OrganizationRole;
+  role: RoleName;
   userID: Scalars['UUID']['input'];
 };
 
-export type RemovePlatformRoleFromUserInput = {
-  role: PlatformRole;
+export type RemoveRoleOnRoleSetFromUserInput = {
+  role: RoleName;
   userID: Scalars['UUID']['input'];
 };
 
 export type RemoveRoleOnRoleSetFromOrganizationInput = {
   contributorID: Scalars['UUID']['input'];
-  role: CommunityRoleType;
+  role: RoleName;
   roleSetID: Scalars['UUID']['input'];
 };
 
 export type RemoveRoleOnRoleSetFromUserInput = {
   contributorID: Scalars['UUID']['input'];
-  role: CommunityRoleType;
+  role: RoleName;
   roleSetID: Scalars['UUID']['input'];
 };
 
 export type RemoveRoleOnRoleSetFromVirtualContributorInput = {
   contributorID: Scalars['UUID']['input'];
-  role: CommunityRoleType;
+  role: RoleName;
   roleSetID: Scalars['UUID']['input'];
 };
 
@@ -5355,7 +5355,7 @@ export type Role = {
   /** Flag to indicate if this Role requires having the same role in the Parent RoleSet. */
   requiresSameRoleInParentRoleSet: Scalars['Boolean']['output'];
   /** The CommunityRole that this role definition is for. */
-  type: CommunityRoleType;
+  type: RoleName;
   /** The date at which the entity was last updated. */
   updatedDate?: Maybe<Scalars['DateTime']['output']>;
   /** The role policy that applies for Users in this Role. */
@@ -5374,11 +5374,11 @@ export type RoleSet = {
   /** All  users excluding the current lead users in this Community. */
   availableUsersForLeadRole: PaginatedUsers;
   /** All available users that are potential Community members. */
-  availableUsersForMemberRole: PaginatedUsers;
+  availableUsersForEntryRole: PaginatedUsers;
   /** The date at which the entity was created. */
   createdDate?: Maybe<Scalars['DateTime']['output']>;
   /** The CommunityRole that acts as the entry Role for the RoleSet, so other roles potentially require it. */
-  entryRoleType: CommunityRoleType;
+  entryRoleType: RoleName;
   /** The ID of the entity */
   id: Scalars['UUID']['output'];
   /** Invitations for this roleSet. */
@@ -5388,7 +5388,7 @@ export type RoleSet = {
   /** The membership status of the currently logged in user. */
   myMembershipStatus?: Maybe<CommunityMembershipStatus>;
   /** The roles on this community for the currently logged in user. */
-  myRoles: Array<CommunityRoleType>;
+  myRoles: Array<RoleName>;
   /** The implicit roles on this community for the currently logged in user. */
   myRolesImplicit: Array<CommunityRoleImplicit>;
   /** All Organizations that have the specified Role in this Community. */
@@ -5415,7 +5415,7 @@ export type RoleSetAvailableUsersForLeadRoleArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type RoleSetAvailableUsersForMemberRoleArgs = {
+export type RoleSetavailableUsersForEntryRoleArgs = {
   after?: InputMaybe<Scalars['UUID']['input']>;
   before?: InputMaybe<Scalars['UUID']['input']>;
   filter?: InputMaybe<UserFilterInput>;
@@ -5424,20 +5424,20 @@ export type RoleSetAvailableUsersForMemberRoleArgs = {
 };
 
 export type RoleSetOrganizationsInRoleArgs = {
-  role: CommunityRoleType;
+  role: RoleName;
 };
 
 export type RoleSetRoleDefinitionArgs = {
-  role: CommunityRoleType;
+  role: RoleName;
 };
 
 export type RoleSetUsersInRoleArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
-  role: CommunityRoleType;
+  role: RoleName;
 };
 
 export type RoleSetVirtualContributorsInRoleArgs = {
-  role: CommunityRoleType;
+  role: RoleName;
 };
 
 export type RolesOrganizationInput = {
@@ -7614,8 +7614,8 @@ export type ResolversTypes = {
   ApplyForEntryRoleOnRoleSetInput: ApplyForEntryRoleOnRoleSetInput;
   AssignLicensePlanToAccount: AssignLicensePlanToAccount;
   AssignLicensePlanToSpace: AssignLicensePlanToSpace;
-  AssignOrganizationRoleToUserInput: AssignOrganizationRoleToUserInput;
-  AssignPlatformRoleToUserInput: AssignPlatformRoleToUserInput;
+  AssignRoleOnRoleSetToUserInput: AssignRoleOnRoleSetToUserInput;
+  AssignRoleOnRoleSetToUserInput: AssignRoleOnRoleSetToUserInput;
   AssignRoleOnRoleSetToOrganizationInput: AssignRoleOnRoleSetToOrganizationInput;
   AssignRoleOnRoleSetToUserInput: AssignRoleOnRoleSetToUserInput;
   AssignRoleOnRoleSetToVirtualContributorInput: AssignRoleOnRoleSetToVirtualContributorInput;
@@ -7776,7 +7776,7 @@ export type ResolversTypes = {
   >;
   CommunityMembershipStatus: CommunityMembershipStatus;
   CommunityRoleImplicit: CommunityRoleImplicit;
-  CommunityRoleType: CommunityRoleType;
+  RoleName: RoleName;
   Config: ResolverTypeWrapper<
     Omit<Config, 'authentication'> & {
       authentication: ResolversTypes['AuthenticationConfig'];
@@ -8169,7 +8169,7 @@ export type ResolversTypes = {
   >;
   OrganizationAuthorizationResetInput: OrganizationAuthorizationResetInput;
   OrganizationFilterInput: OrganizationFilterInput;
-  OrganizationRole: OrganizationRole;
+  RoleName: RoleName;
   OrganizationSettings: ResolverTypeWrapper<OrganizationSettings>;
   OrganizationSettingsMembership: ResolverTypeWrapper<OrganizationSettingsMembership>;
   OrganizationSettingsPrivacy: ResolverTypeWrapper<OrganizationSettingsPrivacy>;
@@ -8222,7 +8222,7 @@ export type ResolversTypes = {
     }
   >;
   PlatformLocations: ResolverTypeWrapper<PlatformLocations>;
-  PlatformRole: PlatformRole;
+  RoleName: RoleName;
   Post: ResolverTypeWrapper<
     Omit<Post, 'comments' | 'createdBy' | 'profile'> & {
       comments: ResolversTypes['Room'];
@@ -8278,8 +8278,8 @@ export type ResolversTypes = {
   >;
   RelayPaginatedSpacePageInfo: ResolverTypeWrapper<RelayPaginatedSpacePageInfo>;
   RemoveCommunityGuidelinesContentInput: RemoveCommunityGuidelinesContentInput;
-  RemoveOrganizationRoleFromUserInput: RemoveOrganizationRoleFromUserInput;
-  RemovePlatformRoleFromUserInput: RemovePlatformRoleFromUserInput;
+  RemoveRoleNameFromUserInput: RemoveRoleNameFromUserInput;
+  RemoveRoleOnRoleSetFromUserInput: RemoveRoleOnRoleSetFromUserInput;
   RemoveRoleOnRoleSetFromOrganizationInput: RemoveRoleOnRoleSetFromOrganizationInput;
   RemoveRoleOnRoleSetFromUserInput: RemoveRoleOnRoleSetFromUserInput;
   RemoveRoleOnRoleSetFromVirtualContributorInput: RemoveRoleOnRoleSetFromVirtualContributorInput;
@@ -8294,7 +8294,7 @@ export type ResolversTypes = {
       RoleSet,
       | 'applications'
       | 'availableUsersForLeadRole'
-      | 'availableUsersForMemberRole'
+      | 'availableUsersForEntryRole'
       | 'invitations'
       | 'organizationsInRole'
       | 'platformInvitations'
@@ -8303,7 +8303,7 @@ export type ResolversTypes = {
     > & {
       applications: Array<ResolversTypes['Application']>;
       availableUsersForLeadRole: ResolversTypes['PaginatedUsers'];
-      availableUsersForMemberRole: ResolversTypes['PaginatedUsers'];
+      availableUsersForEntryRole: ResolversTypes['PaginatedUsers'];
       invitations: Array<ResolversTypes['Invitation']>;
       organizationsInRole: Array<ResolversTypes['Organization']>;
       platformInvitations: Array<ResolversTypes['PlatformInvitation']>;
@@ -8800,8 +8800,8 @@ export type ResolversParentTypes = {
   ApplyForEntryRoleOnRoleSetInput: ApplyForEntryRoleOnRoleSetInput;
   AssignLicensePlanToAccount: AssignLicensePlanToAccount;
   AssignLicensePlanToSpace: AssignLicensePlanToSpace;
-  AssignOrganizationRoleToUserInput: AssignOrganizationRoleToUserInput;
-  AssignPlatformRoleToUserInput: AssignPlatformRoleToUserInput;
+  AssignRoleOnRoleSetToUserInput: AssignRoleOnRoleSetToUserInput;
+  AssignRoleOnRoleSetToUserInput: AssignRoleOnRoleSetToUserInput;
   AssignRoleOnRoleSetToOrganizationInput: AssignRoleOnRoleSetToOrganizationInput;
   AssignRoleOnRoleSetToUserInput: AssignRoleOnRoleSetToUserInput;
   AssignRoleOnRoleSetToVirtualContributorInput: AssignRoleOnRoleSetToVirtualContributorInput;
@@ -9360,8 +9360,8 @@ export type ResolversParentTypes = {
   };
   RelayPaginatedSpacePageInfo: RelayPaginatedSpacePageInfo;
   RemoveCommunityGuidelinesContentInput: RemoveCommunityGuidelinesContentInput;
-  RemoveOrganizationRoleFromUserInput: RemoveOrganizationRoleFromUserInput;
-  RemovePlatformRoleFromUserInput: RemovePlatformRoleFromUserInput;
+  RemoveRoleNameFromUserInput: RemoveRoleNameFromUserInput;
+  RemoveRoleOnRoleSetFromUserInput: RemoveRoleOnRoleSetFromUserInput;
   RemoveRoleOnRoleSetFromOrganizationInput: RemoveRoleOnRoleSetFromOrganizationInput;
   RemoveRoleOnRoleSetFromUserInput: RemoveRoleOnRoleSetFromUserInput;
   RemoveRoleOnRoleSetFromVirtualContributorInput: RemoveRoleOnRoleSetFromVirtualContributorInput;
@@ -9375,7 +9375,7 @@ export type ResolversParentTypes = {
     RoleSet,
     | 'applications'
     | 'availableUsersForLeadRole'
-    | 'availableUsersForMemberRole'
+    | 'availableUsersForEntryRole'
     | 'invitations'
     | 'organizationsInRole'
     | 'platformInvitations'
@@ -9384,7 +9384,7 @@ export type ResolversParentTypes = {
   > & {
     applications: Array<ResolversParentTypes['Application']>;
     availableUsersForLeadRole: ResolversParentTypes['PaginatedUsers'];
-    availableUsersForMemberRole: ResolversParentTypes['PaginatedUsers'];
+    availableUsersForEntryRole: ResolversParentTypes['PaginatedUsers'];
     invitations: Array<ResolversParentTypes['Invitation']>;
     organizationsInRole: Array<ResolversParentTypes['Organization']>;
     platformInvitations: Array<ResolversParentTypes['PlatformInvitation']>;
@@ -12279,7 +12279,7 @@ export type InvitationResolvers<
   createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   createdDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   extraRole?: Resolver<
-    Maybe<ResolversTypes['CommunityRoleType']>,
+    Maybe<ResolversTypes['RoleName']>,
     ParentType,
     ContextType
   >;
@@ -13308,17 +13308,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAssignLicensePlanToSpaceArgs, 'planData'>
   >;
-  assignOrganizationRoleToUser?: Resolver<
+  assignRoleToUser?: Resolver<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    RequireFields<MutationAssignOrganizationRoleToUserArgs, 'membershipData'>
+    RequireFields<MutationassignRoleToUserArgs, 'roleData'>
   >;
-  assignPlatformRoleToUser?: Resolver<
+  assignRoleNameToUser?: Resolver<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    RequireFields<MutationAssignPlatformRoleToUserArgs, 'membershipData'>
+    RequireFields<MutationAssignRoleNameToUserArgs, 'roleData'>
   >;
   assignRoleToOrganization?: Resolver<
     ResolversTypes['Organization'],
@@ -13342,7 +13342,7 @@ export type MutationResolvers<
     ResolversTypes['UserGroup'],
     ParentType,
     ContextType,
-    RequireFields<MutationAssignUserToGroupArgs, 'membershipData'>
+    RequireFields<MutationAssignUserToGroupArgs, 'roleData'>
   >;
   authorizationPolicyResetAll?: Resolver<
     ResolversTypes['String'],
@@ -13741,12 +13741,12 @@ export type MutationResolvers<
     RequireFields<MutationGrantCredentialToUserArgs, 'grantCredentialData'>
   >;
   ingest?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  inviteContributorsForRoleSetMembership?: Resolver<
+  inviteContributorsEntryRoleOnRoleSet?: Resolver<
     Array<ResolversTypes['Invitation']>,
     ParentType,
     ContextType,
     RequireFields<
-      MutationInviteContributorsForRoleSetMembershipArgs,
+      MutationinviteContributorsEntryRoleOnRoleSetArgs,
       'invitationData'
     >
   >;
@@ -13815,17 +13815,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationRemoveMessageOnRoomArgs, 'messageData'>
   >;
-  removeOrganizationRoleFromUser?: Resolver<
+  removeRoleNameFromUser?: Resolver<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    RequireFields<MutationRemoveOrganizationRoleFromUserArgs, 'membershipData'>
+    RequireFields<MutationRemoveRoleNameFromUserArgs, 'roleData'>
   >;
-  removePlatformRoleFromUser?: Resolver<
+  removeRoleNameFromUser?: Resolver<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    RequireFields<MutationRemovePlatformRoleFromUserArgs, 'membershipData'>
+    RequireFields<MutationRemoveRoleNameFromUserArgs, 'roleData'>
   >;
   removeReactionToMessageInRoom?: Resolver<
     ResolversTypes['Boolean'],
@@ -13855,7 +13855,7 @@ export type MutationResolvers<
     ResolversTypes['UserGroup'],
     ParentType,
     ContextType,
-    RequireFields<MutationRemoveUserFromGroupArgs, 'membershipData'>
+    RequireFields<MutationRemoveUserFromGroupArgs, 'roleData'>
   >;
   resetChatGuidance?: Resolver<
     ResolversTypes['Boolean'],
@@ -14354,7 +14354,7 @@ export type OrganizationResolvers<
     ContextType
   >;
   myRoles?: Resolver<
-    Maybe<Array<ResolversTypes['OrganizationRole']>>,
+    Maybe<Array<ResolversTypes['RoleName']>>,
     ParentType,
     ContextType
   >;
@@ -14582,7 +14582,7 @@ export type PlatformResolvers<
   >;
   metadata?: Resolver<ResolversTypes['Metadata'], ParentType, ContextType>;
   myRoles?: Resolver<
-    Array<ResolversTypes['PlatformRole']>,
+    Array<ResolversTypes['RoleName']>,
     ParentType,
     ContextType
   >;
@@ -14647,14 +14647,14 @@ export type PlatformInvitationResolvers<
   >;
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  platformRole?: Resolver<
-    Maybe<ResolversTypes['PlatformRole']>,
+  RoleName?: Resolver<
+    Maybe<ResolversTypes['RoleName']>,
     ParentType,
     ContextType
   >;
   profileCreated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   roleSetExtraRole?: Resolver<
-    Maybe<ResolversTypes['CommunityRoleType']>,
+    Maybe<ResolversTypes['RoleName']>,
     ParentType,
     ContextType
   >;
@@ -15301,7 +15301,7 @@ export type RoleResolvers<
     ParentType,
     ContextType
   >;
-  type?: Resolver<ResolversTypes['CommunityRoleType'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['RoleName'], ParentType, ContextType>;
   updatedDate?: Resolver<
     Maybe<ResolversTypes['DateTime']>,
     ParentType,
@@ -15342,11 +15342,11 @@ export type RoleSetResolvers<
     ContextType,
     Partial<RoleSetAvailableUsersForLeadRoleArgs>
   >;
-  availableUsersForMemberRole?: Resolver<
+  availableUsersForEntryRole?: Resolver<
     ResolversTypes['PaginatedUsers'],
     ParentType,
     ContextType,
-    Partial<RoleSetAvailableUsersForMemberRoleArgs>
+    Partial<RoleSetavailableUsersForEntryRoleArgs>
   >;
   createdDate?: Resolver<
     Maybe<ResolversTypes['DateTime']>,
@@ -15354,7 +15354,7 @@ export type RoleSetResolvers<
     ContextType
   >;
   entryRoleType?: Resolver<
-    ResolversTypes['CommunityRoleType'],
+    ResolversTypes['RoleName'],
     ParentType,
     ContextType
   >;
@@ -15371,7 +15371,7 @@ export type RoleSetResolvers<
     ContextType
   >;
   myRoles?: Resolver<
-    Array<ResolversTypes['CommunityRoleType']>,
+    Array<ResolversTypes['RoleName']>,
     ParentType,
     ContextType
   >;

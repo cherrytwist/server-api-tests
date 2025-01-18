@@ -19,7 +19,7 @@ import {
   assignRoleToUser,
   assignRoleToOrganization,
 } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType, SpaceVisibility } from '@generated/alkemio-schema';
+import { RoleName, SpaceVisibility } from '@generated/alkemio-schema';
 
 const organizationName = 'post-org-name' + uniqueId;
 const hostNameId = 'post-org-nameid' + uniqueId;
@@ -83,25 +83,25 @@ describe('Full Space Deletion', () => {
     await assignRoleToUser(
       users.notificationsAdmin.email,
       entitiesId.space.communityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     await assignRoleToUser(
       users.notificationsAdmin.email,
       entitiesId.space.communityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Assign organization as space community member and lead
     await assignRoleToOrganization(
       entitiesId.space.communityId,
       entitiesId.organization.id,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToOrganization(
       entitiesId.space.communityId,
       entitiesId.organization.id,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Update space visibility

@@ -11,7 +11,7 @@ import {
   assignRoleToUser,
   assignUserToOrganization,
 } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import {
   assignUserAsOrganizationAdmin,
   assignUserAsOrganizationOwner,
@@ -35,37 +35,37 @@ describe('Full User Deletion', () => {
     await assignRoleToUser(
       userId,
       entitiesId.space.communityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       userId,
       entitiesId.challenge.communityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       userId,
       entitiesId.opportunity.communityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       userId,
       entitiesId.space.communityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await assignRoleToUser(
       userId,
       entitiesId.challenge.communityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await assignRoleToUser(
       userId,
       entitiesId.opportunity.communityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Assign user as organization member
