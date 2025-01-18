@@ -161,6 +161,7 @@ export class TestUserManager {
         (e as Error).message,
         `identifier: ${userModel.email} password: ${password}`
       );
+      throw new Error(`Unable to retrieve access token for user ${userModel.email}: ${e}`);
     }
     userModel.authToken = alkemioClient.apiToken;
   }
