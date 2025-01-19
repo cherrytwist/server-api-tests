@@ -20,7 +20,15 @@ export const getUserToken = async (userEmail: string) => {
   };
 
   const alkemioClient = new AlkemioClient(alkemioClientConfig);
-  await alkemioClient.enableAuthentication();
+  try {
+    await alkemioClient.enableAuthentication();
+  } catch (e) {
+    console.error(
+      (e as Error).message,
+      `>> identifier: ${userEmail}`
+    );
+    throw new Error(`Unable to retrieve access token for user ${userEmail}: ${e}`);
+  }
 
   return alkemioClient.apiToken;
 };

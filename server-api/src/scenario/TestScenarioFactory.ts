@@ -53,9 +53,17 @@ export class TestScenarioFactory {
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const scenarioName = scenarioConfig.name;
-    await TestUserManager.populateUserModelMap();
-    await this.populateGlobalRoles();
-    const baseScenario = await this.createOrganization(scenarioName);
+    const baseScenario: OrganizationWithSpaceModel = this.createEmptyBaseScenario();
+
+    try {
+      await TestUserManager.populateUserModelMap();
+      await this.populateGlobalRoles();
+      await this.createOrganization(scenarioName, baseScenario);
+      baseScenario.scenarioSetupSucceeded = true;
+    } catch (e) {
+      console.error(`Unable to create core scenario setup: ${e}`);
+      process.exit(1); // Exit the Jest process with an error code.
+    }
     if (!scenarioConfig.space) {
       // nothing more to do, return
       return baseScenario;
@@ -189,9 +197,9 @@ export class TestScenarioFactory {
   }
 
   private static async createOrganization(
-    scenarioName: string
+    scenarioName: string,
+    model: OrganizationWithSpaceModel
   ): Promise<OrganizationWithSpaceModel> {
-    const model: OrganizationWithSpaceModel = this.createEmptyBaseScenario();
     const uniqueId = UniqueIDGenerator.getID();
     const truncatedScenarioName = scenarioName.slice(0, 18);
     const orgName = `${truncatedScenarioName}-${uniqueId}`;
@@ -444,6 +452,7 @@ export class TestScenarioFactory {
       space: this.createEmptySpaceContext(),
       subspace: this.createEmptySpaceContext(),
       subsubspace: this.createEmptySpaceContext(),
+      scenarioSetupSucceeded: false,
     };
   }
 

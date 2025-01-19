@@ -5,6 +5,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { TestUserModels } from './models/TestUserModels';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { logElapsedTime } from '@utils/profiling';
+import { getUserToken } from './registration/get-user-token';
 
 export class TestUserManager {
   private static userModelMapEmail: Map<string, UserModel>;
@@ -22,10 +23,10 @@ export class TestUserManager {
       const userValue = TestUser[user as keyof typeof TestUser];
       // Create a user model for each test user
       const email = this.buildIdentifier(userValue);
-      const userModel = this.createUserModel(email, userValue);
+      const userModel = this.createEmptyUserModel(email, userValue);
 
-      // Populate the authentication token for each user
-      await this.populateUserAuthenticationToken(userModel);
+      // Populate the authentication token
+      userModel.authToken = await getUserToken(userModel.email);
 
       // Populate the user model with details from the api
       await this.populateUserModelFromApi(userModel);
@@ -39,7 +40,7 @@ export class TestUserManager {
     // logElapsedTime('populateUserModels', start);
   }
 
-  private static createUserModel(email: string, testUser: TestUser): UserModel {
+  private static createEmptyUserModel(email: string, testUser: TestUser): UserModel {
     const result: UserModel = {
       email,
       id: '',
@@ -141,29 +142,7 @@ export class TestUserManager {
   private static async populateUserAuthenticationToken(
     userModel: UserModel
   ): Promise<void> {
-    const password = testConfiguration.identities.admin.password;
 
-    const alkemioClientConfig = {
-      apiEndpointPrivateGraphql: testConfiguration.endPoints.graphql.private,
-      authInfo: {
-        credentials: {
-          email: userModel.email,
-          password: password,
-        },
-      },
-    };
-
-    const alkemioClient = new AlkemioClient(alkemioClientConfig);
-    try {
-      await alkemioClient.enableAuthentication();
-    } catch (e) {
-      console.error(
-        (e as Error).message,
-        `identifier: ${userModel.email} password: ${password}`
-      );
-      throw new Error(`Unable to retrieve access token for user ${userModel.email}: ${e}`);
-    }
-    userModel.authToken = alkemioClient.apiToken;
   }
 
   private static buildIdentifier(user: string) {

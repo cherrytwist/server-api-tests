@@ -6,4 +6,5 @@ export type OrganizationWithSpaceModel = {
   space: SpaceModel;
   subspace: SpaceModel;
   subsubspace: SpaceModel;
+  scenarioSetupSucceeded: boolean;
 };
