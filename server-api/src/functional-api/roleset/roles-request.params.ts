@@ -73,7 +73,7 @@ export const assignRoleToUserExtendedData = async (
 export const removeRoleFromUser = async (
   userID: string,
   roleSetID: string,
-  role: RoleName = RoleName.Member,
+  role: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();

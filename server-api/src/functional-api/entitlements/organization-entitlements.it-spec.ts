@@ -53,15 +53,16 @@ import {
   createOrganization,
   deleteOrganization,
 } from '@functional-api/contributor-management/organization/organization.request.params';
-
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-const uniqueId = UniqueIDGenerator.getID();
-import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { RoleName } from '@generated/alkemio-schema';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 
+const uniqueId = UniqueIDGenerator.getID();
 let spaceId = '';
 let orgId = '';
+let orgRoleSetId = '';
 let vcId = '';
 let innovationPackId = '';
 let accountLicensePlusId = '';
@@ -85,11 +86,13 @@ beforeAll(async () => {
   const res = await createOrganization(orgName, orgName);
   const orgData = res.data?.createOrganization;
   orgId = orgData?.id ?? '';
+  orgRoleSetId = orgData?.roleSet.id ?? '';
   orgAccountId = orgData?.account?.id ?? '';
 
-  await assignUserAsOrganizationAdmin(
+  await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
-    orgId
+    orgRoleSetId,
+    RoleName.Admin
   );
 });
 

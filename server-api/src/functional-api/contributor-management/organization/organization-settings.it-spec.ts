@@ -1,13 +1,14 @@
 import { getOrganizationData, updateOrganization } from './organization.request.params';
 import { updateOrganizationSettings } from './organization.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
-import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
+import { RoleName } from '@generated/alkemio-schema';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 
 const uniqueId = UniqueIDGenerator.getID();
 const firstName = `fn${uniqueId}`;
@@ -29,14 +30,16 @@ beforeAll(async () => {
     website: domain,
   });
 
-  await assignUserAsOrganizationOwner(
+  await assignRoleToUser(
     TestUserManager.users.spaceMember.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Owner
   );
 
-  await assignUserAsOrganizationOwner(
+  await assignRoleToUser(
     TestUserManager.users.spaceAdmin.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Owner
   );
 });
 

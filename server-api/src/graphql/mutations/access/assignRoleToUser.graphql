@@ -1,5 +1,5 @@
 mutation assignRoleToUser($roleData: AssignRoleOnRoleSetToUserInput!) {
   assignRoleToUser(roleData: $roleData) {
-    ...UserDataLight
+    ...UserData
   }
 }

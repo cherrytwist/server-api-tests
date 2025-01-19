@@ -11,7 +11,6 @@ import {
 } from '@functional-api/roleset/roles-request.params';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { RoleName, SpacePrivacyMode } from '@generated/graphql';
-import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
@@ -96,9 +95,10 @@ beforeAll(async () => {
     RoleName.Lead
   );
 
-  await assignUserAsOrganizationAdmin(
+  await assignRoleToUser(
     TestUserManager.users.spaceAdmin.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Admin
   );
 
   await assignRoleToOrganization(
