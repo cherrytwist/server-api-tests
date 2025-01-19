@@ -1,6 +1,9 @@
 fragment OrganizationData on Organization {
   id
   nameID
+  roleSet {
+    id
+  }
   legalEntityName
   domain
   website

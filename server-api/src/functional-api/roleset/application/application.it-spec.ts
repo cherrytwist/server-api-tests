@@ -26,7 +26,6 @@ import {
   TestScenarioConfig,
   TestScenarioNoPreCreationConfig,
 } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
 let applicationId = '';
 let subspaceApplicationId = '';
@@ -35,7 +34,6 @@ let roleSetPendingMemberships: any;
 const isMember = '';
 
 let baseScenario: OrganizationWithSpaceModel;
-let baseScenario2: EmptyModel;
 
 const scenarioConfig2: TestScenarioNoPreCreationConfig = {
   name: 'application-flows',

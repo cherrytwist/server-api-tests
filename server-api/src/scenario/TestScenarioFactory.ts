@@ -28,6 +28,7 @@ import { TestUserManager } from './TestUserManager';
 import { UserModel } from './models/UserModel';
 import { assignPlatformRole } from '@functional-api/platform/authorization-platform-mutation';
 import { logElapsedTime } from '@utils/profiling';
+import { OrganizationModel } from './models/OrganizationModel';
 
 export class TestScenarioFactory {
   public static async createBaseScenarioEmpty(
@@ -53,12 +54,13 @@ export class TestScenarioFactory {
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const scenarioName = scenarioConfig.name;
-    const baseScenario: OrganizationWithSpaceModel = this.createEmptyBaseScenario();
+    const baseScenario: OrganizationWithSpaceModel =
+      this.createEmptyBaseScenario();
 
     try {
       await TestUserManager.populateUserModelMap();
       await this.populateGlobalRoles();
-      await this.createOrganization(scenarioName, baseScenario);
+      await this.createOrganization(scenarioName, baseScenario.organization);
       baseScenario.scenarioSetupSucceeded = true;
     } catch (e) {
       console.error(`Unable to create core scenario setup: ${e}`);
@@ -180,11 +182,7 @@ export class TestScenarioFactory {
         await this.assignUsersToMemberRole(roleSetID, spaceLevel);
       }
       if (spaceCommunityConfig.addAdmin) {
-        await assignRoleToUser(
-          communityAdmin.id,
-          roleSetID,
-          RoleName.Admin
-        );
+        await assignRoleToUser(communityAdmin.id, roleSetID, RoleName.Admin);
       }
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
@@ -198,8 +196,8 @@ export class TestScenarioFactory {
 
   private static async createOrganization(
     scenarioName: string,
-    model: OrganizationWithSpaceModel
-  ): Promise<OrganizationWithSpaceModel> {
+    model: OrganizationModel
+  ): Promise<OrganizationModel> {
     const uniqueId = UniqueIDGenerator.getID();
     const truncatedScenarioName = scenarioName.slice(0, 18);
     const orgName = `${truncatedScenarioName}-${uniqueId}`;
@@ -220,19 +218,17 @@ export class TestScenarioFactory {
       );
     }
 
-    model.organization.id = responseOrg.data?.createOrganization.id ?? '';
-    model.organization.nameId =
-      responseOrg.data?.createOrganization.nameID ?? '';
-    model.organization.agentId =
-      responseOrg.data?.createOrganization.agent.id ?? '';
-    model.organization.accountId =
-      responseOrg.data?.createOrganization.account?.id ?? '';
-    model.organization.verificationId =
-      responseOrg.data?.createOrganization.verification.id ?? '';
-    model.organization.profile = {
-      id: responseOrg.data?.createOrganization.profile.id ?? '',
-      displayName:
-        responseOrg.data?.createOrganization.profile.displayName ?? '',
+    const orgResponseData = responseOrg.data?.createOrganization;
+
+    model.id = orgResponseData.id ?? '';
+    model.nameId = orgResponseData.nameID ?? '';
+    model.roleSetId = orgResponseData.roleSet.id ?? '';
+    model.agentId = orgResponseData.agent.id ?? '';
+    model.accountId = orgResponseData.account?.id ?? '';
+    model.verificationId = orgResponseData.verification.id ?? '';
+    model.profile = {
+      id: orgResponseData.profile.id ?? '',
+      displayName: orgResponseData.profile.displayName ?? '',
     };
     return model;
   }
@@ -442,6 +438,7 @@ export class TestScenarioFactory {
         id: '',
         agentId: '',
         accountId: '',
+        roleSetId: '',
         verificationId: '',
         profile: {
           id: '',
