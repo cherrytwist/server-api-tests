@@ -458,7 +458,7 @@ describe('Invitations - Authorization', () => {
   const authErrorUpdateInvitationMessage =
     "Authorization: unable to grant 'update' privilege: event on invitation";
   const authErrorCreateInvitationMessage =
-    "Authorization: unable to grant 'community-invite' privilege";
+    "Authorization: unable to grant 'roleset-entry-role-invite' privilege";
   const accepted = 'accepted';
   const invited = 'invited';
 
