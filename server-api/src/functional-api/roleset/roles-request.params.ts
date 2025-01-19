@@ -232,26 +232,4 @@ export const assignOrganizationAsCommunityLead = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-/// TODO: This is a different context + should not be mixed up here
-export const assignUserToOrganization = async (
-  userID: string,
-  roleSetID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.assignRoleToUser(
-      {
-        roleData: {
-          contributorID: userID,
-          roleSetID,
-          role: RoleName.Associate,
-        },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
 
-  return graphqlErrorWrapper(callback, userRole);
-};

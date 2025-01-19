@@ -9,7 +9,6 @@ import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   assignRoleToUser,
-  assignUserToOrganization,
 } from '../roles-request.params';
 import { RoleName, SpaceVisibility } from '@generated/graphql';
 import {
@@ -86,9 +85,10 @@ beforeAll(async () => {
     RoleName.Lead
   );
 
-  await assignUserToOrganization(
+  await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Associate
   );
 });
 
@@ -291,9 +291,10 @@ describe('User roles', () => {
         RoleName.Lead
       );
 
-      await assignUserToOrganization(
+      await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
-        orgId
+        baseScenario.organization.roleSetId,
+        RoleName.Associate
       );
     });
     afterAll(async () => {

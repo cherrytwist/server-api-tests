@@ -17,14 +17,11 @@ import {
 } from '@common/constants/privileges';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { createReferenceOnProfile } from '../../references/references.request.params';
-import { assignUserToOrganization } from '../../roleset/roles-request.params';
-import {
-  assignUserAsOrganizationAdmin,
-  assignUserAsOrganizationOwner,
-} from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { RoleName } from '@generated/alkemio-schema';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 
 let refId = '';
 
@@ -37,19 +34,22 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  await assignUserAsOrganizationAdmin(
+  await assignRoleToUser(
     TestUserManager.users.subspaceAdmin.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Admin
   );
 
-  await assignUserAsOrganizationOwner(
+  await assignRoleToUser(
     TestUserManager.users.spaceAdmin.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Admin
   );
 
-  await assignUserToOrganization(
+  await assignRoleToUser(
     TestUserManager.users.spaceMember.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Associate
   );
 });
 afterAll(async () => {
