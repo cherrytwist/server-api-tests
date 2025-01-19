@@ -128,7 +128,8 @@ describe('User roles', () => {
   });
 
   describe('Extended scenario', () => {
-    let orgId = '';
+    let organization2Id = '';
+    let organization2RoleSetId = '';
     let spaceId = '';
     let spaceRoleSetId = '';
     let chId = '';
@@ -143,12 +144,14 @@ describe('User roles', () => {
     let subsubspaceRoleSetId3 = '';
 
     beforeAll(async () => {
-      const orgRes = await createOrganization(
+      const organization2Response = await createOrganization(
         baseScenario.organization.profile.displayName + '1',
         baseScenario.organization.nameId + '1'
       );
-      orgId = orgRes?.data?.createOrganization.id ?? '';
-      const orgAccountId = orgRes?.data?.createOrganization.account?.id ?? '';
+      organization2Id = organization2Response?.data?.createOrganization.id ?? '';
+      organization2RoleSetId = organization2Response?.data?.createOrganization.roleSet.id ?? '';
+
+      const orgAccountId = organization2Response?.data?.createOrganization.account?.id ?? '';
 
       const spaceRes = await createSpaceAndGetData(
         spaceName2,
@@ -285,7 +288,7 @@ describe('User roles', () => {
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
-        baseScenario.organization.roleSetId,
+        organization2RoleSetId,
         RoleName.Associate
       );
     });
@@ -296,7 +299,7 @@ describe('User roles', () => {
       await deleteSpace(chId);
       await deleteSpace(chId2);
       await deleteSpace(spaceId);
-      await deleteOrganization(orgId);
+      await deleteOrganization(organization2Id);
     });
     test('user role - assignment to 2 Organizations, Spaces, Subspaces, Opportunities', async () => {
       // Act

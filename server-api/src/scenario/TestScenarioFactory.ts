@@ -156,16 +156,26 @@ export class TestScenarioFactory {
   public static async cleanUpBaseScenario(
     baseScenario: OrganizationWithSpaceModel
   ): Promise<void> {
-    if (baseScenario.subsubspace.id.length > 0) {
-      const a = await deleteSpace(baseScenario.subsubspace.id);
+    try {
+      if (baseScenario.subsubspace && baseScenario.subsubspace.id.length > 0) {
+        await deleteSpace(baseScenario.subsubspace.id);
+      }
+      if (baseScenario.subspace && baseScenario.subspace.id.length > 0) {
+        await deleteSpace(baseScenario.subspace.id);
+      }
+      if (baseScenario.space && baseScenario.space.id.length > 0) {
+        await deleteSpace(baseScenario.space.id);
+      }
+      if (
+        baseScenario.organization &&
+        baseScenario.organization.id.length > 0
+      ) {
+        await deleteOrganization(baseScenario.organization.id);
+      }
+    } catch (e) {
+      console.error(`Unable to tear down core scenario setup: ${e}`);
+      process.exit(1); // Exit the Jest process with an error code.
     }
-    if (baseScenario.subspace.id.length > 0) {
-      const b = await deleteSpace(baseScenario.subspace.id);
-    }
-    if (baseScenario.space.id.length > 0) {
-      const c = await deleteSpace(baseScenario.space.id);
-    }
-    const d = await deleteOrganization(baseScenario.organization.id);
   }
 
   private static async populateSpace(
