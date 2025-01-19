@@ -24,7 +24,6 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import {
   TestScenarioConfig,
-  TestScenarioNoPreCreationConfig,
 } from '@src/scenario/config/test-scenario-config';
 
 let applicationId = '';
@@ -35,16 +34,9 @@ const isMember = '';
 
 let baseScenario: OrganizationWithSpaceModel;
 
-const scenarioConfig2: TestScenarioNoPreCreationConfig = {
-  name: 'application-flows',
-};
-
 const scenarioConfig: TestScenarioConfig = {
   name: 'application',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
       collaboration: {
         addCallouts: false,
