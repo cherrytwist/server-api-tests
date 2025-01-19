@@ -7,9 +7,7 @@ import {
 } from '../../journey/space/space.request.params';
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  assignRoleToUser,
-} from '../roles-request.params';
+import { assignRoleToUser } from '../roles-request.params';
 import { RoleName, SpaceVisibility } from '@generated/graphql';
 import {
   createOrganization,
@@ -28,20 +26,10 @@ const availableRoles = ['member', 'lead'];
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'organization2',
+  name: 'user2',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
-      subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
-      },
+      subspace: {},
     },
   },
 };
@@ -116,7 +104,10 @@ describe('User roles', () => {
       ])
     );
 
-    expect(spacesData?.[0].subspaces).toEqual(
+    const scenarioSpace = spacesData?.find(
+      space => space.id === baseScenario.space.id
+    );
+    expect(scenarioSpace?.subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           nameID: baseScenario.subspace.nameId,
@@ -125,13 +116,14 @@ describe('User roles', () => {
       ])
     );
 
-    expect(orgData).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          nameID: baseScenario.organization.nameId,
-          roles: expect.arrayContaining(['associate']),
-        }),
-      ])
+    const scenarioOrganization = orgData?.find(
+      org => org.id === baseScenario.organization.id
+    );
+    expect(scenarioOrganization).toEqual(
+      expect.objectContaining({
+        nameID: baseScenario.organization.nameId,
+        roles: expect.arrayContaining(['associate']),
+      })
     );
   });
 

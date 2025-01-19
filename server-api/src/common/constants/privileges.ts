@@ -125,7 +125,7 @@ export const sorted__create_read_readAbout_update_delete_grant_contribute_update
   'UPDATE_CONTENT',
 ].sort();
 
-export const addMember_invite = ['ROLESET_ASSIGN', 'ROLESET_INVITE'];
+export const addMember_invite = ['ROLESET_ENTRY_ROLE_ASSIGN', 'ROLESET_ENTRY_ROLE_INVITE'];
 
 export const sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC = [
   'CREATE',
@@ -133,9 +133,9 @@ export const sorted__create_read_update_delete_grant_addMember_apply_invite_addV
   ...readPrivilege,
   'UPDATE',
   'DELETE',
-  'ROLESET_ASSIGN',
-  'ROLESET_APPLY',
-  'ROLESET_INVITE',
+  'ROLESET_ENTRY_ROLE_ASSIGN',
+  'ROLESET_ENTRY_ROLE_APPLY',
+  'ROLESET_ENTRY_ROLE_INVITE',
   'COMMUNITY_ASSIGN_VC_FROM_ACCOUNT',
 ].sort();
 
@@ -145,22 +145,22 @@ export const sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC
   ...readPrivilege,
   'UPDATE',
   'DELETE',
-  'ROLESET_APPLY',
-  'ROLESET_INVITE',
+  'ROLESET_ENTRY_ROLE_APPLY',
+  'ROLESET_ENTRY_ROLE_INVITE',
   'COMMUNITY_ASSIGN_VC_FROM_ACCOUNT',
 ].sort();
 
 export const sorted__roleSet_applyTo_join = [
-  'ROLESET_APPLY',
-  'ROLESET_JOIN',
+  'ROLESET_ENTRY_ROLE_APPLY',
+  'ROLESET_ENTRY_ROLE_JOIN',
 ].sort();
 
-export const sorted__read_applyToRoleSet = ['READ', 'ROLESET_APPLY'].sort();
+export const sorted__read_applyToRoleSet = ['READ', 'ROLESET_ENTRY_ROLE_APPLY'].sort();
 
 export const sorted__read_applyToRoleSet_invite_addVC = [
   'READ',
-  'ROLESET_APPLY',
-  'ROLESET_INVITE',
+  'ROLESET_ENTRY_ROLE_APPLY',
+  'ROLESET_ENTRY_ROLE_INVITE',
   'COMMUNITY_ASSIGN_VC_FROM_ACCOUNT',
 ].sort();
 

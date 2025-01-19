@@ -17,19 +17,10 @@ const newOrgNameId = 'ha-new-org-nameid';
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'subspace-activity',
+  name: 'orgRolesOnSpace',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
       },
     }
   }

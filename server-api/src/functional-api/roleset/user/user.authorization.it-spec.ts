@@ -94,9 +94,9 @@ afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
-describe('Verify ROLESET_ASSIGN privilege', () => {
+describe('Verify ROLESET_ENTRY_ROLE_ASSIGN privilege', () => {
   describe('DDT role privilege to assign member to space', () => {
-    // ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${sorted__applyToCommunity} - check if the privileges, that the role should have are: ["ROLESET_ASSIGN", "ROLESET_APPLY", "ROLESET_INVITE", "CREATE", "DELETE", "GRANT", "READ", "UPDATE", ]
+    // ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${sorted__applyToCommunity} - check if the privileges, that the role should have are: ["ROLESET_ENTRY_ROLE_ASSIGN", "ROLESET_ENTRY_ROLE_APPLY", "ROLESET_ENTRY_ROLE_INVITE", "CREATE", "DELETE", "GRANT", "READ", "UPDATE", ]
     // Arrange
     test.each`
       user                             | myPrivileges
@@ -131,7 +131,7 @@ describe('Verify ROLESET_ASSIGN privilege', () => {
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SPACE_MEMBER}         | ${['ROLESET_APPLY']}
+      ${TestUser.SPACE_MEMBER}         | ${['ROLESET_ENTRY_ROLE_APPLY']}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SUBSPACE_MEMBER}      | ${sorted__read_applyToRoleSet}
       ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__read_applyToRoleSet_invite_addVC}
@@ -159,9 +159,9 @@ describe('Verify ROLESET_ASSIGN privilege', () => {
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SPACE_MEMBER}         | ${['ROLESET_APPLY']}
+      ${TestUser.SPACE_MEMBER}         | ${['ROLESET_ENTRY_ROLE_APPLY']}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SUBSPACE_MEMBER}      | ${['ROLESET_APPLY']}
+      ${TestUser.SUBSPACE_MEMBER}      | ${['ROLESET_ENTRY_ROLE_APPLY']}
       ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToRoleSet}
     `(

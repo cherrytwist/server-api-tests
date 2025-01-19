@@ -20,7 +20,7 @@
         "--forceExit",
         "--config",
         "${workspaceFolder}/server-api/config/jest.config.roleset.js",
-        "roleset"
+        "user2"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -45,3 +45,5 @@
     }
   ]
 }
+
+

@@ -15,17 +15,8 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-activity',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
       },
     },
   },
