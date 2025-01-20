@@ -20,7 +20,10 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
-import { assignRoleToUser, removeRoleFromUser } from '@functional-api/roleset/roles-request.params';
+import {
+  assignRoleToUser,
+  removeRoleFromUser,
+} from '@functional-api/roleset/roles-request.params';
 import { RoleName } from '@generated/alkemio-schema';
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -36,7 +39,8 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization-owner',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 beforeEach(async () => {
   const request = await createOrganization(organizationName, hostNameId);
@@ -64,9 +68,9 @@ describe('Organization Owner', () => {
     );
 
     // Assert
-    expect(
-      res?.data?.assignRoleToUser?.agent?.credentials
-    ).toContainObject(responseData);
+    expect(res?.data?.assignRoleToUser?.agent?.credentials).toContainObject(
+      responseData
+    );
   });
 
   test('should add same user as owner of 2 organization', async () => {
@@ -93,12 +97,10 @@ describe('Organization Owner', () => {
     );
 
     // Assert
-    expect(
-      resOne?.data?.assignRoleToUser?.agent?.credentials
-    ).toContainObject(responseData);
-    expect(
-      resTwo?.data?.assignRoleToUser?.agent?.credentials
-    ).toContainObject({
+    expect(resOne?.data?.assignRoleToUser?.agent?.credentials).toContainObject(
+      responseData
+    );
+    expect(resTwo?.data?.assignRoleToUser?.agent?.credentials).toContainObject({
       resourceID: organizationIdTwo,
       type: credentialsType,
     });
@@ -150,7 +152,7 @@ describe('Organization Owner', () => {
 
     // Assert
     expect(res?.error?.errors[0].message).toContain(
-      `Min limit of users reached for role 'owner': 1, cannot remove user.: ${organizationId}`
+      `Min limit of users reached for role 'owner': 1, cannot remove user from role on RoleSet: ${organizationRoleSetId}, type: organization`
     );
   });
 
@@ -168,23 +170,28 @@ describe('Organization Owner', () => {
     ).not.toContainObject(responseData);
   });
 
-  test('should throw error for assigning same organization owner twice', async () => {
+  test('should not result in additional credential for assigning same organization owner twice', async () => {
     // Arrange
-    await assignRoleToUser(
+    const firstAssignmentResponse = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
       organizationRoleSetId,
       RoleName.Owner
     );
+    const credentialsCount =
+      firstAssignmentResponse?.data?.assignRoleToUser?.agent?.credentials
+        ?.length || -999;
 
     // Act
-    const res = await assignRoleToUser(
+    const secondAssignmentResponse = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
       organizationRoleSetId,
       RoleName.Owner
     );
+    const updatedCredentialsCount =
+      secondAssignmentResponse?.data?.assignRoleToUser?.agent?.credentials
+        ?.length || -999;
+
     // Assert
-    expect(res?.error?.errors[0].message).toEqual(
-      `Agent (${TestUserManager.users.spaceMember.agentId}) already has assigned credential: organization-owner`
-    );
+    expect(updatedCredentialsCount).toEqual(credentialsCount);
   });
 });
