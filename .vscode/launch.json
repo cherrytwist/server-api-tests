@@ -19,8 +19,8 @@
         "--runInBand",
         "--forceExit",
         "--config",
-        "${workspaceFolder}/server-api/config/jest.config.roleset.js",
-        "user2"
+        "${workspaceFolder}/server-api/config/jest.config.contributor-management.js",
+        "settings"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"

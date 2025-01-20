@@ -150,7 +150,7 @@ describe('Organization Owner', () => {
 
     // Assert
     expect(res?.error?.errors[0].message).toContain(
-      `Not allowed to remove last owner for Organization: ${organizationId}`
+      `Min limit of users reached for role 'owner': 1, cannot remove user.: ${organizationId}`
     );
   });
 

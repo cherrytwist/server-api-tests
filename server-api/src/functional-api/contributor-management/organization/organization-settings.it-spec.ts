@@ -51,13 +51,13 @@ describe('Organization settings', () => {
   describe('DDT user WITH privileges to update organization settings', () => {
     // Arrange
     test.each`
-      userRole                 | message
-      ${TestUser.GLOBAL_ADMIN} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.SPACE_ADMIN}  | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.SPACE_MEMBER} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
+      userRole
+      ${TestUser.GLOBAL_ADMIN}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
     `(
-      'User: "$userRole" get message: "$message", when intend to update organization settings ',
-      async ({ userRole, message }) => {
+      'User: "$userRole" is able to update organization settings ',
+      async ({ userRole }) => {
         // Act
         const res = await updateOrganizationSettings(
           baseScenario.organization.id,
