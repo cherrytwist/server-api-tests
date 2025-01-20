@@ -270,31 +270,28 @@ beforeAll(async () => {
     },
   ];
 
-  preferencesConfig.forEach(async config => {
-    const a = await changePreferenceUser(config.userID, config.type, 'true');
-  });
-  preferencesPostCreatedConfig.forEach(async config => {
-    const a = await changePreferenceUser(config.userID, config.type, 'false');
-  });
-
-  preferencesPostCommentsCreatedConfig.forEach(
-    async config =>
-      await changePreferenceUser(config.userID, config.type, 'false')
+  await Promise.all(
+    preferencesConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'true')
+    )
+  );
+  await Promise.all(
+    preferencesPostCreatedConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'false')
+    )
   );
 
-  preferencesCalloutPublishedConfig.forEach(
-    async config =>
-      await changePreferenceUser(config.userID, config.type, 'false')
+  await Promise.all(
+    preferencesPostCommentsCreatedConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'false')
+    )
   );
 
-  // preferencesDiscussionCommentCreatedConfig.forEach(
-  //   async config =>
-  //     await changePreferenceUser(config.userID, config.type, 'false')
-  // );
-  // preferencesPostOnCallForPostCreatedConfig.forEach(
-  //   async config =>
-  //     await changePreferenceUser(config.userID, config.type, 'false')
-  // );
+  await Promise.all(
+    preferencesCalloutPublishedConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'false')
+    )
+  );
 });
 
 afterAll(async () => {
