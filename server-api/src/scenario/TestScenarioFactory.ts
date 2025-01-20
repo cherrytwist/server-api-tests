@@ -53,14 +53,14 @@ export class TestScenarioFactory {
   public static async createBaseScenarioPrivate(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
-    const scenarioName = scenarioConfig.name;
     const baseScenario: OrganizationWithSpaceModel =
       this.createEmptyBaseScenario();
+    baseScenario.name = scenarioConfig.name;
 
     try {
       await TestUserManager.populateUserModelMap();
       await this.populateGlobalRoles();
-      await this.createOrganization(scenarioName, baseScenario.organization);
+      await this.createOrganization(baseScenario.name, baseScenario.organization);
       baseScenario.scenarioSetupSucceeded = true;
     } catch (e) {
       console.error(`Unable to create core scenario setup: ${e}`);
@@ -74,13 +74,13 @@ export class TestScenarioFactory {
     baseScenario.space = await this.createRootSpace(
       baseScenario.space,
       baseScenario.organization.accountId,
-      scenarioName
+      baseScenario.name
     );
 
     await this.populateSpace(
       scenarioConfig.space,
       baseScenario.space,
-      scenarioName,
+      baseScenario.name,
       TestUserManager.users.spaceAdmin,
       0
     );
@@ -93,13 +93,13 @@ export class TestScenarioFactory {
 
     await this.createSubspace(
       baseScenario.space.id,
-      scenarioName,
+      baseScenario.name,
       baseScenario.subspace
     );
     await this.populateSpace(
       subspace,
       baseScenario.subspace,
-      scenarioName,
+      baseScenario.name,
       TestUserManager.users.subspaceAdmin,
       1
     );
@@ -112,13 +112,13 @@ export class TestScenarioFactory {
 
     await this.createSubspace(
       baseScenario.subspace.id,
-      scenarioName,
+      baseScenario.name,
       baseScenario.subsubspace
     );
     await this.populateSpace(
       subsubspace,
       baseScenario.subsubspace,
-      scenarioName,
+      baseScenario.name,
       TestUserManager.users.subsubspaceAdmin,
       2
     );
@@ -173,7 +173,7 @@ export class TestScenarioFactory {
         await deleteOrganization(baseScenario.organization.id);
       }
     } catch (e) {
-      console.error(`Unable to tear down core scenario setup: ${e}`);
+      console.error(`Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`);
       process.exit(1); // Exit the Jest process with an error code.
     }
   }
@@ -444,6 +444,7 @@ export class TestScenarioFactory {
 
   private static createEmptyBaseScenario(): OrganizationWithSpaceModel {
     return {
+      name: '',
       organization: {
         id: '',
         agentId: '',
