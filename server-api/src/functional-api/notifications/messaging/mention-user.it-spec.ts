@@ -15,8 +15,6 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { testConfiguration } from '@src/config/test.configuration';
-export let preferencesPostCreatedConfig: any[] = [];
-export let preferencesPostCommentsCreatedConfig: any[] = [];
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -35,6 +33,9 @@ const mentionedUser = (userDisplayName: string, userNameId: string) => {
 };
 
 let preferencesConfig: any[] = [];
+let preferencesPostCreatedConfig: any[] = [];
+let preferencesPostCommentsCreatedConfig: any[] = [];
+let preferencesCalloutPublishedConfig: any[] = [];
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
@@ -190,33 +191,82 @@ beforeAll(async () => {
       userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
+    },
+  ];
+
+  preferencesCalloutPublishedConfig = [
+    {
+      userID: TestUserManager.users.globalAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.spaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subspaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subsubspaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.spaceAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subspaceAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subsubspaceAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.nonSpaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
     },
   ];
 
@@ -231,6 +281,12 @@ beforeAll(async () => {
     async config =>
       await changePreferenceUser(config.userID, config.type, 'false')
   );
+
+  preferencesCalloutPublishedConfig.forEach(
+    async config =>
+      await changePreferenceUser(config.userID, config.type, 'false')
+  );
+
   // preferencesDiscussionCommentCreatedConfig.forEach(
   //   async config =>
   //     await changePreferenceUser(config.userID, config.type, 'false')
