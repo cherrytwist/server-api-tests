@@ -28,12 +28,13 @@ import {
   inviteContributors,
 } from '../../roleset/invitations/invitation.request.params';
 import { getRoleSetInvitationsApplications } from '../../roleset/application/application.request.params';
-import { createUser, deleteUser } from '../user/user.request.params';
+import { deleteUser } from '../user/user.request.params';
 import { SearchVisibility, SpaceVisibility } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { getAccountMainEntities } from '@functional-api/account/account.params.request';
 const uniqueId = UniqueIDGenerator.getID();
 
 let invitationId = '';
@@ -107,7 +108,8 @@ beforeAll(async () => {
   const vcData = await createVirtualContributorOnAccount(
     vcName,
     vcSpaceAccountId,
-    l1VCId
+    l1VCId,
+    TestUser.GLOBAL_BETA_TESTER
   );
   vcId = vcData?.data?.createVirtualContributor?.id ?? '';
 
@@ -115,6 +117,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  const getVirtualContributors = await getAccountMainEntities(
+    TestUserManager.users.betaTester.accountId
+  );
+  const returnedVcs =
+    getVirtualContributors.data?.account?.virtualContributors ?? [];
+  for (const entity of returnedVcs) {
+    await deleteVirtualContributorOnAccount(entity.id).catch();
+  }
   await deleteSpace(l1VCId);
   await deleteSpace(vcSpaceId);
 
@@ -169,7 +179,8 @@ describe('Virtual Contributor', () => {
     const vcData = await createVirtualContributorOnAccount(
       vcName,
       vcSpaceAccountId,
-      l1VCId
+      l1VCId,
+      TestUser.GLOBAL_BETA_TESTER
     );
     vcId = vcData?.data?.createVirtualContributor?.id ?? '';
 

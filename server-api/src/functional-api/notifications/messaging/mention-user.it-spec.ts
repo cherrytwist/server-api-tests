@@ -15,8 +15,6 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { testConfiguration } from '@src/config/test.configuration';
-export let preferencesPostCreatedConfig: any[] = [];
-export let preferencesPostCommentsCreatedConfig: any[] = [];
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -35,6 +33,9 @@ const mentionedUser = (userDisplayName: string, userNameId: string) => {
 };
 
 let preferencesConfig: any[] = [];
+let preferencesPostCreatedConfig: any[] = [];
+let preferencesPostCommentsCreatedConfig: any[] = [];
+let preferencesCalloutPublishedConfig: any[] = [];
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
@@ -190,55 +191,107 @@ beforeAll(async () => {
       userID: TestUserManager.users.globalAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.spaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subsubspaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.spaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.subsubspaceAdmin.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
+
     {
       userID: TestUserManager.users.nonSpaceMember.id,
       type: PreferenceType.NotificationPostCommentCreated,
     },
   ];
 
-  preferencesConfig.forEach(async config => {
-    const a = await changePreferenceUser(config.userID, config.type, 'true');
-  });
-  preferencesPostCreatedConfig.forEach(async config => {
-    const a = await changePreferenceUser(config.userID, config.type, 'false');
-  });
+  preferencesCalloutPublishedConfig = [
+    {
+      userID: TestUserManager.users.globalAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
 
-  preferencesPostCommentsCreatedConfig.forEach(
-    async config =>
-      await changePreferenceUser(config.userID, config.type, 'false')
+    {
+      userID: TestUserManager.users.spaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subspaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subsubspaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.spaceAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subspaceAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.subsubspaceAdmin.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+
+    {
+      userID: TestUserManager.users.nonSpaceMember.id,
+      type: PreferenceType.NotificationCalloutPublished,
+    },
+  ];
+
+  await Promise.all(
+    preferencesConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'true')
+    )
   );
-  // preferencesDiscussionCommentCreatedConfig.forEach(
-  //   async config =>
-  //     await changePreferenceUser(config.userID, config.type, 'false')
-  // );
-  // preferencesPostOnCallForPostCreatedConfig.forEach(
-  //   async config =>
-  //     await changePreferenceUser(config.userID, config.type, 'false')
-  // );
+  await Promise.all(
+    preferencesPostCreatedConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'false')
+    )
+  );
+
+  await Promise.all(
+    preferencesPostCommentsCreatedConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'false')
+    )
+  );
+
+  await Promise.all(
+    preferencesCalloutPublishedConfig.map(config =>
+      changePreferenceUser(config.userID, config.type, 'false')
+    )
+  );
 });
 
 afterAll(async () => {
