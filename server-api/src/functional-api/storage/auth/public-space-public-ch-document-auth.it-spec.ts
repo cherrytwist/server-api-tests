@@ -15,7 +15,6 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import {
-  readPrivilege,
   sorted__create_read_readAbout_update_delete_grant,
   sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_contribute,
@@ -130,8 +129,8 @@ describe('Public Space - Public Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${readPrivilege}
-      ${TestUser.NON_SPACE_MEMBER} | ${readPrivilege}
+      ${undefined}                 | ${sorted_read_readAbout}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
@@ -154,8 +153,8 @@ describe('Public Space - Public Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                          | parentEntityType
-      ${undefined}                 | ${readPrivilege}                                                    | ${'CHALLENGE'}
-      ${TestUser.NON_SPACE_MEMBER} | ${readPrivilege}                                                    | ${'CHALLENGE'}
+      ${undefined}                 | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
@@ -201,8 +200,8 @@ describe('Public Space - Public Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${['READ']}
-      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}
+      ${undefined}                 | ${sorted_read_readAbout}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
@@ -225,8 +224,8 @@ describe('Public Space - Public Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                          | parentEntityType
-      ${undefined}                 | ${['READ']}                                                         | ${'CHALLENGE'}
-      ${TestUser.NON_SPACE_MEMBER} | ${['READ']}                                                         | ${'CHALLENGE'}
+      ${undefined}                 | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
@@ -278,8 +277,8 @@ describe('Public Space - Public Subspace - visual on profile', () => {
     // Arrange
     test.each`
       userRole                     | privileges
-      ${undefined}                 | ${readPrivilege}
-      ${TestUser.NON_SPACE_MEMBER} | ${readPrivilege}
+      ${undefined}                 | ${sorted_read_readAbout}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant}
       ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}
@@ -302,8 +301,8 @@ describe('Public Space - Public Subspace - visual on profile', () => {
 
     test.each`
       userRole                     | privileges                                                          | parentEntityType
-      ${undefined}                 | ${readPrivilege}                                                    | ${'CHALLENGE'}
-      ${TestUser.NON_SPACE_MEMBER} | ${readPrivilege}                                                    | ${'CHALLENGE'}
+      ${undefined}                 | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
       ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
       ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
