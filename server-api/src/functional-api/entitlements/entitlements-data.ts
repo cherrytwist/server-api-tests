@@ -217,7 +217,7 @@ export const accountVCCampaignLicenses1SpaceVCPack = {
       license: {
         type: 'SPACE',
         authorization: {
-          myPrivileges: [ 'READ', 'CREATE', 'UPDATE', 'DELETE', 'GRANT'],
+          myPrivileges: [ 'READ', 'CREATE', 'UPDATE', 'DELETE', 'GRANT', 'READ_ABOUT'],
         },
         entitlements: [
           {
