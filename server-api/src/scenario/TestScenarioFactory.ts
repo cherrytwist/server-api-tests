@@ -29,6 +29,7 @@ import { UserModel } from './models/UserModel';
 import { assignPlatformRole } from '@functional-api/platform/authorization-platform-mutation';
 import { logElapsedTime } from '@utils/profiling';
 import { OrganizationModel } from './models/OrganizationModel';
+import { createLogger } from '@utils/create-logger';
 
 export class TestScenarioFactory {
   public static async createBaseScenarioEmpty(
@@ -63,9 +64,11 @@ export class TestScenarioFactory {
       await this.createOrganization(baseScenario.name, baseScenario.organization);
       baseScenario.scenarioSetupSucceeded = true;
     } catch (e) {
+      baseScenario.logger.error(`Unable to create core scenario setup: ${e}`);
       console.error(`Unable to create core scenario setup: ${e}`);
       process.exit(1); // Exit the Jest process with an error code.
     }
+    baseScenario.logger.info(`Initial base scenario setup created`);
     if (!scenarioConfig.space) {
       // nothing more to do, return
       return baseScenario;
@@ -307,7 +310,7 @@ export class TestScenarioFactory {
       {
         framing: {
           profile: {
-            displayName: `postCollectioinCallout-${scenarioName}`,
+            displayName: `postCollectionCallout-${scenarioName}`,
             description: `postCollectionCallout-${scenarioName} - created as part of scenario setup for tests`,
           },
         },
@@ -443,7 +446,9 @@ export class TestScenarioFactory {
   }
 
   private static createEmptyBaseScenario(): OrganizationWithSpaceModel {
+    const logger = createLogger();
     return {
+      logger,
       name: '',
       organization: {
         id: '',
