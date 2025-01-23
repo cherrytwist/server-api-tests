@@ -10,6 +10,7 @@ module.exports = {
   }),
   moduleFileExtensions: ['js', 'json', 'ts'],
   setupFiles: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/jest.setup.ts'], // Add the setup file here
   roots: ['<rootDir>/src'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',

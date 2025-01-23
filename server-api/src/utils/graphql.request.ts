@@ -2,6 +2,7 @@ import request from 'supertest';
 import { TestUser } from '@alkemio/tests-lib';
 import { testConfiguration } from '@src/config/test.configuration';
 import { TestUserManager } from '@src/scenario/TestUserManager';
+import { LogManager } from '@src/scenario/LogManager';
 
 // ToDo
 // Add support for connection to the DB and drop/populate DB
@@ -34,6 +35,7 @@ export const graphqlRequestAuth = async (
   let auth_token = '';
 
   if (!user) {
+
     return await graphqlRequest(requestParams);
   } else {
     const userModel = TestUserManager.getUserModelByType(user);
@@ -41,6 +43,7 @@ export const graphqlRequestAuth = async (
     if (auth_token.length === 0) throw console.error(`Could not authenticate user ${user}`);
   }
 
+  LogManager.getLogger().info(`Executing request: ${requestParams.query}`);
   return await request(testConfiguration.endPoints.graphql.private)
     .post('')
     .send({ ...requestParams })

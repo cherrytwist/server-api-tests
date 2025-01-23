@@ -27,9 +27,8 @@ import {
 import { TestUserManager } from './TestUserManager';
 import { UserModel } from './models/UserModel';
 import { assignPlatformRole } from '@functional-api/platform/authorization-platform-mutation';
-import { logElapsedTime } from '@utils/profiling';
 import { OrganizationModel } from './models/OrganizationModel';
-import { createLogger } from '@utils/create-logger';
+import { LogManager } from './LogManager';
 
 export class TestScenarioFactory {
   public static async createBaseScenarioEmpty(
@@ -64,11 +63,11 @@ export class TestScenarioFactory {
       await this.createOrganization(baseScenario.name, baseScenario.organization);
       baseScenario.scenarioSetupSucceeded = true;
     } catch (e) {
-      baseScenario.logger.error(`Unable to create core scenario setup: ${e}`);
-      console.error(`Unable to create core scenario setup: ${e}`);
+      LogManager.getLogger().error(`Unable to create core scenario setup: ${e}`);
+      LogManager.getLogger().error(`Unable to create core scenario setup: ${e}`);
       process.exit(1); // Exit the Jest process with an error code.
     }
-    baseScenario.logger.info(`Initial base scenario setup created`);
+    LogManager.getLogger().info(`Initial base scenario setup created`);
     if (!scenarioConfig.space) {
       // nothing more to do, return
       return baseScenario;
@@ -176,7 +175,7 @@ export class TestScenarioFactory {
         await deleteOrganization(baseScenario.organization.id);
       }
     } catch (e) {
-      console.error(`Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`);
+      LogManager.getLogger().error(`Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`);
       process.exit(1); // Exit the Jest process with an error code.
     }
   }
@@ -446,9 +445,7 @@ export class TestScenarioFactory {
   }
 
   private static createEmptyBaseScenario(): OrganizationWithSpaceModel {
-    const logger = createLogger();
     return {
-      logger,
       name: '',
       organization: {
         id: '',

@@ -7,6 +7,7 @@ import { testConfiguration } from '@src/config/test.configuration';
 import { stringifyConfig } from '@src/config/create-config-using-envvars';
 import { registerInKratosOrFail } from '@src/scenario/registration/register-in-kratos-or-fail';
 import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-kratos-or-fail';
+import { LogManager } from '@src/scenario/LogManager';
 
 const main = async () => {
   const testConfig = testConfiguration;
@@ -22,7 +23,7 @@ const main = async () => {
     try {
       await userRegisterFlow(username);
     } catch (error) {
-      console.error(`Unable to register user ${username}: ${error}`);
+      LogManager.getLogger().error(`Unable to register user ${username}: ${error}`);
     }
   }
 };
@@ -40,7 +41,7 @@ const userRegisterFlow = async (userName: string) => {
   try {
     await registerInKratosOrFail(firstName, lastName, email);
 
-    console.info(`User ${email} registered in Kratos`);
+    LogManager.getLogger().info(`User ${email} registered in Kratos`);
   } catch (e: any) {
     const errorMessages = (e as any).response?.data.ui
       .messages as UiText[];
@@ -50,21 +51,21 @@ const userRegisterFlow = async (userName: string) => {
       errorMessages.filter((x: { id: number }) => x.id === 4000007).length > 0;
 
     if (userExists) {
-      console.warn(`User ${email} already registered in Kratos`);
+      LogManager.getLogger().warn(`User ${email} already registered in Kratos`);
     } else {
       throw new Error(errorMessage);
     }
   }
 
   await verifyInKratosOrFail(email);
-  console.info(`User ${email} verified`);
+  LogManager.getLogger().info(`User ${email} verified`);
   try {
     await registerInAlkemioOrFail(firstName, lastName, email);
-    console.info(`User ${email} registered in Alkemio`);
+    LogManager.getLogger().info(`User ${email} registered in Alkemio`);
   } catch (e) {
     const err = e as Error;
     if (err.message.indexOf('already registered') > -1) {
-      console.warn(`User ${email} already registered in Alkemio`);
+      LogManager.getLogger().warn(`User ${email} already registered in Alkemio`);
     } else {
       throw new Error(err.message);
     }
@@ -74,7 +75,7 @@ const userRegisterFlow = async (userName: string) => {
 try {
   main();
 } catch (error) {
-  console.error(error);
+  LogManager.getLogger().error(error);
 }
 
 

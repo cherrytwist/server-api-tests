@@ -1,10 +1,8 @@
-import { testConfiguration } from '@src/config/test.configuration';
+
 import { UserModel } from './models/UserModel';
-import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserModels } from './models/TestUserModels';
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { logElapsedTime } from '@utils/profiling';
 import { getUserToken } from './registration/get-user-token';
 
 export class TestUserManager {
