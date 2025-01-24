@@ -4,7 +4,6 @@ import { TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
 import { UiText } from '@ory/kratos-client';
 import { testConfiguration } from '@src/config/test.configuration';
-import { stringifyConfig } from '@src/config/create-config-using-envvars';
 import { registerInKratosOrFail } from '@src/scenario/registration/register-in-kratos-or-fail';
 import { verifyInKratosOrFail } from '@src/scenario/registration/verify-in-kratos-or-fail';
 import { LogManager } from '@src/scenario/LogManager';

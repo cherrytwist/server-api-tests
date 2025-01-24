@@ -1,0 +1,7 @@
+import baseConfig from './jest.config.mjs';
+
+export default {
+  ...baseConfig,
+  testRegex: ['/src/functional-api/notifications/messaging/.*\\.it-spec\\.ts'],
+  coverageDirectory: '<rootDir>/coverage-ci',
+};
