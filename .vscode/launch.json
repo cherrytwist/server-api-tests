@@ -19,7 +19,7 @@
         "--runInBand",
         "--forceExit",
         "--config",
-        "${workspaceFolder}/server-api/config/jest.config.contributor-management.js",
+        "${workspaceFolder}/server-api/config/jest.config.contributor-management.mjs",
         "settings"
       ],
       "console": "integratedTerminal",
@@ -45,5 +45,3 @@
     }
   ]
 }
-
-
