@@ -21,7 +21,6 @@ import {
 import {
   revokeLicensePlanFromSpace,
   getLicensePlanByName,
-  revokeLicensePlanFromAccount,
   assignLicensePlanToSpace,
 } from '../license/license.params.request';
 import {
@@ -40,7 +39,7 @@ import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scena
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let spaceId = '';
-let spaceName = `space-name-${uniqueId}`;
+const spaceName = `space-name-${uniqueId}`;
 
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'license-functional-entitlements',

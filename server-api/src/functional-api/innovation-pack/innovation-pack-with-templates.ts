@@ -1,18 +1,15 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { createInnovationPack } from './innovation_pack.request.params';
 import { whiteboardTemplateValues1 } from './whiteboard-values-fixed';
 import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';
 import { getOrganizations } from '@functional-api/contributor-management/organization/organization.request.params';
 
+const uniqueId = UniqueIDGenerator.getID();
 
 const packName =
   process.env.PACK_NAME || `Default Innovation Pack Name ${uniqueId}`;
 export const whiteboardTemplateValues =
   process.env.WHITEBOARD_TEMPLATE_VALUE || whiteboardTemplateValues1;
-const whiteboardTemplateTitle =
-  process.env.WHITEBOARD_TEMPLATE_NAME ||
-  `Default Whiteboard Template Title ${uniqueId}`;
 
 const packNameId = `pack-nameid-${uniqueId}`;
 

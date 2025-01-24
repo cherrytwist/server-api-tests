@@ -1,4 +1,4 @@
-//import * as Dom from 'graphql-request/dist/types.dom';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestUser } from '@alkemio/tests-lib';
 import Headers from 'graphql-request';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -42,7 +42,7 @@ export const graphqlErrorWrapper = async <TData>(
     const err = error as ErrorType;
     if (!err.response || !err.response.errors) {
       LogManager.getLogger().error(`Unable to complete call '${fn}'`);
-      LogManager.getLogger().error(`Returned error:`);
+      LogManager.getLogger().error('Returned error:');
       LogManager.getLogger().error(err);
       return {
         error: {

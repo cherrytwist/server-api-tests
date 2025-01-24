@@ -1,4 +1,4 @@
-import { LogManager } from "./scenario/LogManager";
+import { LogManager } from './scenario/LogManager';
 
 beforeAll(() => {
   // This will run before any test is executed in the suite

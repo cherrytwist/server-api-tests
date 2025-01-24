@@ -1,3 +1,2 @@
-import { TestUser } from '@alkemio/tests-lib';
-
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type EmptyModel = {};

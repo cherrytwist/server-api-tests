@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable quotes */
 import {} from '@functional-api/contributor-management/user/user.request.params';
 import { fullConfiguration } from './configuration.request.params';
 

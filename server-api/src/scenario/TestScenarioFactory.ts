@@ -64,7 +64,7 @@ export class TestScenarioFactory {
       LogManager.getLogger().error(`Unable to create core scenario setup: ${e}`);
       process.exit(1); // Exit the Jest process with an error code.
     }
-    LogManager.getLogger().info(`Initial base scenario setup created`);
+    LogManager.getLogger().info('Initial base scenario setup created');
     if (!scenarioConfig.space) {
       // nothing more to do, return
       return baseScenario;

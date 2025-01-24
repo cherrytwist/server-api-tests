@@ -1,4 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteMailSlurperMails,
@@ -22,8 +22,6 @@ import { changePreferenceUser } from '@functional-api/contributor-management/use
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-
-const uniqueId = UniqueIDGenerator.getID();
 
 let spaceWhiteboardId = '';
 let preferencesConfig: any[] = [];

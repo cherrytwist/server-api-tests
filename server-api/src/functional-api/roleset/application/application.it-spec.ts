@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import '@utils/array.matcher';
 import {
   createApplication,
@@ -246,7 +247,7 @@ describe('Application', () => {
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
     const applicationSpaceId = createAppData?.id;
 
-    const eventResponseData = await eventOnRoleSetApplication(
+    await eventOnRoleSetApplication(
       applicationSpaceId,
       'APPROVE',
       TestUser.QA_USER

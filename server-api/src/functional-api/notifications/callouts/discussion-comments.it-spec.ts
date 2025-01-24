@@ -1,4 +1,4 @@
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestUser } from '@alkemio/tests-lib';
 import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
@@ -10,11 +10,6 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
-const uniqueId = UniqueIDGenerator.getID();
-
-const spaceName = 'not-up-eco-name' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `opName${uniqueId}`;
 export let preferencesDiscussionCommentCreatedConfig: any[] = [];
 
 const expectedDataSpace = async (toAddresses: any[]) => {

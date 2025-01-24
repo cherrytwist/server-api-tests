@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from 'supertest';
 import { getUserToken } from './get-user-token';
 import { testConfiguration } from '@src/config/test.configuration';
@@ -42,7 +43,7 @@ export const createUserNewRegistration = async (
 ) => {
   const requestParams = {
     operationName: null,
-    query: `mutation createUserNewRegistration { createUserNewRegistration { id }}`,
+    query: 'mutation createUserNewRegistration { createUserNewRegistration { id }}',
     variables: {
       userData: {
         firstName,

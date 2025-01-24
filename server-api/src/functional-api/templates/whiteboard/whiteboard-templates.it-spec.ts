@@ -1,5 +1,4 @@
 import '@utils/array.matcher';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import {
   createWhiteboardTemplate,
@@ -10,9 +9,6 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
-const uniqueId = UniqueIDGenerator.getID();
-let postNameID = '';
-let postDisplayName = '';
 let templateId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
@@ -46,8 +42,6 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  postNameID = `post-name-id-${uniqueId}`;
-  postDisplayName = `post-d-name-${uniqueId}`;
 });
 
 describe('WHITEBOARD templates - CRUD', () => {

@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';

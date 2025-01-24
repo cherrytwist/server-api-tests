@@ -58,8 +58,7 @@
     "test:documents": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.documents.mjs",
     "test:configuration": "jest --forceExit --maxWorkers=1 --verbose --config ./config/jest.config.configuration.mjs",
     "innovation-pack-with-templates": "ts-node-dev ./src/functional-api/innovation-pack/innovation-pack-with-templates.ts",
-    "validate-scenario-setup": "ts-node-dev ./src/scripts/validate-scenario-setup.ts",
-    "register-users": "ts-node-dev ./src/scripts/register-users.ts"
+    "validate-scenario-setup": "ts-node-dev ./src/scripts/validate-scenario-setup.ts"
   },
   "dependencies": {
     "@alkemio/client-lib": "^0.32.0",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from 'supertest';
 import { TestUser } from '@alkemio/tests-lib';
 import { testConfiguration } from '@src/config/test.configuration';
@@ -15,6 +16,7 @@ import { LogManager } from '@src/scenario/LogManager';
  * @param requestParams GraphQL request parameters
  * @api public
  */
+ 
 export const graphqlRequest = async (requestParams: any) => {
   return await request(testConfiguration.endPoints.graphql.private)
     .post('')

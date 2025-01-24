@@ -14,7 +14,6 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import {
-  readAboutPrivilege,
   sorted__create_read_readAbout_update_delete_grant,
   sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_contribute,

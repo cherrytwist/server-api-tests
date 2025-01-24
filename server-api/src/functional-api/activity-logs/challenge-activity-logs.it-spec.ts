@@ -11,7 +11,6 @@ import {
   CommunityMembershipPolicy,
 } from '@generated/alkemio-schema';
 import {
-  deleteSpace,
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { getActivityLogOnCollaboration } from './activity-log-params';
@@ -168,12 +167,11 @@ describe('Activity logs - Subspace', () => {
       resPostonSpace?.data?.createContributionOnCallout.post;
     const postCommentsIdSpace = postDataCreate?.comments.id ?? '';
 
-    const messageRes = await sendMessageToRoom(
+    await sendMessageToRoom(
       postCommentsIdSpace,
       'test message on space post',
       TestUser.GLOBAL_ADMIN
     );
-    messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.subspace.collaboration.calloutsSetId,

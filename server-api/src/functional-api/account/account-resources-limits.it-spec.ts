@@ -10,14 +10,11 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 const uniqueId = UniqueIDGenerator.getID();
 
 let localSpaceId = '';
-let localSpaceIdn = '';
-let localSpaceId1 = '';
-let localSpaceId2 = '';
-let localSpaceId3 = '';
-let localSpaceId4 = '';
+const localSpaceId1 = '';
+const localSpaceId2 = '';
+const localSpaceId3 = '';
+const localSpaceId4 = '';
 
-const organizationName = 'callout-org-name' + uniqueId;
-const hostNameId = 'callout-org-nameid' + uniqueId;
 const spaceName = 'callout-eco-name' + uniqueId;
 const spaceNameId = 'callout-eco-nameid' + uniqueId;
 

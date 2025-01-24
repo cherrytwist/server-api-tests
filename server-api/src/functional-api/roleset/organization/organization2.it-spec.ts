@@ -1,4 +1,3 @@
-import { deleteSpace } from '../../journey/space/space.request.params';
 import {
   assignRoleToOrganization,
   getRoleName,

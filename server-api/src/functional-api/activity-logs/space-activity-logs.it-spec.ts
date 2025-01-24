@@ -122,7 +122,6 @@ describe('Activity logs - Space', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
-          // eslint-disable-next-line quotes
           description: `${TestUserManager.users.spaceAdmin.id}`,
           triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
@@ -134,7 +133,6 @@ describe('Activity logs - Space', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
-          // eslint-disable-next-line quotes
           description: `${TestUserManager.users.spaceMember.id}`,
           triggeredBy: { id: TestUserManager.users.spaceMember.id },
           type: ActivityEventType.MemberJoined,
@@ -146,7 +144,6 @@ describe('Activity logs - Space', () => {
       expect.arrayContaining([
         expect.objectContaining({
           collaborationID: baseScenario.space.collaboration.id,
-          // eslint-disable-next-line quotes
           description: `${TestUserManager.users.globalAdmin.id}`,
           triggeredBy: { id: TestUserManager.users.globalAdmin.id },
           type: ActivityEventType.MemberJoined,
@@ -175,12 +172,11 @@ describe('Activity logs - Space', () => {
       resPostonSpace.data?.createContributionOnCallout.post;
     const postCommentsIdSpace = postDataCreate?.comments.id ?? '';
 
-    const messageRes = await sendMessageToRoom(
+    await sendMessageToRoom(
       postCommentsIdSpace,
       'test message on space post',
       TestUser.GLOBAL_ADMIN
     );
-    messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.space.collaboration.calloutsSetId,
@@ -380,7 +376,7 @@ describe('Access to Activity logs - Space', () => {
       ${TestUser.NON_SPACE_MEMBER}
     `(
       'User: "$userRole" get message: "$message", when intend to access Public space activity logs',
-      async ({ userRole, message }) => {
+      async ({ userRole }) => {
         // Act
         const resActivity = await getActivityLogOnCollaboration(
           baseScenario.space.collaboration.id,

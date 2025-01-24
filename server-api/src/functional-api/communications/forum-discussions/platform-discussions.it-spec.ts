@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
 import {
   getPlatformDiscussionsDataById,
@@ -14,7 +13,6 @@ import {
 import { ForumDiscussionCategory } from '@generated/alkemio-schema';
 import { delay } from '@alkemio/tests-lib';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let platformDiscussionId = '';
@@ -28,12 +26,11 @@ const errorAuthDiscussionDelete =
 const errorAuthDiscussionMessageDelete =
   "Authorization: unable to grant 'delete' privilege: room remove message: ";
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'platform-discussions',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   const res = await getPlatformForumData();
   platformDiscussionId = res?.data?.platform.forum.id ?? '';
 });

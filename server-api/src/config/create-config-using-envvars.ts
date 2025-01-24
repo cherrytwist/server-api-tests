@@ -1,8 +1,5 @@
 import dotenv from 'dotenv';
 import { AlkemioTestConfig } from '@src/config/alkemio-test-config';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
-
-const uniqueId = UniqueIDGenerator.getID();
 
 export const createConfigUsingEnvVars = (): AlkemioTestConfig => {
   dotenv.config();

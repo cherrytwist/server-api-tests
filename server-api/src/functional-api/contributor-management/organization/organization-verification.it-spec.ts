@@ -20,7 +20,6 @@ import {
 } from './organization.request.params';
 import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 let organizationId = '';
@@ -28,12 +27,11 @@ let organizationVerificationId = '';
 const organizationName = 'veirify-org-name' + uniqueId;
 const hostNameId = 'veirify-org-nameid' + uniqueId;
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization-verification',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   const res = await createOrganization(organizationName, hostNameId);
   const orgData = res.data?.createOrganization;
   organizationId = orgData?.id ?? '';

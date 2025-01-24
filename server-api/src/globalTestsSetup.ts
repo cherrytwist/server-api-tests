@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // This is critical to be able to use TypeScript aliases in Jest tests
 require('tsconfig-paths/register');
 import { UiText } from '@ory/kratos-client';

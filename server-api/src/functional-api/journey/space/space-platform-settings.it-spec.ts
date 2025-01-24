@@ -31,7 +31,6 @@ const uniqueId = UniqueIDGenerator.getID();
 
 const spaceNameId = 'space-nameid' + uniqueId;
 let organizationIdTwo = '';
-let orgAccountIdTwo = '';
 
 const organizationNameTwo = 'org2' + uniqueId;
 
@@ -62,7 +61,7 @@ describe('Update space platform settings', () => {
   beforeAll(async () => {
     baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-   const a = await updateSpaceSettings(baseScenario.space.id, {
+   await updateSpaceSettings(baseScenario.space.id, {
       privacy: {
         mode: SpacePrivacyMode.Private,
       },
@@ -82,7 +81,6 @@ describe('Update space platform settings', () => {
         organizationNameTwo
       );
       organizationIdTwo = orgData?.data?.createOrganization.id ?? '';
-      orgAccountIdTwo = orgData?.data?.createOrganization.account?.id ?? '';
     });
 
     afterAll(async () => {
@@ -216,12 +214,11 @@ describe('Update space platform settings', () => {
       'User role: "$user", have access to public archived Space',
       async ({ user, email, communicationMyPrivileges, subspacesCount }) => {
         // Arrange
-        const getuserRoleSpaceDataBeforeArchive =
+        const getUserRoleSpaceDataBeforeArchive =
           await getUserRoleSpacesVisibility(email, SpaceVisibility.Active);
         const beforeVisibilityChangeAllSpaces =
-          getuserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
-        const dataBeforeVisibilityChange =
-          beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
+          getUserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
+        beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
             return obj.nameID.includes(spaceNameId);
           });
         await updateSpacePlatformSettings(
@@ -229,16 +226,6 @@ describe('Update space platform settings', () => {
           spaceNameId,
           SpaceVisibility.Archived
         );
-
-        const getUserRoleSpaceDataAfterArchive =
-          await getUserRoleSpacesVisibility(email, SpaceVisibility.Archived);
-
-        const afterVisibilityChangeAllSpaces =
-          getUserRoleSpaceDataAfterArchive?.data?.rolesUser?.spaces;
-        const dataAfterVisibilityChange =
-          afterVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
-            return obj.nameID.includes(spaceNameId);
-          });
 
         const spaceDataAfterArchive =
           await getSpacesFilteredByVisibilityWithAccess(
@@ -279,21 +266,14 @@ describe('Update space platform settings', () => {
     });
 
     test.each`
-      user                         | email                      | communicationMyPrivileges | subspacesCount | opportunitiesCount
-      ${TestUser.SPACE_ADMIN}      | ${'space.admin@alkem.io'}  | ${[]}                     | ${null}        | ${null}
-      ${TestUser.SPACE_MEMBER}     | ${'space.member@alkem.io'} | ${[]}                     | ${null}        | ${null}
-      ${TestUser.NON_SPACE_MEMBER} | ${'non.space@alkem.io'}    | ${[]}                     | ${null}        | ${null}
+      user                         | communicationMyPrivileges | subspacesCount | opportunitiesCount
+      ${TestUser.SPACE_ADMIN}      | ${[]}                     | ${null}        | ${null}
+      ${TestUser.SPACE_MEMBER}     | ${[]}                     | ${null}        | ${null}
+      ${TestUser.NON_SPACE_MEMBER} | ${[]}                     | ${null}        | ${null}
     `(
       'User role: "$user", have NO access to public archived Space',
-      async ({ user, email, communicationMyPrivileges }) => {
-        const getuserRoleSpaceDataBeforeArchive =
-          await getUserRoleSpacesVisibility(email, SpaceVisibility.Active);
-        const beforeVisibilityChangeAllSpaces =
-          getuserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
-        const dataBeforeVisibilityChange =
-          beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
-            return obj.nameID.includes(spaceNameId);
-          });
+      async ({ user, communicationMyPrivileges }) => {
+
 
         // Act
         await updateSpacePlatformSettings(
@@ -301,16 +281,6 @@ describe('Update space platform settings', () => {
           spaceNameId,
           SpaceVisibility.Archived
         );
-
-        const getUserRoleSpaceDataAfterArchive =
-          await getUserRoleSpacesVisibility(email, SpaceVisibility.Archived);
-
-        const afterVisibilityChangeAllSpaces =
-          getUserRoleSpaceDataAfterArchive?.data?.rolesUser.spaces;
-        const dataAfterVisibilityChange =
-          afterVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
-            return obj.nameID.includes(spaceNameId);
-          });
 
         const spaceDataAfterArchive =
           await getSpacesFilteredByVisibilityNoAccess(

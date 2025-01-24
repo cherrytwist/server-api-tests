@@ -17,7 +17,6 @@ describe('Organization', () => {
   const organizationName = 'Organization with many whiteboardes' + uniqueId;
   const hostNameId = 'org-whiteboardes' + uniqueId;
   const packName = `Default Innovation Pack Name ${uniqueId}`;
-  const whiteboardTemplateTitle = `Default Whiteboard Template Title ${uniqueId}`;
   const packNameId = `pack-nameid-${uniqueId}`;
   let orgId = '';
   beforeAll(async () => {

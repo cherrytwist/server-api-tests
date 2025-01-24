@@ -18,13 +18,13 @@ import {
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import {
   assignRoleToUser,
   removeRoleFromUser,
 } from '@functional-api/roleset/roles-request.params';
 import { RoleName } from '@generated/alkemio-schema';
+
 const uniqueId = UniqueIDGenerator.getID();
 
 let organizationId = '';
@@ -34,13 +34,11 @@ const organizationName = 'org-auth-org-name' + uniqueId;
 const hostNameId = 'org-auth-org-nameid' + uniqueId;
 let responseData: object;
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization-owner',
 };
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 beforeEach(async () => {
   const request = await createOrganization(organizationName, hostNameId);

@@ -170,12 +170,11 @@ describe('Activity logs - Subsubspace', () => {
     const postDataCreate = resPostonSpace?.data?.createContributionOnCallout;
     const postCommentsIdSpace = postDataCreate?.post?.comments.id ?? '';
 
-    const messageRes = await sendMessageToRoom(
+    sendMessageToRoom(
       postCommentsIdSpace,
       'test message on space post',
       TestUser.GLOBAL_ADMIN
     );
-    messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.subsubspace.collaboration.calloutsSetId,

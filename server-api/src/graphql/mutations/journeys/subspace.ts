@@ -55,7 +55,7 @@ export const subspaceVariablesData = (
       who: 'test who' + uniqueId,
     },
     collaborationData: {
-      "addTutorialCallouts": true,
+      'addTutorialCallouts': true,
       calloutsSetData: {},
     },
   };

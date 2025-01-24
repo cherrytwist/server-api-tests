@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createOrganization, deleteOrganization, getOrganizationData } from '@functional-api/contributor-management/organization/organization.request.params';
 import { paginatedOrganization } from './pagination.request.params';
 
