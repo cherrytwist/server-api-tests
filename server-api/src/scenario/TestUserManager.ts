@@ -12,7 +12,6 @@ export class TestUserManager {
   public static users: TestUserModels;
 
   public static async populateUserModelMap() {
-    const start = performance.now();
 
     this.userModelMapEmail = new Map<string, UserModel>();
     this.userModelMapType = new Map<string, UserModel>();
@@ -128,19 +127,6 @@ export class TestUserManager {
       }
     );
     return result;
-  }
-
-  /**
-   * Builds a map with access tokens for each user in the TestUser enum.
-   * Uses ROPC client flow to authenticate the TestUserManager.users.
-   *
-   * @api public
-   * @returns Returns a map in the form of <username, access_token>.
-   */
-  private static async populateUserAuthenticationToken(
-    userModel: UserModel
-  ): Promise<void> {
-
   }
 
   private static buildIdentifier(user: string) {

@@ -1,7 +1,7 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';;
 import { deleteSpace } from '../journey/space/space.request.params';
-import { subscriptionSubsubspaceCreated } from './subscrition-queries';
+import { subscriptionSubsubspaceCreated } from './subscription-queries';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';

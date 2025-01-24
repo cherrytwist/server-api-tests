@@ -34,17 +34,14 @@ export class TestScenarioFactory {
   public static async createBaseScenarioEmpty(
     scenarioConfig: TestScenarioConfig
   ) {
-    const start = performance.now();
     await TestUserManager.populateUserModelMap();
     const result = scenarioConfig;
-    // logElapsedTime('createBaseScenario', start);
     return result;
   }
 
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
-    const start = performance.now();
     const result = await this.createBaseScenarioPrivate(scenarioConfig);
     // logElapsedTime('createBaseScenario', start);
     return result;
@@ -410,9 +407,11 @@ export class TestScenarioFactory {
       case 0:
         usersIdsToAssign.push(TestUserManager.users.spaceAdmin.id);
         usersIdsToAssign.push(TestUserManager.users.spaceMember.id);
+        break;
       case 1:
         usersIdsToAssign.push(TestUserManager.users.subspaceAdmin.id);
         usersIdsToAssign.push(TestUserManager.users.subspaceMember.id);
+        break;
       case 2:
         usersIdsToAssign.push(TestUserManager.users.subsubspaceAdmin.id);
         usersIdsToAssign.push(TestUserManager.users.subsubspaceMember.id);
