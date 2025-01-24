@@ -10,7 +10,7 @@
  * - Handling errors when creating innovation packs over the license limit.
  *
  * The tests use the following utilities and queries:
- * - `assignPlatformRoleToUser` and `removePlatformRoleFromUser` for role management.
+ * - `assignRoleNameToUser` and `removeRoleNameFromUser` for role management.
  * - `getMyEntitlementsQuery` to fetch user entitlements.
  * - `createInnovationPack` and `deleteInnovationPack` for innovation pack management.
  * - `getAccountMainEntities` to fetch account-related data.
@@ -32,10 +32,10 @@ import {
 import { getAccountMainEntities } from '../account/account.params.request';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
-import { PlatformRole } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import {
-  assignPlatformRoleToUser,
-  removePlatformRoleFromUser,
+  assignPlatformRole,
+  removePlatformRole,
 } from '@functional-api/platform/authorization-platform-mutation';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -48,11 +48,11 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
 
 describe('Functional tests - Innovation Pack', () => {
   afterEach(async () => {
-    const spaceData = await getAccountMainEntities(
+    const accountData = await getAccountMainEntities(
       TestUserManager.users.nonSpaceMember.accountId,
       TestUser.NON_SPACE_MEMBER
     );
-    const packs = spaceData.data?.account?.innovationPacks;
+    const packs = accountData.data?.lookup.account?.innovationPacks;
     for (const pack of packs || []) {
       const packId = pack.id;
       await deleteInnovationPack(packId, TestUser.GLOBAL_ADMIN);
@@ -61,9 +61,9 @@ describe('Functional tests - Innovation Pack', () => {
   describe('VC Campaign user innovation pack creation', () => {
     beforeAll(async () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-      const a = await assignPlatformRoleToUser(
+      const a = await assignPlatformRole(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
     const allPrivileges = [
@@ -79,9 +79,9 @@ describe('Functional tests - Innovation Pack', () => {
     ].sort();
 
     afterAll(async () => {
-      await removePlatformRoleFromUser(
+      await removePlatformRole(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
 

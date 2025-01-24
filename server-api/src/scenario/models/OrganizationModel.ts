@@ -7,4 +7,5 @@ export type OrganizationModel = {
   nameId: string;
   profile: ProfileModel;
   verificationId: string;
+  roleSetId: string;
 };

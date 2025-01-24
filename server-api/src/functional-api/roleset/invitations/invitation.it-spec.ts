@@ -16,14 +16,14 @@ import {
   updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
-import { readPrivilege, sorted_read_readAbout } from '@common/constants/privileges';
+import { sorted_read_readAbout } from '@common/constants/privileges';
 import {
   removeRoleFromUser,
   assignRoleToUser,
 } from '@functional-api/roleset/roles-request.params';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
@@ -41,9 +41,6 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'access-invitations',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
       addAdmin: true,
       addMembers: true,
@@ -73,7 +70,7 @@ describe('Invitations', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     if (invitationId && invitationId.length === 36) {
       await deleteInvitation(invitationId);
@@ -90,7 +87,7 @@ describe('Invitations', () => {
 
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -116,7 +113,7 @@ describe('Invitations', () => {
 
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -136,17 +133,17 @@ describe('Invitations', () => {
 
     let invitationIdTwo = 'invitationId2NotRetrieved';
     const invitationResultTwo =
-      invitationDataTwo?.data?.inviteContributorsForRoleSetMembership;
+      invitationDataTwo?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResultTwo && invitationResultTwo.length > 0) {
       invitationIdTwo = invitationResultTwo[0].id;
     }
     expect(invitationIdTwo.length).toEqual(36);
 
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
-    const membershipData = userAppsData?.data?.me;
+    const roleData = userAppsData?.data?.me;
 
     // Assert
-    expect(membershipData?.communityInvitations).toEqual(
+    expect(roleData?.communityInvitations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           invitation: expect.objectContaining({
@@ -169,7 +166,7 @@ describe('Invitations', () => {
     );
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -194,7 +191,7 @@ describe('Invitations', () => {
     );
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult2 =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult2 && invitationResult2.length > 0) {
       invitationId = invitationResult2[0].id;
     }
@@ -226,7 +223,7 @@ describe('Invitations', () => {
 
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -255,7 +252,7 @@ describe('Invitations', () => {
 
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -282,7 +279,7 @@ describe('Invitations-flows', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await deleteInvitation(invitationId);
@@ -297,7 +294,7 @@ describe('Invitations-flows', () => {
     );
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -330,7 +327,7 @@ describe('Invitations-flows', () => {
     );
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -365,13 +362,13 @@ describe('Invitations-flows', () => {
     await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     // Act
@@ -423,15 +420,15 @@ describe('Invitations-flows', () => {
 
     const userDataOrig = await meQuery(TestUser.NON_SPACE_MEMBER);
 
-    const membershipDataOrig = userDataOrig?.data?.me;
+    const roleDataOrig = userDataOrig?.data?.me;
     const invitationsCount =
-      membershipDataOrig?.communityInvitations?.length ?? 0;
+      roleDataOrig?.communityInvitations?.length ?? 0;
     const applicationsCountOrig =
-      membershipDataOrig?.communityApplications?.length ?? 0;
+      roleDataOrig?.communityApplications?.length ?? 0;
 
     invitationId = 'invitationIdNotRetrieved';
     const invitationResult =
-      invitationData?.data?.inviteContributorsForRoleSetMembership;
+      invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
     if (invitationResult && invitationResult.length > 0) {
       invitationId = invitationResult[0].id;
     }
@@ -441,11 +438,11 @@ describe('Invitations-flows', () => {
     const res = await createApplication(baseScenario.space.community.roleSetId, TestUser.NON_SPACE_MEMBER);
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
-    const membershipData = userAppsData?.data?.me;
+    const roleData = userAppsData?.data?.me;
 
     // Assert
     expect(invitationsCount > 0).toBeTruthy();
-    expect(membershipData?.communityApplications).toHaveLength(
+    expect(roleData?.communityApplications).toHaveLength(
       applicationsCountOrig
     );
     expect(res.error?.errors[0].message).toContain(
@@ -458,7 +455,7 @@ describe('Invitations - Authorization', () => {
   const authErrorUpdateInvitationMessage =
     "Authorization: unable to grant 'update' privilege: event on invitation";
   const authErrorCreateInvitationMessage =
-    "Authorization: unable to grant 'community-invite' privilege";
+    "Authorization: unable to grant 'roleset-entry-role-invite' privilege";
   const accepted = 'accepted';
   const invited = 'invited';
 
@@ -466,7 +463,7 @@ describe('Invitations - Authorization', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await deleteInvitation(invitationId);
@@ -489,7 +486,7 @@ describe('Invitations - Authorization', () => {
         );
         invitationId = 'invitationIdNotRetrieved';
         const invitationResult =
-          invitationData?.data?.inviteContributorsForRoleSetMembership;
+          invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
         if (invitationResult && invitationResult.length > 0) {
           invitationId = invitationResult[0].id;
         }
@@ -521,7 +518,7 @@ describe('Invitations - Authorization', () => {
         );
         invitationId = 'invitationIdNotRetrieved';
         const invitationResult =
-          invitationData?.data?.inviteContributorsForRoleSetMembership;
+          invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
         if (invitationResult && invitationResult.length > 0) {
           invitationId = invitationResult[0].id;
         }
@@ -557,7 +554,7 @@ describe('Invitations - Authorization', () => {
         invitationId = 'invitationIdNotRetrieved';
         let invitationState = 'notretrieved';
         const invitationResult =
-          invitationData?.data?.inviteContributorsForRoleSetMembership;
+          invitationData?.data?.inviteContributorsEntryRoleOnRoleSet;
         if (invitationResult && invitationResult.length > 0) {
           invitationId = invitationResult[0].id;
           invitationState = invitationResult[0].state;

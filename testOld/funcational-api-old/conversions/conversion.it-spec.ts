@@ -16,7 +16,7 @@ import {
   assignRoleToOrganization,
   assignRoleToUser,
 } from '../../../server-api/src/functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@generated/alkemio-schema';
+import { RoleName } from '@generated/alkemio-schema';
 import {
   createOrganization,
   deleteOrganization,
@@ -78,13 +78,13 @@ describe.skip('Conversions', () => {
     await assignRoleToOrganization(
       entitiesId.organization.id,
       entitiesId.challenge.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await assignRoleToOrganization(
       newOrgId,
       entitiesId.challenge.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     const numberOfSpacesBeforeConversion = await getSpacesCount();
@@ -116,19 +116,19 @@ describe.skip('Conversions', () => {
     await assignRoleToOrganization(
       entitiesId.organization.id,
       newChCommunityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await assignRoleToUser(
       users.spaceMember.id,
       newChCommunityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       users.spaceMember.id,
       newChCommunityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
     const chalRes = await getChallengeData(newChallId);
 
@@ -160,19 +160,19 @@ describe.skip('Conversions', () => {
     const assignOpportunityOrgLead = await assignRoleToOrganization(
       entitiesId.organization.id,
       newOppCommunityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await assignRoleToUser(
       users.spaceMember.id,
       newOppCommunityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       users.spaceMember.id,
       newOppCommunityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     const oppRes = await getOpportunityData(newOppId);
@@ -301,19 +301,19 @@ describe.skip('Conversions', () => {
     await assignRoleToOrganization(
       entitiesId.organization.id,
       newChCommunityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await assignRoleToUser(
       users.spaceMember.id,
       newChCommunityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToUser(
       users.spaceMember.id,
       newChCommunityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     const chalRes = await getChallengeData(newChallId);

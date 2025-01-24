@@ -24,7 +24,7 @@ import {
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import {
   ChallengePreferenceType,
-  CommunityRoleType,
+  RoleName,
   SpacePreferenceType,
 } from '@alkemio/client-lib';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -67,12 +67,12 @@ beforeAll(async () => {
   await assignRoleToUser(
     users.qaUser.id,
     entitiesId.space.communityId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
   await assignRoleToUser(
     users.qaUser.id,
     entitiesId.space.communityId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await createApplication(

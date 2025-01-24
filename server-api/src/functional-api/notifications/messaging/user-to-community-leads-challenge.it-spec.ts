@@ -15,8 +15,7 @@ import {
   removeRoleFromOrganization,
 } from '@functional-api/roleset/roles-request.params';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
-import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
-import { CommunityRoleType, SpacePrivacyMode } from '@generated/graphql';
+import { RoleName, SpacePrivacyMode } from '@generated/graphql';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
@@ -72,30 +71,31 @@ beforeAll(async () => {
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.subspaceMember.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.subspaceAdmin.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
-  await assignUserAsOrganizationAdmin(
+  await assignRoleToUser(
     TestUserManager.users.spaceAdmin.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Admin
   );
 
   await assignRoleToOrganization(
     baseScenario.organization.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 });
 
@@ -258,19 +258,19 @@ describe('Notifications - send messages to Private Space, Public Subspace NO Com
     await removeRoleFromUser(
       TestUserManager.users.subspaceAdmin.id,
       baseScenario.subspace.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await removeRoleFromUser(
       TestUserManager.users.subspaceMember.id,
       baseScenario.subspace.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     await removeRoleFromOrganization(
       baseScenario.organization.id,
       baseScenario.subspace.community.roleSetId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
   });
 

@@ -16,7 +16,7 @@ import { deleteOrganization } from '@functional-api/contributor-management/organ
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { entitiesId } from '@test/types/entities-helper';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 
 const organizationName = 'auth-ga-org-name' + uniqueId;
 const hostNameId = 'auth-ga-org-nameid' + uniqueId;
@@ -39,7 +39,7 @@ beforeAll(async () => {
   await assignRoleToUser(
     users.qaUser.id,
     entitiesId.space.communityId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await sendMessageToRoom(

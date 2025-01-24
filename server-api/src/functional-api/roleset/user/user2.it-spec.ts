@@ -7,11 +7,8 @@ import {
 } from '../../journey/space/space.request.params';
 import { createSubspace } from '@src/graphql/mutations/journeys/subspace';
 import { TestUser } from '@alkemio/tests-lib';
-import {
-  assignRoleToUser,
-  assignUserToOrganization,
-} from '../roles-request.params';
-import { CommunityRoleType, SpaceVisibility } from '@generated/graphql';
+import { assignRoleToUser } from '../roles-request.params';
+import { RoleName, SpaceVisibility } from '@generated/graphql';
 import {
   createOrganization,
   deleteOrganization,
@@ -29,20 +26,10 @@ const availableRoles = ['member', 'lead'];
 
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
-  name: 'organization2',
+  name: 'user2',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
-      subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
-      },
+      subspace: {},
     },
   },
 };
@@ -53,42 +40,43 @@ beforeAll(async () => {
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Member
+    RoleName.Member
   );
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
-  await assignUserToOrganization(
+  await assignRoleToUser(
     TestUserManager.users.nonSpaceMember.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Associate
   );
 });
 
@@ -116,7 +104,10 @@ describe('User roles', () => {
       ])
     );
 
-    expect(spacesData?.[0].subspaces).toEqual(
+    const scenarioSpace = spacesData?.find(
+      space => space.id === baseScenario.space.id
+    );
+    expect(scenarioSpace?.subspaces).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           nameID: baseScenario.subspace.nameId,
@@ -125,18 +116,20 @@ describe('User roles', () => {
       ])
     );
 
-    expect(orgData).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          nameID: baseScenario.organization.nameId,
-          roles: expect.arrayContaining(['associate']),
-        }),
-      ])
+    const scenarioOrganization = orgData?.find(
+      org => org.id === baseScenario.organization.id
+    );
+    expect(scenarioOrganization).toEqual(
+      expect.objectContaining({
+        nameID: baseScenario.organization.nameId,
+        roles: expect.arrayContaining(['associate']),
+      })
     );
   });
 
   describe('Extended scenario', () => {
-    let orgId = '';
+    let organization2Id = '';
+    let organization2RoleSetId = '';
     let spaceId = '';
     let spaceRoleSetId = '';
     let chId = '';
@@ -151,12 +144,14 @@ describe('User roles', () => {
     let subsubspaceRoleSetId3 = '';
 
     beforeAll(async () => {
-      const orgRes = await createOrganization(
+      const organization2Response = await createOrganization(
         baseScenario.organization.profile.displayName + '1',
         baseScenario.organization.nameId + '1'
       );
-      orgId = orgRes?.data?.createOrganization.id ?? '';
-      const orgAccountId = orgRes?.data?.createOrganization.account?.id ?? '';
+      organization2Id = organization2Response?.data?.createOrganization.id ?? '';
+      organization2RoleSetId = organization2Response?.data?.createOrganization.roleSet.id ?? '';
+
+      const orgAccountId = organization2Response?.data?.createOrganization.account?.id ?? '';
 
       const spaceRes = await createSpaceAndGetData(
         spaceName2,
@@ -222,78 +217,79 @@ describe('User roles', () => {
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         spaceRoleSetId,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subspaceRoleSetId,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subsubspaceRoleSetId,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subspaceRoleSetId2,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subsubspaceRoleSetId2,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subsubspaceRoleSetId3,
-        CommunityRoleType.Member
+        RoleName.Member
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         spaceRoleSetId,
-        CommunityRoleType.Lead
+        RoleName.Lead
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subspaceRoleSetId,
-        CommunityRoleType.Lead
+        RoleName.Lead
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subsubspaceRoleSetId,
-        CommunityRoleType.Lead
+        RoleName.Lead
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subspaceRoleSetId2,
-        CommunityRoleType.Lead
+        RoleName.Lead
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subsubspaceRoleSetId2,
-        CommunityRoleType.Lead
+        RoleName.Lead
       );
 
       await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
         subsubspaceRoleSetId3,
-        CommunityRoleType.Lead
+        RoleName.Lead
       );
 
-      await assignUserToOrganization(
+      await assignRoleToUser(
         TestUserManager.users.nonSpaceMember.id,
-        orgId
+        organization2RoleSetId,
+        RoleName.Associate
       );
     });
     afterAll(async () => {
@@ -303,7 +299,7 @@ describe('User roles', () => {
       await deleteSpace(chId);
       await deleteSpace(chId2);
       await deleteSpace(spaceId);
-      await deleteOrganization(orgId);
+      await deleteOrganization(organization2Id);
     });
     test('user role - assignment to 2 Organizations, Spaces, Subspaces, Opportunities', async () => {
       // Act

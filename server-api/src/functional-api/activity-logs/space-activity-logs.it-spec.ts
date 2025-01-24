@@ -4,7 +4,7 @@ import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CalloutState,
   CalloutType,
-  CommunityRoleType,
+  RoleName,
   ActivityEventType,
   CalloutVisibility,
   SpacePrivacyMode,
@@ -107,7 +107,7 @@ describe('Activity logs - Space', () => {
     await assignRoleToUser(
       TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     // Act
     const resActivity = await getActivityLogOnCollaboration(
@@ -306,12 +306,12 @@ describe('Access to Activity logs - Space', () => {
     await assignRoleToUser(
       TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
     await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
   });
 

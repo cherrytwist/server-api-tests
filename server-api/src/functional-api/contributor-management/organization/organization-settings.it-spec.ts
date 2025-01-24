@@ -1,13 +1,14 @@
 import { getOrganizationData, updateOrganization } from './organization.request.params';
 import { updateOrganizationSettings } from './organization.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
-import { assignUserAsOrganizationOwner } from './organization-authorization-mutation';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { deleteUser, registerVerifiedUser } from '../user/user.request.params';
 import { eventOnOrganizationVerification } from './organization-verification.events.request.params';
+import { RoleName } from '@generated/alkemio-schema';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 
 const uniqueId = UniqueIDGenerator.getID();
 const firstName = `fn${uniqueId}`;
@@ -29,14 +30,16 @@ beforeAll(async () => {
     website: domain,
   });
 
-  await assignUserAsOrganizationOwner(
+  await assignRoleToUser(
     TestUserManager.users.spaceMember.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Owner
   );
 
-  await assignUserAsOrganizationOwner(
+  await assignRoleToUser(
     TestUserManager.users.spaceAdmin.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Owner
   );
 });
 
@@ -48,13 +51,13 @@ describe('Organization settings', () => {
   describe('DDT user WITH privileges to update organization settings', () => {
     // Arrange
     test.each`
-      userRole                 | message
-      ${TestUser.GLOBAL_ADMIN} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.SPACE_ADMIN}  | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
-      ${TestUser.SPACE_MEMBER} | ${'AUTHORIZATION_ORGANIZATION_MATCH_DOMAIN'}
+      userRole
+      ${TestUser.GLOBAL_ADMIN}
+      ${TestUser.SPACE_ADMIN}
+      ${TestUser.SPACE_MEMBER}
     `(
-      'User: "$userRole" get message: "$message", when intend to update organization settings ',
-      async ({ userRole, message }) => {
+      'User: "$userRole" is able to update organization settings ',
+      async ({ userRole }) => {
         // Act
         const res = await updateOrganizationSettings(
           baseScenario.organization.id,
@@ -120,7 +123,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
         expect(organizationMembers).toHaveLength(1);
@@ -149,7 +152,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
         expect(organizationMembers).toHaveLength(1);
@@ -178,7 +181,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
 
@@ -221,7 +224,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const origOrganizationMembers =
-          origOrgData?.data?.organization.associates;
+          origOrgData?.data?.organization.roleSet.usersInRole;
         const origMembersCount = origOrganizationMembers?.length ?? -999;
 
         // Act
@@ -232,7 +235,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
         const associates = organizationMembers?.map((m) => m.email) || [];
 
         // Assert
@@ -262,7 +265,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
         expect(organizationMembers).toHaveLength(1);
@@ -291,7 +294,7 @@ describe('Organization settings', () => {
           baseScenario.organization.id
         );
         const organizationMembers =
-          organizationData?.data?.organization.associates;
+          organizationData?.data?.organization.roleSet.usersInRole;
 
         // Assert
 

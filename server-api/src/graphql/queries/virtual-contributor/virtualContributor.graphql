@@ -1,4 +1,4 @@
-query VirtualContributor($id: UUID_NAMEID!) {
+query VirtualContributor($id: UUID!) {
   virtualContributor(ID: $id) {
     id
     nameID

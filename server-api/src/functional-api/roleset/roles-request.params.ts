@@ -1,9 +1,9 @@
 import { TestUser } from '@alkemio/tests-lib';
 import { graphqlErrorWrapper } from '../../utils/graphql.wrapper';
 import { getGraphqlClient } from '../../utils/graphqlClient';
-import { CommunityRoleType, OrganizationRole } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 
-export const getOrganizationRole = async (
+export const getRoleName = async (
   organizationID: string,
 
   userRole: TestUser = TestUser.GLOBAL_ADMIN
@@ -25,7 +25,7 @@ export const getOrganizationRole = async (
 export const assignRoleToUser = async (
   userID: string,
   roleSetID: string,
-  role: CommunityRoleType,
+  role: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -49,7 +49,7 @@ export const assignRoleToUser = async (
 export const assignRoleToUserExtendedData = async (
   userID: string,
   roleSetID: string,
-  role: CommunityRoleType,
+  role: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -73,7 +73,7 @@ export const assignRoleToUserExtendedData = async (
 export const removeRoleFromUser = async (
   userID: string,
   roleSetID: string,
-  role: CommunityRoleType = CommunityRoleType.Member,
+  role: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -97,7 +97,7 @@ export const removeRoleFromUser = async (
 export const removeRoleFromUserExtendedData = async (
   userID: string,
   roleSetID: string,
-  role: CommunityRoleType = CommunityRoleType.Member,
+  role: RoleName = RoleName.Member,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -121,7 +121,7 @@ export const removeRoleFromUserExtendedData = async (
 export const assignRoleToOrganization = async (
   organizationID: string,
   roleSetID: string,
-  role: CommunityRoleType = CommunityRoleType.Member,
+  role: RoleName = RoleName.Member,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -154,7 +154,7 @@ export const assignRoleToOrganization4 = async (
         roleData: {
           roleSetID,
           contributorID: organizationID,
-          role: CommunityRoleType.Member,
+          role: RoleName.Member,
         },
       },
       {
@@ -168,7 +168,7 @@ export const assignRoleToOrganization4 = async (
 export const removeRoleFromOrganization = async (
   organizationID: string,
   roleSetID: string,
-  role: CommunityRoleType = CommunityRoleType.Member,
+  role: RoleName = RoleName.Member,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
@@ -221,7 +221,7 @@ export const assignOrganizationAsCommunityLead = async (
         roleData: {
           roleSetID,
           contributorID: organizationID,
-          role: CommunityRoleType.Lead,
+          role: RoleName.Lead,
         },
       },
       {
@@ -232,26 +232,4 @@ export const assignOrganizationAsCommunityLead = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-/// TODO: This is a different context + should not be mixed up here
-export const assignUserToOrganization = async (
-  userID: string,
-  organizationID: string,
-  userRole: TestUser = TestUser.GLOBAL_ADMIN
-) => {
-  const graphqlClient = getGraphqlClient();
-  const callback = (authToken: string | undefined) =>
-    graphqlClient.assignOrganizationRoleToUser(
-      {
-        membershipData: {
-          userID,
-          organizationID,
-          role: OrganizationRole.Associate,
-        },
-      },
-      {
-        authorization: `Bearer ${authToken}`,
-      }
-    );
 
-  return graphqlErrorWrapper(callback, userRole);
-};

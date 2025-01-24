@@ -64,13 +64,13 @@ beforeAll(async () => {
   await assignRoleToUser(
     users.qaUser.id,
     entitiesId.space.communityId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await assignRoleToUser(
     users.qaUser.id,
     entitiesId.space.communityId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await createApplication(

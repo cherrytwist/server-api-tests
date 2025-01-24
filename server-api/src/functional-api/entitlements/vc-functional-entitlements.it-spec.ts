@@ -31,11 +31,11 @@ import {
   deleteVirtualContributorOnAccount,
 } from '@functional-api/contributor-management/virtual-contributor/vc.request.params';
 import { getAccountMainEntities } from '../account/account.params.request';
-import { PlatformRole } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
-  assignPlatformRoleToUser,
-  removePlatformRoleFromUser,
+  assignPlatformRole,
+  removePlatformRole,
 } from '@functional-api/platform/authorization-platform-mutation';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { EmptyModel } from '@src/scenario/models/EmptyModel';
@@ -56,13 +56,13 @@ describe('Functional tests - VC', () => {
       TestUserManager.users.nonSpaceMember.accountId,
       TestUser.NON_SPACE_MEMBER
     );
-    const vcs = spaceData.data?.account?.virtualContributors;
+    const vcs = spaceData.data?.lookup.account?.virtualContributors;
     for (const vc of vcs || []) {
       const vcId = vc.id;
      const a = await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
     }
 
-    const spaces = spaceData.data?.account?.spaces;
+    const spaces = spaceData.data?.lookup.account?.spaces;
     for (const space of spaces || []) {
       const spaceId = space.id;
       await deleteSpace(spaceId, TestUser.GLOBAL_ADMIN);
@@ -71,9 +71,9 @@ describe('Functional tests - VC', () => {
   describe('VC Campaign user vc creation', () => {
     beforeAll(async () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-      await assignPlatformRoleToUser(
+      await assignPlatformRole(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
     const allPrivileges = [
@@ -90,9 +90,9 @@ describe('Functional tests - VC', () => {
     ].sort();
 
     afterAll(async () => {
-      await removePlatformRoleFromUser(
+      await removePlatformRole(
         TestUserManager.users.nonSpaceMember.id,
-        PlatformRole.VcCampaign
+        RoleName.PlatformVcCampaign
       );
     });
 

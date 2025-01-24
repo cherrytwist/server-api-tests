@@ -1,13 +1,15 @@
-query GetAccountMainEntities($accountId: UUID_NAMEID!) {
-  account(ID: $accountId) {
-    spaces {
-      id
-    }
-    innovationPacks {
-      id
-    }
-    virtualContributors {
-      id
+query GetAccountMainEntities($accountId: UUID!) {
+  lookup {
+    account(ID: $accountId) {
+      spaces {
+        id
+      }
+      innovationPacks {
+        id
+      }
+      virtualContributors {
+        id
+      }
     }
   }
 }

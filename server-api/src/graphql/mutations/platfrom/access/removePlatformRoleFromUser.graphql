@@ -1,0 +1,5 @@
+mutation removePlatformRoleFromUser($roleData: RemovePlatformRoleInput!) {
+  removePlatformRoleFromUser(roleData: $roleData) {
+    ...UserDataLight
+  }
+}

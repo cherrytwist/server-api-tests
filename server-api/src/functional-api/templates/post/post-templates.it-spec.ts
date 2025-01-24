@@ -25,7 +25,7 @@ import { TestUser } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import { CommunityRoleType } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 import { TestSetupUtils } from '@src/scenario/TestSetupUtils';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -343,7 +343,7 @@ describe('Post templates - CRUD Authorization', () => {
     await assignRoleToUser(
       TestUserManager.users.spaceAdmin.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Admin
+      RoleName.Admin
     );
   });
   describe('Post templates - Create', () => {

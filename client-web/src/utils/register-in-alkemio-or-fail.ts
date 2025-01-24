@@ -69,7 +69,7 @@ export const assignGA = async (userID: string) => {
   const requestParams = {
     operationName: null,
     query: `mutation assignUserAsGlobalAdmin($input: AssignGlobalAdminInput!) {
-      assignUserAsGlobalAdmin(membershipData: $input) {
+      assignUserAsGlobalAdmin(roleData: $input) {
         id
         displayName
       }

@@ -1,4 +1,4 @@
-query GetRolesOrganization($organizationID: UUID_NAMEID!) {
+query GetRolesOrganization($organizationID: UUID!) {
   rolesOrganization(rolesData: { organizationID: $organizationID }) {
     spaces {
       id

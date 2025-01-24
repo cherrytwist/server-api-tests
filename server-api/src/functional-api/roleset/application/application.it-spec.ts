@@ -9,7 +9,7 @@ import { updateSpaceSettings } from '../../journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { deleteUser } from '../../contributor-management/user/user.request.params';
@@ -24,9 +24,7 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import {
   TestScenarioConfig,
-  TestScenarioNoPreCreationConfig,
 } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
 let applicationId = '';
 let subspaceApplicationId = '';
@@ -35,18 +33,10 @@ let roleSetPendingMemberships: any;
 const isMember = '';
 
 let baseScenario: OrganizationWithSpaceModel;
-let baseScenario2: EmptyModel;
-
-const scenarioConfig2: TestScenarioNoPreCreationConfig = {
-  name: 'application-flows',
-};
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'application',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
       collaboration: {
         addCallouts: false,
@@ -76,7 +66,7 @@ describe('Application', () => {
     await removeRoleFromUser(
       TestUserManager.users.qaUser.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     if (applicationId && applicationId.length === 36) {
@@ -312,7 +302,7 @@ describe('Application-flows', () => {
     await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
   });
 
@@ -320,7 +310,7 @@ describe('Application-flows', () => {
     await removeRoleFromUser(
       TestUserManager.users.qaUser.id,
       baseScenario.subspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     if (subspaceApplicationId.length === 36) {
       await deleteApplication(subspaceApplicationId);
@@ -362,7 +352,7 @@ describe('Application-flows', () => {
 
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
-    const membershipData = userAppsData?.data?.me?.communityApplications;
+    const roleData = userAppsData?.data?.me?.communityApplications;
     const subspaceAppOb = [
       expect.objectContaining({
         application: expect.objectContaining({
@@ -377,11 +367,11 @@ describe('Application-flows', () => {
       }),
     ];
 
-    const filteredMembershipData =
-      membershipData?.filter(app => app.application.state == 'new') ?? [];
+    const filteredroleData =
+      roleData?.filter(app => app.application.state == 'new') ?? [];
 
     // Assert
-    expect(filteredMembershipData).toEqual(
+    expect(filteredroleData).toEqual(
       expect.arrayContaining(subspaceAppOb)
     );
   });
@@ -403,7 +393,7 @@ describe('Application-flows', () => {
     await eventOnRoleSetApplication(applicationId, 'REJECT');
 
     const userAppsDataAfter = await meQuery(TestUser.NON_SPACE_MEMBER);
-    const membershipDataAfter =
+    const roleDataAfter =
       userAppsDataAfter?.data?.me?.communityApplications;
 
     const subspaceAppOb = [
@@ -417,7 +407,7 @@ describe('Application-flows', () => {
     ];
 
     // Assert
-    expect(membershipDataAfter).not.toContain(subspaceAppOb);
+    expect(roleDataAfter).not.toContain(subspaceAppOb);
 
     // Unset the subspaceApplicationId so that afterEach does not try to delete it again
     subspaceApplicationId = '';

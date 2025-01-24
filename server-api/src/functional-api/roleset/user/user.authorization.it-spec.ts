@@ -7,13 +7,13 @@ import { TestUser } from '@alkemio/tests-lib';
 import {
   sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC,
   sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC,
-  sorted__read_applyToCommunity,
-  sorted__read_applyToCommunity_invite_addVC,
+  sorted__read_applyToRoleSet,
+  sorted__read_applyToRoleSet_invite_addVC,
 } from '@common/constants/privileges';
 import { removeRoleFromUser } from '../roles-request.params';
 import {
   CommunityMembershipPolicy,
-  CommunityRoleType,
+  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -74,19 +74,19 @@ beforeAll(async () => {
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.subspace.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
     baseScenario.space.community.roleSetId,
-    CommunityRoleType.Lead
+    RoleName.Lead
   );
 });
 
@@ -94,20 +94,20 @@ afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
-describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
+describe('Verify ROLESET_ENTRY_ROLE_ASSIGN privilege', () => {
   describe('DDT role privilege to assign member to space', () => {
-    // ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${sorted__applyToCommunity} - check if the privileges, that the role should have are: ["COMMUNITY_ADD_MEMBER", "COMMUNITY_APPLY", "COMMUNITY_INVITE", "CREATE", "DELETE", "GRANT", "READ", "UPDATE", ]
+    // ${TestUser.GLOBAL_COMMUNITY_ADMIN} | ${sorted__applyToCommunity} - check if the privileges, that the role should have are: ["ROLESET_ENTRY_ROLE_ASSIGN", "ROLESET_ENTRY_ROLE_APPLY", "ROLESET_ENTRY_ROLE_INVITE", "CREATE", "DELETE", "GRANT", "READ", "UPDATE", ]
     // Arrange
     test.each`
       user                             | myPrivileges
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_apply_invite_addVC_accessVC}
-      ${TestUser.SPACE_MEMBER}         | ${sorted__read_applyToCommunity}
-      ${TestUser.SUBSPACE_ADMIN}       | ${sorted__read_applyToCommunity_invite_addVC}
-      ${TestUser.SUBSPACE_MEMBER}      | ${sorted__read_applyToCommunity}
-      ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__read_applyToCommunity}
-      ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToCommunity}
+      ${TestUser.SPACE_MEMBER}         | ${sorted__read_applyToRoleSet}
+      ${TestUser.SUBSPACE_ADMIN}       | ${sorted__read_applyToRoleSet_invite_addVC}
+      ${TestUser.SUBSPACE_MEMBER}      | ${sorted__read_applyToRoleSet}
+      ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__read_applyToRoleSet}
+      ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToRoleSet}
     `(
       'User: "$user", should have privileges: "$myPrivileges" for space journey',
       async ({ user, myPrivileges }) => {
@@ -131,11 +131,11 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SPACE_MEMBER}         | ${['COMMUNITY_APPLY']}
+      ${TestUser.SPACE_MEMBER}         | ${['ROLESET_ENTRY_ROLE_APPLY']}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SUBSPACE_MEMBER}      | ${sorted__read_applyToCommunity}
-      ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__read_applyToCommunity_invite_addVC}
-      ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToCommunity}
+      ${TestUser.SUBSPACE_MEMBER}      | ${sorted__read_applyToRoleSet}
+      ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__read_applyToRoleSet_invite_addVC}
+      ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToRoleSet}
     `(
       'User: "$user", should have privileges: "$myPrivileges" for subspace journey',
       async ({ user, myPrivileges }) => {
@@ -159,11 +159,11 @@ describe('Verify COMMUNITY_ADD_MEMBER privilege', () => {
       ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
       ${TestUser.SPACE_ADMIN}          | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SPACE_MEMBER}         | ${['COMMUNITY_APPLY']}
+      ${TestUser.SPACE_MEMBER}         | ${['ROLESET_ENTRY_ROLE_APPLY']}
       ${TestUser.SUBSPACE_ADMIN}       | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SUBSPACE_MEMBER}      | ${['COMMUNITY_APPLY']}
+      ${TestUser.SUBSPACE_MEMBER}      | ${['ROLESET_ENTRY_ROLE_APPLY']}
       ${TestUser.SUBSUBSPACE_ADMIN}    | ${sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC}
-      ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToCommunity}
+      ${TestUser.SUBSUBSPACE_MEMBER}   | ${sorted__read_applyToRoleSet}
     `(
       'User: "$user", should have privileges: "$myPrivileges" for subsubspace journey',
       async ({ user, myPrivileges }) => {

@@ -15,7 +15,7 @@ import {
   CommunityMembershipPolicy,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
-import { CommunityRoleType, PreferenceType } from '@generated/graphql';
+import { RoleName, PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
@@ -194,7 +194,7 @@ describe('Notifications - member join community', () => {
     await assignRoleToUser(
       TestUserManager.users.qaUser.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member,
+      RoleName.Member,
       TestUser.GLOBAL_ADMIN
     );
 
@@ -233,13 +233,13 @@ describe('Notifications - member join community', () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.subspace.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
       baseScenario.space.community.roleSetId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     // Act

@@ -24,9 +24,6 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'application-lifecycle',
   space: {
-    collaboration: {
-      addCallouts: true,
-    },
     subspace: {
       collaboration: {
         addCallouts: true,

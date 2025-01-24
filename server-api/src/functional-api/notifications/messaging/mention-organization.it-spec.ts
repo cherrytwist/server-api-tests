@@ -5,7 +5,6 @@ import { TestUserManager } from '@src/scenario/TestUserManager';
 import { createPostOnCallout } from '@functional-api/callout/post/post.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
-import { assignUserAsOrganizationAdmin } from '@functional-api/contributor-management/organization/organization-authorization-mutation';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { PreferenceType } from '@generated/graphql';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -16,6 +15,8 @@ import {
   deleteMailSlurperMails,
   getMailsData,
 } from '@utils/mailslurper.rest.requests';
+import { RoleName } from '@generated/alkemio-schema';
+import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 
 const uniqueId = UniqueIDGenerator.getID();
 let postCommentsIdSpace = '';
@@ -74,9 +75,10 @@ beforeAll(async () => {
     contactEmail: 'test-org@alkem.io',
   });
 
-  await assignUserAsOrganizationAdmin(
+  await assignRoleToUser(
     TestUserManager.users.qaUser.id,
-    baseScenario.organization.id
+    baseScenario.organization.roleSetId,
+    RoleName.Admin
   );
 
   await changePreferenceUser(

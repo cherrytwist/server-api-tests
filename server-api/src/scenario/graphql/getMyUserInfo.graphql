@@ -17,6 +17,8 @@ query getMyUserInfo {
     }
   }
   platform {
-    myRoles
+    roleSet {
+      myRoles
+    }
   }
 }

@@ -1,19 +1,19 @@
 import { TestUser } from '@alkemio/tests-lib';
-import { PlatformRole } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 import { graphqlRequestAuth } from '@utils/graphql.request';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';
 
-export const assignPlatformRoleToUser = async (
-  userID: string,
-  platformRole: PlatformRole,
+export const assignPlatformRole = async (
+  contributorID: string,
+  roleName: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.assignPlatformRoleToUser(
       {
-        input: { userID, role: platformRole },
+        roleData: { contributorID, role: roleName },
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -23,16 +23,16 @@ export const assignPlatformRoleToUser = async (
   return graphqlErrorWrapper(callback, userRole);
 };
 
-export const removePlatformRoleFromUser = async (
-  userID: string,
-  platformRole: PlatformRole,
+export const removePlatformRole = async (
+  contributorID: string,
+  roleName: RoleName,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.removePlatformRoleFromUser(
       {
-        input: { userID, role: platformRole },
+        roleData: { contributorID, role: roleName },
       },
       {
         authorization: `Bearer ${authToken}`,

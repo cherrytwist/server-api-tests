@@ -15,8 +15,8 @@ import {
   updateSpaceSettings,
 } from '@functional-api/journey/space/space.request.params';
 import { TestUser, UniqueIDGenerator } from '@alkemio/tests-lib';
-import { CalloutType, CommunityRoleType } from '@generated/graphql';
-import { CalloutVisibility, PlatformRole } from '@generated/alkemio-schema';
+import { CalloutType, RoleName } from '@generated/graphql';
+import { CalloutVisibility } from '@generated/alkemio-schema';
 import { SpaceModel } from './models/SpaceModel';
 import { createSubspace } from '@functional-api/journey/subspace/subspace.request.params';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
@@ -26,8 +26,9 @@ import {
 } from './config/test-scenario-config';
 import { TestUserManager } from './TestUserManager';
 import { UserModel } from './models/UserModel';
-import { assignPlatformRoleToUser } from '@functional-api/platform/authorization-platform-mutation';
+import { assignPlatformRole } from '@functional-api/platform/authorization-platform-mutation';
 import { logElapsedTime } from '@utils/profiling';
+import { OrganizationModel } from './models/OrganizationModel';
 
 export class TestScenarioFactory {
   public static async createBaseScenarioEmpty(
@@ -52,10 +53,19 @@ export class TestScenarioFactory {
   public static async createBaseScenarioPrivate(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
-    const scenarioName = scenarioConfig.name;
-    await TestUserManager.populateUserModelMap();
-    await this.populateGlobalRoles();
-    const baseScenario = await this.createOrganization(scenarioName);
+    const baseScenario: OrganizationWithSpaceModel =
+      this.createEmptyBaseScenario();
+    baseScenario.name = scenarioConfig.name;
+
+    try {
+      await TestUserManager.populateUserModelMap();
+      await this.populateGlobalRoles();
+      await this.createOrganization(baseScenario.name, baseScenario.organization);
+      baseScenario.scenarioSetupSucceeded = true;
+    } catch (e) {
+      console.error(`Unable to create core scenario setup: ${e}`);
+      process.exit(1); // Exit the Jest process with an error code.
+    }
     if (!scenarioConfig.space) {
       // nothing more to do, return
       return baseScenario;
@@ -64,13 +74,13 @@ export class TestScenarioFactory {
     baseScenario.space = await this.createRootSpace(
       baseScenario.space,
       baseScenario.organization.accountId,
-      scenarioName
+      baseScenario.name
     );
 
     await this.populateSpace(
       scenarioConfig.space,
       baseScenario.space,
-      scenarioName,
+      baseScenario.name,
       TestUserManager.users.spaceAdmin,
       0
     );
@@ -83,13 +93,13 @@ export class TestScenarioFactory {
 
     await this.createSubspace(
       baseScenario.space.id,
-      scenarioName,
+      baseScenario.name,
       baseScenario.subspace
     );
     await this.populateSpace(
       subspace,
       baseScenario.subspace,
-      scenarioName,
+      baseScenario.name,
       TestUserManager.users.subspaceAdmin,
       1
     );
@@ -102,13 +112,13 @@ export class TestScenarioFactory {
 
     await this.createSubspace(
       baseScenario.subspace.id,
-      scenarioName,
+      baseScenario.name,
       baseScenario.subsubspace
     );
     await this.populateSpace(
       subsubspace,
       baseScenario.subsubspace,
-      scenarioName,
+      baseScenario.name,
       TestUserManager.users.subsubspaceAdmin,
       2
     );
@@ -117,45 +127,55 @@ export class TestScenarioFactory {
   }
 
   private static async populateGlobalRoles(): Promise<void> {
-    await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignRoleNameToUser(
       TestUserManager.users.globalLicenseAdmin,
-      PlatformRole.LicenseManager
+      RoleName.GlobalLicenseManager
     );
 
-    await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignRoleNameToUser(
       TestUserManager.users.globalSupportAdmin,
-      PlatformRole.Support
+      RoleName.GlobalSupport
     );
 
-    await this.checkAndAssignPlatformRoleToUser(
+    await this.checkAndAssignRoleNameToUser(
       TestUserManager.users.betaTester,
-      PlatformRole.BetaTester
+      RoleName.PlatformBetaTester
     );
   }
 
-  private static async checkAndAssignPlatformRoleToUser(
+  private static async checkAndAssignRoleNameToUser(
     userModel: UserModel,
-    role: PlatformRole
+    role: RoleName
   ): Promise<void> {
-    const alreadyHasRole = userModel.platformRoles.includes(role);
+    const alreadyHasRole = userModel.RoleNames.includes(role);
     if (!alreadyHasRole) {
-      await assignPlatformRoleToUser(userModel.id, role);
+      await assignPlatformRole(userModel.id, role);
     }
   }
 
   public static async cleanUpBaseScenario(
     baseScenario: OrganizationWithSpaceModel
   ): Promise<void> {
-    if (baseScenario.subsubspace.id.length > 0) {
-      const a = await deleteSpace(baseScenario.subsubspace.id);
+    try {
+      if (baseScenario.subsubspace && baseScenario.subsubspace.id.length > 0) {
+        await deleteSpace(baseScenario.subsubspace.id);
+      }
+      if (baseScenario.subspace && baseScenario.subspace.id.length > 0) {
+        await deleteSpace(baseScenario.subspace.id);
+      }
+      if (baseScenario.space && baseScenario.space.id.length > 0) {
+        await deleteSpace(baseScenario.space.id);
+      }
+      if (
+        baseScenario.organization &&
+        baseScenario.organization.id.length > 0
+      ) {
+        await deleteOrganization(baseScenario.organization.id);
+      }
+    } catch (e) {
+      console.error(`Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`);
+      process.exit(1); // Exit the Jest process with an error code.
     }
-    if (baseScenario.subspace.id.length > 0) {
-      const b = await deleteSpace(baseScenario.subspace.id);
-    }
-    if (baseScenario.space.id.length > 0) {
-      const c = await deleteSpace(baseScenario.space.id);
-    }
-    const d = await deleteOrganization(baseScenario.organization.id);
   }
 
   private static async populateSpace(
@@ -172,11 +192,7 @@ export class TestScenarioFactory {
         await this.assignUsersToMemberRole(roleSetID, spaceLevel);
       }
       if (spaceCommunityConfig.addAdmin) {
-        await assignRoleToUser(
-          communityAdmin.id,
-          roleSetID,
-          CommunityRoleType.Admin
-        );
+        await assignRoleToUser(communityAdmin.id, roleSetID, RoleName.Admin);
       }
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
@@ -189,9 +205,9 @@ export class TestScenarioFactory {
   }
 
   private static async createOrganization(
-    scenarioName: string
-  ): Promise<OrganizationWithSpaceModel> {
-    const model: OrganizationWithSpaceModel = this.createEmptyBaseScenario();
+    scenarioName: string,
+    model: OrganizationModel
+  ): Promise<OrganizationModel> {
     const uniqueId = UniqueIDGenerator.getID();
     const truncatedScenarioName = scenarioName.slice(0, 18);
     const orgName = `${truncatedScenarioName}-${uniqueId}`;
@@ -212,19 +228,17 @@ export class TestScenarioFactory {
       );
     }
 
-    model.organization.id = responseOrg.data?.createOrganization.id ?? '';
-    model.organization.nameId =
-      responseOrg.data?.createOrganization.nameID ?? '';
-    model.organization.agentId =
-      responseOrg.data?.createOrganization.agent.id ?? '';
-    model.organization.accountId =
-      responseOrg.data?.createOrganization.account?.id ?? '';
-    model.organization.verificationId =
-      responseOrg.data?.createOrganization.verification.id ?? '';
-    model.organization.profile = {
-      id: responseOrg.data?.createOrganization.profile.id ?? '',
-      displayName:
-        responseOrg.data?.createOrganization.profile.displayName ?? '',
+    const orgResponseData = responseOrg.data?.createOrganization;
+
+    model.id = orgResponseData.id ?? '';
+    model.nameId = orgResponseData.nameID ?? '';
+    model.roleSetId = orgResponseData.roleSet.id ?? '';
+    model.agentId = orgResponseData.agent.id ?? '';
+    model.accountId = orgResponseData.account?.id ?? '';
+    model.verificationId = orgResponseData.verification.id ?? '';
+    model.profile = {
+      id: orgResponseData.profile.id ?? '',
+      displayName: orgResponseData.profile.displayName ?? '',
     };
     return model;
   }
@@ -402,7 +416,7 @@ export class TestScenarioFactory {
         usersIdsToAssign.push(TestUserManager.users.subsubspaceMember.id);
     }
     for (const userID of usersIdsToAssign) {
-      await assignRoleToUser(userID, roleSetId, CommunityRoleType.Member);
+      await assignRoleToUser(userID, roleSetId, RoleName.Member);
     }
   }
 
@@ -430,10 +444,12 @@ export class TestScenarioFactory {
 
   private static createEmptyBaseScenario(): OrganizationWithSpaceModel {
     return {
+      name: '',
       organization: {
         id: '',
         agentId: '',
         accountId: '',
+        roleSetId: '',
         verificationId: '',
         profile: {
           id: '',
@@ -444,6 +460,7 @@ export class TestScenarioFactory {
       space: this.createEmptySpaceContext(),
       subspace: this.createEmptySpaceContext(),
       subsubspace: this.createEmptySpaceContext(),
+      scenarioSetupSucceeded: false,
     };
   }
 

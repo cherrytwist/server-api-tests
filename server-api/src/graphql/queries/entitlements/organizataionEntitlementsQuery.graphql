@@ -1,4 +1,4 @@
-query OrganizationEntitlementsQuery($ID: UUID_NAMEID!) {
+query OrganizationEntitlementsQuery($ID: UUID!) {
   organization(ID: $ID) {
     account {
       subscriptions {

@@ -16,17 +16,19 @@ import {
   deleteOrganization,
 } from '../organization/organization.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
-import {
-  assignUserAsOrganizationOwner,
-  removeUserAsOrganizationOwner,
-} from './organization-authorization-mutation';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import {
+  assignRoleToUser,
+  removeRoleFromUser,
+} from '@functional-api/roleset/roles-request.params';
+import { RoleName } from '@generated/alkemio-schema';
 const uniqueId = UniqueIDGenerator.getID();
 
 let organizationId = '';
+let organizationRoleSetId = '';
 const credentialsType = 'ORGANIZATION_OWNER';
 const organizationName = 'org-auth-org-name' + uniqueId;
 const hostNameId = 'org-auth-org-nameid' + uniqueId;
@@ -37,11 +39,13 @@ const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization-owner',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  baseScenario =
+    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 beforeEach(async () => {
   const request = await createOrganization(organizationName, hostNameId);
   organizationId = request.data?.createOrganization?.id ?? '';
+  organizationRoleSetId = request.data?.createOrganization?.roleSet.id ?? '';
 
   responseData = {
     resourceID: organizationId,
@@ -57,15 +61,16 @@ describe('Organization Owner', () => {
   test('should create organization owner', async () => {
     // Act
 
-    const res = await assignUserAsOrganizationOwner(
+    const res = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
     // Assert
-    expect(
-      res?.data?.assignOrganizationRoleToUser?.agent?.credentials
-    ).toContainObject(responseData);
+    expect(res?.data?.assignRoleToUser?.agent?.credentials).toContainObject(
+      responseData
+    );
   });
 
   test('should add same user as owner of 2 organization', async () => {
@@ -74,26 +79,28 @@ describe('Organization Owner', () => {
       `OrgTwoOwnerOne-${uniqueId}`,
       `orgtwoownerone-${uniqueId}`
     );
-    const organizationIdTwo = responseOrgTwo.data?.createOrganization?.id ?? '';
+    const org2Data = responseOrgTwo.data?.createOrganization;
+    const organizationIdTwo = org2Data?.id ?? '';
+    const organizationRoleSetIdTwo = org2Data?.roleSet.id ?? '';
 
     // Act
-    const resOne = await assignUserAsOrganizationOwner(
+    const resOne = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
-    const resTwo = await assignUserAsOrganizationOwner(
+    const resTwo = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationIdTwo
+      organizationRoleSetIdTwo,
+      RoleName.Owner
     );
 
     // Assert
-    expect(
-      resOne?.data?.assignOrganizationRoleToUser?.agent?.credentials
-    ).toContainObject(responseData);
-    expect(
-      resTwo?.data?.assignOrganizationRoleToUser?.agent?.credentials
-    ).toContainObject({
+    expect(resOne?.data?.assignRoleToUser?.agent?.credentials).toContainObject(
+      responseData
+    );
+    expect(resTwo?.data?.assignRoleToUser?.agent?.credentials).toContainObject({
       resourceID: organizationIdTwo,
       type: credentialsType,
     });
@@ -103,75 +110,88 @@ describe('Organization Owner', () => {
 
   test('should remove user owner from organization', async () => {
     // Arrange
-    await assignUserAsOrganizationOwner(
+    await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
-    await assignUserAsOrganizationOwner(
+    await assignRoleToUser(
       TestUserManager.users.nonSpaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
     // Act
-    const res = await removeUserAsOrganizationOwner(
+    const res = await removeRoleFromUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
     // Assert
     expect(
-      res?.data?.removeOrganizationRoleFromUser?.agent?.credentials
+      res?.data?.removeRoleFromUser?.agent?.credentials
     ).not.toContainObject(responseData);
   });
 
   test('should not remove the only owner of an organization', async () => {
     // Arrange
-    await assignUserAsOrganizationOwner(
+    await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
     // Act
-    const res = await removeUserAsOrganizationOwner(
+    const res = await removeRoleFromUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
     // Assert
     expect(res?.error?.errors[0].message).toContain(
-      `Not allowed to remove last owner for Organization: ${organizationId}`
+      `Min limit of users reached for role 'owner': 1, cannot remove user from role on RoleSet: ${organizationRoleSetId}, type: organization`
     );
   });
 
   test('should not return user credentials for removing user not owner of an Organization', async () => {
     // Act
-    const res = await removeUserAsOrganizationOwner(
+    const res = await removeRoleFromUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
 
     // Assert
     expect(
-      res?.data?.removeOrganizationRoleFromUser?.agent?.credentials
+      res?.data?.removeRoleFromUser?.agent?.credentials
     ).not.toContainObject(responseData);
   });
 
-  test('should throw error for assigning same organization owner twice', async () => {
+  test('should not result in additional credential for assigning same organization owner twice', async () => {
     // Arrange
-    await assignUserAsOrganizationOwner(
+    const firstAssignmentResponse = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
+    const credentialsCount =
+      firstAssignmentResponse?.data?.assignRoleToUser?.agent?.credentials
+        ?.length || -999;
 
     // Act
-    const res = await assignUserAsOrganizationOwner(
+    const secondAssignmentResponse = await assignRoleToUser(
       TestUserManager.users.spaceMember.id,
-      organizationId
+      organizationRoleSetId,
+      RoleName.Owner
     );
+    const updatedCredentialsCount =
+      secondAssignmentResponse?.data?.assignRoleToUser?.agent?.credentials
+        ?.length || -999;
+
     // Assert
-    expect(res?.error?.errors[0].message).toEqual(
-      `Agent (${TestUserManager.users.spaceMember.agentId}) already has assigned credential: organization-owner`
-    );
+    expect(updatedCredentialsCount).toEqual(credentialsCount);
   });
 });

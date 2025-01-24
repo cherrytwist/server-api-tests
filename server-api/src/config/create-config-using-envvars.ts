@@ -34,11 +34,6 @@ export const createConfigUsingEnvVars = (): AlkemioTestConfig => {
         email: '',
         password: process.env.AUTH_TEST_HARNESS_PASSWORD ?? 'not set',
       },
-      // user: {
-      //   firstName: process.env.USER_FIRST_NAME || 'fn',
-      //   lastName: process.env.USER_LAST_NAME || 'ln',
-      //   email: process.env.USER_EMAIL || `default${uniqueId}@alkem.io`,
-      // },
     },
   };
   return config;

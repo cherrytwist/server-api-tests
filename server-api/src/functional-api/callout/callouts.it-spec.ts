@@ -436,7 +436,6 @@ describe('Callouts - AUTH Subsubspace', () => {
       ${TestUser.SPACE_ADMIN}        | ${'"data":{"createCalloutOnCalloutsSet"'}
       ${TestUser.SUBSPACE_ADMIN}     | ${'"data":{"createCalloutOnCalloutsSet"'}
       ${TestUser.SUBSUBSPACE_ADMIN}  | ${'"data":{"createCalloutOnCalloutsSet"'}
-      ${TestUser.SPACE_MEMBER}       | ${'"data":{"createCalloutOnCalloutsSet"'}
       ${TestUser.SUBSPACE_MEMBER}    | ${'"data":{"createCalloutOnCalloutsSet"'}
       ${TestUser.SUBSUBSPACE_MEMBER} | ${'"data":{"createCalloutOnCalloutsSet"'}
     `(
@@ -461,6 +460,7 @@ describe('Callouts - AUTH Subsubspace', () => {
     test.each`
       userRole                     | message
       ${TestUser.NON_SPACE_MEMBER} | ${'errors'}
+      ${TestUser.SPACE_MEMBER}     | ${'errors'}
     `(
       'User: "$userRole" get message: "$message", who intend to create callout',
       async ({ userRole, message }) => {

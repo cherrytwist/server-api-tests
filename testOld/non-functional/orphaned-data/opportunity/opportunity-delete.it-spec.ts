@@ -19,7 +19,7 @@ import {
   assignRoleToOrganization,
 } from '@functional-api/roleset/roles-request.params';
 import { users } from '@utils/queries/users-data';
-import { CommunityRoleType } from '@generated/graphql';
+import { RoleName } from '@generated/graphql';
 
 const organizationName = 'post-org-name' + uniqueId;
 const hostNameId = 'post-org-nameid' + uniqueId;
@@ -78,25 +78,25 @@ describe('Full Opportunity Deletion', () => {
     await assignRoleToUser(
       users.notificationsAdmin.email,
       entitiesId.opportunity.communityId,
-      CommunityRoleType.Member
+      RoleName.Member
     );
     await assignRoleToUser(
       users.notificationsAdmin.email,
       entitiesId.opportunity.communityId,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Assign organization as opportunity community member and lead
     await assignRoleToOrganization(
       entitiesId.opportunity.communityId,
       entitiesId.organization.id,
-      CommunityRoleType.Member
+      RoleName.Member
     );
 
     await assignRoleToOrganization(
       entitiesId.opportunity.communityId,
       entitiesId.organization.id,
-      CommunityRoleType.Lead
+      RoleName.Lead
     );
 
     // Act
