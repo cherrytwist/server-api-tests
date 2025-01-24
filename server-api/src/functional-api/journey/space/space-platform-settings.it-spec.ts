@@ -26,6 +26,7 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { TestUserManager } from '@src/scenario/TestUserManager';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -206,16 +207,20 @@ describe('Update space platform settings', () => {
     });
 
     test.each`
-      user                             | email                         | communicationMyPrivileges                                                                  | subspacesCount | opportunitiesCount
-      ${TestUser.GLOBAL_ADMIN}         | ${'admin@alkem.io'}           | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}           | ${1}
-      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${'global.spaces@alkem.io'}   | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}           | ${1}
-      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${'community.admin@alkem.io'} | ${readPrivilege}                                                                           | ${1}           | ${1}
+      user                             | communicationMyPrivileges                                                                  | subspacesCount | opportunitiesCount
+      ${TestUser.GLOBAL_ADMIN}         | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}           | ${1}
+      ${TestUser.GLOBAL_LICENSE_ADMIN} | ${sorted__create_read_update_delete_grant_authorizationReset_createSubspace_platformAdmin} | ${1}           | ${1}
+      ${TestUser.GLOBAL_SUPPORT_ADMIN} | ${readPrivilege}                                                                           | ${1}           | ${1}
     `(
       'User role: "$user", have access to public archived Space',
-      async ({ user, email, communicationMyPrivileges, subspacesCount }) => {
+      async ({ user, communicationMyPrivileges, subspacesCount }) => {
         // Arrange
+        const userModel = TestUserManager.getUserModelByType(user);
         const getUserRoleSpaceDataBeforeArchive =
-          await getUserRoleSpacesVisibility(email, SpaceVisibility.Active);
+          await getUserRoleSpacesVisibility(
+            userModel.id,
+            SpaceVisibility.Active
+          );
         const beforeVisibilityChangeAllSpaces =
           getUserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
         beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {

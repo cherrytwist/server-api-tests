@@ -3,6 +3,7 @@ import { createInnovationPack } from './innovation_pack.request.params';
 import { whiteboardTemplateValues1 } from './whiteboard-values-fixed';
 import { createWhiteboardTemplate } from '@functional-api/templates/whiteboard/whiteboard-templates.request.params';
 import { getOrganizations } from '@functional-api/contributor-management/organization/organization.request.params';
+import { LogManager } from '@src/scenario/LogManager';
 
 const uniqueId = UniqueIDGenerator.getID();
 
@@ -18,19 +19,12 @@ const main = async () => {
   const firstAvailableOrganizationId =
     organizationsData.data?.organizations[0].id;
   const providerId = process.env.ORG_ID || firstAvailableOrganizationId || '';
-  const packData = await createInnovationPack(
-    packName,
-    packNameId,
-    providerId
-  );
+  const packData = await createInnovationPack(packName, packNameId, providerId);
   const templateSetId =
     packData?.data?.createInnovationPack.templatesSet?.id ?? '';
-  await createWhiteboardTemplate(
-    templateSetId,
-    whiteboardTemplateValues
-  );
+  await createWhiteboardTemplate(templateSetId, whiteboardTemplateValues);
 };
 
 main().catch(error => {
-  console.error(error);
+  LogManager.getLogger().error(error);
 });

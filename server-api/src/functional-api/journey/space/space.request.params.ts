@@ -2,9 +2,13 @@
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
-import { CommunityMembershipPolicy, SpacePrivacyMode, SpaceVisibility } from '@generated/graphql';
+import {
+  CommunityMembershipPolicy,
+  SpacePrivacyMode,
+  SpaceVisibility,
+} from '@generated/graphql';
 
 export const spaceName = `testEcoName${uniqueId}`;
 export const spaceNameId = `testecoeid${uniqueId}`;
@@ -34,7 +38,7 @@ export const createSpaceBasicData = async (
             calloutsSetData: {},
           },
           accountID,
-         // licensePlanID,
+          // licensePlanID,
         },
       },
       {
@@ -368,6 +372,9 @@ export const getUserRoleSpacesVisibility = async (
   visibility: SpaceVisibility,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
+  if (userID.length !== 36) {
+    throw new Error(`Invalid user ID: ${userID}`);
+  }
   const graphqlClient = getGraphqlClient();
   const callback = (authToken: string | undefined) =>
     graphqlClient.GetUserRoles(
