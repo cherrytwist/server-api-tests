@@ -26,26 +26,16 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'subsubspace-authorization',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
       addMembers: true,
       addAdmin: true,
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
         addMembers: true,
         addAdmin: true,
       },
-      subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
-      },
+      subspace: {},
     },
   },
 };

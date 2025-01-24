@@ -12,18 +12,8 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'user-edge',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
-      subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
-      },
+      subspace: {},
     },
   },
 };

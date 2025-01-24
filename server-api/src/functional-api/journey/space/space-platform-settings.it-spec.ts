@@ -38,19 +38,10 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'space-platform-settings',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: { addAdmin: true, addMembers: true },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: { addAdmin: true, addMembers: true },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
         community: { addAdmin: true, addMembers: true },
       },
     },
@@ -61,7 +52,7 @@ describe('Update space platform settings', () => {
   beforeAll(async () => {
     baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-   await updateSpaceSettings(baseScenario.space.id, {
+    await updateSpaceSettings(baseScenario.space.id, {
       privacy: {
         mode: SpacePrivacyMode.Private,
       },
@@ -219,8 +210,8 @@ describe('Update space platform settings', () => {
         const beforeVisibilityChangeAllSpaces =
           getUserRoleSpaceDataBeforeArchive?.data?.rolesUser.spaces;
         beforeVisibilityChangeAllSpaces?.filter((obj: { nameID: string }) => {
-            return obj.nameID.includes(spaceNameId);
-          });
+          return obj.nameID.includes(spaceNameId);
+        });
         await updateSpacePlatformSettings(
           baseScenario.space.id,
           spaceNameId,
@@ -273,8 +264,6 @@ describe('Update space platform settings', () => {
     `(
       'User role: "$user", have NO access to public archived Space',
       async ({ user, communicationMyPrivileges }) => {
-
-
         // Act
         await updateSpacePlatformSettings(
           baseScenario.space.id,

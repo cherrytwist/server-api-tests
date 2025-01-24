@@ -24,25 +24,16 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'access-user-authorizations',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
       addAdmin: true,
       addMembers: true,
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
         addAdmin: true,
         addMembers: true,
       },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
         community: {
           addAdmin: true,
           addMembers: true,
@@ -53,8 +44,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     privacy: { mode: SpacePrivacyMode.Public },

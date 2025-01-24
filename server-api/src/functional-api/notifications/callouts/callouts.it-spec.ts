@@ -48,25 +48,16 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'callouts-notifications',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
       addAdmin: true,
       addMembers: true,
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
         addAdmin: true,
         addMembers: true,
       },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
         community: {
           addAdmin: true,
           addMembers: true,
@@ -147,7 +138,7 @@ describe('Notifications - post', () => {
     );
 
     preferencesConfigCallout.forEach(async config => {
-       await changePreferenceUser(config.userID, config.type, 'true');
+      await changePreferenceUser(config.userID, config.type, 'true');
     });
   });
   test('GA PUBLISH space callout - HM(7) get notifications', async () => {

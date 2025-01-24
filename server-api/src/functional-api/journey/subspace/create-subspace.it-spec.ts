@@ -9,19 +9,14 @@ import {
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
-;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subspaceName = '';
 let subspaceId = '';
 let additionalSubspaceId = '';
 
-
 const subspaceData = async (subspaceId: string) => {
-  const subspaceData = await getSubspaceData(
-    baseScenario.space.id,
-    subspaceId
-  );
+  const subspaceData = await getSubspaceData(baseScenario.space.id, subspaceId);
   return subspaceData;
 };
 
@@ -32,16 +27,11 @@ const subspacesList = async () => {
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-create',
-  space: {
-    collaboration: {
-      addCallouts: false,
-    },
-  }
-}
+  space: {},
+};
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -78,8 +68,8 @@ describe('Create subspace', () => {
     expect(response.status).toBe(200);
     expect(createSubspaceData?.profile.displayName).toEqual('subspaceName');
     expect(createSubspaceData).toEqual(
-      (await getSubspaceData(baseScenario.space.id, additionalSubspaceId))
-        .data?.space.subspace
+      (await getSubspaceData(baseScenario.space.id, additionalSubspaceId)).data
+        ?.space.subspace
     );
     await deleteSpace(additionalSubspaceId);
   });

@@ -31,17 +31,11 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-community-leads-subspace',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
       addAdmin: true,
       addMembers: true,
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
         addAdmin: true,
         addMembers: true,
