@@ -10,9 +10,7 @@ import {
   SpacePrivacyMode,
   CommunityMembershipPolicy,
 } from '@generated/alkemio-schema';
-import {
-  updateSpaceSettings,
-} from '@functional-api/journey/space/space.request.params';
+import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { getActivityLogOnCollaboration } from './activity-log-params';
 import {
   createCalloutOnCalloutsSet,
@@ -39,12 +37,16 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-activity',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: { addAdmin: true, addMembers: true },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
     },
   },

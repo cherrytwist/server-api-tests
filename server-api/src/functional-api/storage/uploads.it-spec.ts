@@ -1,4 +1,3 @@
-
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -31,7 +30,7 @@ const uniqueId = UniqueIDGenerator.getID();
 
 let refId = '';
 let visualId = '';
-let documentEndPoint: string | undefined = '' ;
+let documentEndPoint: string | undefined = '';
 let documentId = '';
 let referenceUri = '';
 let visualUri: string = '';
@@ -69,7 +68,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'storage-files-to-upload',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
   },
 };
@@ -168,7 +169,7 @@ describe('Upload document', () => {
       path.join(__dirname, 'files-to-upload', 'doc.pdf'),
       refId
     );
-    documentEndPoint = res.data?.uploadFileOnReference?.uri  || 'not found';
+    documentEndPoint = res.data?.uploadFileOnReference?.uri || 'not found';
     documentId = getLastPartOfUrl(documentEndPoint);
 
     await deleteDocument(documentId, TestUser.GLOBAL_ADMIN);
@@ -185,7 +186,7 @@ describe('Upload document', () => {
       refId
     );
 
-    documentEndPoint = res.data?.uploadFileOnReference?.uri  || 'not found';
+    documentEndPoint = res.data?.uploadFileOnReference?.uri || 'not found';
     documentId = getLastPartOfUrl(documentEndPoint);
 
     const documentAccess = await getAuthDocument(
@@ -221,7 +222,7 @@ describe('Upload document', () => {
       path.join(__dirname, 'files-to-upload', 'image.png'),
       refId2
     );
-    documentEndPoint = res.data?.uploadFileOnReference?.uri  || 'not found';
+    documentEndPoint = res.data?.uploadFileOnReference?.uri || 'not found';
     documentId = getLastPartOfUrl(documentEndPoint);
     await deleteReferenceOnProfile(refId2);
     const documentAccess = await getAuthDocument(
@@ -294,7 +295,7 @@ describe('Upload visual tests', () => {
       path.join(__dirname, 'files-to-upload', '190-410.jpg'),
       visualId
     );
-    documentEndPoint = res.data?.uploadImageOnVisual?.uri  || 'not found';
+    documentEndPoint = res.data?.uploadImageOnVisual?.uri || 'not found';
     documentId = getLastPartOfUrl(documentEndPoint);
     visualUri = await getVisualUri(baseScenario.organization.id);
     expect(visualUri).toEqual(documentEndPoint);
@@ -310,7 +311,7 @@ describe('Upload visual tests', () => {
       path.join(__dirname, 'files-to-upload', '190-410.jpg'),
       visualId
     );
-    documentEndPoint = res?.data?.uploadImageOnVisual?.uri  || 'not found';
+    documentEndPoint = res?.data?.uploadImageOnVisual?.uri || 'not found';
     documentId = getLastPartOfUrl(documentEndPoint);
     visualUri = await getVisualUri(baseScenario.organization.id);
     expect(visualUri).toEqual(documentEndPoint);

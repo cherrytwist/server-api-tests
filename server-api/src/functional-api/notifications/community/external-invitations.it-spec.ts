@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -25,7 +28,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'notifications-external-invitation',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
       addAdmin: true,
@@ -33,7 +38,9 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
         addAdmin: true,
@@ -41,7 +48,9 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
           addAdmin: true,
@@ -55,8 +64,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   await updateSpaceSettings(baseScenario.space.id, {
     membership: {

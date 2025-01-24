@@ -57,11 +57,18 @@ export class TestScenarioFactory {
     try {
       await TestUserManager.populateUserModelMap();
       await this.populateGlobalRoles();
-      await this.createOrganization(baseScenario.name, baseScenario.organization);
+      await this.createOrganization(
+        baseScenario.name,
+        baseScenario.organization
+      );
       baseScenario.scenarioSetupSucceeded = true;
     } catch (e) {
-      LogManager.getLogger().error(`Unable to create core scenario setup: ${e}`);
-      LogManager.getLogger().error(`Unable to create core scenario setup: ${e}`);
+      LogManager.getLogger().error(
+        `Unable to create core scenario setup: ${e}`
+      );
+      LogManager.getLogger().error(
+        `Unable to create core scenario setup: ${e}`
+      );
       process.exit(1); // Exit the Jest process with an error code.
     }
     LogManager.getLogger().info('Initial base scenario setup created');
@@ -172,7 +179,9 @@ export class TestScenarioFactory {
         await deleteOrganization(baseScenario.organization.id);
       }
     } catch (e) {
-      LogManager.getLogger().error(`Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`);
+      LogManager.getLogger().error(
+        `Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`
+      );
       process.exit(1); // Exit the Jest process with an error code.
     }
   }
@@ -196,8 +205,14 @@ export class TestScenarioFactory {
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
     if (spaceCollaborationConfig) {
-      if (spaceCollaborationConfig.addCallouts) {
-        await this.createCalloutsOnSpace(spaceModel, scenarioName);
+      if (spaceCollaborationConfig.addPostCallout) {
+        await this.createPostCalloutOnSpace(spaceModel, scenarioName);
+      }
+      if (spaceCollaborationConfig.addPostCollectionCallout) {
+        await this.createPostCollectionCalloutOnSpace(spaceModel, scenarioName);
+      }
+      if (spaceCollaborationConfig.addWhiteboardCallout) {
+        await this.createWhiteboardCalloutOnSpace(spaceModel, scenarioName);
       }
     }
     return spaceModel;
@@ -297,7 +312,33 @@ export class TestScenarioFactory {
     return spaceModel;
   }
 
-  private static async createCalloutsOnSpace(
+  private static async createPostCalloutOnSpace(
+    spaceModel: SpaceModel,
+    scenarioName: string
+  ): Promise<SpaceModel> {
+    const creatPostCallout = await createCalloutOnCalloutsSet(
+      spaceModel.collaboration.calloutsSetId,
+      {
+        framing: {
+          profile: { displayName: `${scenarioName} - post` },
+        },
+        type: CalloutType.Post,
+      }
+    );
+    const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
+
+    spaceModel.collaboration.calloutPostId = postCalloutData?.id ?? '';
+    spaceModel.collaboration.calloutPostCommentsId =
+      postCalloutData?.comments?.id ?? '';
+    await updateCalloutVisibility(
+      spaceModel.collaboration.calloutPostId,
+      CalloutVisibility.Published
+    );
+
+    return spaceModel;
+  }
+
+  private static async createPostCollectionCalloutOnSpace(
     spaceModel: SpaceModel,
     scenarioName: string
   ): Promise<SpaceModel> {
@@ -321,13 +362,19 @@ export class TestScenarioFactory {
       spaceModel.collaboration.calloutPostCollectionId,
       CalloutVisibility.Published
     );
+    return spaceModel;
+  }
 
+  private static async createWhiteboardCalloutOnSpace(
+    spaceModel: SpaceModel,
+    scenarioName: string
+  ): Promise<SpaceModel> {
     const whiteboardCalloutData = await createWhiteboardCalloutOnCalloutsSet(
       spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
-            displayName: 'whiteboard callout space-Initial',
+            displayName: `${scenarioName} - whiteboard callout`,
             description: 'Whiteboard - initial',
           },
         },
@@ -341,25 +388,6 @@ export class TestScenarioFactory {
 
     await updateCalloutVisibility(
       spaceModel.collaboration.calloutWhiteboardId,
-      CalloutVisibility.Published
-    );
-
-    const creatPostCallout = await createCalloutOnCalloutsSet(
-      spaceModel.collaboration.calloutsSetId,
-      {
-        framing: {
-          profile: { displayName: 'Space Post Callout' },
-        },
-        type: CalloutType.Post,
-      }
-    );
-    const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
-
-    spaceModel.collaboration.calloutPostId = postCalloutData?.id ?? '';
-    spaceModel.collaboration.calloutPostCommentsId =
-      postCalloutData?.comments?.id ?? '';
-    await updateCalloutVisibility(
-      spaceModel.collaboration.calloutPostId,
       CalloutVisibility.Published
     );
 

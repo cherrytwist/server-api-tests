@@ -42,7 +42,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-mention-user',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
       addAdmin: true,
@@ -50,7 +52,9 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
         addAdmin: true,
@@ -58,7 +62,9 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
           addAdmin: true,

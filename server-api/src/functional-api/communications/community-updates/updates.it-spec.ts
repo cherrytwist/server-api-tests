@@ -21,7 +21,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'community-updates',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: { addAdmin: true, addMembers: true },
   },

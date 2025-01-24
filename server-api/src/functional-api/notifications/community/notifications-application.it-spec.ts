@@ -11,10 +11,7 @@ import {
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import {
-  CommunityMembershipPolicy,
-  RoleName,
-} from '@generated/alkemio-schema';
+import { CommunityMembershipPolicy, RoleName } from '@generated/alkemio-schema';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -29,7 +26,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'notifications-application',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
       addAdmin: true,
@@ -37,7 +36,9 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
         addAdmin: true,

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -44,7 +47,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'discussion-comments-notification',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
       addMembers: true,
@@ -52,7 +57,9 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
         addMembers: true,
@@ -60,7 +67,9 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
           addMembers: true,
@@ -74,8 +83,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesDiscussionCommentCreatedConfig = [
     {
@@ -151,7 +159,9 @@ describe('Notifications - callout comments', () => {
     expect(mails[0]).toEqual(
       await expectedDataSpace([TestUserManager.users.globalAdmin.email])
     );
-    expect(mails[0]).toEqual(await expectedDataSpace([TestUserManager.users.spaceAdmin.email]));
+    expect(mails[0]).toEqual(
+      await expectedDataSpace([TestUserManager.users.spaceAdmin.email])
+    );
     expect(mails[0]).toEqual(
       await expectedDataSpace([TestUserManager.users.spaceMember.email])
     );
@@ -184,7 +194,9 @@ describe('Notifications - callout comments', () => {
     expect(mails[0]).toEqual(
       await expectedDataSpace([TestUserManager.users.globalAdmin.email])
     );
-    expect(mails[0]).toEqual(await expectedDataSpace([TestUserManager.users.spaceAdmin.email]));
+    expect(mails[0]).toEqual(
+      await expectedDataSpace([TestUserManager.users.spaceAdmin.email])
+    );
     expect(mails[0]).toEqual(
       await expectedDataSpace([TestUserManager.users.spaceMember.email])
     );
@@ -215,7 +227,9 @@ describe('Notifications - callout comments', () => {
 
     expect(mails[1]).toEqual(5);
 
-    expect(mails[0]).toEqual(await expectedDataChal([TestUserManager.users.globalAdmin.email]));
+    expect(mails[0]).toEqual(
+      await expectedDataChal([TestUserManager.users.globalAdmin.email])
+    );
     // HA don't get notification as is member only of HUB
     expect(mails[0]).not.toEqual(
       await expectedDataChal([TestUserManager.users.spaceAdmin.email])
@@ -251,7 +265,9 @@ describe('Notifications - callout comments', () => {
     const mails = await getMailsData();
 
     expect(mails[1]).toEqual(3);
-    expect(mails[0]).toEqual(await expectedDataOpp([TestUserManager.users.globalAdmin.email]));
+    expect(mails[0]).toEqual(
+      await expectedDataOpp([TestUserManager.users.globalAdmin.email])
+    );
     // HA don't get notification as is member only of HUB
     expect(mails[0]).not.toEqual(
       await expectedDataOpp([TestUserManager.users.spaceAdmin.email])

@@ -56,7 +56,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'storage-auth-public-space-document',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
       addAdmin: true,

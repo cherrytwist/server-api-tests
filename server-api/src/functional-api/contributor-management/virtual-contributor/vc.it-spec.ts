@@ -59,7 +59,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'virtual-contributor',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
   },
 };

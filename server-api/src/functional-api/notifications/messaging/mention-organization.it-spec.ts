@@ -1,4 +1,3 @@
-
 import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -36,7 +35,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-mention-org',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
       addAdmin: true,
@@ -44,7 +45,9 @@ const scenarioConfig: TestScenarioConfig = {
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
         addAdmin: true,
@@ -52,7 +55,9 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
           addAdmin: true,

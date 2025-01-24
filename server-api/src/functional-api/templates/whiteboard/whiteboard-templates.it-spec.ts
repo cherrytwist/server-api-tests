@@ -17,15 +17,21 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'templates-whiteboard',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
       },
     },
@@ -33,16 +39,14 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
-beforeEach(async () => {
-});
+beforeEach(async () => {});
 
 describe('WHITEBOARD templates - CRUD', () => {
   afterEach(async () => {

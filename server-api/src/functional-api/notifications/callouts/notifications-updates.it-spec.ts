@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
-import { deleteMailSlurperMails, getMailsData } from '@utils/mailslurper.rest.requests';
+import {
+  deleteMailSlurperMails,
+  getMailsData,
+} from '@utils/mailslurper.rest.requests';
 import { delay } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
@@ -48,15 +51,19 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'notifications-updates',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-        addAdmin: true,
-        addMembers: true,
-      },
-      subspace: {
+      addAdmin: true,
+      addMembers: true,
+    },
+    subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
         addAdmin: true,
@@ -64,7 +71,9 @@ const scenarioConfig: TestScenarioConfig = {
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
           addAdmin: true,
@@ -78,8 +87,7 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
 
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   preferencesConfig = [
     {
@@ -148,7 +156,6 @@ afterAll(async () => {
 // Skip tests due to bug: #193
 describe.skip('Notifications - updates', () => {
   beforeAll(async () => {
-
     await changePreferenceUser(
       TestUserManager.users.globalSupportAdmin.id,
       PreferenceType.NotificationCommunicationUpdates,
@@ -172,7 +179,10 @@ describe.skip('Notifications - updates', () => {
 
   test('GA create space update - GA(1), HA (1), HM(6) get notifications', async () => {
     // Act
-    await sendMessageToRoom(baseScenario.space.communication.updatesId, 'GA space update ');
+    await sendMessageToRoom(
+      baseScenario.space.communication.updatesId,
+      'GA space update '
+    );
 
     await delay(6000);
     const mails = await getMailsData();
@@ -180,34 +190,61 @@ describe.skip('Notifications - updates', () => {
     // Assert
     expect(mails[1]).toEqual(9);
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(ecoName, TestUserManager.users.globalAdmin.email)
+      await templatedAsAdminResult(
+        ecoName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(ecoName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsAdminResult(
+        ecoName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.globalAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.spaceMember.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subspaceAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subspaceMember.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subsubspaceAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subsubspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subsubspaceMember.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subsubspaceMember.email
+      )
     );
   });
 
@@ -226,34 +263,61 @@ describe.skip('Notifications - updates', () => {
     expect(mails[1]).toEqual(9);
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(ecoName, TestUserManager.users.globalAdmin.email)
+      await templatedAsAdminResult(
+        ecoName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(ecoName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsAdminResult(
+        ecoName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.globalAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.spaceMember.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subspaceAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subspaceMember.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subsubspaceAdmin.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subsubspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(ecoName, TestUserManager.users.subsubspaceMember.email)
+      await templatedAsMemberResult(
+        ecoName,
+        TestUserManager.users.subsubspaceMember.email
+      )
     );
   });
 
@@ -272,34 +336,61 @@ describe.skip('Notifications - updates', () => {
     expect(mails[1]).toEqual(7);
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(subspaceName, TestUserManager.users.globalAdmin.email)
+      await templatedAsAdminResult(
+        subspaceName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(subspaceName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsAdminResult(
+        subspaceName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.globalAdmin.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.spaceMember.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.subspaceAdmin.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.subspaceMember.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.subspaceMember.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.subsubspaceAdmin.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.subsubspaceAdmin.email
+      )
     );
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(subspaceName, TestUserManager.users.subsubspaceMember.email)
+      await templatedAsMemberResult(
+        subspaceName,
+        TestUserManager.users.subsubspaceMember.email
+      )
     );
   });
 
@@ -318,28 +409,49 @@ describe.skip('Notifications - updates', () => {
     expect(mails[1]).toEqual(5);
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(subsubspaceName, TestUserManager.users.globalAdmin.email)
+      await templatedAsAdminResult(
+        subsubspaceName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsAdminResult(subsubspaceName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsAdminResult(
+        subsubspaceName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
 
     expect(mails[0]).toEqual(
-      await templatedAsMemberResult(subsubspaceName, TestUserManager.users.globalAdmin.email)
+      await templatedAsMemberResult(
+        subsubspaceName,
+        TestUserManager.users.globalAdmin.email
+      )
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(subsubspaceName, TestUserManager.users.spaceAdmin.email)
+      await templatedAsMemberResult(
+        subsubspaceName,
+        TestUserManager.users.spaceAdmin.email
+      )
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(subsubspaceName, TestUserManager.users.spaceMember.email)
+      await templatedAsMemberResult(
+        subsubspaceName,
+        TestUserManager.users.spaceMember.email
+      )
     );
 
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(subsubspaceName, TestUserManager.users.subspaceAdmin.email)
+      await templatedAsMemberResult(
+        subsubspaceName,
+        TestUserManager.users.subspaceAdmin.email
+      )
     );
     expect(mails[0]).not.toEqual(
-      await templatedAsMemberResult(subsubspaceName, TestUserManager.users.subspaceMember.email)
+      await templatedAsMemberResult(
+        subsubspaceName,
+        TestUserManager.users.subspaceMember.email
+      )
     );
 
     expect(mails[0]).toEqual(

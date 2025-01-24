@@ -19,7 +19,9 @@ export interface TestScenarioSpaceConfig {
     addAdmin: boolean;
   };
   collaboration?: {
-    addCallouts: boolean;
+    addPostCallout?: boolean;
+    addPostCollectionCallout?: boolean;
+    addWhiteboardCallout?: boolean;
   };
   subspace?: TestScenarioSpaceConfig;
 }

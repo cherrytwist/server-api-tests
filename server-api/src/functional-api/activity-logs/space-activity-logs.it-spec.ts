@@ -38,7 +38,9 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'space-activity',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
   },
 };
