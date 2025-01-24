@@ -9,6 +9,7 @@ import { deleteTemplate, GetTemplateById } from '../template.request.params';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { TestUser } from '@alkemio/tests-lib';
 
 let templateId = '';
 
@@ -22,8 +23,8 @@ const scenarioConfig: TestScenarioConfig = {
       addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
     subspace: {
       collaboration: {
@@ -32,8 +33,8 @@ const scenarioConfig: TestScenarioConfig = {
         addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
       },
     },
   },

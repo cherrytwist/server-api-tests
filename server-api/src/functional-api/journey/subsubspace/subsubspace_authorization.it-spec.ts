@@ -27,13 +27,13 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subsubspace-authorization',
   space: {
     community: {
-      addMembers: true,
-      addAdmin: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
     subspace: {
       community: {
-        addMembers: true,
-        addAdmin: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
       },
       subspace: {},
     },

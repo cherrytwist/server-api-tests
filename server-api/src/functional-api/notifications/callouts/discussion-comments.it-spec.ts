@@ -52,8 +52,8 @@ const scenarioConfig: TestScenarioConfig = {
       addWhiteboardCallout: true,
     },
     community: {
-      addMembers: true,
-      addAdmin: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
     subspace: {
       collaboration: {
@@ -62,8 +62,8 @@ const scenarioConfig: TestScenarioConfig = {
         addWhiteboardCallout: true,
       },
       community: {
-        addMembers: true,
-        addAdmin: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
       },
       subspace: {
         collaboration: {
@@ -72,8 +72,8 @@ const scenarioConfig: TestScenarioConfig = {
           addWhiteboardCallout: true,
         },
         community: {
-          addMembers: true,
-          addAdmin: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
         },
       },
     },

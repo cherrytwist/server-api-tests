@@ -32,15 +32,14 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'invitation-external',
   space: {
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
   },
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {

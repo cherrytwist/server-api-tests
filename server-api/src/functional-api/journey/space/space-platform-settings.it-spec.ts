@@ -38,11 +38,20 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'space-platform-settings',
   space: {
-    community: { addAdmin: true, addMembers: true },
+    community: {
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
+    },
     subspace: {
-      community: { addAdmin: true, addMembers: true },
+      community: {
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
+      },
       subspace: {
-        community: { addAdmin: true, addMembers: true },
+        community: {
+          admins: [TestUser.SUBSPACE_ADMIN],
+          members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
+        },
       },
     },
   },

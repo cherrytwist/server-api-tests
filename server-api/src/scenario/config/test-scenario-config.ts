@@ -1,3 +1,5 @@
+import { TestUser } from '@alkemio/tests-lib';
+
 export interface TestScenarioConfig {
   name: string;
   organization?: TestScenarioOrganizationConfig;
@@ -15,8 +17,8 @@ export interface TestScenarioNoPreCreationConfig {
 
 export interface TestScenarioSpaceConfig {
   community?: {
-    addMembers: boolean;
-    addAdmin: boolean;
+    members?: TestUser[];
+    admins?: TestUser[];
   };
   collaboration?: {
     addPostCallout?: boolean;

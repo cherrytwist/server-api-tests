@@ -42,8 +42,8 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'access-invitations',
   space: {
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
   },
 };
@@ -421,8 +421,7 @@ describe('Invitations-flows', () => {
     const userDataOrig = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const roleDataOrig = userDataOrig?.data?.me;
-    const invitationsCount =
-      roleDataOrig?.communityInvitations?.length ?? 0;
+    const invitationsCount = roleDataOrig?.communityInvitations?.length ?? 0;
     const applicationsCountOrig =
       roleDataOrig?.communityApplications?.length ?? 0;
 
@@ -435,16 +434,17 @@ describe('Invitations-flows', () => {
     expect(invitationId.length).toEqual(36);
 
     // Act
-    const res = await createApplication(baseScenario.space.community.roleSetId, TestUser.NON_SPACE_MEMBER);
+    const res = await createApplication(
+      baseScenario.space.community.roleSetId,
+      TestUser.NON_SPACE_MEMBER
+    );
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const roleData = userAppsData?.data?.me;
 
     // Assert
     expect(invitationsCount > 0).toBeTruthy();
-    expect(roleData?.communityApplications).toHaveLength(
-      applicationsCountOrig
-    );
+    expect(roleData?.communityApplications).toHaveLength(applicationsCountOrig);
     expect(res.error?.errors[0].message).toContain(
       `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${TestUserManager.users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );

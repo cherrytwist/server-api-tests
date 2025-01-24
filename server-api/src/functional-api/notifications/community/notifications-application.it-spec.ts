@@ -8,7 +8,7 @@ import {
   createApplication,
   deleteApplication,
 } from '@functional-api/roleset/application/application.request.params';
-import { delay } from '@alkemio/tests-lib';
+import { delay, TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
 import { CommunityMembershipPolicy, RoleName } from '@generated/alkemio-schema';
@@ -31,8 +31,8 @@ const scenarioConfig: TestScenarioConfig = {
       addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
     subspace: {
       collaboration: {
@@ -41,8 +41,8 @@ const scenarioConfig: TestScenarioConfig = {
         addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
       },
     },
   },

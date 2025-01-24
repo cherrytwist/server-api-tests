@@ -86,9 +86,7 @@ export class TestScenarioFactory {
     await this.populateSpace(
       scenarioConfig.space,
       baseScenario.space,
-      baseScenario.name,
-      TestUserManager.users.spaceAdmin,
-      0
+      baseScenario.name
     );
 
     const subspace = scenarioConfig.space.subspace;
@@ -105,9 +103,7 @@ export class TestScenarioFactory {
     await this.populateSpace(
       subspace,
       baseScenario.subspace,
-      baseScenario.name,
-      TestUserManager.users.subspaceAdmin,
-      1
+      baseScenario.name
     );
 
     const subsubspace = subspace.subspace;
@@ -124,9 +120,7 @@ export class TestScenarioFactory {
     await this.populateSpace(
       subsubspace,
       baseScenario.subsubspace,
-      baseScenario.name,
-      TestUserManager.users.subsubspaceAdmin,
-      2
+      baseScenario.name
     );
 
     return baseScenario;
@@ -189,18 +183,24 @@ export class TestScenarioFactory {
   private static async populateSpace(
     spaceConfig: TestScenarioSpaceConfig,
     spaceModel: SpaceModel,
-    scenarioName: string,
-    communityAdmin: UserModel,
-    spaceLevel: 0 | 1 | 2
+    scenarioName: string
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
     const spaceCommunityConfig = spaceConfig.community;
     if (spaceCommunityConfig) {
-      if (spaceCommunityConfig.addMembers) {
-        await this.assignUsersToMemberRole(roleSetID, spaceLevel);
+      if (spaceCommunityConfig.members) {
+        this.assignUsersByTypeToRole(
+          spaceCommunityConfig.members,
+          RoleName.Member,
+          roleSetID
+        );
       }
-      if (spaceCommunityConfig.addAdmin) {
-        await assignRoleToUser(communityAdmin.id, roleSetID, RoleName.Admin);
+      if (spaceCommunityConfig.admins) {
+        this.assignUsersByTypeToRole(
+          spaceCommunityConfig.admins,
+          RoleName.Admin,
+          roleSetID
+        );
       }
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
@@ -216,6 +216,21 @@ export class TestScenarioFactory {
       }
     }
     return spaceModel;
+  }
+
+  private static async assignUsersByTypeToRole(
+    userTypes: TestUser[],
+    role: RoleName,
+    roleSetID: string
+  ): Promise<void> {
+    const usersIdsToAssign: string[] = [];
+    for (const userName of userTypes) {
+      const user = TestUserManager.getUserModelByType(userName);
+      usersIdsToAssign.push(user.id);
+    }
+    for (const userID of usersIdsToAssign) {
+      await assignRoleToUser(userID, roleSetID, role);
+    }
   }
 
   private static async createOrganization(

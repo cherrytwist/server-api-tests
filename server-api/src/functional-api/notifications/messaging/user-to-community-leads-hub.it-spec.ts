@@ -33,8 +33,8 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-to-community-leads-space',
   space: {
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
   },
 };
