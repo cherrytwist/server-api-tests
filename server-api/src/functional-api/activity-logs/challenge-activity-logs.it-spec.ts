@@ -45,6 +45,11 @@ const scenarioConfig: TestScenarioConfig = {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
+    settings: {
+      membership: {
+        policy: CommunityMembershipPolicy.Open,
+      },
+    },
     subspace: {
       collaboration: {
         addPostCallout: true,
@@ -57,12 +62,6 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    membership: {
-      policy: CommunityMembershipPolicy.Open,
-    },
-  });
 });
 
 afterAll(async () => {

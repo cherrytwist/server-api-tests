@@ -42,17 +42,16 @@ const scenarioConfig: TestScenarioConfig = {
       addPostCollectionCallout: true,
       addWhiteboardCallout: true,
     },
+    settings: {
+      membership: {
+        policy: CommunityMembershipPolicy.Open,
+      },
+    },
   },
 };
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    membership: {
-      policy: CommunityMembershipPolicy.Open,
-    },
-  });
 });
 
 afterAll(async () => {

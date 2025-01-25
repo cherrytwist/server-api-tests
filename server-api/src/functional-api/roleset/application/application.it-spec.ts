@@ -36,20 +36,20 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'application',
   space: {
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Public,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
+    },
     subspace: {},
   },
 };
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Public,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Applications,
-    },
-  });
 });
 
 afterAll(async () => {

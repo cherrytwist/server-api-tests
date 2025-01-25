@@ -11,7 +11,6 @@ import {
   createSpaceAndGetData,
   deleteSpace,
   updateSpacePlatformSettings,
-  updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -63,6 +62,14 @@ const scenarioConfig: TestScenarioConfig = {
       addPostCollectionCallout: true,
       addWhiteboardCallout: true,
     },
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Public,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
+    },
   },
 };
 
@@ -73,15 +80,6 @@ beforeAll(async () => {
     'FEATURE_VIRTUAL_CONTRIBUTORS'
   );
   vcLicensePlanId = vcLicensePlan[0].id;
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Public,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Applications,
-    },
-  });
 
   await assignLicensePlanToAccount(
     baseScenario.organization.accountId,

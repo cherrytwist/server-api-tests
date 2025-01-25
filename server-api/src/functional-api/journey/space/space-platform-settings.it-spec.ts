@@ -43,6 +43,9 @@ const scenarioConfig: TestScenarioConfig = {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Private },
+    },
     subspace: {
       community: {
         admins: [TestUser.SUBSPACE_ADMIN],
@@ -61,12 +64,6 @@ const scenarioConfig: TestScenarioConfig = {
 describe('Update space platform settings', () => {
   beforeAll(async () => {
     baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-    await updateSpaceSettings(baseScenario.space.id, {
-      privacy: {
-        mode: SpacePrivacyMode.Private,
-      },
-    });
   });
 
   afterAll(async () => {

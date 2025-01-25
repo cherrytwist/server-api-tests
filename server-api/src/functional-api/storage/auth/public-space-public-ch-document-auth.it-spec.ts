@@ -65,11 +65,17 @@ const scenarioConfig: TestScenarioConfig = {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Public },
+    },
     subspace: {
       collaboration: {
         addPostCallout: true,
         addPostCollectionCallout: true,
         addWhiteboardCallout: true,
+      },
+      settings: {
+        privacy: { mode: SpacePrivacyMode.Public },
       },
       community: {
         admins: [TestUser.SUBSPACE_ADMIN],
@@ -88,12 +94,7 @@ beforeAll(async () => {
     SpaceVisibility.Active
   );
 
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
-  });
-
   await updateSpaceSettings(baseScenario.subspace.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
     collaboration: {
       inheritMembershipRights: true,
       allowMembersToCreateCallouts: false,

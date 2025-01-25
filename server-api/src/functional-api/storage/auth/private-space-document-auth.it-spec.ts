@@ -9,10 +9,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import {
-  updateSpacePlatformSettings,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { updateSpacePlatformSettings } from '../../journey/space/space.request.params';
 import {
   sorted__create_read_update_delete_grant_contribute,
   sorted__create_read_update_delete_grant_contribute_updateContent,
@@ -60,6 +57,9 @@ const scenarioConfig: TestScenarioConfig = {
       addPostCollectionCallout: true,
       addWhiteboardCallout: true,
     },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Private },
+    },
     community: {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
@@ -69,11 +69,6 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: { mode: SpacePrivacyMode.Private },
-  });
-
   await updateSpacePlatformSettings(
     baseScenario.space.id,
     baseScenario.space.nameId,

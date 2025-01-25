@@ -184,6 +184,20 @@ export class TestScenarioFactory {
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
     const spaceCommunityConfig = spaceConfig.community;
+    if (spaceConfig.settings) {
+      if (spaceConfig.settings.privacy) {
+        await updateSpaceSettings(spaceModel.id, {
+          privacy: { mode: spaceConfig.settings.privacy.mode },
+        });
+      }
+      if (spaceConfig.settings.membership) {
+        await updateSpaceSettings(spaceModel.id, {
+          membership: {
+            policy: spaceConfig.settings.membership.policy,
+          },
+        });
+      }
+    }
     if (spaceCommunityConfig) {
       if (spaceCommunityConfig.members) {
         this.assignUsersByTypeToRole(
@@ -196,6 +210,14 @@ export class TestScenarioFactory {
         this.assignUsersByTypeToRole(
           spaceCommunityConfig.admins,
           RoleName.Admin,
+          roleSetID
+        );
+      }
+
+      if (spaceCommunityConfig.leads) {
+        this.assignUsersByTypeToRole(
+          spaceCommunityConfig.leads,
+          RoleName.Lead,
           roleSetID
         );
       }
@@ -328,7 +350,7 @@ export class TestScenarioFactory {
     spaceModel: SpaceModel,
     scenarioName: string
   ): Promise<SpaceModel> {
-    const creatPostCallout = await createCalloutOnCalloutsSet(
+    const createPostCallout = await createCalloutOnCalloutsSet(
       spaceModel.collaboration.calloutsSetId,
       {
         framing: {
@@ -337,7 +359,7 @@ export class TestScenarioFactory {
         type: CalloutType.Post,
       }
     );
-    const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
+    const postCalloutData = createPostCallout.data?.createCalloutOnCalloutsSet;
 
     spaceModel.collaboration.calloutPostId = postCalloutData?.id ?? '';
     spaceModel.collaboration.calloutPostCommentsId =

@@ -35,6 +35,7 @@ const scenarioConfig: TestScenarioConfig = {
     community: {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
+      leads: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
   },
 };
@@ -46,18 +47,6 @@ beforeAll(async () => {
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
-    baseScenario.space.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.spaceAdmin.id,
-    baseScenario.space.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.spaceMember.id,
     baseScenario.space.community.roleSetId,
     RoleName.Lead
   );

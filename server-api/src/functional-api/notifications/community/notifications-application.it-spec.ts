@@ -34,6 +34,11 @@ const scenarioConfig: TestScenarioConfig = {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
+    settings: {
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
+    },
     subspace: {
       collaboration: {
         addPostCallout: true,
@@ -52,10 +57,6 @@ beforeAll(async () => {
   await deleteMailSlurperMails();
 
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    membership: { policy: CommunityMembershipPolicy.Applications },
-  });
 
   preferencesConfig = [
     {

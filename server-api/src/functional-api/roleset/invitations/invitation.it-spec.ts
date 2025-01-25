@@ -11,10 +11,7 @@ import {
   getSpaceInvitation,
   inviteContributors,
 } from './invitation.request.params';
-import {
-  getSpaceData,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { getSpaceData } from '../../journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sorted_read_readAbout } from '@common/constants/privileges';
 import {
@@ -41,6 +38,14 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'access-invitations',
   space: {
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
+    },
     community: {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
@@ -50,15 +55,6 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Private,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Applications,
-    },
-  });
 });
 
 afterAll(async () => {

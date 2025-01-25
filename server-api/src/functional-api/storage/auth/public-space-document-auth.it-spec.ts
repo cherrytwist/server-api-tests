@@ -9,10 +9,7 @@ import {
 } from '../upload.params';
 import path from 'path';
 import { lookupProfileVisuals } from '../../lookup/lookup-request.params';
-import {
-  updateSpacePlatformSettings,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { updateSpacePlatformSettings } from '../../journey/space/space.request.params';
 import {
   sorted__create_read_readAbout_update_delete_grant,
   sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel,
@@ -60,6 +57,9 @@ const scenarioConfig: TestScenarioConfig = {
       addPostCollectionCallout: true,
       addWhiteboardCallout: true,
     },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Public },
+    },
     community: {
       admins: [TestUser.SPACE_ADMIN],
       members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
@@ -75,10 +75,6 @@ beforeAll(async () => {
     baseScenario.space.nameId,
     SpaceVisibility.Active
   );
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
-  });
 });
 
 afterAll(async () => {
