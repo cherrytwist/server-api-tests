@@ -31,7 +31,14 @@ const scenarioConfig: TestScenarioConfig = {
   space: {
     community: {
       admins: [TestUser.SPACE_ADMIN],
-      members: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
     },
     settings: {
       privacy: {
@@ -41,7 +48,12 @@ const scenarioConfig: TestScenarioConfig = {
     subspace: {
       community: {
         admins: [TestUser.SUBSPACE_ADMIN],
-        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
       subspace: {
         community: {

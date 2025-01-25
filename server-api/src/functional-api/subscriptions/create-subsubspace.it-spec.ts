@@ -37,7 +37,12 @@ const scenarioConfig: TestScenarioConfig = {
       },
       community: {
         admins: [TestUser.SUBSPACE_ADMIN],
-        members: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
     },
   },
