@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
 import { sendMessageReplyToRoom } from './reply.request.params';
 import { addReaction } from '../reactions/reactions.request.params';
@@ -11,7 +10,6 @@ import {
   removeMessageOnRoom,
 } from '../communication.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 ;
 const uniqueId = UniqueIDGenerator.getID();
@@ -23,12 +21,11 @@ let messageId = '';
 let replyId = '';
 let threadId = '';
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'replies',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   const res = await getPlatformForumData();
   platformDiscussionId = res?.data?.platform.forum.id ?? '';
 });

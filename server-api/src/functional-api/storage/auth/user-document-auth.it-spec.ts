@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -22,19 +21,16 @@ import {
 } from '@common/constants/privileges';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
 let refId = '';
 let documentId = '';
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'storage-auth-user-document',
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 });
 
 describe('User - documents', () => {

@@ -1,7 +1,7 @@
 import { SubscriptionClient } from '@utils/subscriptions';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { createPostOnCallout } from '../callout/post/post.request.params';
-import { subscriptionRooms } from './subscrition-queries';
+import { subscriptionRooms } from './subscription-queries';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToRoom } from '../communications/communication.params';
 import { TestUser } from '@alkemio/tests-lib';
@@ -77,27 +77,45 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'callouts',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
-          addAdmin: true,
-          addMembers: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
         },
       },
     },
@@ -105,8 +123,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {

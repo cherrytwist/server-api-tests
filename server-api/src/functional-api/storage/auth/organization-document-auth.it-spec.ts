@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,

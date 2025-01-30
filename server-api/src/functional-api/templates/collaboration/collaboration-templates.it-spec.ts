@@ -9,6 +9,7 @@ import { deleteTemplate, GetTemplateById } from '../template.request.params';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
+import { TestUser } from '@alkemio/tests-lib';
 
 let templateId = '';
 
@@ -17,27 +18,41 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'callouts',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
-
     },
   },
 };
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {

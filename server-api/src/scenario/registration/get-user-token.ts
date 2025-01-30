@@ -1,5 +1,6 @@
 import { AlkemioClient } from '@alkemio/client-lib';
 import { testConfiguration } from '@src/config/test.configuration';
+import { LogManager } from '../LogManager';
 
 
 export const getUserToken = async (userEmail: string) => {
@@ -23,7 +24,7 @@ export const getUserToken = async (userEmail: string) => {
   try {
     await alkemioClient.enableAuthentication();
   } catch (e) {
-    console.error(
+    LogManager.getLogger().error(
       (e as Error).message,
       `>> identifier: ${userEmail}`
     );

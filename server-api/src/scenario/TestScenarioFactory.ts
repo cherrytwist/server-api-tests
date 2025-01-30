@@ -27,24 +27,21 @@ import {
 import { TestUserManager } from './TestUserManager';
 import { UserModel } from './models/UserModel';
 import { assignPlatformRole } from '@functional-api/platform/authorization-platform-mutation';
-import { logElapsedTime } from '@utils/profiling';
 import { OrganizationModel } from './models/OrganizationModel';
+import { LogManager } from './LogManager';
 
 export class TestScenarioFactory {
   public static async createBaseScenarioEmpty(
     scenarioConfig: TestScenarioConfig
   ) {
-    const start = performance.now();
     await TestUserManager.populateUserModelMap();
     const result = scenarioConfig;
-    // logElapsedTime('createBaseScenario', start);
     return result;
   }
 
   public static async createBaseScenario(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
-    const start = performance.now();
     const result = await this.createBaseScenarioPrivate(scenarioConfig);
     // logElapsedTime('createBaseScenario', start);
     return result;
@@ -60,12 +57,18 @@ export class TestScenarioFactory {
     try {
       await TestUserManager.populateUserModelMap();
       await this.populateGlobalRoles();
-      await this.createOrganization(baseScenario.name, baseScenario.organization);
+      await this.createOrganization(
+        baseScenario.name,
+        baseScenario.organization
+      );
       baseScenario.scenarioSetupSucceeded = true;
     } catch (e) {
-      console.error(`Unable to create core scenario setup: ${e}`);
+      LogManager.getLogger().error(
+        `Unable to create core scenario setup: ${e}`
+      );
       process.exit(1); // Exit the Jest process with an error code.
     }
+    LogManager.getLogger().info('Initial base scenario setup created');
     if (!scenarioConfig.space) {
       // nothing more to do, return
       return baseScenario;
@@ -80,9 +83,7 @@ export class TestScenarioFactory {
     await this.populateSpace(
       scenarioConfig.space,
       baseScenario.space,
-      baseScenario.name,
-      TestUserManager.users.spaceAdmin,
-      0
+      baseScenario.name
     );
 
     const subspace = scenarioConfig.space.subspace;
@@ -99,9 +100,7 @@ export class TestScenarioFactory {
     await this.populateSpace(
       subspace,
       baseScenario.subspace,
-      baseScenario.name,
-      TestUserManager.users.subspaceAdmin,
-      1
+      baseScenario.name
     );
 
     const subsubspace = subspace.subspace;
@@ -118,9 +117,7 @@ export class TestScenarioFactory {
     await this.populateSpace(
       subsubspace,
       baseScenario.subsubspace,
-      baseScenario.name,
-      TestUserManager.users.subsubspaceAdmin,
-      2
+      baseScenario.name
     );
 
     return baseScenario;
@@ -173,7 +170,9 @@ export class TestScenarioFactory {
         await deleteOrganization(baseScenario.organization.id);
       }
     } catch (e) {
-      console.error(`Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`);
+      LogManager.getLogger().error(
+        `Unable to tear down core scenario setup for '${baseScenario.name}: ${e}`
+      );
       process.exit(1); // Exit the Jest process with an error code.
     }
   }
@@ -181,27 +180,76 @@ export class TestScenarioFactory {
   private static async populateSpace(
     spaceConfig: TestScenarioSpaceConfig,
     spaceModel: SpaceModel,
-    scenarioName: string,
-    communityAdmin: UserModel,
-    spaceLevel: 0 | 1 | 2
+    scenarioName: string
   ): Promise<SpaceModel> {
     const roleSetID = spaceModel.community.roleSetId;
     const spaceCommunityConfig = spaceConfig.community;
-    if (spaceCommunityConfig) {
-      if (spaceCommunityConfig.addMembers) {
-        await this.assignUsersToMemberRole(roleSetID, spaceLevel);
+    if (spaceConfig.settings) {
+      if (spaceConfig.settings.privacy) {
+        await updateSpaceSettings(spaceModel.id, {
+          privacy: { mode: spaceConfig.settings.privacy.mode },
+        });
       }
-      if (spaceCommunityConfig.addAdmin) {
-        await assignRoleToUser(communityAdmin.id, roleSetID, RoleName.Admin);
+      if (spaceConfig.settings.membership) {
+        await updateSpaceSettings(spaceModel.id, {
+          membership: {
+            policy: spaceConfig.settings.membership.policy,
+          },
+        });
+      }
+    }
+    if (spaceCommunityConfig) {
+      if (spaceCommunityConfig.members) {
+        this.assignUsersByTypeToRole(
+          spaceCommunityConfig.members,
+          RoleName.Member,
+          roleSetID
+        );
+      }
+      if (spaceCommunityConfig.admins) {
+        this.assignUsersByTypeToRole(
+          spaceCommunityConfig.admins,
+          RoleName.Admin,
+          roleSetID
+        );
+      }
+
+      if (spaceCommunityConfig.leads) {
+        this.assignUsersByTypeToRole(
+          spaceCommunityConfig.leads,
+          RoleName.Lead,
+          roleSetID
+        );
       }
     }
     const spaceCollaborationConfig = spaceConfig.collaboration;
     if (spaceCollaborationConfig) {
-      if (spaceCollaborationConfig.addCallouts) {
-        await this.createCalloutsOnSpace(spaceModel, scenarioName);
+      if (spaceCollaborationConfig.addPostCallout) {
+        await this.createPostCalloutOnSpace(spaceModel, scenarioName);
+      }
+      if (spaceCollaborationConfig.addPostCollectionCallout) {
+        await this.createPostCollectionCalloutOnSpace(spaceModel, scenarioName);
+      }
+      if (spaceCollaborationConfig.addWhiteboardCallout) {
+        await this.createWhiteboardCalloutOnSpace(spaceModel, scenarioName);
       }
     }
     return spaceModel;
+  }
+
+  private static async assignUsersByTypeToRole(
+    userTypes: TestUser[],
+    role: RoleName,
+    roleSetID: string
+  ): Promise<void> {
+    const usersIdsToAssign: string[] = [];
+    for (const userName of userTypes) {
+      const user = TestUserManager.getUserModelByType(userName);
+      usersIdsToAssign.push(user.id);
+    }
+    for (const userID of usersIdsToAssign) {
+      await assignRoleToUser(userID, roleSetID, role);
+    }
   }
 
   private static async createOrganization(
@@ -298,7 +346,33 @@ export class TestScenarioFactory {
     return spaceModel;
   }
 
-  private static async createCalloutsOnSpace(
+  private static async createPostCalloutOnSpace(
+    spaceModel: SpaceModel,
+    scenarioName: string
+  ): Promise<SpaceModel> {
+    const createPostCallout = await createCalloutOnCalloutsSet(
+      spaceModel.collaboration.calloutsSetId,
+      {
+        framing: {
+          profile: { displayName: `${scenarioName} - post` },
+        },
+        type: CalloutType.Post,
+      }
+    );
+    const postCalloutData = createPostCallout.data?.createCalloutOnCalloutsSet;
+
+    spaceModel.collaboration.calloutPostId = postCalloutData?.id ?? '';
+    spaceModel.collaboration.calloutPostCommentsId =
+      postCalloutData?.comments?.id ?? '';
+    await updateCalloutVisibility(
+      spaceModel.collaboration.calloutPostId,
+      CalloutVisibility.Published
+    );
+
+    return spaceModel;
+  }
+
+  private static async createPostCollectionCalloutOnSpace(
     spaceModel: SpaceModel,
     scenarioName: string
   ): Promise<SpaceModel> {
@@ -307,7 +381,7 @@ export class TestScenarioFactory {
       {
         framing: {
           profile: {
-            displayName: `postCollectioinCallout-${scenarioName}`,
+            displayName: `postCollectionCallout-${scenarioName}`,
             description: `postCollectionCallout-${scenarioName} - created as part of scenario setup for tests`,
           },
         },
@@ -322,13 +396,19 @@ export class TestScenarioFactory {
       spaceModel.collaboration.calloutPostCollectionId,
       CalloutVisibility.Published
     );
+    return spaceModel;
+  }
 
+  private static async createWhiteboardCalloutOnSpace(
+    spaceModel: SpaceModel,
+    scenarioName: string
+  ): Promise<SpaceModel> {
     const whiteboardCalloutData = await createWhiteboardCalloutOnCalloutsSet(
       spaceModel.collaboration.calloutsSetId,
       {
         framing: {
           profile: {
-            displayName: 'whiteboard callout space-Initial',
+            displayName: `${scenarioName} - whiteboard callout`,
             description: 'Whiteboard - initial',
           },
         },
@@ -342,25 +422,6 @@ export class TestScenarioFactory {
 
     await updateCalloutVisibility(
       spaceModel.collaboration.calloutWhiteboardId,
-      CalloutVisibility.Published
-    );
-
-    const creatPostCallout = await createCalloutOnCalloutsSet(
-      spaceModel.collaboration.calloutsSetId,
-      {
-        framing: {
-          profile: { displayName: 'Space Post Callout' },
-        },
-        type: CalloutType.Post,
-      }
-    );
-    const postCalloutData = creatPostCallout.data?.createCalloutOnCalloutsSet;
-
-    spaceModel.collaboration.calloutPostId = postCalloutData?.id ?? '';
-    spaceModel.collaboration.calloutPostCommentsId =
-      postCalloutData?.comments?.id ?? '';
-    await updateCalloutVisibility(
-      spaceModel.collaboration.calloutPostId,
       CalloutVisibility.Published
     );
 
@@ -408,9 +469,11 @@ export class TestScenarioFactory {
       case 0:
         usersIdsToAssign.push(TestUserManager.users.spaceAdmin.id);
         usersIdsToAssign.push(TestUserManager.users.spaceMember.id);
+        break;
       case 1:
         usersIdsToAssign.push(TestUserManager.users.subspaceAdmin.id);
         usersIdsToAssign.push(TestUserManager.users.subspaceMember.id);
+        break;
       case 2:
         usersIdsToAssign.push(TestUserManager.users.subsubspaceAdmin.id);
         usersIdsToAssign.push(TestUserManager.users.subsubspaceMember.id);

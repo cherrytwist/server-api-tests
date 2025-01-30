@@ -1,3 +1,9 @@
+import {
+  CommunityMembershipPolicy,
+  SpacePrivacyMode,
+} from '@alkemio/client-lib';
+import { TestUser } from '@alkemio/tests-lib';
+
 export interface TestScenarioConfig {
   name: string;
   organization?: TestScenarioOrganizationConfig;
@@ -15,13 +21,24 @@ export interface TestScenarioNoPreCreationConfig {
 
 export interface TestScenarioSpaceConfig {
   community?: {
-    addMembers: boolean;
-    addAdmin: boolean;
+    members?: TestUser[];
+    admins?: TestUser[];
+    leads?: TestUser[];
   };
   collaboration?: {
-    addCallouts: boolean;
+    addPostCallout?: boolean;
+    addPostCollectionCallout?: boolean;
+    addWhiteboardCallout?: boolean;
   };
   subspace?: TestScenarioSpaceConfig;
+  settings?: {
+    privacy?: {
+      mode?: SpacePrivacyMode;
+    };
+    membership?: {
+      policy?: CommunityMembershipPolicy;
+    };
+  };
 }
 
 export interface TestScenarioOrganizationConfig {

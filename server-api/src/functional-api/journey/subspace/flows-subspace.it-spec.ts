@@ -5,7 +5,6 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subspaceName = '';
@@ -16,16 +15,11 @@ let baseScenario: OrganizationWithSpaceModel;
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-flows',
-  space: {
-    collaboration: {
-      addCallouts: false,
-    },
-  }
-}
+  space: {},
+};
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
@@ -76,8 +70,7 @@ describe('Flows subspace', () => {
     );
     const secondsubspaceName =
       responseSecondSubspace.data?.createSubspace.profile.displayName ?? '';
-    additionalSubspaceId =
-      responseSecondSubspace.data?.createSubspace.id ?? '';
+    additionalSubspaceId = responseSecondSubspace.data?.createSubspace.id ?? '';
 
     // Act
     const responseUpdateSubspace = await updateSpaceContext(

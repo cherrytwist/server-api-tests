@@ -7,10 +7,9 @@ import {
 import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { createOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { SpaceVisibility } from '@generated/graphql';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
-;
 const uniqueId = UniqueIDGenerator.getID();
 
 let spaceId = '';
@@ -21,13 +20,12 @@ const hostNameId = 'space-org-nameid' + uniqueId;
 const spaceName = 'space-nam' + uniqueId;
 const spaceNameId = 'space-namei' + uniqueId;
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'space',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-})
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+});
 
 describe('Space entity', () => {
   beforeAll(async () => {
@@ -98,8 +96,9 @@ describe('Space entity', () => {
 
     // Assert
     expect(responseUpdate.error?.errors[0].message).toContain(
-      `Unable to update Space nameID: the provided nameID is already taken: ${spaceNameId +
-        'c'}`
+      `Unable to update Space nameID: the provided nameID is already taken: ${
+        spaceNameId + 'c'
+      }`
     );
     await deleteSpace(spaceIdTwo);
   });

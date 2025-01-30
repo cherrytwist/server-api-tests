@@ -1,8 +1,4 @@
-import { TestUserManager } from '@src/scenario/TestUserManager';
-import {
-  getRoleSetUserPrivilege,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { getRoleSetUserPrivilege } from '../../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import {
   sorted__create_read_update_delete_grant_addMember_apply_invite_addVC_accessVC,
@@ -10,10 +6,8 @@ import {
   sorted__read_applyToRoleSet,
   sorted__read_applyToRoleSet_invite_addVC,
 } from '@common/constants/privileges';
-import { removeRoleFromUser } from '../roles-request.params';
 import {
   CommunityMembershipPolicy,
-  RoleName,
   SpacePrivacyMode,
 } from '@generated/alkemio-schema';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -24,28 +18,43 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'access-user-authorizations',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Public },
+      membership: { policy: CommunityMembershipPolicy.Applications },
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
+      },
+      settings: {
+        privacy: { mode: SpacePrivacyMode.Private },
+        membership: { policy: CommunityMembershipPolicy.Applications },
       },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
         community: {
-          addAdmin: true,
-          addMembers: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
+        },
+        settings: {
+          privacy: { mode: SpacePrivacyMode.Private },
+          membership: { policy: CommunityMembershipPolicy.Applications },
         },
       },
     },
@@ -53,41 +62,7 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
-    membership: { policy: CommunityMembershipPolicy.Applications },
-  });
-
-  await updateSpaceSettings(baseScenario.subspace.id, {
-    membership: { policy: CommunityMembershipPolicy.Applications },
-    privacy: { mode: SpacePrivacyMode.Private },
-  });
-
-  await updateSpaceSettings(baseScenario.subsubspace.id, {
-    membership: { policy: CommunityMembershipPolicy.Applications },
-    privacy: { mode: SpacePrivacyMode.Private },
-  });
-
-  await removeRoleFromUser(
-    TestUserManager.users.globalAdmin.id,
-    baseScenario.subsubspace.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await removeRoleFromUser(
-    TestUserManager.users.globalAdmin.id,
-    baseScenario.subspace.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await removeRoleFromUser(
-    TestUserManager.users.globalAdmin.id,
-    baseScenario.space.community.roleSetId,
-    RoleName.Lead
-  );
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import '@utils/array.matcher';
 import {
   createVirtualContributorOnAccount,
@@ -10,7 +11,6 @@ import {
   createSpaceAndGetData,
   deleteSpace,
   updateSpacePlatformSettings,
-  updateSpaceSettings,
 } from '../../journey/space/space.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -58,7 +58,17 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'virtual-contributor',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
+    },
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Public,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
     },
   },
 };
@@ -70,15 +80,6 @@ beforeAll(async () => {
     'FEATURE_VIRTUAL_CONTRIBUTORS'
   );
   vcLicensePlanId = vcLicensePlan[0].id;
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Public,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Applications,
-    },
-  });
 
   await assignLicensePlanToAccount(
     baseScenario.organization.accountId,

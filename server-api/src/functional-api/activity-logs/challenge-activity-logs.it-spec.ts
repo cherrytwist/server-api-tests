@@ -10,10 +10,7 @@ import {
   SpacePrivacyMode,
   CommunityMembershipPolicy,
 } from '@generated/alkemio-schema';
-import {
-  deleteSpace,
-  updateSpaceSettings,
-} from '@functional-api/journey/space/space.request.params';
+import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { getActivityLogOnCollaboration } from './activity-log-params';
 import {
   createCalloutOnCalloutsSet,
@@ -40,12 +37,31 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-activity',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
-    community: { addAdmin: true, addMembers: true },
+    community: {
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      membership: {
+        policy: CommunityMembershipPolicy.Open,
+      },
+    },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
     },
   },
@@ -53,12 +69,6 @@ const scenarioConfig: TestScenarioConfig = {
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    membership: {
-      policy: CommunityMembershipPolicy.Open,
-    },
-  });
 });
 
 afterAll(async () => {
@@ -168,12 +178,11 @@ describe('Activity logs - Subspace', () => {
       resPostonSpace?.data?.createContributionOnCallout.post;
     const postCommentsIdSpace = postDataCreate?.comments.id ?? '';
 
-    const messageRes = await sendMessageToRoom(
+    await sendMessageToRoom(
       postCommentsIdSpace,
       'test message on space post',
       TestUser.GLOBAL_ADMIN
     );
-    messageRes?.data?.sendMessageToRoom.id;
 
     const resDiscussion = await createCalloutOnCalloutsSet(
       baseScenario.subspace.collaboration.calloutsSetId,

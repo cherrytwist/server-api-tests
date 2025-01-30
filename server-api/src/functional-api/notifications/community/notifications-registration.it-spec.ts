@@ -13,7 +13,6 @@ import { changePreferenceUser } from '@functional-api/contributor-management/use
 import { PreferenceType } from '@generated/graphql';
 import { delay } from '@alkemio/tests-lib';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
 const uniqueId = UniqueIDGenerator.getID();
@@ -21,14 +20,12 @@ const uniqueId = UniqueIDGenerator.getID();
 let userName = '';
 let userId = '';
 let userEmail = '';
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'notifications-forum-discussion',
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   await deleteMailSlurperMails();
   userName = `testuser${uniqueId}`;
   userEmail = `${uniqueId}@test.com`;

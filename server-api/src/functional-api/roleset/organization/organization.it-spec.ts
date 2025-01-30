@@ -52,7 +52,7 @@ describe('Assign / Remove organization to community', () => {
         baseScenario.subsubspace.community.roleSetId,
         RoleName.Member
       );
-      const a = await removeRoleFromOrganization(
+      await removeRoleFromOrganization(
         baseScenario.organization.id,
         baseScenario.subspace.community.roleSetId,
         RoleName.Member
@@ -89,7 +89,7 @@ describe('Assign / Remove organization to community', () => {
     });
     test('Assign organization as member to subspace', async () => {
       // Act
-      const a = await assignRoleToOrganization(
+      await assignRoleToOrganization(
         baseScenario.organization.id,
         baseScenario.subspace.community.roleSetId,
         RoleName.Member

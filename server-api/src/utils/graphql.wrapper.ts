@@ -1,7 +1,8 @@
-//import * as Dom from 'graphql-request/dist/types.dom';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestUser } from '@alkemio/tests-lib';
 import Headers from 'graphql-request';
 import { TestUserManager } from '@src/scenario/TestUserManager';
+import { LogManager } from '@src/scenario/LogManager';
 
 export type ErrorType = {
   response: {
@@ -35,13 +36,14 @@ export const graphqlErrorWrapper = async <TData>(
     authToken = userModel.authToken;
   }
   try {
+    LogManager.getLogger().info(`Executing request: ${fn}`);
     return await fn(authToken);
   } catch (error) {
     const err = error as ErrorType;
     if (!err.response || !err.response.errors) {
-      console.error(`Unable to complete call '${fn}'`);
-      console.error(`Returned error:`);
-      console.error(err);
+      LogManager.getLogger().error(`Unable to complete call '${fn}'`);
+      LogManager.getLogger().error('Returned error:');
+      LogManager.getLogger().error(err);
       return {
         error: {
           errors: [{ message: 'Unable to complete call', code: 'UNKNOWN' }],
@@ -53,8 +55,8 @@ export const graphqlErrorWrapper = async <TData>(
         e => e.extensions.code !== 'BAD_USER_INPUT' && e.extensions.code !== 'FORBIDDEN_POLICY'
       );
       if (badErrors.length > 0) {
-        console.error(badErrors);
-        console.error(`Unable to complete call '${fn}'`);
+        LogManager.getLogger().error(badErrors);
+        LogManager.getLogger().error(`Unable to complete call '${fn}'`);
       }
       return {
         error: {

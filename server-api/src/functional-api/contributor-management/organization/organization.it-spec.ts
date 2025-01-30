@@ -10,7 +10,6 @@
  * and that the API responses match the expected values.
  */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
-const uniqueId = UniqueIDGenerator.getID();
 import {
   createOrganization,
   deleteOrganization,
@@ -18,8 +17,8 @@ import {
 } from './organization.request.params';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 
+const uniqueId = UniqueIDGenerator.getID();
 const legalEntityName = 'Legal alkemio';
 const domain = 'alkem.io';
 const website = 'alkem.io';
@@ -28,12 +27,11 @@ const organizationName = `org-name + ${uniqueId}`;
 const hostNameId = 'org-nameid' + uniqueId;
 let orgId = '';
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'organization',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
 
   const res = await createOrganization(organizationName, hostNameId);
 

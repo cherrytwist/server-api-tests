@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { delay, TestUser } from '@alkemio/tests-lib';
 import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -31,12 +32,17 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-to-community-leads-space',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+      leads: [TestUser.SPACE_MEMBER, TestUser.SPACE_ADMIN],
     },
   },
 };
@@ -48,18 +54,6 @@ beforeAll(async () => {
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
-    baseScenario.space.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.spaceAdmin.id,
-    baseScenario.space.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.spaceMember.id,
     baseScenario.space.community.roleSetId,
     RoleName.Lead
   );

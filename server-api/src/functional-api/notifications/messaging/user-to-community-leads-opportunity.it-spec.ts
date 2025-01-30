@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
 import { delay, TestUser } from '@alkemio/tests-lib';
-import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sendMessageToCommunityLeads } from '@functional-api/communications/communication.params';
 import {
@@ -31,28 +29,37 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-to-community-leads-subsubspace',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
         community: {
-          addAdmin: true,
-          addMembers: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
+          leads: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
         },
       },
     },
@@ -64,12 +71,6 @@ beforeAll(async () => {
 
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Private,
-    },
-  });
-
   await updateOrganization(baseScenario.organization.id, {
     legalEntityName: 'legalEntityName',
     domain: 'domain',
@@ -79,18 +80,6 @@ beforeAll(async () => {
 
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
-    baseScenario.subsubspace.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.subsubspaceMember.id,
-    baseScenario.subsubspace.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.subsubspaceAdmin.id,
     baseScenario.subsubspace.community.roleSetId,
     RoleName.Lead
   );

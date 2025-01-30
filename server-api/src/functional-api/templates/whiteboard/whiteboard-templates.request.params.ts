@@ -65,7 +65,6 @@ export const createWhiteboardTemplate = async (
 
 export const updateTemplate = async (
   templateId: string,
-  defaultDescription = 'Default post template description - Update',
   displayName = 'Default post template title - Update',
   description = 'Default post template info description - Update',
   userRole: TestUser = TestUser.GLOBAL_ADMIN

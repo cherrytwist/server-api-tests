@@ -67,8 +67,8 @@ let vcId = '';
 let innovationPackId = '';
 let accountLicensePlusId = '';
 
-let spaceName = `space-name-${uniqueId}`;
-let orgName = `org-name-${uniqueId}`;
+const spaceName = `space-name-${uniqueId}`;
+const orgName = `org-name-${uniqueId}`;
 let orgAccountId = '';
 const vcName = `vcname1-${uniqueId}`;
 const packName = `packname-${uniqueId}`;

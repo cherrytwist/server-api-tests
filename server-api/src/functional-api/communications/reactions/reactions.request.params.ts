@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestUser } from '@alkemio/tests-lib';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';
 import { getGraphqlClient } from '@utils/graphqlClient';

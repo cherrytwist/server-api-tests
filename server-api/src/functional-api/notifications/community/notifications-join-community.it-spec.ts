@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   deleteMailSlurperMails,
   getMailsData,
 } from '@utils/mailslurper.rest.requests';
-import { updateSpaceSettings } from '@functional-api/journey/space/space.request.params';
 import { delay } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
@@ -29,19 +29,48 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'notifications-join-community',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Open,
+      },
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
+      },
+      settings: {
+        membership: {
+          policy: CommunityMembershipPolicy.Open,
+        },
       },
     },
   },
@@ -50,21 +79,6 @@ const scenarioConfig: TestScenarioConfig = {
 beforeAll(async () => {
   await deleteMailSlurperMails();
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Private,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Open,
-    },
-  });
-
-  await updateSpaceSettings(baseScenario.subspace.id, {
-    membership: {
-      policy: CommunityMembershipPolicy.Open,
-    },
-  });
 
   preferencesConfig = [
     {

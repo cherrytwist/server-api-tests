@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import {
@@ -22,9 +23,6 @@ import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 const uniqueId = UniqueIDGenerator.getID();
 
-const spaceName = 'not-up-eco-name' + uniqueId;
-const subspaceName = `chName${uniqueId}`;
-const subsubspaceName = `opName${uniqueId}`;
 let spacePostId = '';
 let subspacePostId = '';
 let subsubspacePostId = '';
@@ -41,27 +39,45 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'post-comments-notifications',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
-          addAdmin: true,
-          addMembers: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
         },
       },
     },

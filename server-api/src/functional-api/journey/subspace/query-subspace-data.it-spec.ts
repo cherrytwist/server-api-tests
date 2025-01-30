@@ -1,16 +1,10 @@
 import '@utils/array.matcher';
-import {
-  createSubspace,
-  getSubspaceData,
-} from './subspace.request.params';
+import { createSubspace, getSubspaceData } from './subspace.request.params';
 import {
   createOrganization,
   deleteOrganization,
 } from '@functional-api/contributor-management/organization/organization.request.params';
-import {
-  deleteSpace,
-  updateSpaceContext,
-} from '../space/space.request.params';
+import { deleteSpace, updateSpaceContext } from '../space/space.request.params';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
@@ -32,16 +26,11 @@ let baseScenario: OrganizationWithSpaceModel;
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-data-access',
-  space: {
-    collaboration: {
-      addCallouts: false,
-    },
-  }
-}
+  space: {},
+};
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 
   organizationNameTest = `QA organizationNameTest ${uniqueId}`;
 
@@ -66,9 +55,7 @@ afterEach(async () => {
 });
 
 beforeEach(async () => {
-  uniqueTextId = Math.random()
-    .toString(36)
-    .slice(-6);
+  uniqueTextId = Math.random().toString(36).slice(-6);
   subspaceName = `testSubspace ${uniqueTextId}`;
   subsubspaceName = `subsubspaceName ${uniqueTextId}`;
   subsubspaceNameId = `opp${uniqueTextId}`;

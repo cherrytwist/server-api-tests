@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import '@utils/array.matcher';
 import {
   deleteCallout,
@@ -12,9 +11,7 @@ import {
 } from '../post/post.request.params';
 import { TestUser } from '@alkemio/tests-lib';
 import { CalloutState, CalloutVisibility } from '@generated/alkemio-schema';
-import { deleteSpace } from '../../journey/space/space.request.params';
 import { sendMessageToRoom } from '@functional-api/communications/communication.params';
-import { deleteOrganization } from '@functional-api/contributor-management/organization/organization.request.params';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
@@ -50,19 +47,46 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'callout-close-state',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
-    community: { addAdmin: true, addMembers: true },
+    community: {
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
-      community: { addAdmin: true, addMembers: true },
+      community: {
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
+      },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
-        community: { addAdmin: true, addMembers: true },
+        community: {
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
+        },
       },
     },
   },
@@ -298,16 +322,13 @@ describe('Callout - Close State - User Privileges Posts', () => {
 // ToDo
 
 describe.skip('Callout - Close State - User Privileges Discussions', () => {
-  let spaceCalloutId = '';
-  let subspaceCalloutId = '';
-  let subsubspaceCalloutId = '';
   let spaceCalloutCommentsId = '';
   let subspaceCalloutCommentsId = '';
   let subsubspaceCalloutCommentsId = '';
 
   beforeAll(async () => {
     const preconditions = async (calloutId: string) => {
-     const a =  await updateCallout(calloutId, TestUser.GLOBAL_ADMIN, {
+      await updateCallout(calloutId, TestUser.GLOBAL_ADMIN, {
         contributionPolicy: {
           state: CalloutState.Closed,
         },
@@ -319,7 +340,6 @@ describe.skip('Callout - Close State - User Privileges Discussions', () => {
       baseScenario.space.collaboration.calloutPostCommentsId
     );
 
-    spaceCalloutId = spaceCallout?.data?.lookup?.callout?.id ?? '';
     spaceCalloutCommentsId =
       spaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(baseScenario.space.collaboration.calloutPostId);
@@ -328,7 +348,6 @@ describe.skip('Callout - Close State - User Privileges Discussions', () => {
       baseScenario.subspace.collaboration.calloutsSetId,
       baseScenario.subspace.collaboration.calloutPostCommentsId
     );
-    subspaceCalloutId = subspaceCallout?.data?.lookup?.callout?.id ?? '';
     subspaceCalloutCommentsId =
       subspaceCallout?.data?.lookup?.callout?.comments?.id ?? '';
     await preconditions(baseScenario.subspace.collaboration.calloutPostId);
@@ -338,7 +357,6 @@ describe.skip('Callout - Close State - User Privileges Discussions', () => {
         baseScenario.subsubspace.collaboration.calloutsSetId,
         baseScenario.subsubspace.collaboration.calloutPostCommentsId
       );
-    subsubspaceCalloutId = subsubspaceCallout?.data?.lookup.callout?.id ?? '';
     subsubspaceCalloutCommentsId =
       subsubspaceCallout?.data?.lookup.callout?.comments?.id ?? '';
     await preconditions(baseScenario.subsubspace.collaboration.calloutPostId);

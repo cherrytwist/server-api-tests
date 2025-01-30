@@ -43,8 +43,7 @@ import {
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
-let spaceId = '';
-let spaceName = `space-name-${uniqueId}`;
+const spaceName = `space-name-${uniqueId}`;
 
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'space-functional-entitlements',
@@ -108,7 +107,6 @@ describe('Functional tests - Space', () => {
           TestUserManager.users.nonSpaceMember.accountId,
           TestUser.NON_SPACE_MEMBER
         );
-        spaceId = createSpace.data?.createSpace.id ?? '';
 
         // Assert
         expect(
@@ -129,7 +127,6 @@ describe('Functional tests - Space', () => {
         TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
-      spaceId = createSpace.data?.createSpace.id ?? '';
 
       // Assert
       expect(
@@ -153,17 +150,16 @@ describe('Functional tests - Space', () => {
       );
       const spaceId0 = response.data?.lookup.account?.spaces?.[0].id ?? '';
       // Act
-      const a = await deleteSpace(spaceId0, TestUser.GLOBAL_ADMIN);
+      await deleteSpace(spaceId0, TestUser.GLOBAL_ADMIN);
       const responseAfter = await getMyEntitlementsQuery(
         TestUser.NON_SPACE_MEMBER
       );
-      const createSpace = await createSpaceBasicData(
+      await createSpaceBasicData(
         spaceName,
         spaceName,
         TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
-      spaceId = createSpace.data?.createSpace.id ?? '';
 
       // Assert
       expect(

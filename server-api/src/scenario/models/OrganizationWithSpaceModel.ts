@@ -1,5 +1,5 @@
-import { OrganizationModel } from "./OrganizationModel";
-import { SpaceModel } from "./SpaceModel";
+import { OrganizationModel } from './OrganizationModel';
+import { SpaceModel } from './SpaceModel';
 
 export type OrganizationWithSpaceModel = {
   name: string;

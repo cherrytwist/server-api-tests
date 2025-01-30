@@ -1,4 +1,4 @@
-import { TestUser } from "@alkemio/tests-lib";
+import { TestUser } from '@alkemio/tests-lib';
 
 export type UserModel = {
   id: string;

@@ -1,4 +1,4 @@
-import { ProfileModel } from "./ProfileModel";
+import { ProfileModel } from './ProfileModel';
 
 export type OrganizationModel = {
   id: string;

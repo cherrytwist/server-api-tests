@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import '@utils/array.matcher';
 import {
   createApplication,
@@ -11,10 +11,7 @@ import {
   getSpaceInvitation,
   inviteContributors,
 } from './invitation.request.params';
-import {
-  getSpaceData,
-  updateSpaceSettings,
-} from '../../journey/space/space.request.params';
+import { getSpaceData } from '../../journey/space/space.request.params';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { sorted_read_readAbout } from '@common/constants/privileges';
 import {
@@ -41,24 +38,30 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'access-invitations',
   space: {
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
+    },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
     },
   },
 };
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Private,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Applications,
-    },
-  });
 });
 
 afterAll(async () => {
@@ -421,8 +424,7 @@ describe('Invitations-flows', () => {
     const userDataOrig = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const roleDataOrig = userDataOrig?.data?.me;
-    const invitationsCount =
-      roleDataOrig?.communityInvitations?.length ?? 0;
+    const invitationsCount = roleDataOrig?.communityInvitations?.length ?? 0;
     const applicationsCountOrig =
       roleDataOrig?.communityApplications?.length ?? 0;
 
@@ -435,16 +437,17 @@ describe('Invitations-flows', () => {
     expect(invitationId.length).toEqual(36);
 
     // Act
-    const res = await createApplication(baseScenario.space.community.roleSetId, TestUser.NON_SPACE_MEMBER);
+    const res = await createApplication(
+      baseScenario.space.community.roleSetId,
+      TestUser.NON_SPACE_MEMBER
+    );
     const userAppsData = await meQuery(TestUser.NON_SPACE_MEMBER);
 
     const roleData = userAppsData?.data?.me;
 
     // Assert
     expect(invitationsCount > 0).toBeTruthy();
-    expect(roleData?.communityApplications).toHaveLength(
-      applicationsCountOrig
-    );
+    expect(roleData?.communityApplications).toHaveLength(applicationsCountOrig);
     expect(res.error?.errors[0].message).toContain(
       `Application not possible: An open invitation (ID: ${invitationId}) already exists for contributor ${TestUserManager.users.nonSpaceMember.id} (user) on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );

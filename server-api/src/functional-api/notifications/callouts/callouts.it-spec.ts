@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import {
@@ -48,28 +48,31 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'callouts-notifications',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
       subspace: {
-        collaboration: {
-          addCallouts: false,
-        },
         community: {
-          addAdmin: true,
-          addMembers: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
         },
       },
     },
@@ -147,7 +150,7 @@ describe('Notifications - post', () => {
     );
 
     preferencesConfigCallout.forEach(async config => {
-       await changePreferenceUser(config.userID, config.type, 'true');
+      await changePreferenceUser(config.userID, config.type, 'true');
     });
   });
   test('GA PUBLISH space callout - HM(7) get notifications', async () => {

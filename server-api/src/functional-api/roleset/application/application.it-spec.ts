@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import '@utils/array.matcher';
 import {
   createApplication,
@@ -22,9 +23,7 @@ import { delay, TestUser } from '@alkemio/tests-lib';
 import { registerInAlkemioOrFail } from '@src/scenario/registration/register-in-alkemio-or-fail';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
-import {
-  TestScenarioConfig,
-} from '@src/scenario/config/test-scenario-config';
+import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
 let applicationId = '';
 let subspaceApplicationId = '';
@@ -37,24 +36,20 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'application',
   space: {
-    subspace: {
-      collaboration: {
-        addCallouts: false,
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Public,
+      },
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
       },
     },
+    subspace: {},
   },
 };
 
 beforeAll(async () => {
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Public,
-    },
-    membership: {
-      policy: CommunityMembershipPolicy.Applications,
-    },
-  });
 });
 
 afterAll(async () => {
@@ -246,7 +241,7 @@ describe('Application', () => {
     const createAppData = applicationData?.data?.applyForEntryRoleOnRoleSet;
     const applicationSpaceId = createAppData?.id;
 
-    const eventResponseData = await eventOnRoleSetApplication(
+    await eventOnRoleSetApplication(
       applicationSpaceId,
       'APPROVE',
       TestUser.QA_USER
@@ -371,9 +366,7 @@ describe('Application-flows', () => {
       roleData?.filter(app => app.application.state == 'new') ?? [];
 
     // Assert
-    expect(filteredroleData).toEqual(
-      expect.arrayContaining(subspaceAppOb)
-    );
+    expect(filteredroleData).toEqual(expect.arrayContaining(subspaceAppOb));
   });
 
   test('should return updated membershipUser applications', async () => {
@@ -393,8 +386,7 @@ describe('Application-flows', () => {
     await eventOnRoleSetApplication(applicationId, 'REJECT');
 
     const userAppsDataAfter = await meQuery(TestUser.NON_SPACE_MEMBER);
-    const roleDataAfter =
-      userAppsDataAfter?.data?.me?.communityApplications;
+    const roleDataAfter = userAppsDataAfter?.data?.me?.communityApplications;
 
     const subspaceAppOb = [
       {
@@ -511,5 +503,3 @@ describe('Application-flows', () => {
     subspaceApplicationId = '';
   });
 });
-
-

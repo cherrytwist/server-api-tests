@@ -1,4 +1,3 @@
-import { graphqlRequestAuth } from '@utils/graphql.request';
 import { TestUser } from '@alkemio/tests-lib';
 import { getGraphqlClient } from '@utils/graphqlClient';
 import { graphqlErrorWrapper } from '@utils/graphql.wrapper';

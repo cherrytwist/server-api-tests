@@ -1,7 +1,7 @@
 import { SubscriptionClient } from '@utils/subscriptions';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { deleteSpace } from '../journey/space/space.request.params';
-import { subscriptionSubsubspaceCreated } from './subscrition-queries';
+import { subscriptionSubsubspaceCreated } from './subscription-queries';
 import { TestUser } from '@alkemio/tests-lib';
 import { delay } from '@alkemio/tests-lib';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -25,22 +25,30 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'callouts',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
     },
   },
 };
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {

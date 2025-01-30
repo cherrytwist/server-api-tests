@@ -40,8 +40,6 @@ import {
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
-let packId = '';
-const packName = `packname-${uniqueId}`;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'innovation-pack-functional-entitlements',
 };
@@ -61,7 +59,7 @@ describe('Functional tests - Innovation Pack', () => {
   describe('VC Campaign user innovation pack creation', () => {
     beforeAll(async () => {
       await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
-      const a = await assignPlatformRole(
+      await assignPlatformRole(
         TestUserManager.users.nonSpaceMember.id,
         RoleName.PlatformVcCampaign
       );
@@ -105,7 +103,6 @@ describe('Functional tests - Innovation Pack', () => {
           TestUserManager.users.nonSpaceMember.accountId,
           TestUser.NON_SPACE_MEMBER
         );
-        packId = createPack?.data?.createInnovationPack?.id ?? '';
 
         // Assert
         expect(
@@ -120,7 +117,7 @@ describe('Functional tests - Innovation Pack', () => {
       // Create maximum allowed packs first
       const maxPacks = 3;
       for (let i = 0; i < maxPacks; i++) {
-        const a = await createInnovationPack(
+        await createInnovationPack(
           `setup-pack-${i}-${uniqueId}`,
           `setup-pack-${i}-${uniqueId}`,
           TestUserManager.users.nonSpaceMember.accountId,

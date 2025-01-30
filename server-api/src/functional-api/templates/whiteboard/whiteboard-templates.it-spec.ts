@@ -1,5 +1,4 @@
 import '@utils/array.matcher';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import { GetTemplateById } from '@functional-api/templates/template.request.params';
 import {
   createWhiteboardTemplate,
@@ -10,9 +9,6 @@ import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
 
-const uniqueId = UniqueIDGenerator.getID();
-let postNameID = '';
-let postDisplayName = '';
 let templateId = '';
 
 let baseScenario: OrganizationWithSpaceModel;
@@ -21,15 +17,21 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'templates-whiteboard',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
       },
     },
@@ -37,18 +39,14 @@ const scenarioConfig: TestScenarioConfig = {
 };
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
 });
 
 afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
-beforeEach(async () => {
-  postNameID = `post-name-id-${uniqueId}`;
-  postDisplayName = `post-d-name-${uniqueId}`;
-});
+beforeEach(async () => {});
 
 describe('WHITEBOARD templates - CRUD', () => {
   afterEach(async () => {

@@ -38,13 +38,11 @@ import {
   removePlatformRole,
 } from '@functional-api/platform/authorization-platform-mutation';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 const uniqueId = UniqueIDGenerator.getID();
 
 const spaceName = `space-name-${uniqueId}`;
 const vcName = `vcname1-${uniqueId}`;
-let vcId = '';
 
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'vc-functional-entitlements',
@@ -59,7 +57,7 @@ describe('Functional tests - VC', () => {
     const vcs = spaceData.data?.lookup.account?.virtualContributors;
     for (const vc of vcs || []) {
       const vcId = vc.id;
-     const a = await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
+     await deleteVirtualContributorOnAccount(vcId, TestUser.GLOBAL_ADMIN);
     }
 
     const spaces = spaceData.data?.lookup.account?.spaces;
@@ -125,7 +123,6 @@ describe('Functional tests - VC', () => {
           spaceId,
           TestUser.NON_SPACE_MEMBER
         );
-        vcId = createVc?.data?.createVirtualContributor?.id ?? '';
 
         // Assert
         expect(

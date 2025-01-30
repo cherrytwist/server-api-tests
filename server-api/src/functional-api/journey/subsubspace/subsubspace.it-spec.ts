@@ -4,10 +4,10 @@ import {
   createSubspace,
   getSubspaceData,
 } from '../subspace/subspace.request.params';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
+import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 import { OrganizationWithSpaceModel } from '@src/scenario/models/OrganizationWithSpaceModel';
 import { TestScenarioConfig } from '@src/scenario/config/test-scenario-config';
-;
 const uniqueId = UniqueIDGenerator.getID();
 
 let subsubspaceName = '';
@@ -26,23 +26,14 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'subsubspace',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },subspace: {
-      collaboration: {
-        addCallouts: false,
-      },},
-    }
-  }
-}
+      subspace: {},
+    },
+  },
+};
 
 beforeAll(async () => {
-  baseScenario =
-    await TestScenarioFactory.createBaseScenario(scenarioConfig);
+  baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
   subsubspaceName = 'post-opp';
 });
 

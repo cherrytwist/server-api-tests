@@ -57,27 +57,51 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'storage-auth-public-space-private-subspace-document',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Public },
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
+      },
+      settings: {
+        privacy: { mode: SpacePrivacyMode.Private },
       },
       subspace: {
         collaboration: {
-          addCallouts: true,
+          addPostCallout: true,
+          addPostCollectionCallout: true,
+          addWhiteboardCallout: true,
         },
         community: {
-          addAdmin: true,
-          addMembers: true,
+          admins: [TestUser.SUBSUBSPACE_ADMIN],
+          members: [TestUser.SUBSUBSPACE_MEMBER, TestUser.SUBSUBSPACE_ADMIN],
         },
       },
     },
@@ -93,12 +117,7 @@ beforeAll(async () => {
     SpaceVisibility.Active
   );
 
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
-  });
-
   await updateSpaceSettings(baseScenario.subspace.id, {
-    privacy: { mode: SpacePrivacyMode.Private },
     collaboration: {
       inheritMembershipRights: true,
       allowMembersToCreateCallouts: false,
@@ -161,14 +180,14 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     );
 
     test.each`
-      userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
-      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
-      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
+      userRole                     | privileges                                                          | parentEntityType
+      ${undefined}                 | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace profile storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
@@ -234,14 +253,14 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     );
 
     test.each`
-      userRole                     | privileges                                                           | parentEntityType
-      ${undefined}                 | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
-      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel}  | ${'CHALLENGE'}
-      ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                             | ${'CHALLENGE'}
+      userRole                     | privileges                                                          | parentEntityType
+      ${undefined}                 | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.NON_SPACE_MEMBER} | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SPACE_MEMBER}     | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel} | ${'CHALLENGE'}
+      ${TestUser.SUBSPACE_MEMBER}  | ${sorted_read_readAbout}                                            | ${'CHALLENGE'}
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace profile storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {

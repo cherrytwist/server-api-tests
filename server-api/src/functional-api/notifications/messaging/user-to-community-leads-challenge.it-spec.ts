@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   deleteMailSlurperMails,
   getMailsData,
@@ -32,20 +31,32 @@ let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'messaging-user-community-leads-subspace',
   space: {
-    collaboration: {
-      addCallouts: false,
-    },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      privacy: {
+        mode: SpacePrivacyMode.Private,
+      },
     },
     subspace: {
-      collaboration: {
-        addCallouts: false,
-      },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
+        leads: [TestUser.SUBSPACE_MEMBER, TestUser.SUBSPACE_ADMIN],
       },
     },
   },
@@ -62,26 +73,8 @@ beforeAll(async () => {
     contactEmail: 'test-org@alkem.io',
   });
 
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: {
-      mode: SpacePrivacyMode.Private,
-    },
-  });
-
   await removeRoleFromUser(
     TestUserManager.users.globalAdmin.id,
-    baseScenario.subspace.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.subspaceMember.id,
-    baseScenario.subspace.community.roleSetId,
-    RoleName.Lead
-  );
-
-  await assignRoleToUser(
-    TestUserManager.users.subspaceAdmin.id,
     baseScenario.subspace.community.roleSetId,
     RoleName.Lead
   );

@@ -2,13 +2,26 @@ import { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   schema: 'http://localhost:3000/graphql',
-  documents: ["src/**/*.graphql"],
+  documents: ['src/**/*.graphql'],
   hooks: {
     afterAllFileWrite: ['prettier --write'],
   },
   generates: {
     'src/core/generated/alkemio-schema.ts': {
-      plugins: ['typescript', 'typescript-resolvers', 'typescript-operations'],
+      plugins: [
+        {
+          add: {
+            content: `
+          /* eslint-disable @typescript-eslint/no-unused-vars */
+          /* eslint-disable @typescript-eslint/no-empty-object-type */
+          /* eslint-disable @typescript-eslint/no-explicit-any */
+            `,
+          },
+        },
+        'typescript',
+        'typescript-resolvers',
+        'typescript-operations',
+      ],
       config: {
         skipTypename: true,
         maybeValue: 'T | undefined',
@@ -33,7 +46,11 @@ const config: CodegenConfig = {
       plugins: [
         {
           add: {
-            content: '/* eslint-disable @typescript-eslint/no-explicit-any */',
+            content: `
+            /* eslint-disable @typescript-eslint/no-unused-vars */
+            /* eslint-disable @typescript-eslint/no-empty-object-type */
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+              `,
           },
         },
         'typescript',

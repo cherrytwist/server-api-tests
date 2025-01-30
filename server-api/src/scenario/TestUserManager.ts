@@ -1,10 +1,8 @@
-import { testConfiguration } from '@src/config/test.configuration';
+
 import { UserModel } from './models/UserModel';
-import { AlkemioClient } from '@alkemio/client-lib';
 import { TestUser } from '@alkemio/tests-lib';
 import { TestUserModels } from './models/TestUserModels';
 import { getGraphqlClient } from '@utils/graphqlClient';
-import { logElapsedTime } from '@utils/profiling';
 import { getUserToken } from './registration/get-user-token';
 
 export class TestUserManager {
@@ -14,7 +12,6 @@ export class TestUserManager {
   public static users: TestUserModels;
 
   public static async populateUserModelMap() {
-    const start = performance.now();
 
     this.userModelMapEmail = new Map<string, UserModel>();
     this.userModelMapType = new Map<string, UserModel>();
@@ -130,19 +127,6 @@ export class TestUserManager {
       }
     );
     return result;
-  }
-
-  /**
-   * Builds a map with access tokens for each user in the TestUser enum.
-   * Uses ROPC client flow to authenticate the TestUserManager.users.
-   *
-   * @api public
-   * @returns Returns a map in the form of <username, access_token>.
-   */
-  private static async populateUserAuthenticationToken(
-    userModel: UserModel
-  ): Promise<void> {
-
   }
 
   private static buildIdentifier(user: string) {

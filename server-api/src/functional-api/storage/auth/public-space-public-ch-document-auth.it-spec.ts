@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
 import {
   deleteDocument,
@@ -58,19 +57,41 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'storage-auth-public-space-public-subspace-document',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      privacy: { mode: SpacePrivacyMode.Public },
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
+      },
+      settings: {
+        privacy: { mode: SpacePrivacyMode.Public },
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
     },
   },
@@ -85,12 +106,7 @@ beforeAll(async () => {
     SpaceVisibility.Active
   );
 
-  await updateSpaceSettings(baseScenario.space.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
-  });
-
   await updateSpaceSettings(baseScenario.subspace.id, {
-    privacy: { mode: SpacePrivacyMode.Public },
     collaboration: {
       inheritMembershipRights: true,
       allowMembersToCreateCallouts: false,

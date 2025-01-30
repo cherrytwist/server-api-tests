@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
 import { TestUser } from '@alkemio/tests-lib';
-import { UniqueIDGenerator } from '@alkemio/tests-lib';;
-const uniqueId = UniqueIDGenerator.getID();
+import { UniqueIDGenerator } from '@alkemio/tests-lib';
 import {
   getPlatformDiscussionsDataById,
   createDiscussion,
@@ -12,20 +11,19 @@ import {
 } from '../communication.params';
 import { addReaction, removeReaction } from './reactions.request.params';
 import { TestScenarioNoPreCreationConfig } from '@src/scenario/config/test-scenario-config';
-import { EmptyModel } from '@src/scenario/models/EmptyModel';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
 
+const uniqueId = UniqueIDGenerator.getID();
 let platformDiscussionId = '';
 let discussionId = '';
 let discussionCommentsId = '';
 let messageId = '';
 
-let baseScenario: EmptyModel;
 const scenarioConfig: TestScenarioNoPreCreationConfig = {
   name: 'reactions',
 };
 beforeAll(async () => {
-  baseScenario = await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
+  await TestScenarioFactory.createBaseScenarioEmpty(scenarioConfig);
   const res = await getPlatformForumData();
   platformDiscussionId = res?.data?.platform.forum.id ?? '';
 });

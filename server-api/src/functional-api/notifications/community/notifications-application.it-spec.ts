@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   deleteMailSlurperMails,
   getMailsData,
@@ -7,13 +8,10 @@ import {
   createApplication,
   deleteApplication,
 } from '@functional-api/roleset/application/application.request.params';
-import { delay } from '@alkemio/tests-lib';
+import { delay, TestUser } from '@alkemio/tests-lib';
 import { TestUserManager } from '@src/scenario/TestUserManager';
 import { assignRoleToUser } from '@functional-api/roleset/roles-request.params';
-import {
-  CommunityMembershipPolicy,
-  RoleName,
-} from '@generated/alkemio-schema';
+import { CommunityMembershipPolicy, RoleName } from '@generated/alkemio-schema';
 import { PreferenceType } from '@generated/graphql';
 import { changePreferenceUser } from '@functional-api/contributor-management/user/user-preferences-mutation';
 import { TestScenarioFactory } from '@src/scenario/TestScenarioFactory';
@@ -28,19 +26,40 @@ const scenarioConfig: TestScenarioConfig = {
   name: 'notifications-application',
   space: {
     collaboration: {
-      addCallouts: true,
+      addPostCallout: true,
+      addPostCollectionCallout: true,
+      addWhiteboardCallout: true,
     },
     community: {
-      addAdmin: true,
-      addMembers: true,
+      admins: [TestUser.SPACE_ADMIN],
+      members: [
+        TestUser.SPACE_MEMBER,
+        TestUser.SPACE_ADMIN,
+        TestUser.SUBSPACE_MEMBER,
+        TestUser.SUBSPACE_ADMIN,
+        TestUser.SUBSUBSPACE_MEMBER,
+        TestUser.SUBSUBSPACE_ADMIN,
+      ],
+    },
+    settings: {
+      membership: {
+        policy: CommunityMembershipPolicy.Applications,
+      },
     },
     subspace: {
       collaboration: {
-        addCallouts: true,
+        addPostCallout: true,
+        addPostCollectionCallout: true,
+        addWhiteboardCallout: true,
       },
       community: {
-        addAdmin: true,
-        addMembers: true,
+        admins: [TestUser.SUBSPACE_ADMIN],
+        members: [
+          TestUser.SUBSPACE_MEMBER,
+          TestUser.SUBSPACE_ADMIN,
+          TestUser.SUBSUBSPACE_MEMBER,
+          TestUser.SUBSUBSPACE_ADMIN,
+        ],
       },
     },
   },
@@ -50,10 +69,6 @@ beforeAll(async () => {
   await deleteMailSlurperMails();
 
   baseScenario = await TestScenarioFactory.createBaseScenario(scenarioConfig);
-
-  await updateSpaceSettings(baseScenario.space.id, {
-    membership: { policy: CommunityMembershipPolicy.Applications },
-  });
 
   preferencesConfig = [
     {
