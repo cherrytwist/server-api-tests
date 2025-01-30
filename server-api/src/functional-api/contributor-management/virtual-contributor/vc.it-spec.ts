@@ -122,7 +122,7 @@ afterAll(async () => {
     TestUserManager.users.betaTester.accountId
   );
   const returnedVcs =
-    getVirtualContributors.data?.lookup?.account?.virtualContributors ?? [];
+    getVirtualContributors.data?.lookup.account?.virtualContributors ?? [];
   for (const entity of returnedVcs) {
     await deleteVirtualContributorOnAccount(entity.id).catch();
   }
