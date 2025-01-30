@@ -5,57 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Jest e2e Tests",
+      "name": "Debug Specific Server API Suite",
       "type": "node",
       "request": "launch",
+      "envFile": "${workspaceFolder}/server-api/.env",
+      "cwd": "${workspaceFolder}/server-api",
+      "runtimeExecutable": "node",
+      "env": {
+        "NODE_ENV": "test"
+      },
       "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
+        "${workspaceFolder}/server-api/node_modules/jest/bin/jest.js",
         "--runInBand",
+        "--forceExit",
         "--config",
-        "${workspaceRoot}/test/config/jest.config.e2e.js"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },
-    {
-      "name": "Debug Jest Integration Tests",
-      "type": "node",
-      "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand",
-        "--config",
-        "${workspaceRoot}/test/config/jest.config.it.js"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },
-    {
-      "name": "Debug Jest CI Tests",
-      "type": "node",
-      "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand",
-        "--coverage",
-        "false"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },
-    {
-      "name": "Debug Specific Suite",
-      "type": "node",
-      "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand",
-        "--config",
-        "${workspaceRoot}/test/config/jest.config.roleset.js"
+        "${workspaceFolder}/server-api/config/jest.config.roleset.mjs",
+        "authorization"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -64,15 +29,18 @@
       "name": "Debug Register Users",
       "type": "node",
       "request": "launch",
-      "args": ["${workspaceFolder}/test/utils/register-user.ts"],
-      "envFile": "${workspaceFolder}/.env",
+      "args": ["${workspaceFolder}/server-api/src/scripts/register-users.ts"],
+      "envFile": "${workspaceFolder}/server-api/.env",
       "runtimeArgs": [
+        "--nolazy",
         "-r",
         "ts-node/register",
         "-r",
         "tsconfig-paths/register"
       ],
+      "cwd": "${workspaceRoot}/server-api",
       "console": "integratedTerminal",
+      "sourceMaps": true,
       "internalConsoleOptions": "neverOpen"
     }
   ]

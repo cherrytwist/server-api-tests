@@ -1,9 +1,0 @@
-fragment WhiteboardTemplateData on Template {
-  whiteboard {
-    id
-    profile {
-      ...ProfileData
-    }
-    content
-  }
-}

@@ -1,0 +1,12 @@
+query GetOrgVisualUri($organizationId: UUID!) {
+  organization(ID: $organizationId) {
+    nameID
+    profile {
+      visuals {
+        id
+        name
+        uri
+      }
+    }
+  }
+}

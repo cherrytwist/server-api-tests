@@ -1,8 +1,0 @@
-fragment InnovationFlowTemplateData on Template {
-  innovationFlow {
-    id
-    states {
-      ...InnovationFlowStateData
-    }
-  }
-}

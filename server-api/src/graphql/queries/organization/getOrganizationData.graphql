@@ -1,0 +1,6 @@
+query getOrganizationData($organizationId: UUID!) {
+  organization(ID: $organizationId) {
+    ...OrganizationData
+  }
+}
+

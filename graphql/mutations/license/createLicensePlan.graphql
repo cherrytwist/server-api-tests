@@ -1,5 +1,0 @@
-mutation CreateLicensePlan($LicensePlan: CreateLicensePlanOnLicensingInput!) {
-  createLicensePlan(planData: $LicensePlan) {
-    ...LicensePlanData
-  }
-}

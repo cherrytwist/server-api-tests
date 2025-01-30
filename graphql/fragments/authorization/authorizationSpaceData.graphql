@@ -1,4 +1,0 @@
-fragment AuthorizationData on Authorization {
-  anonymousReadAccess
-  myPrivileges
-}
