@@ -3,12 +3,27 @@ query GetAccountMainEntities($accountId: UUID!) {
     account(ID: $accountId) {
       spaces {
         id
+        nameID
+        provider {
+          id
+          nameID
+        }
       }
       innovationPacks {
         id
+        nameID
+        provider {
+          id
+          nameID
+        }
       }
       virtualContributors {
         id
+        nameID
+        provider {
+          id
+          nameID
+        }
       }
     }
   }

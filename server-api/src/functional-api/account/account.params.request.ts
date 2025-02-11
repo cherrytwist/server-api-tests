@@ -19,3 +19,25 @@ export const getAccountMainEntities = async (
 
   return graphqlErrorWrapper(callback, userRole);
 };
+
+export const transferInnovationPackToAccount = async (
+  innovationPackID: string,
+  targetAccountID: string,
+  userRole: TestUser = TestUser.GLOBAL_ADMIN
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.TransferInnovationPackToAccount(
+      {
+        transferData: {
+          innovationPackID,
+          targetAccountID,
+        },
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+
+  return graphqlErrorWrapper(callback, userRole);
+};

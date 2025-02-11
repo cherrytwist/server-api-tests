@@ -35,6 +35,7 @@ export class TestScenarioFactory {
     scenarioConfig: TestScenarioConfig
   ) {
     await TestUserManager.populateUserModelMap();
+    await this.populateGlobalRoles();
     const result = scenarioConfig;
     return result;
   }
