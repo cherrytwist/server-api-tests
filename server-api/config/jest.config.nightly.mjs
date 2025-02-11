@@ -3,6 +3,7 @@ import baseConfig from './jest.config.mjs';
 export default {
   ...baseConfig,
   testRegex: [
+    '/src/functional-api/account/.*\\.it-spec\\.ts',
     '/src/functional-api/roleset/.*\\.it-spec\\.ts',
     '/src/functional-api/contributor-management/.*\\.it-spec\\.ts',
     '/src/functional-api/callout/.*\\.it-spec\\.ts',
