@@ -5,8 +5,6 @@ import {
   createVirtualContributorOnAccountSpaceBased,
   deleteVirtualContributorOnAccount,
   queryVCData,
-  queryVCKnowledgeBase,
-  queryVCKnowledgePrivileges,
   queryVCStorageConfig,
   updateVirtualContributor,
   updateVirtualContributorSettings,
@@ -35,10 +33,7 @@ import { getAccountMainEntities } from '@functional-api/account/account.params.r
 import {
   sorted__create_read_update_delete_contribute_readAbout,
   sorted__create_read_update_delete_contribute_readAbout_fileDelete_fileUpload,
-  sorted__create_read_update_delete_contribute_createCallout_readAbout,
-  sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer,
   sorted__create_read_update_delete_grant_platformAdmin_readAbout,
-  sorted__create_read_update_delete_grant_readAbout,
   sorted__create_read_update_delete_readAbout_fileDelete_fileUpload,
 } from '@common/constants/privileges';
 import { SearchVisibility } from '@alkemio/client-lib/dist/types/alkemio-schema';
@@ -191,94 +186,7 @@ describe('Virtual Contributor ACCESS - All Public - Visibility Public / BoK / Pu
     );
   });
 
-  describe('VC knowledge privileges', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(
-          vcKnowledgeBasedId,
-          userRole
-        );
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base calloutSet', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcKnowledgeBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base storageBucket', () => {
+  describe('VC storageBucket', () => {
     //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
     test.each`
       userRole                       | privileges
@@ -372,94 +280,7 @@ describe('Virtual Contributor Access - All Private - Visibility Private / BoK / 
     );
   });
 
-  describe('VC knowledge privileges', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges"  knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(
-          vcKnowledgeBasedId,
-          userRole
-        );
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base calloutSet', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${undefined}
-      ${TestUser.SPACE_ADMIN}        | ${undefined}
-      ${TestUser.SPACE_MEMBER}       | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${undefined}
-      ${TestUser.SPACE_ADMIN}        | ${undefined}
-      ${TestUser.SPACE_MEMBER}       | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcKnowledgeBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base storageBucket', () => {
+  describe('VC storageBucket', () => {
     //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
     test.each`
       userRole                       | privileges
@@ -553,94 +374,7 @@ describe('Virtual Contributor Access - All Private - Visibility Private / BoK / 
     );
   });
 
-  describe('VC knowledge privileges', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges"  knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(
-          vcKnowledgeBasedId,
-          userRole
-        );
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base calloutSet', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ', 'READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ', 'READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcKnowledgeBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base storageBucket', () => {
+  describe('VC storageBucket', () => {
     //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
     test.each`
       userRole                       | privileges
@@ -731,94 +465,7 @@ describe('Virtual Contributor Access - All Private - Visibility Public / BoK / P
     );
   });
 
-  describe('VC knowledge privileges', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${['READ_ABOUT']}
-      ${TestUser.SPACE_ADMIN}        | ${['READ_ABOUT']}
-      ${TestUser.SPACE_MEMBER}       | ${['READ_ABOUT']}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_grant_readAbout}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges"  knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgePrivileges(
-          vcKnowledgeBasedId,
-          userRole
-        );
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base calloutSet', () => {
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${undefined}
-      ${TestUser.SPACE_ADMIN}        | ${undefined}
-      ${TestUser.SPACE_MEMBER}       | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to spaceBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcSpaceBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-    //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
-
-    test.each`
-      userRole                       | privileges
-      ${TestUser.NON_SPACE_MEMBER}   | ${undefined}
-      ${TestUser.SPACE_ADMIN}        | ${undefined}
-      ${TestUser.SPACE_MEMBER}       | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}       | ${sorted__create_read_update_delete_createCallout_readAbout_transferAccept_transferOffer}
-      ${TestUser.GLOBAL_BETA_TESTER} | ${sorted__create_read_update_delete_contribute_createCallout_readAbout}
-    `(
-      'User: "$userRole" has this privileges: "$privileges" to knowledgeBasedVC',
-      async ({ userRole, privileges }) => {
-        const res = await queryVCKnowledgeBase(vcKnowledgeBasedId, userRole);
-        const data =
-          res.data?.virtualContributor?.knowledgeBase?.calloutsSet.authorization
-            ?.myPrivileges;
-
-        expect(data?.sort()).toEqual(privileges);
-      }
-    );
-  });
-
-  describe('VC knowledge base storageBucket', () => {
+  describe('VC storageBucket', () => {
     //   failing    ${undefined}                   | ${['READ', 'READ_ABOUT']}
     test.each`
       userRole                       | privileges

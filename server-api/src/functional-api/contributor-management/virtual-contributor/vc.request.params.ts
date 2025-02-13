@@ -249,3 +249,20 @@ export const queryVCStorageConfig = async (
     );
   return graphqlErrorWrapper(callback, userRole);
 };
+
+export const queryVCKnowledgeStorageConfig = async (
+  virtualContributorId: string,
+  userRole: TestUser = TestUser.GLOBAL_BETA_TESTER
+) => {
+  const graphqlClient = getGraphqlClient();
+  const callback = (authToken: string | undefined) =>
+    graphqlClient.VirtualContributorKnowledgeStorageConfig(
+      {
+        virtualContributorId,
+      },
+      {
+        authorization: `Bearer ${authToken}`,
+      }
+    );
+  return graphqlErrorWrapper(callback, userRole);
+};
