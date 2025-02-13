@@ -13,7 +13,6 @@ import { updateSpacePlatformSettings } from '../../journey/space/space.request.p
 import {
   sorted__create_read_update_delete_grant_contribute,
   sorted__create_read_update_delete_grant_contribute_updateContent,
-  sorted__create_read_update_delete_grant_contribute_updateContentt,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute,
   sorted__create_read_readAbout_update_delete_grant,
@@ -903,7 +902,7 @@ describe('Private Space - visual on profile', () => {
     test.each`
       userRole                     | privileges
       ${undefined}                 | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContent}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
       ${TestUser.SPACE_MEMBER}     | ${['CONTRIBUTE', 'READ']}

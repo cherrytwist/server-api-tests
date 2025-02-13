@@ -17,7 +17,7 @@ import {
   sorted__create_read_readAbout_update_delete_grant,
   sorted__create_read_readAbout_update_delete_grant_fileUp_fileDel,
   sorted__create_read_update_delete_grant_contribute,
-  sorted__create_read_update_delete_grant_contribute_updateContentt,
+  sorted__create_read_update_delete_grant_contribute_updateContent,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute,
   sorted__create_read_update_delete_grant_fileUp_fileDel_contribute_updateContent,
   sorted_read_readAbout,
@@ -669,7 +669,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       userRole                     | privileges
       ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContent}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
@@ -916,7 +916,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       userRole                     | privileges
       ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContent}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
@@ -995,7 +995,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       userRole                     | privileges
       ${undefined}                 | ${undefined}
       ${TestUser.NON_SPACE_MEMBER} | ${undefined}
-      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContentt}
+      ${TestUser.GLOBAL_ADMIN}     | ${sorted__create_read_update_delete_grant_contribute_updateContent}
       ${TestUser.SPACE_ADMIN}      | ${sorted__create_read_update_delete_grant_contribute}
       ${TestUser.SPACE_MEMBER}     | ${undefined}
       ${TestUser.SUBSPACE_ADMIN}   | ${sorted__create_read_update_delete_grant_contribute}
