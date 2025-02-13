@@ -139,13 +139,6 @@ export const sorted__create_read_update_delete_grant_contribute_updateContentt =
     'UPDATE_CONTENT',
   ].sort();
 
-export const sorted__create_read_readAbout_update_delete_grant_contribute_updateContentt =
-  [
-    ...sorted__create_read_readAbout_update_delete_grant,
-    'CONTRIBUTE',
-    'UPDATE_CONTENT',
-  ].sort();
-
 export const addMember_invite = [
   'ROLESET_ENTRY_ROLE_ASSIGN',
   'ROLESET_ENTRY_ROLE_INVITE',
