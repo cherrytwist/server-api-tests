@@ -377,7 +377,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
         refId
       );
       const res = await calloutLinkContributionStorageConfig(
-        refId,
         calloutId,
         TestUser.GLOBAL_ADMIN
       );
@@ -402,7 +401,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       'User: "$userRole" has this privileges: "$privileges" to space link collection callout (storageBucket) document',
       async ({ userRole, privileges }) => {
         const res = await calloutLinkContributionStorageConfig(
-          refId,
           calloutId,
           userRole
         );
@@ -438,7 +436,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
   describe('Access to Call for Posts Post Card visual(banner) documents', () => {
     let calloutId: string;
-    let postCardId: string;
 
     afterAll(async () => {
       await deleteDocument(documentId);
@@ -456,7 +453,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       const postData = await createPostCardOnCallout(calloutId);
       const postDataBase = postData.data?.createContributionOnCallout?.post;
       const visualId = postDataBase?.profile?.visual?.id ?? '';
-      postCardId = postDataBase?.id ?? '';
 
       await uploadImageOnVisual(
         path.join(__dirname, 'files-to-upload', '190-410.jpg'),
@@ -464,7 +460,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       );
 
       const res = await calloutPostCardStorageConfig(
-        postCardId,
         calloutId,
         TestUser.GLOBAL_ADMIN
       );
@@ -487,11 +482,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
-        const res = await calloutPostCardStorageConfig(
-          postCardId,
-          calloutId,
-          userRole
-        );
+        const res = await calloutPostCardStorageConfig(calloutId, userRole);
 
         const data =
           res.data?.lookup.callout?.contributions?.[0].post?.profile
@@ -513,11 +504,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space subspace post collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await calloutPostCardStorageConfig(
-          postCardId,
-          calloutId,
-          userRole
-        );
+        const res = await calloutPostCardStorageConfig(calloutId, userRole);
 
         const data =
           res.data?.lookup.callout?.contributions?.[0].post?.profile
@@ -532,7 +519,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
 
   describe('Access to Call for Posts Post Card reference documents', () => {
     let calloutId: string;
-    let postCardId: string;
 
     afterAll(async () => {
       await deleteDocument(documentId);
@@ -549,7 +535,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       const postData = await createPostCardOnCallout(calloutId);
       const postDataBase = postData.data?.createContributionOnCallout?.post;
       const postCardProfilelId = postDataBase?.profile?.id ?? '';
-      postCardId = postDataBase?.id ?? '';
 
       const refData = await createReferenceOnProfile(postCardProfilelId);
       refId = refData?.data?.createReferenceOnProfile?.id ?? '';
@@ -560,7 +545,6 @@ describe('Public Space - Private Subspace - visual on profile', () => {
       );
 
       const res = await calloutPostCardStorageConfig(
-        postCardId,
         calloutId,
         TestUser.GLOBAL_ADMIN
       );
@@ -583,11 +567,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space visual for post of call for post  callout (storageBucket) document',
       async ({ userRole, privileges }) => {
-        const res = await calloutPostCardStorageConfig(
-          postCardId,
-          calloutId,
-          userRole
-        );
+        const res = await calloutPostCardStorageConfig(calloutId, userRole);
         const data =
           res.data?.lookup.callout?.contributions?.[0].post?.profile
             .storageBucket?.documents[0].authorization;
@@ -608,11 +588,7 @@ describe('Public Space - Private Subspace - visual on profile', () => {
     `(
       'User: "$userRole" has this privileges: "$privileges" to space post collection callout storage bucket',
       async ({ userRole, privileges, parentEntityType }) => {
-        const res = await calloutPostCardStorageConfig(
-          postCardId,
-          calloutId,
-          userRole
-        );
+        const res = await calloutPostCardStorageConfig(calloutId, userRole);
 
         const data =
           res.data?.lookup.callout?.contributions?.[0].post?.profile

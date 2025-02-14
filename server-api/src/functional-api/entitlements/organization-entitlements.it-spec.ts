@@ -179,7 +179,7 @@ describe('Get Organization Account Authorization and License privileges ', () =>
         orgAccountId,
         TestUser.NON_SPACE_MEMBER
       );
-      spaceId = createSpace.data?.space.id ?? '';
+      spaceId = createSpace.data?.lookup?.space?.id ?? '';
 
       const vcData = await createVirtualContributorOnAccountSpaceBased(
         vcName,

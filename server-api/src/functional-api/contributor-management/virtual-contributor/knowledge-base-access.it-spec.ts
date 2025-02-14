@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import '@utils/array.matcher';
 import {
   createVirtualContributorOnAccountKnowledgeBasedWithCallout,
@@ -104,7 +103,7 @@ beforeAll(async () => {
     spaceNameIdVC,
     TestUserManager.users.betaTester.accountId
   );
-  const vcSpaceData = responceVcSpace?.data?.space;
+  const vcSpaceData = responceVcSpace?.data?.lookup?.space;
   vcSpaceId = vcSpaceData?.id ?? '';
   vcSpaceAccountId = vcSpaceData?.account?.id ?? '';
 

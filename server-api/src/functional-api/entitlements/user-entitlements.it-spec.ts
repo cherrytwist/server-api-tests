@@ -147,7 +147,7 @@ describe('Get User Account Authorization and License privileges ', () => {
         TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
-      spaceId = createSpace.data?.space.id ?? '';
+      spaceId = createSpace.data?.lookup?.space?.id ?? '';
 
       const vcData = await createVirtualContributorOnAccountSpaceBased(
         vcName,
@@ -246,7 +246,7 @@ describe('Get User Account Authorization and License privileges ', () => {
         TestUserManager.users.nonSpaceMember.accountId,
         TestUser.NON_SPACE_MEMBER
       );
-      spaceId = createSpace.data?.space.id ?? '';
+      spaceId = createSpace.data?.lookup?.space?.id ?? '';
 
       const vcData = await createVirtualContributorOnAccountSpaceBased(
         vcName,
