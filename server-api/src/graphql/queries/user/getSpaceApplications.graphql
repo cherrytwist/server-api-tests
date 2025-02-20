@@ -1,6 +1,6 @@
 query getSpaceApplications($spaceId: UUID!) {
   lookup {
-    space(ID: spaceId) {
+    space(ID: $spaceId) {
       id
       community {
         roleSet {

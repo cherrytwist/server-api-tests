@@ -1,4 +1,4 @@
-query PendingMembershipsSpace($spaceId: UUID_NAMEID!, $fetchDetails: Boolean! = false) {
+query PendingMembershipsSpace($spaceId: UUID!, $fetchDetails: Boolean! = false) {
   space(ID: $spaceId) {
     id
     nameID
