@@ -68,7 +68,7 @@ afterAll(async () => {
   await TestScenarioFactory.cleanUpBaseScenario(baseScenario);
 });
 
-describe.skip('Invitations', () => {
+describe('Invitations', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
@@ -245,7 +245,7 @@ describe.skip('Invitations', () => {
     );
   });
 
-  test.skip('should return invitations after user is removed', async () => {
+  test('should return invitations after user is removed', async () => {
     // Act
     invitationData = await inviteContributors(
       baseScenario.space.community.roleSetId,
@@ -277,7 +277,7 @@ describe.skip('Invitations', () => {
   });
 });
 
-describe.skip('Invitations-flows', () => {
+describe('Invitations-flows', () => {
   afterEach(async () => {
     await removeRoleFromUser(
       TestUserManager.users.nonSpaceMember.id,
@@ -393,7 +393,6 @@ describe.skip('Invitations-flows', () => {
       baseScenario.space.community.roleSetId,
       TestUser.NON_SPACE_MEMBER
     );
-    console.log(res.data);
     let applicationId = 'applicationIdNotRetrieved';
     if (res?.data?.applyForEntryRoleOnRoleSet) {
       applicationId = res?.data?.applyForEntryRoleOnRoleSet?.id;
@@ -406,14 +405,12 @@ describe.skip('Invitations-flows', () => {
       [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
-    console.log(invitationData.error);
 
     // Assert
     expect(invitationData?.error?.errors[0].message).toContain(
       `Invitation not possible: An open application (ID: ${applicationId}) already exists for contributor ${TestUserManager.users.nonSpaceMember.id} on RoleSet: ${baseScenario.space.community.roleSetId}.`
     );
-    const a = await deleteApplication(applicationId);
-    console.log(a.data);
+    await deleteApplication(applicationId);
   });
 
   test('User with received inviation, cannot apply to the community', async () => {
@@ -423,7 +420,6 @@ describe.skip('Invitations-flows', () => {
       [TestUserManager.users.nonSpaceMember.id],
       TestUser.GLOBAL_ADMIN
     );
-    console.log(invitationData.error);
 
     const userDataOrig = await meQuery(TestUser.NON_SPACE_MEMBER);
 
@@ -458,7 +454,7 @@ describe.skip('Invitations-flows', () => {
   });
 });
 
-describe.skip('Invitations - Authorization', () => {
+describe('Invitations - Authorization', () => {
   const authErrorUpdateInvitationMessage =
     "Authorization: unable to grant 'update' privilege: event on invitation";
   const authErrorCreateInvitationMessage =
