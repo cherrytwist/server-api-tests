@@ -1,7 +1,6 @@
 fragment SpaceAboutDetails on SpaceAbout {
   id
-  vision
-  impact
+  why
   who
   authorization {
     ...AuthorizationData
