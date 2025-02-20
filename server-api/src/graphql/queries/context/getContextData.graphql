@@ -1,7 +1,0 @@
-query GetSpaceAboutDetails($spaceId: UUID_NAMEID!, $subspaceId: UUID_NAMEID!) {
-  space(ID: $spaceId) {
-    subspace(ID: $subspaceId) {
-      ...SubspaceData
-    }
-  }
-}

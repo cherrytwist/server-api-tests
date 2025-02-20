@@ -10,7 +10,6 @@ query PendingMembershipsSpace(
         ...PendingMembershipsJourneyProfile
       }
     }
-    __typename
   }
 }
 
