@@ -146,8 +146,7 @@ describe('Application', () => {
     await deleteApplication(applicationId2);
   });
 
-  // skipped until bug: is resolved: https://app.zenhub.com/workspaces/alkemio-development-5ecb98b262ebd9f4aec4194c/issues/gh/alkem-io/server/4950
-  test.skip('should throw error for creating the same application twice', async () => {
+  test('should throw error for creating the same application twice', async () => {
     // Act
     const applicationDataOne = await createApplication(
       baseScenario.space.community.roleSetId,
@@ -258,7 +257,6 @@ describe('Application', () => {
     await deleteApplication(applicationSpaceId);
   });
 
-  // Skip until implemented a solution to stabalize test suites triggered after user deletion
   test('should return applications after user is removed', async () => {
     // Arrange
     const applicationsBeforeCreateDelete =
