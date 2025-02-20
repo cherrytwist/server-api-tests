@@ -6,8 +6,8 @@ fragment SubspaceData on Space {
     name
     value
   }
-  profile {
-    ...ProfileData
+  about {
+    ...SpaceAboutDetails
   }
   collaboration {
     ...CollaborationData
@@ -18,8 +18,4 @@ fragment SubspaceData on Space {
   community {
     ...CommunityData
   }
-  context {
-    ...ContextData
-  }
-
 }

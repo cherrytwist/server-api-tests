@@ -13,8 +13,8 @@ fragment SpaceData on Space {
   authorization {
     ...AuthorizationData
   }
-  context {
-    ...ContextData
+  about {
+    ...SpaceAboutDetails
   }
   community {
     ...CommunityData
@@ -27,9 +27,6 @@ fragment SpaceData on Space {
   }
   settings {
     ...SettingsData
-  }
-  profile {
-    ...ProfileData
   }
   templatesManager {
     ...TemplatesManagerData

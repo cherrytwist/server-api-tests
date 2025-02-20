@@ -1,9 +1,12 @@
-fragment ContextData on Context {
+fragment SpaceAboutDetails on SpaceAbout {
   id
   vision
   impact
   who
   authorization {
     ...AuthorizationData
+  }
+  profile {
+    ...ProfileData
   }
 }
