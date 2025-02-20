@@ -30,8 +30,10 @@ export const createSpaceBasicData = async (
       {
         spaceData: {
           nameID: spaceNameId,
-          profileData: {
-            displayName: spaceName,
+          about: {
+            profileData: {
+              displayName: spaceName,
+            },
           },
           collaborationData: {
             addTutorialCallouts: true,
@@ -276,7 +278,9 @@ export const updateSpaceLocation = async (
       {
         spaceData: {
           ID: spaceId,
-          profileData: { location: { country, city } },
+          about: {
+            profile: { location: { country, city } },
+          },
         },
       },
       {
@@ -291,8 +295,7 @@ export const updateSpaceContext = async (
   spaceId: string,
   displayName?: string,
   options?: {
-    impact?: string | 'Updated Impact';
-    vision?: string | 'Updated Vision';
+    why?: string | 'Updated Why';
     who?: string | 'Updated Who';
   },
   userRole: TestUser = TestUser.GLOBAL_ADMIN
@@ -303,8 +306,8 @@ export const updateSpaceContext = async (
       {
         spaceData: {
           ID: spaceId,
-          profileData: { displayName },
-          context: {
+          about: {
+            profile: { displayName },
             ...options,
           },
         },

@@ -330,9 +330,12 @@ export class TestScenarioFactory {
     const spaceData = responseRootSpace.data?.lookup?.space;
     spaceModel.id = spaceData?.id ?? '';
     spaceModel.nameId = spaceData?.nameID ?? '';
-    spaceModel.profile = {
-      id: spaceData?.profile?.id ?? '',
-      displayName: spaceData?.profile?.displayName ?? '',
+    spaceModel.about = {
+      id: spaceData?.about?.id ?? '',
+      profile: {
+        id: spaceData?.about.profile?.id ?? '',
+        displayName: spaceData?.about.profile?.displayName ?? '',
+      },
     };
     spaceModel.collaboration.id = spaceData?.collaboration.id ?? '';
     spaceModel.communication.updatesId =
@@ -454,9 +457,10 @@ export class TestScenarioFactory {
     targetModel.collaboration.id = subspaceData?.collaboration?.id ?? '';
     targetModel.collaboration.calloutsSetId =
       subspaceData?.collaboration.calloutsSet?.id ?? '';
-    targetModel.contextId = subspaceData?.context?.id ?? '';
-    targetModel.profile.id = subspaceData?.profile?.id ?? '';
-    targetModel.profile.displayName = subspaceData?.profile?.displayName ?? '';
+    targetModel.about.id = subspaceData?.about?.id ?? '';
+    targetModel.about.profile.id = subspaceData?.about.profile?.id ?? '';
+    targetModel.about.profile.displayName =
+      subspaceData?.about.profile?.displayName ?? '';
 
     return targetModel;
   }
@@ -536,9 +540,12 @@ export class TestScenarioFactory {
         roleSetId: '',
         applicationId: '',
       },
-      profile: {
+      about: {
         id: '',
-        displayName: '',
+        profile: {
+          id: '',
+          displayName: '',
+        },
       },
       collaboration: {
         id: '',

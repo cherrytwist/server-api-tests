@@ -66,7 +66,9 @@ describe('Create subspace', () => {
 
     // Assert
     expect(response.status).toBe(200);
-    expect(createSubspaceData?.profile.displayName).toEqual('subspaceName');
+    expect(createSubspaceData?.about.profile.displayName).toEqual(
+      'subspaceName'
+    );
     expect(createSubspaceData).toEqual(
       (await getSubspaceData(additionalSubspaceId)).data?.lookup?.space
     );

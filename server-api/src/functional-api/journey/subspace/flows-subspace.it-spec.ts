@@ -68,7 +68,8 @@ describe('Flows subspace', () => {
       baseScenario.space.id
     );
     const secondsubspaceName =
-      responseSecondSubspace.data?.createSubspace.profile.displayName ?? '';
+      responseSecondSubspace.data?.createSubspace.about.profile.displayName ??
+      '';
     additionalSubspaceId = responseSecondSubspace.data?.createSubspace.id ?? '';
 
     // Act
@@ -76,8 +77,7 @@ describe('Flows subspace', () => {
       subspaceId,
       secondsubspaceName,
       {
-        vision: 'test vision update',
-        impact: 'test impact update',
+        why: 'test why update',
         who: 'test who update',
       }
     );
@@ -85,7 +85,7 @@ describe('Flows subspace', () => {
     // Assert
     expect(responseUpdateSubspace.status).toBe(200);
     expect(
-      responseUpdateSubspace.data?.updateSpace.profile.displayName
+      responseUpdateSubspace.data?.updateSpace.about.profile.displayName
     ).toEqual(secondsubspaceName);
     await deleteSpace(additionalSubspaceId);
   });
@@ -102,7 +102,7 @@ describe('Flows subspace', () => {
     additionalSubspaceId = subspaceData?.id ?? '';
 
     // Assert
-    expect(subspaceData?.profile.displayName).toContain(subspaceName);
+    expect(subspaceData?.about.profile.displayName).toContain(subspaceName);
     await deleteSpace(additionalSubspaceId);
   });
 

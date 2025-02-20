@@ -75,9 +75,9 @@ describe('Query Subspace data', () => {
     const responseQueryData = await getSubspaceData(subspaceId);
 
     // Assert
-    expect(responseQueryData.data?.lookup?.space?.profile.displayName).toEqual(
-      subspaceName
-    );
+    expect(
+      responseQueryData.data?.lookup?.space?.about.profile.displayName
+    ).toEqual(subspaceName);
   });
 
   test('should query subsubspace through subspace', async () => {
@@ -98,7 +98,8 @@ describe('Query Subspace data', () => {
     // Assert
     expect(responseQueryData.data?.lookup?.space?.subspaces).toHaveLength(1);
     expect(
-      responseQueryData.data?.lookup?.space?.subspaces[0].profile.displayName
+      responseQueryData.data?.lookup?.space?.subspaces[0].about.profile
+        .displayName
     ).toEqual(subsubspaceName);
     expect(responseQueryData.data?.lookup?.space?.subspaces[0].nameID).toEqual(
       subsubspaceNameId
@@ -133,15 +134,14 @@ describe('Query Subspace data', () => {
 
   test('should update a subspace', async () => {
     // Arrange
-    const context = {
-      vision: 'test vision update',
-      impact: 'test impact update',
+    const about = {
+      why: 'test vision update',
       who: 'test who update',
     };
     const response = await updateSpaceContext(
       subspaceId,
       subspaceName + 'change',
-      context
+      about
     );
     const updatedSubspace = response.data?.updateSpace;
 
@@ -149,14 +149,12 @@ describe('Query Subspace data', () => {
     const getSubspaceDatas = await getSubspaceData(subspaceId);
 
     // Assert
-    expect(updatedSubspace?.profile.displayName).toEqual(
+    expect(updatedSubspace?.about.profile.displayName).toEqual(
       subspaceName + 'change'
     );
-    expect(getSubspaceDatas.data?.lookup?.space?.profile.displayName).toEqual(
-      subspaceName + 'change'
-    );
-    expect(getSubspaceDatas.data?.lookup?.space?.context.impact).toEqual(
-      context.impact
-    );
+    expect(
+      getSubspaceDatas.data?.lookup?.space?.about.profile.displayName
+    ).toEqual(subspaceName + 'change');
+    expect(getSubspaceDatas.data?.lookup?.space?.about.why).toEqual(about.why);
   });
 });
