@@ -74,18 +74,26 @@ export class TestScenarioFactory {
       // nothing more to do, return
       return baseScenario;
     }
-    //
-    baseScenario.space = await this.createRootSpace(
-      baseScenario.space,
-      baseScenario.organization.accountId,
-      baseScenario.name
-    );
 
-    await this.populateSpace(
-      scenarioConfig.space,
-      baseScenario.space,
-      baseScenario.name
-    );
+    try {
+      baseScenario.space = await this.createRootSpace(
+        baseScenario.space,
+        baseScenario.organization.accountId,
+        baseScenario.name,
+        scenarioConfig.space.collaboration?.addTutorialCallouts || true
+      );
+
+      await this.populateSpace(
+        scenarioConfig.space,
+        baseScenario.space,
+        baseScenario.name
+      );
+    } catch (e) {
+      LogManager.getLogger().error(
+        `Unable to create core scenario setup: ${e}`
+      );
+      process.exit(1); // Exit the Jest process with an error code.
+    }
 
     const subspace = scenarioConfig.space.subspace;
     if (!subspace) {
@@ -305,7 +313,8 @@ export class TestScenarioFactory {
   private static async createRootSpace(
     spaceModel: SpaceModel,
     accountID: string,
-    scenarioName: string
+    scenarioName: string,
+    addTutorialCallouts: boolean
   ): Promise<SpaceModel> {
     const uniqueId = UniqueIDGenerator.getID();
     const truncatedScenarioName = scenarioName.slice(0, 18);
@@ -318,7 +327,8 @@ export class TestScenarioFactory {
     const responseRootSpace = await this.createSpaceAndGetData(
       spaceName,
       spaceNameId,
-      accountID
+      accountID,
+      addTutorialCallouts
     );
 
     if (!responseRootSpace.data?.lookup?.space) {
@@ -492,12 +502,14 @@ export class TestScenarioFactory {
     spaceName: string,
     spaceNameId: string,
     accountID: string,
+    addTutorialCallouts: boolean,
     role = TestUser.GLOBAL_ADMIN
   ) {
     const response = await createSpaceBasicData(
       spaceName,
       spaceNameId,
       accountID,
+      addTutorialCallouts,
       role
     );
     const spaceId = response?.data?.createSpace.id ?? '';

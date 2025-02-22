@@ -6,6 +6,7 @@ import { UniqueIDGenerator } from '@alkemio/tests-lib';
 const uniqueId = UniqueIDGenerator.getID();
 import {
   CommunityMembershipPolicy,
+  CreateSpaceOnAccountInput,
   SpacePrivacyMode,
   SpaceVisibility,
 } from '@generated/graphql';
@@ -17,31 +18,27 @@ export const createSpaceBasicData = async (
   spaceName: string,
   spaceNameId: string,
   accountID: string,
-  //licensePlanID?: string,
+  addTutorialCallouts = true,
   userRole: TestUser = TestUser.GLOBAL_ADMIN
 ) => {
-  // const getLicensePlanSpaceFree = await getLicensePlanByName(
-  //   'SPACE_LICENSE_FREE'
-  // );
-  // licensePlanID = getLicensePlanSpaceFree[0].id;
   const graphqlClient = getGraphqlClient();
+  const spaceData: CreateSpaceOnAccountInput = {
+    nameID: spaceNameId,
+    about: {
+      profileData: {
+        displayName: spaceName,
+      },
+    },
+    collaborationData: {
+      addTutorialCallouts,
+      calloutsSetData: {},
+    },
+    accountID,
+  };
   const callback = (authToken: string | undefined) =>
     graphqlClient.CreateSpaceBasicData(
       {
-        spaceData: {
-          nameID: spaceNameId,
-          about: {
-            profileData: {
-              displayName: spaceName,
-            },
-          },
-          collaborationData: {
-            addTutorialCallouts: true,
-            calloutsSetData: {},
-          },
-          accountID,
-          // licensePlanID,
-        },
+        spaceData,
       },
       {
         authorization: `Bearer ${authToken}`,
@@ -61,6 +58,7 @@ export const createSpaceAndGetData = async (
     spaceName,
     spaceNameId,
     accountID,
+    false,
     role
   );
 
