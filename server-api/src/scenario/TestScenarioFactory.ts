@@ -48,7 +48,7 @@ export class TestScenarioFactory {
     return result;
   }
 
-  public static async createBaseScenarioPrivate(
+  private static async createBaseScenarioPrivate(
     scenarioConfig: TestScenarioConfig
   ): Promise<OrganizationWithSpaceModel> {
     const baseScenario: OrganizationWithSpaceModel =
@@ -63,19 +63,13 @@ export class TestScenarioFactory {
         baseScenario.organization
       );
       baseScenario.scenarioSetupSucceeded = true;
-    } catch (e) {
-      LogManager.getLogger().error(
-        `Unable to create core scenario setup: ${e}`
-      );
-      process.exit(1); // Exit the Jest process with an error code.
-    }
-    LogManager.getLogger().info('Initial base scenario setup created');
-    if (!scenarioConfig.space) {
-      // nothing more to do, return
-      return baseScenario;
-    }
 
-    try {
+      LogManager.getLogger().info('Initial base scenario setup created');
+      if (!scenarioConfig.space) {
+        // nothing more to do, return
+        return baseScenario;
+      }
+
       baseScenario.space = await this.createRootSpace(
         baseScenario.space,
         baseScenario.organization.accountId,
@@ -88,46 +82,46 @@ export class TestScenarioFactory {
         baseScenario.space,
         baseScenario.name
       );
+
+      const subspace = scenarioConfig.space.subspace;
+      if (!subspace) {
+        // all done, return
+        return baseScenario;
+      }
+
+      await this.createSubspace(
+        baseScenario.space.id,
+        baseScenario.name,
+        baseScenario.subspace
+      );
+      await this.populateSpace(
+        subspace,
+        baseScenario.subspace,
+        baseScenario.name
+      );
+
+      const subsubspace = subspace.subspace;
+      if (!subsubspace) {
+        // all done, return
+        return baseScenario;
+      }
+
+      await this.createSubspace(
+        baseScenario.subspace.id,
+        baseScenario.name,
+        baseScenario.subsubspace
+      );
+      await this.populateSpace(
+        subsubspace,
+        baseScenario.subsubspace,
+        baseScenario.name
+      );
     } catch (e) {
       LogManager.getLogger().error(
         `Unable to create core scenario setup: ${e}`
       );
       process.exit(1); // Exit the Jest process with an error code.
     }
-
-    const subspace = scenarioConfig.space.subspace;
-    if (!subspace) {
-      // all done, return
-      return baseScenario;
-    }
-
-    await this.createSubspace(
-      baseScenario.space.id,
-      baseScenario.name,
-      baseScenario.subspace
-    );
-    await this.populateSpace(
-      subspace,
-      baseScenario.subspace,
-      baseScenario.name
-    );
-
-    const subsubspace = subspace.subspace;
-    if (!subsubspace) {
-      // all done, return
-      return baseScenario;
-    }
-
-    await this.createSubspace(
-      baseScenario.subspace.id,
-      baseScenario.name,
-      baseScenario.subsubspace
-    );
-    await this.populateSpace(
-      subsubspace,
-      baseScenario.subsubspace,
-      baseScenario.name
-    );
 
     return baseScenario;
   }

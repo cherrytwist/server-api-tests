@@ -27,7 +27,11 @@ const subspacesList = async () => {
 let baseScenario: OrganizationWithSpaceModel;
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-create',
-  space: {},
+  space: {
+    collaboration: {
+      addTutorialCallouts: false,
+    },
+  },
 };
 
 beforeAll(async () => {

@@ -26,7 +26,11 @@ let baseScenario: OrganizationWithSpaceModel;
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-data-access',
-  space: {},
+  space: {
+    collaboration: {
+      addTutorialCallouts: false,
+    },
+  },
 };
 
 beforeAll(async () => {

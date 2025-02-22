@@ -15,7 +15,11 @@ let baseScenario: OrganizationWithSpaceModel;
 
 const scenarioConfig: TestScenarioConfig = {
   name: 'subspace-flows',
-  space: {},
+  space: {
+    collaboration: {
+      addTutorialCallouts: false,
+    },
+  },
 };
 
 beforeAll(async () => {
